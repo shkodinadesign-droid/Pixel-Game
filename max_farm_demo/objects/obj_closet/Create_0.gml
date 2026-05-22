@@ -1,0 +1,1 @@
+show_hint = false;

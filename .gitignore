@@ -1,0 +1,10 @@
+# GameMaker Studio 2
+*.DS_Store
+*.yyz
+/max_farm_demo/.cache/
+/max_farm_demo/tmp/
+/max_farm_demo/logs/
+
+# OS
+.DS_Store
+Thumbs.db
