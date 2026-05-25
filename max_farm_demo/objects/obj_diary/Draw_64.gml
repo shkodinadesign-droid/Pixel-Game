@@ -76,7 +76,7 @@ for (var i = 0; i < 7; i++) {
 }
 
 // Заголовок текущей вкладки
-draw_set_font(fnt_diary);
+draw_set_font(fnt_dialog);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
 draw_set_color(make_color_rgb(80, 50, 20));
@@ -181,7 +181,7 @@ switch (current_tab) {
                         var _by = _sy + slot_size;
                         draw_set_color(make_color_rgb(70, 40, 10));
                         draw_circle(_bx, _by, _br, false);
-                        draw_set_font(fnt_diary);
+                        draw_set_font(fnt_dialog);
                         draw_set_halign(fa_center);
                         draw_set_valign(fa_middle);
                         draw_set_color(c_white);
@@ -217,7 +217,7 @@ switch (current_tab) {
                 detail_x + detail_w, detail_y + detail_h, 6, 6, true);
 
             // Заголовок (жирный)
-            draw_set_font(fnt_diary);
+            draw_set_font(fnt_dialog);
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
             draw_set_color(make_color_rgb(70, 35, 5));
@@ -229,7 +229,7 @@ switch (current_tab) {
                       detail_x + detail_w - 10, detail_y + 34);
 
             // Описание (обычный шрифт, с переносом по ширине карточки)
-            draw_set_font(fnt_diary);
+            draw_set_font(fnt_dialog);
             draw_set_color(make_color_rgb(55, 35, 15));
             draw_text_ext(detail_x + 12, detail_y + 42, _idesc, -1, detail_w - 22);
 
@@ -242,7 +242,7 @@ switch (current_tab) {
 
         } else {
             // Подсказка — по центру правой страницы, на уровне сетки
-            draw_set_font(fnt_diary);
+            draw_set_font(fnt_dialog);
             draw_set_halign(fa_center);
             draw_set_valign(fa_top);
             draw_set_color(make_color_rgb(160, 130, 100));
@@ -259,7 +259,7 @@ switch (current_tab) {
         draw_set_valign(fa_top);
 
         // Заголовок раздела
-        draw_set_font(fnt_diary);
+        draw_set_font(fnt_dialog);
         draw_set_color(make_color_rgb(80, 50, 20));
         draw_text(content_x, content_y, "Основные задания");
 
@@ -270,7 +270,7 @@ switch (current_tab) {
         // --- Задание 1: Посадить зерна (ВЫПОЛНЕНО) ---
         draw_set_color(make_color_rgb(70, 150, 70));
         draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-        draw_set_font(fnt_diary);
+        draw_set_font(fnt_dialog);
         draw_set_halign(fa_center);
         draw_set_valign(fa_middle);
         draw_set_color(c_white);
@@ -293,7 +293,7 @@ switch (current_tab) {
             // Выполнено — зелёный чекбокс + зачёркивание
             draw_set_color(make_color_rgb(70, 150, 70));
             draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-            draw_set_font(fnt_diary);
+            draw_set_font(fnt_dialog);
             draw_set_halign(fa_center);
             draw_set_valign(fa_middle);
             draw_set_color(c_white);
@@ -314,7 +314,7 @@ switch (current_tab) {
                 // Выполнено
                 draw_set_color(make_color_rgb(70, 150, 70));
                 draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-                draw_set_font(fnt_diary);
+                draw_set_font(fnt_dialog);
                 draw_set_halign(fa_center);
                 draw_set_valign(fa_middle);
                 draw_set_color(c_white);
@@ -341,7 +341,7 @@ switch (current_tab) {
                 if (_coffee_task_done) {
                     draw_set_color(make_color_rgb(70, 150, 70));
                     draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-                    draw_set_font(fnt_diary);
+                    draw_set_font(fnt_dialog);
                     draw_set_halign(fa_center);
                     draw_set_valign(fa_middle);
                     draw_set_color(c_white);
@@ -359,7 +359,7 @@ switch (current_tab) {
                     draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
                     draw_set_color(make_color_rgb(160, 50, 30));
                     draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, true);
-                    draw_set_font(fnt_diary);
+                    draw_set_font(fnt_dialog);
                     draw_set_color(make_color_rgb(55, 35, 15));
                     draw_text(content_x + _tbox + _tgap + 5, _ty, "Приготовить себе кофе");
                 }
@@ -373,7 +373,7 @@ switch (current_tab) {
                     // Выполнено — зелёный чекбокс + зачёркивание
                     draw_set_color(make_color_rgb(70, 150, 70));
                     draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-                    draw_set_font(fnt_diary);
+                    draw_set_font(fnt_dialog);
                     draw_set_halign(fa_center);
                     draw_set_valign(fa_middle);
                     draw_set_color(c_white);
@@ -392,7 +392,7 @@ switch (current_tab) {
                     draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
                     draw_set_color(make_color_rgb(160, 50, 30));
                     draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, true);
-                    draw_set_font(fnt_diary);
+                    draw_set_font(fnt_dialog);
                     draw_set_color(make_color_rgb(55, 35, 15));
                     draw_text(content_x + _tbox + _tgap + 5, _ty, "Посади клубнику и картофель");
                 }
@@ -416,7 +416,7 @@ switch (current_tab) {
             var _rtgap = round(6  * bs);  // отступ
 
             // Заголовок
-            draw_set_font(fnt_diary);
+            draw_set_font(fnt_dialog);
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
             draw_set_color(make_color_rgb(120, 60, 10));
@@ -439,7 +439,7 @@ switch (current_tab) {
             if (_all_done) {
                 draw_set_color(make_color_rgb(70, 150, 70));
                 draw_roundrect_ext(_rp_x, _ry, _rp_x + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_font(fnt_diary); draw_set_halign(fa_center); draw_set_valign(fa_middle);
+                draw_set_font(fnt_dialog); draw_set_halign(fa_center); draw_set_valign(fa_middle);
                 draw_set_color(c_white);
                 draw_text(_rp_x + _rtbox / 2, _ry + _rtbox / 2, "v");
                 draw_set_halign(fa_left); draw_set_valign(fa_top);
@@ -450,7 +450,7 @@ switch (current_tab) {
             } else {
                 draw_set_color(make_color_rgb(139, 90, 43));
                 draw_roundrect_ext(_rp_x, _ry, _rp_x + _rtbox, _ry + _rtbox, 2, 2, true);
-                draw_set_font(fnt_diary); draw_set_color(make_color_rgb(55, 35, 15));
+                draw_set_font(fnt_dialog); draw_set_color(make_color_rgb(55, 35, 15));
                 draw_text(_rp_x + _rtbox + _rtgap, _ry, "Узнать где ключ от тайной двери");
             }
             _ry += round(32 * bs);
@@ -462,7 +462,7 @@ switch (current_tab) {
             if (_t1) {
                 draw_set_color(make_color_rgb(70, 150, 70));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_font(fnt_diary); draw_set_halign(fa_center); draw_set_valign(fa_middle);
+                draw_set_font(fnt_dialog); draw_set_halign(fa_center); draw_set_valign(fa_middle);
                 draw_set_color(c_white);
                 draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
                 draw_set_halign(fa_left); draw_set_valign(fa_top);
@@ -475,7 +475,7 @@ switch (current_tab) {
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
                 draw_set_color(make_color_rgb(160, 50, 30));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
-                draw_set_font(fnt_diary); draw_set_color(make_color_rgb(55, 35, 15));
+                draw_set_font(fnt_dialog); draw_set_color(make_color_rgb(55, 35, 15));
                 draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "1. Приготовить три пирога");
             }
             _ry += _rp_lh;
@@ -485,7 +485,7 @@ switch (current_tab) {
             if (_t2) {
                 draw_set_color(make_color_rgb(70, 150, 70));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_font(fnt_diary); draw_set_halign(fa_center); draw_set_valign(fa_middle);
+                draw_set_font(fnt_dialog); draw_set_halign(fa_center); draw_set_valign(fa_middle);
                 draw_set_color(c_white);
                 draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
                 draw_set_halign(fa_left); draw_set_valign(fa_top);
@@ -498,7 +498,7 @@ switch (current_tab) {
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
                 draw_set_color(make_color_rgb(160, 50, 30));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
-                draw_set_font(fnt_diary); draw_set_color(make_color_rgb(55, 35, 15));
+                draw_set_font(fnt_dialog); draw_set_color(make_color_rgb(55, 35, 15));
                 draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "2. Сварить все виды кофе");
             }
             _ry += _rp_lh;
@@ -508,7 +508,7 @@ switch (current_tab) {
             if (_t3) {
                 draw_set_color(make_color_rgb(70, 150, 70));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_font(fnt_diary); draw_set_halign(fa_center); draw_set_valign(fa_middle);
+                draw_set_font(fnt_dialog); draw_set_halign(fa_center); draw_set_valign(fa_middle);
                 draw_set_color(c_white);
                 draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
                 draw_set_halign(fa_left); draw_set_valign(fa_top);
@@ -521,7 +521,7 @@ switch (current_tab) {
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
                 draw_set_color(make_color_rgb(160, 50, 30));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
-                draw_set_font(fnt_diary); draw_set_color(make_color_rgb(55, 35, 15));
+                draw_set_font(fnt_dialog); draw_set_color(make_color_rgb(55, 35, 15));
                 draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "3. Открыть рецепт пиццы бабули");
             }
             _ry += _rp_lh;
@@ -531,7 +531,7 @@ switch (current_tab) {
             if (_t4) {
                 draw_set_color(make_color_rgb(70, 150, 70));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_font(fnt_diary); draw_set_halign(fa_center); draw_set_valign(fa_middle);
+                draw_set_font(fnt_dialog); draw_set_halign(fa_center); draw_set_valign(fa_middle);
                 draw_set_color(c_white);
                 draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
                 draw_set_halign(fa_left); draw_set_valign(fa_top);
@@ -544,7 +544,7 @@ switch (current_tab) {
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
                 draw_set_color(make_color_rgb(160, 50, 30));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
-                draw_set_font(fnt_diary); draw_set_color(make_color_rgb(55, 35, 15));
+                draw_set_font(fnt_dialog); draw_set_color(make_color_rgb(55, 35, 15));
                 draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "4. Помочь жителям деревни");
             }
             _ry += _rp_lh;
@@ -554,7 +554,7 @@ switch (current_tab) {
             if (_t5) {
                 draw_set_color(make_color_rgb(70, 150, 70));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_font(fnt_diary); draw_set_halign(fa_center); draw_set_valign(fa_middle);
+                draw_set_font(fnt_dialog); draw_set_halign(fa_center); draw_set_valign(fa_middle);
                 draw_set_color(c_white);
                 draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
                 draw_set_halign(fa_left); draw_set_valign(fa_top);
@@ -567,13 +567,13 @@ switch (current_tab) {
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
                 draw_set_color(make_color_rgb(160, 50, 30));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
-                draw_set_font(fnt_diary); draw_set_color(make_color_rgb(55, 35, 15));
+                draw_set_font(fnt_dialog); draw_set_color(make_color_rgb(55, 35, 15));
                 draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "5. Приготовить грушевое варенье");
             }
         }
         break;
     case 2: // Растения
-        draw_set_font(fnt_diary);
+        draw_set_font(fnt_dialog);
         draw_set_color(make_color_rgb(80, 50, 20));
 
         // Морковь
@@ -603,7 +603,7 @@ switch (current_tab) {
         break;
     case 3: // Рецепты
         if (!_recipes_unlocked) {
-            draw_set_font(fnt_diary);
+            draw_set_font(fnt_dialog);
             draw_set_halign(fa_center);
             draw_set_valign(fa_middle);
             draw_set_color(make_color_rgb(160, 130, 100));
@@ -618,7 +618,7 @@ switch (current_tab) {
         var _rec_y = content_y;
 
         // Название
-        draw_set_font(fnt_diary);
+        draw_set_font(fnt_dialog);
         draw_set_color(make_color_rgb(80, 50, 20));
         draw_text(_rec_x, _rec_y, "Картофельный пирог");
 
@@ -628,7 +628,7 @@ switch (current_tab) {
                   _rec_x + round(220 * bs), _rec_y + round(22 * bs));
 
         // Ингредиенты одной строкой
-        draw_set_font(fnt_diary);
+        draw_set_font(fnt_dialog);
         draw_set_color(make_color_rgb(80, 55, 25));
         draw_text(_rec_x, _rec_y + round(30 * bs),
                   "Картофель, Молоко, Яйцо, Мука, Дрожжи");
@@ -647,7 +647,7 @@ switch (current_tab) {
         draw_roundrect_ext(_pbtn_x, _pbtn_y, _pbtn_x + _pbtn_w, _pbtn_y + _pbtn_h, 4, 4, false);
         draw_set_color(make_color_rgb(230, 200, 155));
         draw_roundrect_ext(_pbtn_x, _pbtn_y, _pbtn_x + _pbtn_w, _pbtn_y + _pbtn_h, 4, 4, true);
-        draw_set_font(fnt_diary);
+        draw_set_font(fnt_dialog);
         draw_set_halign(fa_center);
         draw_set_valign(fa_middle);
         draw_set_color(c_white);
@@ -666,7 +666,7 @@ switch (current_tab) {
             _coffee_y += round(10 * bs);
 
             // Название рецепта
-            draw_set_font(fnt_diary);
+            draw_set_font(fnt_dialog);
             draw_set_color(make_color_rgb(80, 50, 20));
             draw_text(_rec_x, _coffee_y, "Латте");
 
@@ -676,7 +676,7 @@ switch (current_tab) {
                       _rec_x + round(220 * bs), _coffee_y + round(22 * bs));
 
             // Ингредиенты
-            draw_set_font(fnt_diary);
+            draw_set_font(fnt_dialog);
             draw_set_color(make_color_rgb(80, 55, 25));
             draw_text(_rec_x, _coffee_y + round(30 * bs),
                       "Зерна кофе, Молоко, Сахар");
@@ -696,13 +696,13 @@ switch (current_tab) {
             draw_set_color(make_color_rgb(160, 120, 70));
             draw_roundrect_ext(_det_x, _det_y, _det_x + _det_w, _det_y + _det_h, 6, 6, true);
 
-            draw_set_font(fnt_diary);
+            draw_set_font(fnt_dialog);
             draw_set_color(make_color_rgb(80, 50, 20));
             draw_text(_det_x + 12, _det_y + 12, "Картофельный пирог");
             draw_set_color(make_color_rgb(160, 120, 70));
             draw_line(_det_x + 10, _det_y + 34, _det_x + _det_w - 10, _det_y + 34);
 
-            draw_set_font(fnt_diary);
+            draw_set_font(fnt_dialog);
             draw_set_color(make_color_rgb(55, 35, 15));
             draw_text_ext(_det_x + 12, _det_y + 42,
                 "Любимый пирог Джастина по рецепту бабушки Сони." +
@@ -714,7 +714,7 @@ switch (current_tab) {
         }
         break;
     case 4: // Друзья
-        draw_set_font(fnt_diary);
+        draw_set_font(fnt_dialog);
         draw_set_color(make_color_rgb(80, 50, 20));
         draw_text(content_x, content_y, "Бабушка Мэгги");
 
@@ -723,13 +723,13 @@ switch (current_tab) {
         if (global.kitten_arrived) {
             var _ky = content_y + 32;
             // Иконка сердечко
-            draw_set_font(fnt_diary);
+            draw_set_font(fnt_dialog);
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
             draw_set_color(make_color_rgb(255, 80, 120));
             draw_text(content_x, _ky, "♥");
             // Имя и описание
-            draw_set_font(fnt_diary);
+            draw_set_font(fnt_dialog);
             draw_set_color(make_color_rgb(80, 50, 20));
             draw_text(content_x + 20, _ky, "Кекс");
             draw_set_color(make_color_rgb(120, 80, 40));
@@ -737,7 +737,7 @@ switch (current_tab) {
         }
         break;
     case 5: // Приключения
-        draw_set_font(fnt_diary);
+        draw_set_font(fnt_dialog);
         draw_text(content_x, content_y, "Приключения скоро!");
         break;
     case 6: // Валюта
@@ -746,13 +746,13 @@ switch (current_tab) {
         draw_circle(content_x + 12, content_y + 12, 11, false);
         draw_set_color(make_color_rgb(200, 155, 20));
         draw_circle(content_x + 12, content_y + 12, 11, true);
-        draw_set_font(fnt_diary);
+        draw_set_font(fnt_dialog);
         draw_set_halign(fa_center);
         draw_set_valign(fa_middle);
         draw_set_color(make_color_rgb(140, 90, 10));
         draw_text(content_x + 12, content_y + 12, "C");
         // Сумма
-        draw_set_font(fnt_diary);
+        draw_set_font(fnt_dialog);
         draw_set_halign(fa_left);
         draw_set_valign(fa_top);
         draw_set_color(make_color_rgb(80, 50, 20));
@@ -761,7 +761,7 @@ switch (current_tab) {
 }
 
 // Подсказка закрытия
-draw_set_font(fnt_diary);
+draw_set_font(fnt_dialog);
 draw_set_halign(fa_right);
 draw_set_color(make_color_rgb(150, 130, 110));
 draw_text(book_x + book_w - 15, book_y + book_h - 20, "Клик вне книги - закрыть");
