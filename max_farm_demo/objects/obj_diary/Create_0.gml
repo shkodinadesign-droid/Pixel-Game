@@ -16,7 +16,7 @@ var gui_h = display_get_gui_height();
 book_w = round(549 * book_scale);  // ~686
 book_h = round(302 * book_scale);  // ~378
 book_x = (gui_w - book_w) / 2;
-book_y = (gui_h - book_h) / 2;
+book_y = (gui_h - book_h) / 2 + 30;
 
 // Размеры вкладок (масштабируются вместе с книгой)
 tab_w       = round(40 * book_scale);  // 50
