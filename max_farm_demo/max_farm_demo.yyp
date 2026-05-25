@@ -77,6 +77,7 @@
   "resources":[
     {"id":{"name":"fnt_dialog_ru_bold","path":"fonts/fnt_dialog_ru_bold/fnt_dialog_ru_bold.yy",},},
     {"id":{"name":"fnt_dialog","path":"fonts/fnt_dialog/fnt_dialog.yy",},},
+    {"id":{"name":"fnt_diary","path":"fonts/fnt_diary/fnt_diary.yy",},},
     {"id":{"name":"fnt_ui","path":"fonts/fnt_ui/fnt_ui.yy",},},
     {"id":{"name":"obj_apple_on_tree","path":"objects/obj_apple_on_tree/obj_apple_on_tree.yy",},},
     {"id":{"name":"obj_apple_tree_fruit","path":"objects/obj_apple_tree_fruit/obj_apple_tree_fruit.yy",},},
