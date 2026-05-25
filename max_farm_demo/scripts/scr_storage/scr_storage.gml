@@ -203,6 +203,34 @@ function storage_init() {
         sell_price: 18,
         grow_days: 0
     });
+    ds_map_add(global.item_database, "apple_bun", {
+        name: "Булочки с яблоками",
+        category: "baked",
+        sell_price: 22,
+        grow_days: 0,
+        icon: asset_get_index("spr_apple_bun_icon")
+    });
+    ds_map_add(global.item_database, "apple_jam", {
+        name: "Варенье яблочное",
+        category: "baked",
+        sell_price: 30,
+        grow_days: 0,
+        icon: asset_get_index("spr_apple_jam_icon")
+    });
+    ds_map_add(global.item_database, "pear_jam", {
+        name: "Грушевое варенье",
+        category: "baked",
+        sell_price: 28,
+        grow_days: 0,
+        icon: asset_get_index("spr_pear_jam_icon")
+    });
+    ds_map_add(global.item_database, "pizza", {
+        name: "Пицца",
+        category: "baked",
+        sell_price: 40,
+        grow_days: 0,
+        icon: asset_get_index("spr_pizza_icon")
+    });
 
     // === ХРАНИЛИЩЕ САРАЯ (по категориям) ===
     global.barn_storage = ds_map_create();
@@ -220,6 +248,9 @@ function storage_init() {
 
     // === ИНВЕНТАРЬ ИГРОКА ===
     global.player_inventory = ds_map_create();
+    inventory_add(ITEM_SEED,            4);
+    inventory_add(ITEM_POTATO_SEED,     5);
+    inventory_add(ITEM_STRAWBERRY_SEED, 5);
 
     // === ХРАНИЛИЩЕ ЯЩИКА ===
     global.chest_inventory = ds_map_create();

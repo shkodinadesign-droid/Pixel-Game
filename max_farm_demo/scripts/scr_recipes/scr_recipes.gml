@@ -30,6 +30,60 @@ function recipes_init() {
         result: { item: ITEM_CARROT_MUFFIN, amount: 1 }
     };
     array_push(global.recipes, _r3);
+
+    var _r4 = {
+        id:          "apple_bun",
+        name:        "Булочки с яблоками",
+        ingredients: [
+            { item: ITEM_APPLE, amount: 2 },
+            { item: "sugar",    amount: 1 },
+            { item: "milk",     amount: 1 },
+            { item: "egg",      amount: 1 },
+            { item: "flour",    amount: 1 }
+        ],
+        result: { item: ITEM_APPLE_BUN, amount: 1 }
+    };
+    array_push(global.recipes, _r4);
+
+    // water появится после добавления колодца
+    var _r5 = {
+        id:          "apple_jam",
+        name:        "Варенье яблочное",
+        ingredients: [
+            { item: ITEM_APPLE, amount: 6 },
+            { item: "sugar",    amount: 2 },
+            { item: "water",    amount: 1 }
+        ],
+        result: { item: ITEM_APPLE_JAM, amount: 1 }
+    };
+    array_push(global.recipes, _r5);
+
+    // pepperoni и tomato появятся позже (мясная лавка)
+    var _r6 = {
+        id:          "pizza",
+        name:        "Пицца",
+        ingredients: [
+            { item: "flour",     amount: 1 },
+            { item: "water",     amount: 1 },
+            { item: "egg",       amount: 1 },
+            { item: "tomato",    amount: 1 },
+            { item: "pepperoni", amount: 1 }
+        ],
+        result: { item: ITEM_PIZZA, amount: 1 }
+    };
+    array_push(global.recipes, _r6);
+
+    var _r7 = {
+        id:          "pear_jam",
+        name:        "Грушевое варенье",
+        ingredients: [
+            { item: ITEM_PEAR, amount: 3 },
+            { item: "water",   amount: 1 },
+            { item: "sugar",   amount: 1 }
+        ],
+        result: { item: ITEM_PEAR_JAM, amount: 1 }
+    };
+    array_push(global.recipes, _r7);
 }
 
 function recipe_can_craft(idx) {

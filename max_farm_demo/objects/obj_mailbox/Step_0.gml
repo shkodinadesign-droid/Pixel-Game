@@ -48,7 +48,11 @@ if (pending_action != "" && !instance_exists(obj_ui_letter)) {
         global.secret_quest_started = true;
         // Авто-открытие дневника на вкладке "Задания"
         if (!instance_exists(obj_diary)) {
-            var _d = instance_create_layer(0, 0, "Instances", obj_diary);
+            var _dlyr = layer_get_id("GUI");
+            if (_dlyr == -1) _dlyr = layer_get_id("Instances");
+            if (_dlyr == -1) _dlyr = layer_get_id("Instances_3");
+            if (_dlyr == -1) _dlyr = layer;
+            var _d = instance_create_layer(0, 0, _dlyr, obj_diary);
             _d.current_tab = 1;
         }
     }

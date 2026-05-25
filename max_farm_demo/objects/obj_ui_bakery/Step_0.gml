@@ -51,7 +51,7 @@ if (cook_done && cook_done_timer > 0) {
                 obj_max.image_index  = 0;
             }
         } else {
-            var _dialog_obj = (_r_done.id == "carrot_muffin")
+            var _dialog_obj = (_r_done.id == "carrot_muffin" || _r_done.id == "apple_bun")
                 ? obj_ui_dialog_max_muffin
                 : obj_ui_dialog_max_pie;
             instance_create_layer(0, 0, "GUI", _dialog_obj);

@@ -18,3 +18,7 @@ enum DoorDir { Up, Down, Left, Right }
 #macro ITEM_APPLE  "apple"
 #macro ITEM_PEAR   "pear"
 #macro ITEM_PEACH  "peach"
+#macro ITEM_APPLE_BUN  "apple_bun"
+#macro ITEM_APPLE_JAM  "apple_jam"
+#macro ITEM_PEAR_JAM   "pear_jam"
+#macro ITEM_PIZZA      "pizza"

@@ -1,8 +1,8 @@
 // --- базовые флаги клетки ---
 has_seed = false;
 watered  = false;
-dug      = true;   // true = ямка выкопана (старые грядки уже готовы)
-covered  = true;   // true = закопано (старые грядки уже готовы к поливу)
+dug      = false;  // false = ещё не вскопано лопатой
+covered  = false;
 crop_id  = noone;
 
 // --- координаты центра клетки (рум-редактор уже ставит по сетке) ---
@@ -14,19 +14,26 @@ my_layer = layer;
 
 // --- визуал земли ---
 function soil_update_sprite() {
-    if (watered) {
+    visible     = true;
+    image_blend = c_white;
+    if (!dug) {
+        sprite_index = spr_soil_dry;
+        image_alpha  = 0.35;
+    } else if (watered) {
         sprite_index = spr_soil_wet;
+        image_alpha  = 1;
     } else {
         sprite_index = spr_soil_dry;
+        image_alpha  = 1;
     }
-    image_blend = c_white;
 }
 soil_update_sprite();
 
 // --- ВЫКОПАТЬ ЯМКУ ЛОПАТОЙ ---
 function dig_cell() {
     if (dug) exit;
-    dug = true;
+    dug     = true;
+    covered = true;
     soil_update_sprite();
 }
 

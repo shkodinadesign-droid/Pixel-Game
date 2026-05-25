@@ -12,8 +12,10 @@ hp_max = 100;
 hp     = 100;
 
 // --- инструменты и направление ---
-selected_tool = Tool.WateringCan;  // лейка выбрана по умолчанию
-selected_seed = "";                // "" = ничего не выбрано
+selected_tool         = Tool.None;
+selected_seed         = "";
+selected_shovel       = false;
+selected_watering_can = false;
 nearest_soil  = noone;            // ближайшая клетка грядки (для хинта)
 facing = [0, 1];               // смотрим вниз (x=0, y=1)
 

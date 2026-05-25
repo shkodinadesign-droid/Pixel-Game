@@ -16,16 +16,21 @@ var _cy = (bbox_top + bbox_bottom) * 0.5;
 
 if (point_distance(_cx, _cy, obj_max.x, obj_max.y) < 96
 &&  keyboard_check_pressed(ord("E"))) {
-    inventory_add(fruit_item, _apple_count);
-    // Помечаем все яблоки этого дерева как собранные
     var _today = instance_exists(obj_day_controller) ? obj_day_controller.day_index : 0;
+    var _picked = noone;
     with (obj_apple_on_tree) {
-        if (my_tree == other.id) {
-            collected        = true;
-            collected_on_day = _today;
+        if (my_tree == other.id && !collected) {
+            _picked = id;
+            break;
         }
     }
-    has_fruit = false;
-    var _hud = instance_find(obj_ui_inventory, 0);
-    if (_hud != noone) with (_hud) show_item_pop(spr_apple_icon, "+" + string(_apple_count));
+    if (_picked != noone) {
+        _picked.collected        = true;
+        _picked.collected_on_day = _today;
+        if (!variable_global_exists("fruit_states")) global.fruit_states = ds_map_create();
+        global.fruit_states[? "apple_" + string(_picked.x) + "_" + string(_picked.y)] = [true, _today];
+        inventory_add(fruit_item, 1);
+        var _hud = instance_find(obj_ui_inventory, 0);
+        if (_hud != noone) with (_hud) show_item_pop(spr_apple_icon, "+1");
+    }
 }

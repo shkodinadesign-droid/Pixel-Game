@@ -46,9 +46,10 @@ if (TEST_DAY >= 2) {
 }
 if (TEST_DAY >= 3) {
     // День 3 — письмо про секретную комнату ещё не прочитано (появится "!" на ящике)
-    global.maggie_day2_started = true;
-    global.kitten_arrived      = true;
-    global.coffee_made         = true;
+    global.maggie_day2_started  = true;
+    global.kitten_arrived       = true;
+    global.coffee_made          = true;
+    global.secret_quest_started = true;
     // Письма 0,1,2,5 прочитаны; письмо 6 (секретная дверь) — НЕТ, ждёт в ящике
     global.letters_read = [0, 1, 2, 5];
     // Флаг: на первом кадре перейти в дом

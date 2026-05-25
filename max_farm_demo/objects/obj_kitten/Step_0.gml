@@ -96,8 +96,10 @@ switch (state) {
         var _fty  = follow_id.y + ((_mlen > 0.1) ? (_mdy/_mlen)*34 : 0);
         if (point_distance(x, y, _ftx, _fty) > 8) {
             var _fdir = point_direction(x, y, _ftx, _fty);
-            x = round(x + lengthdir_x(walk_spd, _fdir));
-            y = round(y + lengthdir_y(walk_spd, _fdir));
+            var _fnx = round(x + lengthdir_x(walk_spd, _fdir));
+            var _fny = round(y + lengthdir_y(walk_spd, _fdir));
+            if (!place_meeting(_fnx, y, obj_solid)) x = _fnx;
+            if (!place_meeting(x, _fny, obj_solid)) y = _fny;
             image_xscale = (cos(degtorad(_fdir)) < 0) ? -1 : 1;
         }
         break;
@@ -106,8 +108,10 @@ switch (state) {
         if (sit_target_x < 0) { state = "wander"; break; }
         if (point_distance(x, y, sit_target_x, sit_target_y) > 6) {
             var _sdir = point_direction(x, y, sit_target_x, sit_target_y);
-            x = round(x + lengthdir_x(walk_spd * 0.9, _sdir));
-            y = round(y + lengthdir_y(walk_spd * 0.9, _sdir));
+            var _snx = round(x + lengthdir_x(walk_spd * 0.9, _sdir));
+            var _sny = round(y + lengthdir_y(walk_spd * 0.9, _sdir));
+            if (!place_meeting(_snx, y, obj_solid)) x = _snx;
+            if (!place_meeting(x, _sny, obj_solid)) y = _sny;
             image_xscale = (cos(degtorad(_sdir)) < 0) ? -1 : 1;
         }
         break;
@@ -116,8 +120,10 @@ switch (state) {
         if (!instance_exists(obj_max)) { state = "wander"; break; }
         if (point_distance(x, y, obj_max.x, obj_max.y) > 36) {
             var _mdir = point_direction(x, y, obj_max.x, obj_max.y);
-            x = round(x + lengthdir_x(walk_spd, _mdir));
-            y = round(y + lengthdir_y(walk_spd, _mdir));
+            var _mnx = round(x + lengthdir_x(walk_spd, _mdir));
+            var _mny = round(y + lengthdir_y(walk_spd, _mdir));
+            if (!place_meeting(_mnx, y, obj_solid)) x = _mnx;
+            if (!place_meeting(x, _mny, obj_solid)) y = _mny;
             image_xscale = (cos(degtorad(_mdir)) < 0) ? -1 : 1;
         } else {
             heart_alpha = 1; state = "wander"; walk_spd = 0.8; wander_timer = 120;
@@ -139,8 +145,10 @@ switch (state) {
             var _target_dir = point_direction(x, y, wander_x, wander_y);
             var _diff = angle_difference(_target_dir, wander_dir);
             wander_dir += clamp(_diff, -4, 4);
-            x = round(x + lengthdir_x(walk_spd, wander_dir));
-            y = round(y + lengthdir_y(walk_spd, wander_dir));
+            var _wnx = round(x + lengthdir_x(walk_spd, wander_dir));
+            var _wny = round(y + lengthdir_y(walk_spd, wander_dir));
+            if (!place_meeting(_wnx, y, obj_solid)) x = _wnx;
+            if (!place_meeting(x, _wny, obj_solid)) y = _wny;
             x = clamp(x, wander_x1, wander_x2);
             y = clamp(y, wander_y1, wander_y2);
             image_xscale = (cos(degtorad(wander_dir)) < 0) ? -1 : 1;
@@ -150,8 +158,10 @@ switch (state) {
     case "walking_to_bed":
         if (point_distance(x, y, bed_x, bed_y) > 4) {
             var _bdir = point_direction(x, y, bed_x, bed_y);
-            x = round(x + lengthdir_x(walk_spd, _bdir));
-            y = round(y + lengthdir_y(walk_spd, _bdir));
+            var _bnx = round(x + lengthdir_x(walk_spd, _bdir));
+            var _bny = round(y + lengthdir_y(walk_spd, _bdir));
+            if (!place_meeting(_bnx, y, obj_solid)) x = _bnx;
+            if (!place_meeting(x, _bny, obj_solid)) y = _bny;
             image_xscale = (cos(degtorad(_bdir)) < 0) ? -1 : 1;
         } else {
             x = bed_x; y = bed_y;
@@ -177,8 +187,10 @@ switch (state) {
         // Идём к двери дома на ферме
         if (point_distance(x, y, farm_door_x, farm_door_y) > 10) {
             var _ghdir = point_direction(x, y, farm_door_x, farm_door_y);
-            x = round(x + lengthdir_x(walk_spd * 1.3, _ghdir));
-            y = round(y + lengthdir_y(walk_spd * 1.3, _ghdir));
+            var _ghnx = round(x + lengthdir_x(walk_spd * 1.3, _ghdir));
+            var _ghny = round(y + lengthdir_y(walk_spd * 1.3, _ghdir));
+            if (!place_meeting(_ghnx, y, obj_solid)) x = _ghnx;
+            if (!place_meeting(x, _ghny, obj_solid)) y = _ghny;
             image_xscale = (cos(degtorad(_ghdir)) < 0) ? -1 : 1;
         } else {
             // Дошли до двери → телепортируемся на кровать в доме

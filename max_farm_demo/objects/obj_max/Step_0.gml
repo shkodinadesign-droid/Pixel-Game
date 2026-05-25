@@ -151,9 +151,21 @@ if (mouse_check_button_pressed(mb_left)) {
                 if (_gx >= _slot_x && _gx < _slot_x + _sw) {
                     var _e = hotbar_items[_idx];
                     if (_e.is_seed) {
-                        selected_seed = (selected_seed == _e.item) ? "" : _e.item;
+                        selected_seed         = (selected_seed == _e.item) ? "" : _e.item;
+                        selected_shovel       = false;
+                        selected_watering_can = false;
+                    } else if (_e.item == "shovel") {
+                        selected_shovel       = !selected_shovel;
+                        selected_seed         = "";
+                        selected_watering_can = false;
+                    } else if (_e.item == "watering_can") {
+                        selected_watering_can = !selected_watering_can;
+                        selected_seed         = "";
+                        selected_shovel       = false;
                     } else {
-                        selected_seed = "";
+                        selected_seed         = "";
+                        selected_shovel       = false;
+                        selected_watering_can = false;
                     }
                     _clicked = true;
                     break;
@@ -166,46 +178,42 @@ if (mouse_check_button_pressed(mb_left)) {
 
 // действия на грядке (E / Space)
 if ((keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_space)) && soil_here != noone) {
-    if (!soil_here.dug) {
-        // Шаг 1: вскопать ямку
+    if (selected_shovel && !soil_here.dug) {
+        // Лопата: вскопать
         with (soil_here) dig_cell();
-    } else if (!soil_here.has_seed && soil_here.dug) {
-            // Шаг 2: посадить выбранный тип семян
-            var _seed_type = "";
-            var _seed_item = "";
-            if (selected_seed == ITEM_SEED && inventory_get_amount(ITEM_SEED) > 0) {
-                _seed_type = "carrot";
-                _seed_item = ITEM_SEED;
-            } else if (selected_seed == ITEM_POTATO_SEED && inventory_get_amount(ITEM_POTATO_SEED) > 0) {
-                _seed_type = "potato";
-                _seed_item = ITEM_POTATO_SEED;
-            } else if (selected_seed == ITEM_STRAWBERRY_SEED && inventory_get_amount(ITEM_STRAWBERRY_SEED) > 0) {
-                _seed_type = "strawberry";
-                _seed_item = ITEM_STRAWBERRY_SEED;
-            }
-            if (_seed_type != "") {
-                with (soil_here) plant_crop(_seed_type);
-                inventory_remove(_seed_item, 1);
-                var hud = instance_find(obj_ui_inventory, 0);
-                if (hud != noone) with (hud) show_carrot_pop("-1");
-            }
-    }
-}
-
-// полив (Q) — лейка всегда активна
-if (keyboard_check_pressed(ord("Q"))) {
-    var soil_q = soil_here;
-    if (soil_q != noone) {
-        var _was_watered = soil_q.watered;
-        with (soil_q) water_cell();
-        // FX только если полив реально произошёл
-        if (soil_q.watered && !_was_watered) {
-            var fx_layer = layer_get_id("layer_fx");
+    } else if (selected_watering_can && soil_here.dug) {
+        // Лейка: полить
+        var _was_watered = soil_here.watered;
+        with (soil_here) water_cell();
+        if (soil_here.watered && !_was_watered) {
+            var fx_layer = layer_get_id("layer_soil");
+            if (fx_layer == -1) fx_layer = layer_get_id("Instances_3");
             if (fx_layer == -1) fx_layer = layer;
-            instance_create_layer(soil_q.x, soil_q.y, fx_layer, obj_water_fx);
+            instance_create_layer(soil_here.x, soil_here.y, fx_layer, obj_water_fx);
+        }
+    } else if (selected_seed != "" && soil_here.dug && !soil_here.has_seed) {
+        // Семя: посадить в вскопанную грядку
+        var _seed_type = "";
+        var _seed_item = "";
+        if (selected_seed == ITEM_SEED && inventory_get_amount(ITEM_SEED) > 0) {
+            _seed_type = "carrot";
+            _seed_item = ITEM_SEED;
+        } else if (selected_seed == ITEM_POTATO_SEED && inventory_get_amount(ITEM_POTATO_SEED) > 0) {
+            _seed_type = "potato";
+            _seed_item = ITEM_POTATO_SEED;
+        } else if (selected_seed == ITEM_STRAWBERRY_SEED && inventory_get_amount(ITEM_STRAWBERRY_SEED) > 0) {
+            _seed_type = "strawberry";
+            _seed_item = ITEM_STRAWBERRY_SEED;
+        }
+        if (_seed_type != "") {
+            with (soil_here) plant_crop(_seed_type);
+            inventory_remove(_seed_item, 1);
+            var hud = instance_find(obj_ui_inventory, 0);
+            if (hud != noone) with (hud) show_carrot_pop("-1");
         }
     }
 }
+
 
 // ---------- перемещение (с коллизиями) ----------
 if (!place_meeting(x + move_x, y, obj_solid)) x += move_x;

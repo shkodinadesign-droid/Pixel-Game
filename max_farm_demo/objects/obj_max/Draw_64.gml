@@ -75,8 +75,11 @@ for (var _i = 0; _i < hotbar_visible; _i++) {
     var _e  = hotbar_items[_idx];
     var _sx = ix + slot_w * _i;
 
-    // Подсветка выбранного семени
-    if (_e.is_seed && selected_seed == _e.item) {
+    // Подсветка выбранного семени или лопаты
+    var _highlight = (_e.is_seed && selected_seed == _e.item)
+                  || (_e.item == "shovel"       && selected_shovel)
+                  || (_e.item == "watering_can" && selected_watering_can);
+    if (_highlight) {
         draw_set_color(make_color_rgb(255, 220, 50));
         draw_set_alpha(0.9);
         draw_roundrect_ext(_sx + 3, panel_y + 3, _sx + slot_w - 3, panel_y + panel_h - 3, 4, 4, true);
