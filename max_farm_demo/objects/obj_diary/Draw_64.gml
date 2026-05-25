@@ -467,16 +467,16 @@ switch (current_tab) {
                 draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
                 draw_set_halign(fa_left); draw_set_valign(fa_top);
                 draw_set_color(make_color_rgb(140, 115, 90));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "1. Приготовить три пирога");
+                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Приготовить три пирога");
                 draw_line(_rp_x + _ind + _rtbox + _rtgap, _ry + _rp_lh * 0.5,
-                          _rp_x + _ind + _rtbox + _rtgap + string_width("1. Приготовить три пирога"), _ry + _rp_lh * 0.5);
+                          _rp_x + _ind + _rtbox + _rtgap + string_width("Приготовить три пирога"), _ry + _rp_lh * 0.5);
             } else {
                 draw_set_color(make_color_rgb(200, 80, 60));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
                 draw_set_color(make_color_rgb(160, 50, 30));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
                 draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "1. Приготовить три пирога");
+                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Приготовить три пирога");
             }
             _ry += _rp_lh;
 
@@ -490,16 +490,16 @@ switch (current_tab) {
                 draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
                 draw_set_halign(fa_left); draw_set_valign(fa_top);
                 draw_set_color(make_color_rgb(140, 115, 90));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "2. Сварить все виды кофе");
+                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Сварить все виды кофе");
                 draw_line(_rp_x + _ind + _rtbox + _rtgap, _ry + _rp_lh * 0.5,
-                          _rp_x + _ind + _rtbox + _rtgap + string_width("2. Сварить все виды кофе"), _ry + _rp_lh * 0.5);
+                          _rp_x + _ind + _rtbox + _rtgap + string_width("Сварить все виды кофе"), _ry + _rp_lh * 0.5);
             } else {
                 draw_set_color(make_color_rgb(200, 80, 60));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
                 draw_set_color(make_color_rgb(160, 50, 30));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
                 draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "2. Сварить все виды кофе");
+                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Сварить все виды кофе");
             }
             _ry += _rp_lh;
 
@@ -513,7 +513,7 @@ switch (current_tab) {
                 draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
                 draw_set_halign(fa_left); draw_set_valign(fa_top);
                 draw_set_color(make_color_rgb(140, 115, 90));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "3. Открыть рецепт пиццы бабули");
+                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Открыть рецепт пиццы бабули");
                 draw_line(_rp_x + _ind + _rtbox + _rtgap, _ry + _rp_lh * 0.5,
                           _rp_x + _rp_w, _ry + _rp_lh * 0.5);
             } else {
@@ -522,7 +522,7 @@ switch (current_tab) {
                 draw_set_color(make_color_rgb(160, 50, 30));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
                 draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "3. Открыть рецепт пиццы бабули");
+                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Открыть рецепт пиццы бабули");
             }
             _ry += _rp_lh;
 
@@ -536,7 +536,7 @@ switch (current_tab) {
                 draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
                 draw_set_halign(fa_left); draw_set_valign(fa_top);
                 draw_set_color(make_color_rgb(140, 115, 90));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "4. Помочь жителям деревни");
+                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Помочь жителям деревни");
                 draw_line(_rp_x + _ind + _rtbox + _rtgap, _ry + _rp_lh * 0.5,
                           _rp_x + _rp_w, _ry + _rp_lh * 0.5);
             } else {
@@ -545,7 +545,7 @@ switch (current_tab) {
                 draw_set_color(make_color_rgb(160, 50, 30));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
                 draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "4. Помочь жителям деревни");
+                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Помочь жителям деревни");
             }
             _ry += _rp_lh;
 
@@ -559,7 +559,7 @@ switch (current_tab) {
                 draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
                 draw_set_halign(fa_left); draw_set_valign(fa_top);
                 draw_set_color(make_color_rgb(140, 115, 90));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "5. Приготовить грушевое варенье");
+                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Приготовить грушевое варенье");
                 draw_line(_rp_x + _ind + _rtbox + _rtgap, _ry + _rp_lh * 0.5,
                           _rp_x + _rp_w, _ry + _rp_lh * 0.5);
             } else {
@@ -568,7 +568,7 @@ switch (current_tab) {
                 draw_set_color(make_color_rgb(160, 50, 30));
                 draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
                 draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "5. Приготовить грушевое варенье");
+                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Приготовить грушевое варенье");
             }
         }
         break;
