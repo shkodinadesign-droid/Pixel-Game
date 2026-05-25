@@ -7,7 +7,7 @@ global.control_locked = true;
 current_tab = 0;
 
 // Масштаб дневника (1.0 = оригинал 549x302)
-book_scale = 1.25;
+book_scale = 1.5;
 
 // Размеры книги (GUI координаты)
 var gui_w = display_get_gui_width();
