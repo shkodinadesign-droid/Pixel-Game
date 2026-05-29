@@ -10,8 +10,8 @@
   "name":"obj_ivan_npc",
   "overriddenProperties":[],
   "parent":{
-    "name":"NPCs",
-    "path":"folders/Objects/NPCs.yy",
+    "name":"character",
+    "path":"folders/Objects/character.yy",
   },
   "parentObjectId":null,
   "persistent":false,
