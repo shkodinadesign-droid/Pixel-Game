@@ -30,7 +30,10 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":null,
+  "spriteId":{
+    "name":"spr_joshua_shop",
+    "path":"sprites/spr_joshua_shop/spr_joshua_shop.yy",
+  },
   "spriteMaskId":null,
   "visible":true,
 }
