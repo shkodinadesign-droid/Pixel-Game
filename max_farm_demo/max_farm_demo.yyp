@@ -84,6 +84,8 @@
     {"id":{"name":"obj_apple_tree_fruit","path":"objects/obj_apple_tree_fruit/obj_apple_tree_fruit.yy",},},
     {"id":{"name":"obj_bakery_entrance","path":"objects/obj_bakery_entrance/obj_bakery_entrance.yy",},},
     {"id":{"name":"obj_bakery_exit","path":"objects/obj_bakery_exit/obj_bakery_exit.yy",},},
+    {"id":{"name":"obj_joshua_shop_entrance","path":"objects/obj_joshua_shop_entrance/obj_joshua_shop_entrance.yy",},},
+    {"id":{"name":"obj_joshua_shop_exit","path":"objects/obj_joshua_shop_exit/obj_joshua_shop_exit.yy",},},
     {"id":{"name":"obj_bakery_outside","path":"objects/obj_bakery_outside/obj_bakery_outside.yy",},},
     {"id":{"name":"obj_bakery_secret_door","path":"objects/obj_bakery_secret_door/obj_bakery_secret_door.yy",},},
     {"id":{"name":"obj_barn_exit","path":"objects/obj_barn_exit/obj_barn_exit.yy",},},
@@ -369,6 +371,7 @@
     {"roomId":{"name":"room_video_intro","path":"rooms/room_video_intro/room_video_intro.yy",},},
     {"roomId":{"name":"rm_bakery","path":"rooms/rm_bakery/rm_bakery.yy",},},
     {"roomId":{"name":"rm_village","path":"rooms/rm_village/rm_village.yy",},},
+    {"roomId":{"name":"rm_joshua_shop","path":"rooms/rm_joshua_shop/rm_joshua_shop.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[
