@@ -204,6 +204,7 @@
     {"id":{"name":"rm_farm","path":"rooms/rm_farm/rm_farm.yy",},},
     {"id":{"name":"rm_house_inside","path":"rooms/rm_house_inside/rm_house_inside.yy",},},
     {"id":{"name":"rm_village","path":"rooms/rm_village/rm_village.yy",},},
+    {"id":{"name":"rm_joshua_shop","path":"rooms/rm_joshua_shop/rm_joshua_shop.yy",},},
     {"id":{"name":"room_barn","path":"rooms/room_barn/room_barn.yy",},},
     {"id":{"name":"room_splash","path":"rooms/room_splash/room_splash.yy",},},
     {"id":{"name":"room_title","path":"rooms/room_title/room_title.yy",},},
@@ -371,7 +372,6 @@
     {"roomId":{"name":"room_video_intro","path":"rooms/room_video_intro/room_video_intro.yy",},},
     {"roomId":{"name":"rm_bakery","path":"rooms/rm_bakery/rm_bakery.yy",},},
     {"roomId":{"name":"rm_village","path":"rooms/rm_village/rm_village.yy",},},
-    {"roomId":{"name":"rm_joshua_shop","path":"rooms/rm_joshua_shop/rm_joshua_shop.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[
