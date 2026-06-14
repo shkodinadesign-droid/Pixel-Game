@@ -32,12 +32,14 @@ function storage_init() {
     ds_map_add(global.item_database, "carrot", {
         name: "Морковь",
         category: "vegetables",
-        grow_days: 3
+        grow_days: 3,
+        sell_price: 5
     });
     ds_map_add(global.item_database, "potato", {
         name: "Картофель",
         category: "vegetables",
         grow_days: 4,
+        sell_price: 5,
         icon: spr_potato_icon,
         icon_scale: 0.75
     });
@@ -98,12 +100,14 @@ function storage_init() {
         name: "Яблоко",
         category: "fruits",
         source: "tree",
+        sell_price: 2,
         icon: asset_get_index("spr_apple_icon")
     });
     ds_map_add(global.item_database, "pear", {
         name: "Груша",
         category: "fruits",
         source: "tree",
+        sell_price: 2,
         icon: asset_get_index("spr_pear_icon")
     });
     ds_map_add(global.item_database, "peach", {
@@ -115,7 +119,8 @@ function storage_init() {
     ds_map_add(global.item_database, "strawberry", {
         name: "Клубника",
         category: "fruits",
-        grow_days: 4
+        grow_days: 4,
+        sell_price: 5
     });
     ds_map_add(global.item_database, "strawberry_seed", {
         name: "Семена клубники",
@@ -167,12 +172,12 @@ function storage_init() {
     ds_map_add(global.item_database, "latte", {
         name: "Латте",
         category: "coffee",
-        sell_price: 15
+        sell_price: 10
     });
     ds_map_add(global.item_database, "americano", {
         name: "Американо",
         category: "coffee",
-        sell_price: 12
+        sell_price: 10
     });
 
     // --- МЁД ---
@@ -186,48 +191,48 @@ function storage_init() {
     ds_map_add(global.item_database, "potato_pie", {
         name: "Картофельный пирог",
         category: "baked",
-        sell_price: 20,
+        sell_price: 10,
         grow_days: 0,
         icon: spr_potatoes_pie
     });
     ds_map_add(global.item_database, "carrot_pie", {
         name: "Морковный пирог",
         category: "baked",
-        sell_price: 15,
+        sell_price: 10,
         grow_days: 0,
         icon: spr_carrot_pie
     });
     ds_map_add(global.item_database, "carrot_muffin", {
-        name: "Морковный пирог",
+        name: "Морковный маффин",
         category: "baked",
-        sell_price: 18,
+        sell_price: 10,
         grow_days: 0
     });
     ds_map_add(global.item_database, "apple_bun", {
         name: "Булочки с яблоками",
         category: "baked",
-        sell_price: 22,
+        sell_price: 10,
         grow_days: 0,
         icon: asset_get_index("spr_apple_bun_icon")
     });
     ds_map_add(global.item_database, "apple_jam", {
         name: "Варенье яблочное",
         category: "baked",
-        sell_price: 30,
+        sell_price: 10,
         grow_days: 0,
         icon: asset_get_index("spr_apple_jam_icon")
     });
     ds_map_add(global.item_database, "pear_jam", {
         name: "Грушевое варенье",
         category: "baked",
-        sell_price: 28,
+        sell_price: 10,
         grow_days: 0,
         icon: asset_get_index("spr_pear_jam_icon")
     });
     ds_map_add(global.item_database, "pizza", {
         name: "Пицца",
         category: "baked",
-        sell_price: 40,
+        sell_price: 10,
         grow_days: 0,
         icon: asset_get_index("spr_pizza_icon")
     });
