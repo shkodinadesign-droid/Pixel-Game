@@ -1,17 +1,13 @@
 {
   "$GMObject":"",
   "%Name":"obj_mailbox",
-  "eventList":[
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-  ],
+  "eventList":[],
   "managed":true,
   "name":"obj_mailbox",
   "overriddenProperties":[],
   "parent":{
-    "name":"farm_main_room",
-    "path":"folders/Objects/farm_main_room.yy",
+    "name":"Room farm",
+    "path":"folders/Sprites/Room farm.yy",
   },
   "parentObjectId":null,
   "persistent":false,

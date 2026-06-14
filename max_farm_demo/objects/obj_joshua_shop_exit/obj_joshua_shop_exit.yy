@@ -10,8 +10,8 @@
   "name":"obj_joshua_shop_exit",
   "overriddenProperties":[],
   "parent":{
-    "name":"technical",
-    "path":"folders/Objects/technical.yy",
+    "name":"village obj",
+    "path":"folders/Objects/village obj.yy",
   },
   "parentObjectId":null,
   "persistent":false,
