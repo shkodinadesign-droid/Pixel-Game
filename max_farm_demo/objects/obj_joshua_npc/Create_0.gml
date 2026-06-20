@@ -1,5 +1,2 @@
 say_timer = 0;
-npc_name  = "Джошуа";
-npc_color = make_color_rgb(60, 140, 80);
-npc_w     = 24;
-npc_h     = 36;
+npc_name  = "Miley";
