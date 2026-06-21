@@ -7,8 +7,8 @@ if (p != noone) {
         if (keyboard_check_pressed(ord("E"))) {
             global.return_spawn_x = p.x;
             global.return_spawn_y = p.y + 32;
-            global.next_spawn_x   = 320;
-            global.next_spawn_y   = 320;
+            global.next_spawn_x   = 128;
+            global.next_spawn_y   = 690;
             room_goto(rm_joshua_shop);
         }
     } else {

@@ -1,18 +1,17 @@
 {
   "$GMObject":"",
-  "%Name":"obj_joshua_npc",
+  "%Name":"obj_ui_dialog_miley_shop",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":64,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"obj_joshua_npc",
+  "name":"obj_ui_dialog_miley_shop",
   "overriddenProperties":[],
   "parent":{
-    "name":"character",
-    "path":"folders/Objects/character.yy",
+    "name":"technical",
+    "path":"folders/Objects/technical.yy",
   },
   "parentObjectId":null,
   "persistent":false,
@@ -32,10 +31,7 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":{
-    "name":"spr_Miley",
-    "path":"sprites/spr_Miley/spr_Miley.yy",
-  },
+  "spriteId":null,
   "spriteMaskId":null,
   "visible":true,
 }

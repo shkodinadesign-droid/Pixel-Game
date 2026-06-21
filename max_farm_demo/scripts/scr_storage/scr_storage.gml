@@ -47,6 +47,18 @@ function storage_init() {
         name: "Семена картофеля",
         category: "vegetables"
     });
+    ds_map_add(global.item_database, "tomato_seed", {
+        name: "Семена томатов",
+        category: "vegetables"
+    });
+    ds_map_add(global.item_database, "pumpkin_seed", {
+        name: "Семена тыквы",
+        category: "vegetables"
+    });
+    ds_map_add(global.item_database, "sunflower_seed", {
+        name: "Семена подсолнуха",
+        category: "vegetables"
+    });
     ds_map_add(global.item_database, "tomato", {
         name: "Помидор",
         category: "vegetables",
@@ -96,6 +108,14 @@ function storage_init() {
     });
 
     // --- ФРУКТЫ ---
+    ds_map_add(global.item_database, "apple_sapling", {
+        name: "Саженец яблони",
+        category: "fruits"
+    });
+    ds_map_add(global.item_database, "pear_sapling", {
+        name: "Саженец груши",
+        category: "fruits"
+    });
     ds_map_add(global.item_database, "apple", {
         name: "Яблоко",
         category: "fruits",
@@ -245,7 +265,7 @@ function storage_init() {
     }
 
     // === ВАЛЮТА ===
-    global.coins = 0;
+    global.coins = 20;
 
     // === ВИТРИНА ===
     global.vitrina_items  = ds_map_create(); // item_id → {amount, price}
