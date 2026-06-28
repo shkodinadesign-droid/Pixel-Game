@@ -304,7 +304,7 @@ for (var i = 0; i < _ing_count; i++) {
 
     // Иконка по центру ячейки
     var _info_ic  = storage_get_item_info(_item_id);
-    var _has_icon = (_info_ic != undefined && variable_struct_exists(_info_ic, "icon"));
+    var _has_icon = (_info_ic != undefined && variable_struct_exists(_info_ic, "icon") && sprite_exists(_info_ic.icon));
     if (_has_icon) {
         var _spr_ic  = _info_ic.icon;
         var _icon_sz = cell_size - 10;
