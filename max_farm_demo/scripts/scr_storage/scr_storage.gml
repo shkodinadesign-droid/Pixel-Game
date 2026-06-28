@@ -62,7 +62,9 @@ function storage_init() {
     ds_map_add(global.item_database, "tomato", {
         name: "Помидор",
         category: "vegetables",
-        grow_days: 5
+        grow_days: 5,
+        icon: -1,
+        sell_price: 3
     });
     ds_map_add(global.item_database, "cabbage", {
         name: "Капуста",
@@ -276,6 +278,9 @@ function storage_init() {
     inventory_add(ITEM_SEED,            4);
     inventory_add(ITEM_POTATO_SEED,     5);
     inventory_add(ITEM_STRAWBERRY_SEED, 5);
+
+    // === ИНВЕНТАРЬ МАЙЛИ (товары, проданные ей игроком) ===
+    global.miley_inventory = ds_map_create();
 
     // === ХРАНИЛИЩЕ ЯЩИКА ===
     global.chest_inventory = ds_map_create();

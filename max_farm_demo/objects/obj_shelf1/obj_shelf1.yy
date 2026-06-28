@@ -6,8 +6,8 @@
   "name":"obj_shelf1",
   "overriddenProperties":[],
   "parent":{
-    "name":"Village room",
-    "path":"folders/Sprites/Village room.yy",
+    "name":"village obj",
+    "path":"folders/Objects/village obj.yy",
   },
   "parentObjectId":{
     "name":"obj_solid",

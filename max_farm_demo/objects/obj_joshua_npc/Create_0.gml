@@ -4,6 +4,8 @@ npc_name  = "Miley";
 // Сбросить блокировку при входе в магазин (spawn_controller здесь не стоит)
 global.control_locked = false;
 
+if (!variable_global_exists("miley_inventory")) global.miley_inventory = ds_map_create();
+
 // Автодиалог при первом входе
 if (!variable_global_exists("miley_first_visit_done")) global.miley_first_visit_done = false;
 intro_timer = global.miley_first_visit_done ? -1 : 90; // 1.5 сек задержка после входа
@@ -64,16 +66,28 @@ shop_grid_y    = shop_panel_y + 72;
 shop_selected  = -1;
 shop_buy_qty   = 1;
 
-// Продажа (правая сторона) — отдельный список
-sell_items = [
-    { id: "potato",          spr: spr_potato_icon,   col: make_color_rgb(220,170,50),  name: "Картофель",   price: 2  },
-    { id: "apple",           spr: spr_apple_icon,    col: make_color_rgb(180,60,60),   name: "Яблоко",      price: 2  },
-    { id: "pear",            spr: spr_pear_icon,     col: make_color_rgb(180,200,80),  name: "Груша",       price: 2  },
-    { id: "potato_pie",      spr: spr_potatoes_pie,  col: make_color_rgb(200,150,80),  name: "Пирог",       price: 20 },
-    { id: "carrot_pie",      spr: spr_carrot_pie,    col: make_color_rgb(220,130,50),  name: "Пирог морк.", price: 20 },
-    { id: "carrot_muffin",   spr: -1,                col: make_color_rgb(200,150,80),  name: "Маффин",      price: 20 },
-    { id: "apple_bun",       spr: -1,                col: make_color_rgb(200,150,80),  name: "Булочки",     price: 20 },
-];
+// Продажа (правая сторона) — динамически из инвентаря игрока
+sell_items    = [];
+sell_selected = -1;
+sell_qty      = 1;
 
-sell_selected  = -1;
-sell_qty       = 1;
+rebuild_sell_items = function() {
+    sell_items    = [];
+    sell_selected = -1;
+    sell_qty      = 1;
+    if (!variable_global_exists("player_inventory")) exit;
+    var _key = ds_map_find_first(global.player_inventory);
+    repeat(ds_map_size(global.player_inventory)) {
+        var _qty = ds_map_find_value(global.player_inventory, _key);
+        if (_qty > 0) {
+            var _def = ds_map_find_value(global.item_database, _key);
+            if (_def != undefined) {
+                var _spr = variable_struct_exists(_def, "icon") ? _def.icon : -1;
+                var _nm  = variable_struct_exists(_def, "name") ? _def.name : string(_key);
+                var _sp  = variable_struct_exists(_def, "sell_price") ? _def.sell_price : 1;
+                array_push(sell_items, { id: _key, spr: _spr, col: make_color_rgb(200,200,180), name: _nm, price: _sp });
+            }
+        }
+        _key = ds_map_find_next(global.player_inventory, _key);
+    }
+};

@@ -41,6 +41,7 @@ if (shop_state >= 1 && shop_state <= 3) {
         if (shop_state == 4) {
             _click_prev  = true;
             _click_press = false;
+            rebuild_sell_items();
         }
     }
 }
@@ -61,7 +62,7 @@ if (shop_state == 4) {
 
     if (_click_press) {
         var _clicked = false;
-        var _bar_y   = shop_panel_y + shop_panel_h - 58;
+        var _bar_y   = shop_panel_y + shop_panel_h - 62;
         var _arr_w   = 24; var _arr_h = 24;
 
         // === Левая сторона: клик по слоту магазина → выбрать для покупки ===
@@ -115,9 +116,9 @@ if (shop_state == 4) {
                 shop_buy_qty++;
             }
 
-            var _btn_x = shop_panel_x + shop_panel_w / 4 - 60;
+            var _btn_x = shop_panel_x + shop_panel_w / 2 - 60;
             var _btn_w = 120; var _btn_h = 32;
-            var _btn_y = _bar_y + 22;
+            var _btn_y = _bar_y + 4;
             if (_mx >= _btn_x && _mx <= _btn_x + _btn_w &&
                 _my >= _btn_y && _my <= _btn_y + _btn_h) {
                 var _total = _item.price * shop_buy_qty;
@@ -126,6 +127,7 @@ if (shop_state == 4) {
                     inventory_add(_item.id, shop_buy_qty);
                     shop_selected = -1;
                     shop_buy_qty  = 1;
+                    rebuild_sell_items();
                 }
             }
         }
@@ -145,14 +147,17 @@ if (shop_state == 4) {
                 sell_qty = min(inventory_get_amount(_sitem.id), sell_qty + 1);
             }
 
-            var _btn_x = shop_panel_x + shop_panel_w * 3 / 4 - 60;
+            var _btn_x = shop_panel_x + shop_panel_w - 140;
             var _btn_w = 120; var _btn_h = 32;
-            var _btn_y = _bar_y + 22;
+            var _btn_y = _bar_y + 4;
             if (_mx >= _btn_x && _mx <= _btn_x + _btn_w &&
                 _my >= _btn_y && _my <= _btn_y + _btn_h) {
                 if (inventory_get_amount(_sitem.id) >= sell_qty) {
                     inventory_remove(_sitem.id, sell_qty);
                     global.coins += _sitem.price * sell_qty;
+                    var _cur = ds_map_find_value(global.miley_inventory, _sitem.id);
+                    if (is_undefined(_cur)) _cur = 0;
+                    ds_map_set(global.miley_inventory, _sitem.id, _cur + sell_qty);
                     sell_selected = -1;
                     sell_qty      = 1;
                 }
