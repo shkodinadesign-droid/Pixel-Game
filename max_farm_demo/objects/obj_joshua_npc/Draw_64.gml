@@ -161,10 +161,9 @@ if (shop_state == 4) {
             var _sy  = shop_grid_y + _r * (shop_slot_size + shop_slot_gap);
             if (_idx < array_length(shop_items)) {
                 var _def  = shop_items[_idx];
-                var _can  = (global.coins >= _def.price);
-                _draw_slot(_sx, _sy, _def, 1,
+                _draw_slot(_sx, _sy, _def, 0,
                            (shop_selected == _idx),
-                           string(_def.price) + "м", mx, my);
+                           " ", mx, my);
             }
         }
     }
@@ -184,25 +183,28 @@ if (shop_state == 4) {
         }
     }
 
-    // ── Что Майли купила (под сеткой продажи) ──
+    // ── Что Майли купила (под сеткой продажи, слоты с кружками) ──
     if (variable_global_exists("miley_inventory") && ds_map_size(global.miley_inventory) > 0) {
-        var _ml_y = shop_grid_y + shop_grid_rows * (shop_slot_size + shop_slot_gap) + 6;
+        var _ml_top = shop_grid_y + shop_grid_rows * (shop_slot_size + shop_slot_gap) + 6;
         draw_set_font(fnt_ui);
         draw_set_halign(fa_left);
         draw_set_valign(fa_top);
         draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(shop_inv_x, _ml_y, "Майли купила:");
-        _ml_y += 18;
-        var _mkey = ds_map_find_first(global.miley_inventory);
-        var _bar_limit = shop_panel_y + shop_panel_h - 66;
+        draw_text(shop_inv_x, _ml_top, "Майли получила:");
+        var _ml_sy  = _ml_top + 20;
+        var _ml_col = 0;
+        var _mkey   = ds_map_find_first(global.miley_inventory);
         repeat(ds_map_size(global.miley_inventory)) {
-            if (_ml_y >= _bar_limit) break;
+            if (_ml_sy + shop_slot_size > shop_panel_y + shop_panel_h - 66) break;
             var _mamt = ds_map_find_value(global.miley_inventory, _mkey);
             var _mdef = ds_map_find_value(global.item_database, _mkey);
-            var _mnm  = (_mdef != undefined && variable_struct_exists(_mdef, "name")) ? _mdef.name : string(_mkey);
-            draw_set_color(make_color_rgb(60, 100, 50));
-            draw_text(shop_inv_x, _ml_y, _mnm + " ×" + string(_mamt));
-            _ml_y += 18;
+            var _mspr = (_mdef != undefined && variable_struct_exists(_mdef, "icon")) ? _mdef.icon : -1;
+            var _mcol = (_mdef != undefined && variable_struct_exists(_mdef, "col"))  ? _mdef.col  : make_color_rgb(180,160,120);
+            var _mslot = { spr: _mspr, col: _mcol };
+            var _msx = shop_inv_x + _ml_col * (shop_slot_size + shop_slot_gap);
+            _draw_slot(_msx, _ml_sy, _mslot, _mamt, false, "", mx, my);
+            _ml_col++;
+            if (_ml_col >= shop_grid_cols) { _ml_col = 0; _ml_sy += shop_slot_size + shop_slot_gap; }
             _mkey = ds_map_find_next(global.miley_inventory, _mkey);
         }
     }

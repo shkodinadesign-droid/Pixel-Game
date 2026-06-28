@@ -122,6 +122,33 @@ switch (current_tab) {
              inventory_get_amount("potato_pie"), "Картоф. пирог",
              "Любимый пирог Джастина.\n\nПриготовить в пекарне:\nКартофель + Молоко + Яйцо\nМука + Дрожжи.\n\nМожно продать или\nотдать Джастину."],
         ];
+
+        // Добавляем товары из player_inventory, которых нет в базовом списке
+        var _base_ids = ["carrot","carrot_seed","potato_seed","strawberry_seed",
+                         "potato","milk","egg","flour","yeast","potato_pie"];
+        if (variable_global_exists("player_inventory") && variable_global_exists("item_database")) {
+            var _pk = ds_map_find_first(global.player_inventory);
+            repeat(ds_map_size(global.player_inventory)) {
+                var _in_base = false;
+                for (var _bi = 0; _bi < array_length(_base_ids); _bi++) {
+                    if (_pk == _base_ids[_bi]) { _in_base = true; break; }
+                }
+                if (!_in_base) {
+                    var _pq = ds_map_find_value(global.player_inventory, _pk);
+                    if (_pq > 0) {
+                        var _pd = ds_map_find_value(global.item_database, _pk);
+                        if (_pd != undefined) {
+                            var _pspr = variable_struct_exists(_pd, "icon")  ? _pd.icon  : -1;
+                            var _pcol = variable_struct_exists(_pd, "col")   ? _pd.col   : make_color_rgb(180,160,120);
+                            var _pnm  = variable_struct_exists(_pd, "name")  ? _pd.name  : string(_pk);
+                            array_push(inv_items, [_pspr, _pcol, _pq, _pnm, ""]);
+                        }
+                    }
+                }
+                _pk = ds_map_find_next(global.player_inventory, _pk);
+            }
+        }
+
         var inv_count = array_length(inv_items);
 
         // --- Константы сетки (масштабированные) ---
