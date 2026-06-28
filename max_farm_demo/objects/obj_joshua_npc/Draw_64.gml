@@ -183,15 +183,10 @@ if (shop_state == 4) {
         }
     }
 
-    // ── Что Майли купила (под сеткой продажи, слоты с кружками) ──
+    // ── Товары Майли (под левой сеткой магазина, слоты с кружками) ──
     if (variable_global_exists("miley_inventory") && ds_map_size(global.miley_inventory) > 0) {
         var _ml_top = shop_grid_y + shop_grid_rows * (shop_slot_size + shop_slot_gap) + 6;
-        draw_set_font(fnt_ui);
-        draw_set_halign(fa_left);
-        draw_set_valign(fa_top);
-        draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(shop_inv_x, _ml_top, "Майли получила:");
-        var _ml_sy  = _ml_top + 20;
+        var _ml_sy  = _ml_top;
         var _ml_col = 0;
         var _mkey   = ds_map_find_first(global.miley_inventory);
         repeat(ds_map_size(global.miley_inventory)) {
@@ -201,7 +196,7 @@ if (shop_state == 4) {
             var _mspr = (_mdef != undefined && variable_struct_exists(_mdef, "icon")) ? _mdef.icon : -1;
             var _mcol = (_mdef != undefined && variable_struct_exists(_mdef, "col"))  ? _mdef.col  : make_color_rgb(180,160,120);
             var _mslot = { spr: _mspr, col: _mcol };
-            var _msx = shop_inv_x + _ml_col * (shop_slot_size + shop_slot_gap);
+            var _msx = shop_grid_x + _ml_col * (shop_slot_size + shop_slot_gap);
             _draw_slot(_msx, _ml_sy, _mslot, _mamt, false, "", mx, my);
             _ml_col++;
             if (_ml_col >= shop_grid_cols) { _ml_col = 0; _ml_sy += shop_slot_size + shop_slot_gap; }
