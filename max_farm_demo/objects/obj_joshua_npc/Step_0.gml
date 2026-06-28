@@ -18,8 +18,33 @@ if (intro_timer > 0 && !global.control_locked) {
 if (shop_state == 0 && !global.control_locked && instance_exists(obj_max)) {
     if (point_distance(x, y, obj_max.x, obj_max.y) < 160
     &&  keyboard_check_pressed(ord("E"))) {
-        shop_state = 1;
+        if (global.miley_first_visit_done) {
+            shop_state = 5; // короткий диалог при повторном визите
+        } else {
+            shop_state = 1; // полный интро-диалог при первом визите
+        }
         global.control_locked = true;
+    }
+}
+
+// Короткий диалог (фаза 5) — повторный визит
+if (shop_state == 5) {
+    var _gui_w = display_get_gui_width();
+    dx = (_gui_w - dw) / 2;
+    var _bx1 = dx + dw - btn_w - dpad;
+    var _by1 = dy + dh - btn_h - dpad;
+    var _bx2 = _bx1 + btn_w;
+    var _by2 = _by1 + btn_h;
+
+    var _advance = (_click_press && _mx >= _bx1 && _mx <= _bx2 && _my >= _by1 && _my <= _by2)
+        || keyboard_check_pressed(vk_return)
+        || keyboard_check_pressed(vk_space);
+
+    if (_advance) {
+        _click_prev  = true;
+        _click_press = false;
+        shop_state   = 4;
+        rebuild_sell_items();
     }
 }
 

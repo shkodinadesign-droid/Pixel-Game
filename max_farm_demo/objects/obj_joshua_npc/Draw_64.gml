@@ -1,4 +1,35 @@
-if (shop_state == 0) exit;
+// ===== ХИНТ "[E] Говорить" при повторном визите =====
+if (shop_state == 0) {
+    if (variable_global_exists("miley_first_visit_done") && global.miley_first_visit_done
+    && instance_exists(obj_max)
+    && point_distance(x, y, obj_max.x, obj_max.y) < 160) {
+        var _gui_w = display_get_gui_width();
+        var _gui_h = display_get_gui_height();
+        var _vx = camera_get_view_x(view_camera[0]);
+        var _vy = camera_get_view_y(view_camera[0]);
+        var _vw = camera_get_view_width(view_camera[0]);
+        var _vh = camera_get_view_height(view_camera[0]);
+        var _sx = (x - _vx) * (_gui_w / _vw);
+        var _sy = (y - _vy) * (_gui_h / _vh);
+
+        var _pw = 130; var _ph = 28;
+        var _px = _sx - _pw / 2;
+        var _py = _sy - 72;
+
+        draw_set_alpha(0.88);
+        draw_set_color(c_black);
+        draw_roundrect_ext(_px, _py, _px + _pw, _py + _ph, 6, 6, false);
+        draw_set_alpha(1);
+        draw_set_font(fnt_ui);
+        draw_set_halign(fa_center);
+        draw_set_valign(fa_middle);
+        draw_set_color(c_white);
+        draw_text(_px + _pw / 2, _py + _ph / 2, "[E]  Говорить");
+        draw_set_halign(fa_left);
+        draw_set_valign(fa_top);
+    }
+    exit;
+}
 
 var _gui_w = display_get_gui_width();
 var _gui_h = display_get_gui_height();
@@ -65,6 +96,46 @@ if (shop_state >= 1 && shop_state <= 3) {
     draw_set_halign(fa_center);
     draw_set_valign(fa_middle);
     draw_set_color(_hover ? c_black : c_white);
+    draw_text((_bx1+_bx2)/2, (_by1+_by2)/2, "Далее");
+}
+
+// ===== КОРОТКИЙ ДИАЛОГ (фаза 5) — повторный визит =====
+if (shop_state == 5) {
+    dx = (_gui_w - dw) / 2;
+    var _col5 = make_color_rgb(80, 180, 120);
+
+    gpu_set_blendmode(bm_normal);
+    draw_set_alpha(1);
+    draw_set_color(c_black);
+    draw_roundrect_ext(dx, dy, dx + dw, dy + dh, 12, 12, false);
+    draw_set_color(_col5);
+    draw_roundrect_ext(dx, dy, dx + dw, dy + dh, 12, 12, true);
+
+    var tx5 = dx + dpad + 8;
+    var ty5 = dy + dpad;
+    draw_set_font(fnt_ui);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_color(_col5);
+    draw_text(tx5, ty5, "Майли:");
+    ty5 += dlh * 1.5;
+    draw_set_color(c_white);
+    draw_text(tx5, ty5, "Добрый день! Что желаете купить?");
+
+    var _bx1 = dx + dw - btn_w - dpad;
+    var _by1 = dy + dh - btn_h - dpad;
+    var _bx2 = _bx1 + btn_w;
+    var _by2 = _by1 + btn_h;
+    var _hover5 = (device_mouse_x_to_gui(0) >= _bx1 && device_mouse_x_to_gui(0) <= _bx2
+               && device_mouse_y_to_gui(0) >= _by1 && device_mouse_y_to_gui(0) <= _by2);
+    draw_set_color(_hover5 ? c_white : c_black);
+    draw_rectangle(_bx1, _by1, _bx2, _by2, false);
+    draw_set_color(_col5);
+    draw_line(_bx1+1,_by1,_bx2-1,_by1); draw_line(_bx1+1,_by2,_bx2-1,_by2);
+    draw_line(_bx1+1,_by1,_bx1+1,_by2); draw_line(_bx2-1,_by1,_bx2-1,_by2);
+    draw_set_halign(fa_center);
+    draw_set_valign(fa_middle);
+    draw_set_color(_hover5 ? c_black : c_white);
     draw_text((_bx1+_bx2)/2, (_by1+_by2)/2, "Далее");
 }
 
