@@ -5,19 +5,11 @@ speaker_col = make_color_rgb(255, 210, 100);
 
 var _quest = variable_global_exists("secret_quest_started") && global.secret_quest_started;
 
-if (_quest) {
-    line1 = "Эта дверь закрыта. Это похоже на";
-    line2 = "тайную комнату из письма бабули.";
-    line3 = "Чтобы её открыть я должна";
-    line4 = "выполнить все задания бабушки.";
-    line_count = 4;
-} else {
-    line1 = "Эта дверь закрыта.";
-    line2 = "Это похоже на тайную комнату =)";
-    line3 = "";
-    line4 = "";
-    line_count = 2;
-}
+line1 = "Тут закрыто.";
+line2 = "";
+line3 = "";
+line4 = "";
+line_count = 1;
 
 win_w  = 520;
 pad    = 14;
