@@ -103,7 +103,7 @@ for (var i = 0; i < _bi_count; i++) {
     var _bx     = bowl_cx + cos(_angle) * (bowl_rx * 0.45);
     var _by     = bowl_cy + sin(_angle) * (bowl_ry * 0.35) + 8;
     var _binfo  = storage_get_item_info(bowl_items[i]);
-    var _bhas   = (_binfo != undefined && variable_struct_exists(_binfo, "icon"));
+    var _bhas   = (_binfo != undefined && variable_struct_exists(_binfo, "icon") && sprite_exists(_binfo.icon));
     if (_bhas) {
         var _bspr = _binfo.icon;
         var _bisc = variable_struct_exists(_binfo, "icon_scale") ? _binfo.icon_scale : 1.0;
@@ -128,7 +128,7 @@ for (var i = 0; i < array_length(fly_anims); i++) {
     var _fy    = lerp(_fa.sy, bowl_cy + 10, _fa.t) - sin(_fa.t * pi) * 45;
     var _r2    = lerp(10, 12, _fa.t);
     var _finfo = storage_get_item_info(_fa.item_id);
-    var _fhas  = (_finfo != undefined && variable_struct_exists(_finfo, "icon"));
+    var _fhas  = (_finfo != undefined && variable_struct_exists(_finfo, "icon") && sprite_exists(_finfo.icon));
     if (_fhas) {
         var _fspr = _finfo.icon;
         var _fisc = variable_struct_exists(_finfo, "icon_scale") ? _finfo.icon_scale : 1.0;
