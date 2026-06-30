@@ -13,7 +13,7 @@ if (shop_state == 0) {
         var _sy = (y - _vy) * (_gui_h / _vh);
 
         var _pw = 130; var _ph = 28;
-        var _px = _sx - _pw / 2 + 10;
+        var _px = _sx - _pw / 2 + 20;
         var _py = _sy - 72;
 
         draw_set_alpha(0.88);
