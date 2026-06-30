@@ -4,7 +4,8 @@
 // Поставь TEST_DAY = 1 для обычного старта
 // Поставь TEST_DAY = 2 для тестирования кофейного квеста
 // Поставь TEST_DAY = 3 для тестирования дня 3 / секретной двери
-var TEST_DAY = 3;
+// Поставь TEST_DAY = 4 для тестирования письма с пуддингом
+var TEST_DAY = 4;
 
 // --- Текущее время ---
 day_index = TEST_DAY;
@@ -53,6 +54,17 @@ if (TEST_DAY >= 3) {
     // Письма 0,1,2,5 прочитаны; письмо 6 (секретная дверь) — НЕТ, ждёт в ящике
     global.letters_read = [0, 1, 2, 5];
     // Флаг: на первом кадре перейти в дом
+    _need_house_start = true;
+}
+if (TEST_DAY >= 4) {
+    // День 4 — письмо с пуддингом ещё не прочитано, ждёт в ящике
+    global.maggie_day2_started  = true;
+    global.kitten_arrived       = true;
+    global.coffee_made          = true;
+    global.secret_quest_started = true;
+    // Письма 0,1,2,3,5,6 прочитаны; письмо 7 (пуддинг) — НЕТ, ждёт в ящике
+    global.letters_read = [0, 1, 2, 3, 5, 6];
+    if (!variable_global_exists("pudding_quest")) global.pudding_quest = false;
     _need_house_start = true;
 }
 if (TEST_DAY == 1) {

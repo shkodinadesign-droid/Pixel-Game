@@ -56,6 +56,10 @@ if (pending_action != "" && !instance_exists(obj_ui_letter)) {
             _d.current_tab = 1;
         }
     }
+    if (pending_action == "pudding_quest_start") {
+        if (!variable_global_exists("pudding_quest")) global.pudding_quest = false;
+        global.pudding_quest = true;
+    }
     // После любого письма — дневник всегда прыгает с "!"
     global.diary_has_new  = true;
     global.diary_was_read = false;
