@@ -84,6 +84,19 @@ function recipes_init() {
         result: { item: ITEM_PEAR_JAM, amount: 1 }
     };
     array_push(global.recipes, _r7);
+
+    var _r8 = {
+        id:          "pudding",
+        name:        "Пуддинг",
+        ingredients: [
+            { item: "milk",      amount: 1 },
+            { item: "egg",       amount: 1 },
+            { item: "sugar",     amount: 1 },
+            { item: ITEM_APPLE,  amount: 1 }
+        ],
+        result: { item: ITEM_PUDDING, amount: 1 }
+    };
+    array_push(global.recipes, _r8);
 }
 
 function recipe_can_craft(idx) {

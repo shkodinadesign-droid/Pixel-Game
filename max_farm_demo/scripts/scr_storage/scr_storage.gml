@@ -259,6 +259,15 @@ function storage_init() {
         icon: asset_get_index("spr_pizza_icon")
     });
 
+    ds_map_add(global.item_database, "pudding", {
+        name: "Пуддинг",
+        category: "baked",
+        sell_price: 8,
+        grow_days: 0,
+        col: make_color_rgb(255, 220, 140),
+        icon: asset_get_index("spr_pudding_icon")
+    });
+
     // === ХРАНИЛИЩЕ САРАЯ (по категориям) ===
     global.barn_storage = ds_map_create();
     for (var i = 0; i < array_length(global.storage_categories); i++) {
