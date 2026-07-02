@@ -38,7 +38,7 @@ if (cook_anim > 0) {
 if (cook_done && cook_done_timer > 0) {
     cook_done_timer--;
     if (cook_done_timer == 0) {
-        var _r_done = global.recipes[selected_recipe];
+        var _r_done = visible_recipes[selected_recipe];
         if (_r_done.id == "latte" || _r_done.id == "americano") {
             // Кофейный рецепт — анимация питья
             if (!variable_global_exists("coffee_made")) global.coffee_made = false;
@@ -95,7 +95,7 @@ if (cook_anim == 0 && !cook_done && click_press) {
     var _nav_y = tab_y;
     var _nav_h = tab_h + 4;
     if (my >= _nav_y && my <= _nav_y + _nav_h) {
-        var _count = array_length(global.recipes);
+        var _count = array_length(visible_recipes);
         if (mx >= right_x && mx <= right_x + _arr_w) {
             var _prev = (selected_recipe - 1 + _count) mod _count;
             if (_prev != selected_recipe) {
@@ -139,7 +139,7 @@ if (cook_anim == 0 && !cook_done) {
 // --- Hover и клики по ячейкам ---
 hover_cell = -1;
 if (cook_anim == 0 && !cook_done) {
-    var _r = global.recipes[selected_recipe];
+    var _r = visible_recipes[selected_recipe];
     var _ing_count = array_length(_r.ingredients);
 
     for (var i = 0; i < _ing_count; i++) {

@@ -88,6 +88,7 @@ function recipes_init() {
     var _r8 = {
         id:          "pudding",
         name:        "Пуддинг",
+        unlock:      "pudding_quest",
         ingredients: [
             { item: "milk",      amount: 1 },
             { item: "egg",       amount: 1 },

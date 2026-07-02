@@ -161,7 +161,7 @@ for (var i = 0; i < array_length(splash_anims); i++) {
 
 // Текст "Готово!" после готовки
 if (cook_done) {
-    var _r = global.recipes[selected_recipe];
+    var _r = visible_recipes[selected_recipe];
     var _res_info = storage_get_item_info(_r.result.item);
     var _res_name = (_res_info != undefined) ? _res_info.name : _r.result.item;
     draw_set_font(fnt_ui);
@@ -178,7 +178,7 @@ if (cook_done) {
 // ПРАВАЯ ЧАСТЬ — РЕЦЕПТ + ЯЧЕЙКИ
 // =======================================================
 
-var _r = global.recipes[selected_recipe];
+var _r = visible_recipes[selected_recipe];
 var _ing_count = array_length(_r.ingredients);
 
 // --- Стрелки навигации рецептов ---

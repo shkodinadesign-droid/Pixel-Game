@@ -61,6 +61,21 @@ if (hour >= 6 && hour < 12) {
     target_darkness = 0.4 + (hour - 21 + minute/60) / 3 * 0.3;
 }
 
+// --- Ночная сцена с лягушонком: пуддинг на крыльце + наступил вечер ---
+if (variable_global_exists("pudding_on_porch") && global.pudding_on_porch
+&&  phase == "evening" && hour >= 20
+&& !variable_global_exists("frog_night_done")) {
+    if (!variable_global_exists("frog_night_done")) global.frog_night_done = false;
+    global.frog_night_done = true;
+    // Запускаем ночную катсцену
+    if (!instance_exists(obj_cutscene_frog_night)) {
+        var _lyr = layer_get_id("GUI");
+        if (_lyr == -1) _lyr = layer_get_id("Instances");
+        if (_lyr == -1) _lyr = layer;
+        instance_create_layer(0, 0, _lyr, obj_cutscene_frog_night);
+    }
+}
+
 // --- Утреннее приветствие Дня 2 (встроенный диалог в obj_day_controller) ---
 if (day_index == 2 && hour >= 6 && !day2_morning_shown && room == rm_farm) {
     day2_morning_shown  = true;

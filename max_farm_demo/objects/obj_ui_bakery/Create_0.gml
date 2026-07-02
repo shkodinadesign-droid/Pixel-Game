@@ -1,6 +1,15 @@
 // ===== UI BAKERY CREATE =====
 
-// 0 = картофельный пирог, 1 = морковный пирог
+// Строим список доступных рецептов (с учётом unlock-флагов)
+visible_recipes = [];
+for (var _i = 0; _i < array_length(global.recipes); _i++) {
+    var _rec = global.recipes[_i];
+    var _ok  = true;
+    if (variable_struct_exists(_rec, "unlock")) {
+        _ok = variable_global_exists(_rec.unlock) && variable_global_get(_rec.unlock);
+    }
+    if (_ok) array_push(visible_recipes, _rec);
+}
 selected_recipe = 0;
 
 var gui_w = display_get_gui_width();
