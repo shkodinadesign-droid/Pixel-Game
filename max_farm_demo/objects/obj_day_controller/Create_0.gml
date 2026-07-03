@@ -57,14 +57,16 @@ if (TEST_DAY >= 3) {
     _need_house_start = true;
 }
 if (TEST_DAY >= 4) {
-    // День 4 — письмо с пуддингом ещё не прочитано, ждёт в ящике
+    // День 4 — письмо с пуддингом прочитано, рецепт разблокирован
     global.maggie_day2_started  = true;
     global.kitten_arrived       = true;
     global.coffee_made          = true;
     global.secret_quest_started = true;
-    // Письма 0,1,2,3,5,6 прочитаны; письмо 7 (пуддинг) — НЕТ, ждёт в ящике
-    global.letters_read = [0, 1, 2, 3, 5, 6];
-    if (!variable_global_exists("pudding_quest")) global.pudding_quest = false;
+    // Все письма включая 7 (пуддинг) прочитаны
+    global.letters_read = [0, 1, 2, 3, 5, 6, 7];
+    global.pudding_quest = true;
+    if (!variable_global_exists("pudding_on_porch")) global.pudding_on_porch = false;
+    if (!variable_global_exists("pudding_ready"))    global.pudding_ready    = false;
     _need_house_start = true;
 }
 if (TEST_DAY == 1) {

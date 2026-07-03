@@ -12,6 +12,7 @@ ds_map_set(_ing_color_map, "flour",  make_color_rgb(235,225,205));
 ds_map_set(_ing_color_map, "yeast",  make_color_rgb(160,110,55));
 ds_map_set(_ing_color_map, "carrot", make_color_rgb(255,130,30));
 ds_map_set(_ing_color_map, "sugar",  make_color_rgb(240,240,220));
+ds_map_set(_ing_color_map, "apple",  make_color_rgb(180,220,80));
 
 // Во время анимации питья — панель не рисуем
 if (drink_phase) {
