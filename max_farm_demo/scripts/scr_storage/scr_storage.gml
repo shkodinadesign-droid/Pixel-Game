@@ -265,7 +265,7 @@ function storage_init() {
         sell_price: 8,
         grow_days: 0,
         col: make_color_rgb(255, 220, 140),
-        icon: asset_get_index("spr_pudding_icon")
+        icon: spr_pudding_icon
     });
 
     // === ХРАНИЛИЩЕ САРАЯ (по категориям) ===

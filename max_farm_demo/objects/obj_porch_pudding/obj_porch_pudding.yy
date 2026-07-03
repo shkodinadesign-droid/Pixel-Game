@@ -11,8 +11,8 @@
   "name":"obj_porch_pudding",
   "overriddenProperties":[],
   "parent":{
-    "name":"technical",
-    "path":"folders/Objects/technical.yy",
+    "name":"farm_main_room",
+    "path":"folders/Objects/farm_main_room.yy",
   },
   "parentObjectId":null,
   "persistent":false,
