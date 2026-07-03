@@ -5,13 +5,30 @@ speaker_col = make_color_rgb(255, 210, 100);
 
 var _quest = variable_global_exists("secret_quest_started") && global.secret_quest_started;
 
-line1 = "Тут закрыто.";
-line2 = "";
-line3 = "";
-line4 = "";
-line_count = 1;
+if (room == rm_joshua_shop) {
+    // Дверь в магазине Майли — просто закрыто
+    line1 = "Тут закрыто.";
+    line2 = "";
+    line3 = "";
+    line4 = "";
+    line_count = 1;
+} else if (_quest) {
+    // Пекарня — квест активен, загадочный намёк
+    line1 = "Странная дверь... Она явно ведёт куда-то.";
+    line2 = "Интересно, что за ней скрывается?";
+    line3 = "Может, бабуля знает ключ...";
+    line4 = "";
+    line_count = 3;
+} else {
+    // Пекарня — квест ещё не начат
+    line1 = "Заперто. Эта дверь выглядит необычно.";
+    line2 = "";
+    line3 = "";
+    line4 = "";
+    line_count = 1;
+}
 
-win_w  = 520;
+win_w  = 560;
 pad    = 14;
 line_h = 26;
 win_h  = pad + round(line_h * 1.5) + line_h * (line_count + 0.5) + pad * 2 + 40;
