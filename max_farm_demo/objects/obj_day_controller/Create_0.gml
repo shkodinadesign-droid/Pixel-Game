@@ -63,7 +63,8 @@ if (TEST_DAY >= 4) {
     global.coffee_made          = true;
     global.secret_quest_started = true;
     // Письма до пуддинга прочитаны; письмо 7 (рецепт бабули) доставит почтовый ящик
-    global.letters_read = [0, 1, 2, 3, 5, 6];
+    global.letters_read  = [0, 1, 2, 3, 5, 6];
+    global.pudding_quest = true;
     if (!variable_global_exists("pudding_on_porch")) global.pudding_on_porch = false;
     if (!variable_global_exists("pudding_ready"))    global.pudding_ready    = false;
     _need_house_start = true;
