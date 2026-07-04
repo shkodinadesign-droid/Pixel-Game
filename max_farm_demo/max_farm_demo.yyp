@@ -190,6 +190,7 @@
     {"id":{"name":"obj_ui_dialog_max_muffin","path":"objects/obj_ui_dialog_max_muffin/obj_ui_dialog_max_muffin.yy",},},
     {"id":{"name":"obj_ui_dialog_max_pie","path":"objects/obj_ui_dialog_max_pie/obj_ui_dialog_max_pie.yy",},},
     {"id":{"name":"obj_ui_dialog_max_pudding","path":"objects/obj_ui_dialog_max_pudding/obj_ui_dialog_max_pudding.yy",},},
+    {"id":{"name":"obj_ui_dialog_max_pudding_porch","path":"objects/obj_ui_dialog_max_pudding_porch/obj_ui_dialog_max_pudding_porch.yy",},},
     {"id":{"name":"obj_ui_dialog_plant_task","path":"objects/obj_ui_dialog_plant_task/obj_ui_dialog_plant_task.yy",},},
     {"id":{"name":"obj_ui_dialog_secret_door","path":"objects/obj_ui_dialog_secret_door/obj_ui_dialog_secret_door.yy",},},
     {"id":{"name":"obj_ui_dialog_seed_reminder","path":"objects/obj_ui_dialog_seed_reminder/obj_ui_dialog_seed_reminder.yy",},},
