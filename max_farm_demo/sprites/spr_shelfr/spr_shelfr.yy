@@ -1,7 +1,7 @@
 {
   "$GMSprite":"v2",
   "%Name":"spr_shelfr",
-  "bboxMode":2,
+  "bboxMode":0,
   "bbox_bottom":139,
   "bbox_left":5,
   "bbox_right":129,

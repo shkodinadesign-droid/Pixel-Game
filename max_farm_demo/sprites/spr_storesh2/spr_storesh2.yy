@@ -1,11 +1,11 @@
 {
   "$GMSprite":"v2",
   "%Name":"spr_storesh2",
-  "bboxMode":2,
+  "bboxMode":0,
   "bbox_bottom":97,
   "bbox_left":2,
   "bbox_right":113,
-  "bbox_top":0,
+  "bbox_top":1,
   "collisionKind":1,
   "collisionTolerance":0,
   "DynamicTexturePage":false,

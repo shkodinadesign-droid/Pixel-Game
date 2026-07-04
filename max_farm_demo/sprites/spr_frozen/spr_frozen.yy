@@ -1,7 +1,7 @@
 {
   "$GMSprite":"v2",
   "%Name":"spr_frozen",
-  "bboxMode":2,
+  "bboxMode":0,
   "bbox_bottom":95,
   "bbox_left":0,
   "bbox_right":48,
