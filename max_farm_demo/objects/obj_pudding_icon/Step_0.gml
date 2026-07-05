@@ -12,4 +12,4 @@ global.pudding_on_porch = true;
 visible = true;
 
 // Диалог Макс после того как положила пуддинг
-instance_create_layer(0, 0, "UI", obj_ui_dialog_max_pudding_porch);
+instance_create_depth(0, 0, -9999, obj_ui_dialog_max_pudding_porch);
