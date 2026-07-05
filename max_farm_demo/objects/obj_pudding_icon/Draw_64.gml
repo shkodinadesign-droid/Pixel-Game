@@ -5,7 +5,7 @@ if (!instance_exists(obj_max)) exit;
 
 var _p    = instance_find(obj_max, 0);
 var _dist = point_distance(x, y, _p.x, _p.y);
-if (_dist >= 28) exit;
+if (_dist >= 48) exit;
 
 var _cam = view_camera[0];
 var _cx  = camera_get_view_x(_cam);

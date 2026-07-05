@@ -66,7 +66,8 @@ if (TEST_DAY >= 4) {
     global.letters_read  = [0, 1, 2, 3, 5, 6];
     global.pudding_quest = true;
     if (!variable_global_exists("pudding_on_porch")) global.pudding_on_porch = false;
-    if (!variable_global_exists("pudding_ready"))    global.pudding_ready    = false;
+    global.pudding_ready = true;
+    inventory_add("pudding", 1);
     _need_house_start = true;
 }
 if (TEST_DAY == 1) {

@@ -4,7 +4,7 @@ if (global.pudding_on_porch) exit;
 if (!variable_global_exists("pudding_ready") || !global.pudding_ready) exit;
 if (variable_global_exists("control_locked") && global.control_locked) exit;
 if (!instance_exists(obj_max)) exit;
-if (point_distance(x, y, obj_max.x, obj_max.y) >= 28) exit;
+if (point_distance(x, y, obj_max.x, obj_max.y) >= 48) exit;
 if (!keyboard_check_pressed(ord("E"))) exit;
 
 inventory_remove("pudding", 1);
