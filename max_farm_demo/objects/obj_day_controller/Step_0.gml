@@ -1,5 +1,13 @@
 // === КОНТРОЛЛЕР ДНЯ/НОЧИ (STEP) ===
 
+// Добавить пуддинг в инвентарь для тестирования (после инициализации)
+if (variable_instance_exists(id, "_need_pudding_in_inv") && _need_pudding_in_inv) {
+    if (variable_global_exists("player_inventory")) {
+        _need_pudding_in_inv = false;
+        inventory_add("pudding", 1);
+    }
+}
+
 // Тест-старт день 3: перенести Макса в дом на первом кадре
 if (variable_instance_exists(id, "_need_house_start") && _need_house_start) {
     _need_house_start = false;

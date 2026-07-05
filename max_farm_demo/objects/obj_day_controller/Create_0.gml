@@ -67,7 +67,7 @@ if (TEST_DAY >= 4) {
     global.pudding_quest = true;
     if (!variable_global_exists("pudding_on_porch")) global.pudding_on_porch = false;
     global.pudding_ready = true;
-    inventory_add("pudding", 1);
+    _need_pudding_in_inv = true;
     _need_house_start = true;
 }
 if (TEST_DAY == 1) {
