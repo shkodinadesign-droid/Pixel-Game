@@ -18,6 +18,20 @@ if (_total_dark > 0) {
     draw_set_alpha(1);
 }
 
+// --- Подсказка: положить пуддинг на огород ---
+if (room == rm_farm
+&&  variable_global_exists("pudding_ready") && global.pudding_ready
+&&  variable_global_exists("pudding_on_porch") && !global.pudding_on_porch
+&&  instance_exists(obj_max)) {
+    var _gx = 240; var _gy = 430;
+    if (point_distance(_gx, _gy, obj_max.x, obj_max.y) < 48) {
+        var _cam = view_camera[0];
+        var _hx = (_gx - camera_get_view_x(_cam)) / camera_get_view_width(_cam)  * display_get_gui_width();
+        var _hy = (_gy - camera_get_view_y(_cam)) / camera_get_view_height(_cam) * display_get_gui_height() - 16;
+        draw_hint("[E] Положить пуддинг", _hx, _hy, true);
+    }
+}
+
 // --- UI: Время и день ---
 if (show_time_ui && sleep_fade < 0.5) {
     var _margin = 10;

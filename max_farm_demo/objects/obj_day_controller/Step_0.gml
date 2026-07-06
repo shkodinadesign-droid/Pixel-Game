@@ -8,6 +8,26 @@ if (variable_instance_exists(id, "_need_pudding_in_inv") && _need_pudding_in_inv
     }
 }
 
+// --- Подсказка положить пуддинг на огород ---
+if (room == rm_farm
+&&  variable_global_exists("pudding_ready") && global.pudding_ready
+&&  variable_global_exists("pudding_on_porch") && !global.pudding_on_porch
+&&  instance_exists(obj_max)) {
+    var _gx = 240; var _gy = 430; // центр огорода
+    if (point_distance(_gx, _gy, obj_max.x, obj_max.y) < 48) {
+        if (keyboard_check_pressed(ord("E"))) {
+            inventory_remove("pudding", 1);
+            global.pudding_on_porch = true;
+            if (instance_exists(obj_pudding_icon)) {
+                obj_pudding_icon.x       = _gx;
+                obj_pudding_icon.y       = _gy;
+                obj_pudding_icon.visible = true;
+            }
+            instance_create_depth(0, 0, -9999, obj_ui_dialog_max_pudding_porch);
+        }
+    }
+}
+
 // Тест-старт день 3: перенести Макса в дом на первом кадре
 if (variable_instance_exists(id, "_need_house_start") && _need_house_start) {
     _need_house_start = false;

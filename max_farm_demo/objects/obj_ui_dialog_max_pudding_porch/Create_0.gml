@@ -2,7 +2,7 @@ global.control_locked = true;
 
 speaker     = "Макс:";
 speaker_col = make_color_rgb(255, 210, 100);
-line1 = "Пуддинг стоит у двери пекарни.";
+line1 = "Пуддинг стоит в огороде.";
 line2 = "Подождём до утра...";
 line3 = "";
 line4 = "";
