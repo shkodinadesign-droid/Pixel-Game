@@ -51,6 +51,7 @@ switch (phase) {
             global.pudding_on_porch = false;
             if (instance_exists(obj_pudding_icon)) obj_pudding_icon.visible = false;
             global.magic_map_placed = true;
+            instance_create_depth(240, 430, 0, obj_frog_map);
             phase = 6; phase_timer = 0;
         }
     break;

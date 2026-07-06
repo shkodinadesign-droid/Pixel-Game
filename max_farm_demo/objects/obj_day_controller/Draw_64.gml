@@ -32,6 +32,20 @@ if (room == rm_farm
     }
 }
 
+// --- Подсказка: взять карту лягушонка ---
+if (room == rm_farm
+&&  variable_global_exists("magic_map_placed") && global.magic_map_placed
+&&  !variable_global_exists("magic_map_taken")
+&&  instance_exists(obj_frog_map) && instance_exists(obj_max)) {
+    var _map = instance_find(obj_frog_map, 0);
+    if (point_distance(_map.x, _map.y, obj_max.x, obj_max.y) < 48) {
+        var _cam = view_camera[0];
+        var _hx = (_map.x - camera_get_view_x(_cam)) / camera_get_view_width(_cam)  * display_get_gui_width();
+        var _hy = (_map.y - camera_get_view_y(_cam)) / camera_get_view_height(_cam) * display_get_gui_height() - 16;
+        draw_hint("[E] Взять карту", _hx, _hy, true);
+    }
+}
+
 // --- UI: Время и день ---
 if (show_time_ui && sleep_fade < 0.5) {
     var _margin = 10;

@@ -118,6 +118,8 @@
     {"id":{"name":"obj_egg_icon","path":"objects/obj_egg_icon/obj_egg_icon.yy",},},
     {"id":{"name":"obj_exit_house","path":"objects/obj_exit_house/obj_exit_house.yy",},},
     {"id":{"name":"obj_fence_1","path":"objects/obj_fence_1/obj_fence_1.yy",},},
+    {"id":{"name":"obj_frog_map","path":"objects/obj_frog_map/obj_frog_map.yy",},},
+    {"id":{"name":"obj_ui_fullscreen_map","path":"objects/obj_ui_fullscreen_map/obj_ui_fullscreen_map.yy",},},
     {"id":{"name":"obj_fence_h","path":"objects/obj_fence_h/obj_fence_h.yy",},},
     {"id":{"name":"obj_fence_v","path":"objects/obj_fence_v/obj_fence_v.yy",},},
     {"id":{"name":"obj_flour_icon","path":"objects/obj_flour_icon/obj_flour_icon.yy",},},

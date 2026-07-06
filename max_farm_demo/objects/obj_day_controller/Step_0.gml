@@ -28,6 +28,21 @@ if (room == rm_farm
     }
 }
 
+// --- Взять карту лягушонка ---
+if (room == rm_farm
+&&  variable_global_exists("magic_map_placed") && global.magic_map_placed
+&&  !variable_global_exists("magic_map_taken")
+&&  instance_exists(obj_frog_map) && instance_exists(obj_max)) {
+    var _map = instance_find(obj_frog_map, 0);
+    if (point_distance(_map.x, _map.y, obj_max.x, obj_max.y) < 48) {
+        if (keyboard_check_pressed(ord("E"))) {
+            global.magic_map_taken = true;
+            instance_destroy(_map);
+            instance_create_depth(0, 0, -9999, obj_ui_fullscreen_map);
+        }
+    }
+}
+
 // Тест-старт день 3: перенести Макса в дом на первом кадре
 if (variable_instance_exists(id, "_need_house_start") && _need_house_start) {
     _need_house_start = false;
