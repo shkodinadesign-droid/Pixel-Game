@@ -12,6 +12,7 @@ var advance = (hover && click_press)
            || keyboard_check_pressed(ord("E"));
 
 if (advance) {
-    global.control_locked = false;
+    // control_locked остаётся true — катсцена возьмёт управление
     instance_destroy();
+    instance_create_depth(0, 0, -9999, obj_cutscene_frog_night);
 }

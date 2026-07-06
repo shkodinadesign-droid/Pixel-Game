@@ -3,56 +3,76 @@ frog_anim++;
 
 switch (phase) {
 
-    case 0: // Экран постепенно темнеет до ночи
-        darkness = min(darkness + 0.012, 0.72);
-        if (darkness >= 0.72) {
-            phase       = 1;
-            phase_timer = 0;
-        }
+    case 0: // Темнеет — ночь наступает
+        darkness = min(darkness + 0.012, 0.85);
+        if (darkness >= 0.85) { phase = 1; phase_timer = 0; }
     break;
 
-    case 1: // Лягушонок идёт к пуддингу
-        frog_dir = 1;
-        var _dx = target_x - x;
-        if (abs(_dx) > frog_speed) {
-            x += frog_speed * sign(_dx);
+    case 1: // Макс автоматически идёт к двери дома
+        if (instance_exists(obj_max)) {
+            var _dist = point_distance(obj_max.x, obj_max.y, door_x, door_y);
+            if (_dist > 10) {
+                obj_max.x += (door_x - obj_max.x) / _dist * 2;
+                obj_max.y += (door_y - obj_max.y) / _dist * 2;
+            } else {
+                obj_max.visible = false;
+                phase = 2; phase_timer = 0;
+            }
         } else {
-            x     = target_x;
-            phase = 2;
+            phase = 2; phase_timer = 0;
+        }
+    break;
+
+    case 2: // Полное затемнение
+        darkness = min(darkness + 0.04, 1);
+        if (phase_timer > 60) { phase = 3; phase_timer = 0; text_alpha = 0; }
+    break;
+
+    case 3: // Перемотка времени "09:00 ☀"
+        text_alpha = min(text_alpha + 0.04, 1);
+        if (phase_timer > 150) {
+            darkness  = 0.78;
+            phase     = 4;
             phase_timer = 0;
         }
     break;
 
-    case 2: // Ест пуддинг (~2 сек)
+    case 4: // Лягушонок идёт справа к пуддингу (240, 430)
+        if (x > 244) {
+            x -= 1.8;
+        } else {
+            x = 240;
+            phase = 5; phase_timer = 0;
+        }
+    break;
+
+    case 5: // Лягушонок у пуддинга — забирает его
         if (phase_timer > 120) {
-            // Пуддинг исчезает
             global.pudding_on_porch = false;
             if (instance_exists(obj_pudding_icon)) obj_pudding_icon.visible = false;
-            phase       = 3;
-            phase_timer = 0;
+            global.magic_map_placed = true;
+            phase = 6; phase_timer = 0;
         }
     break;
 
-    case 3: // Оставляет книжку и уходит влево
-        // Оставляем флаг волшебного дневника
-        if (phase_timer == 1) {
-            global.magic_diary_on_porch = true;
-        }
-        frog_dir = -1;
-        var _exit_x = camera_get_view_x(view_camera[0]) - 60;
-        if (x > _exit_x) {
-            x -= frog_speed;
-        } else {
-            phase       = 4;
-            phase_timer = 0;
-        }
+    case 6: // Лягушонок уходит вправо
+        x += 2;
+        if (x > 960) { phase = 7; phase_timer = 0; }
     break;
 
-    case 4: // Светлеет и завершаем (~2 сек)
-        darkness = max(darkness - 0.008, 0);
-        if (phase_timer > 160) {
+    case 7: // Рассвет — экран светлеет
+        darkness = max(darkness - 0.007, 0);
+        if (darkness <= 0 && phase_timer > 60) { phase = 8; phase_timer = 0; }
+    break;
+
+    case 8: // Переход в дом — Макс просыпается
+        if (phase_timer > 90) {
+            global.frog_night_done = true;
+            global.control_locked  = false;
             if (instance_exists(obj_max)) obj_max.visible = true;
-            global.control_locked = false;
+            global.next_spawn_x = 96;
+            global.next_spawn_y = 200;
+            room_goto(rm_house_inside);
             instance_destroy();
         }
     break;
