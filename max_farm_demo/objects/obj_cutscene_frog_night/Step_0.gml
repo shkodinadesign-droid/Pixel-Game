@@ -24,13 +24,13 @@ switch (phase) {
     break;
 
     case 2: // Полное затемнение
-        darkness = min(darkness + 0.04, 1);
-        if (phase_timer > 60) { phase = 3; phase_timer = 0; text_alpha = 0; }
+        darkness = min(darkness + 0.06, 1);
+        if (phase_timer > 30) { phase = 3; phase_timer = 0; text_alpha = 0; }
     break;
 
     case 3: // Перемотка времени "09:00 ☀"
-        text_alpha = min(text_alpha + 0.04, 1);
-        if (phase_timer > 150) {
+        text_alpha = min(text_alpha + 0.06, 1);
+        if (phase_timer > 60) {
             darkness  = 0.78;
             phase     = 4;
             phase_timer = 0;
@@ -58,13 +58,25 @@ switch (phase) {
             if (instance_exists(obj_pudding_icon)) obj_pudding_icon.visible = false;
             global.magic_map_placed = true;
             instance_create_depth(240, 430, 0, obj_frog_map);
-            phase = 6; phase_timer = 0;
+            phase = 6; phase_timer = 0; wp_index = 0;
         }
     break;
 
-    case 6: // Лягушонок уходит вправо
-        x += 2;
-        if (x > 960) { phase = 7; phase_timer = 0; }
+    case 6: // Лягушонок уходит по обратному маршруту
+        var _ri = array_length(waypoints) - 1 - wp_index;
+        if (_ri < 0) { phase = 7; phase_timer = 0; break; }
+        var _rwp = waypoints[_ri];
+        var _rdist = point_distance(x, y, _rwp.x, _rwp.y);
+        if (_rdist > frog_speed * 1.5) {
+            x += ((_rwp.x - x) / _rdist) * frog_speed * 1.5;
+            y += ((_rwp.y - y) / _rdist) * frog_speed * 1.5;
+        } else {
+            x = _rwp.x; y = _rwp.y;
+            wp_index++;
+            if (wp_index >= array_length(waypoints)) {
+                phase = 7; phase_timer = 0;
+            }
+        }
     break;
 
     case 7: // Рассвет — экран светлеет

@@ -38,7 +38,7 @@ if (room == rm_farm
         if (keyboard_check_pressed(ord("E"))) {
             global.magic_map_taken = true;
             instance_destroy(_map);
-            instance_create_depth(0, 0, -9999, obj_ui_fullscreen_map);
+            instance_create_depth(0, 0, -9999, obj_ui_dialog_max_map);
         }
     }
 }

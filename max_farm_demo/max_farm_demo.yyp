@@ -187,6 +187,7 @@
     {"id":{"name":"obj_ui_coffee_maker","path":"objects/obj_ui_coffee_maker/obj_ui_coffee_maker.yy",},},
     {"id":{"name":"obj_ui_coins_hud","path":"objects/obj_ui_coins_hud/obj_ui_coins_hud.yy",},},
     {"id":{"name":"obj_ui_dialog_coffee_done","path":"objects/obj_ui_dialog_coffee_done/obj_ui_dialog_coffee_done.yy",},},
+    {"id":{"name":"obj_ui_dialog_max_map","path":"objects/obj_ui_dialog_max_map/obj_ui_dialog_max_map.yy",},},
     {"id":{"name":"obj_ui_dialog_coffee_prompt","path":"objects/obj_ui_dialog_coffee_prompt/obj_ui_dialog_coffee_prompt.yy",},},
     {"id":{"name":"obj_ui_dialog_garden_intro","path":"objects/obj_ui_dialog_garden_intro/obj_ui_dialog_garden_intro.yy",},},
     {"id":{"name":"obj_ui_dialog_justin_day2","path":"objects/obj_ui_dialog_justin_day2/obj_ui_dialog_justin_day2.yy",},},
