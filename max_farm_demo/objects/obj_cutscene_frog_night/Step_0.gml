@@ -37,12 +37,18 @@ switch (phase) {
         }
     break;
 
-    case 4: // Лягушонок идёт справа к пуддингу (240, 430)
-        if (x > 244) {
-            x -= 1.8;
+    case 4: // Лягушонок идёт по маршруту к пуддингу
+        var _wp = waypoints[wp_index];
+        var _dist = point_distance(x, y, _wp.x, _wp.y);
+        if (_dist > frog_speed) {
+            x += ((_wp.x - x) / _dist) * frog_speed;
+            y += ((_wp.y - y) / _dist) * frog_speed;
         } else {
-            x = 240;
-            phase = 5; phase_timer = 0;
+            x = _wp.x; y = _wp.y;
+            wp_index++;
+            if (wp_index >= array_length(waypoints)) {
+                phase = 5; phase_timer = 0;
+            }
         }
     break;
 

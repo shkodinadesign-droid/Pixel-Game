@@ -1,3 +1,5 @@
+if (room != rm_farm) exit;
+
 // Спрайт карты на земле
 // Замени spr_tab_diary на свою иконку папируса когда будет готова
 var _spr = asset_get_index("spr_frog_map_icon");
