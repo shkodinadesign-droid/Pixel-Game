@@ -22,6 +22,7 @@ if (_total_dark > 0) {
 if (room == rm_farm
 &&  variable_global_exists("pudding_ready") && global.pudding_ready
 &&  variable_global_exists("pudding_on_porch") && !global.pudding_on_porch
+&&  !(variable_global_exists("magic_map_placed") && global.magic_map_placed)
 &&  instance_exists(obj_max)) {
     var _gx = 240; var _gy = 430;
     if (point_distance(_gx, _gy, obj_max.x, obj_max.y) < 48) {
