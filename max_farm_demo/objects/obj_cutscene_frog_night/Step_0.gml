@@ -25,12 +25,12 @@ switch (phase) {
 
     case 2: // Полное затемнение
         darkness = min(darkness + 0.06, 1);
-        if (phase_timer > 30) { phase = 3; phase_timer = 0; text_alpha = 0; }
+        if (phase_timer > 15) { phase = 3; phase_timer = 0; text_alpha = 0; }
     break;
 
     case 3: // Перемотка времени "09:00 ☀"
         text_alpha = min(text_alpha + 0.06, 1);
-        if (phase_timer > 60) {
+        if (phase_timer > 40) {
             darkness  = 0.78;
             phase     = 4;
             phase_timer = 0;
