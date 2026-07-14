@@ -102,7 +102,7 @@ if (!global.plant_task_shown && global.coffee_made && nearest_soil != noone) {
 
 // === ХОТБАР: листание и выбор семян ===
 var _total = array_length(hotbar_items);
-var _max_scroll = _total - hotbar_visible;
+var _max_scroll = max(0, _total - hotbar_visible);
 
 // Клавиши [ и ] — листание
 if (keyboard_check_pressed(ord("["))) hotbar_scroll = max(0, hotbar_scroll - 1);
@@ -213,8 +213,12 @@ if ((keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_space)) && so
         if (_seed_type != "") {
             with (soil_here) plant_crop(_seed_type);
             inventory_remove(_seed_item, 1);
-            if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 4)
-                global.tutorial_farm_step = 5;
+            if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 4) {
+                var _rem = inventory_get_amount(ITEM_SEED)
+                         + inventory_get_amount(ITEM_POTATO_SEED)
+                         + inventory_get_amount(ITEM_STRAWBERRY_SEED);
+                if (_rem <= 0) global.tutorial_farm_step = 5;
+            }
             var hud = instance_find(obj_ui_inventory, 0);
             if (hud != noone) with (hud) show_carrot_pop("-1");
         }
