@@ -88,6 +88,20 @@ for (var _i = 0; _i < eff_visible; _i++) {
         draw_set_color(c_white);
     }
 
+    // Туториал-подсветка: пульсирующая зелёная рамка
+    var _tut_step = variable_global_exists("tutorial_farm_step") ? global.tutorial_farm_step : 4;
+    var _tut_glow = (_tut_step == 1 && _e.item == "shovel")
+                 || (_tut_step == 2 && _e.is_seed)
+                 || (_tut_step == 3 && _e.item == "watering_can");
+    if (_tut_glow) {
+        var _pulse = 0.5 + sin(current_time / 200) * 0.5;
+        draw_set_color(make_color_rgb(80, 255, 120));
+        draw_set_alpha(_pulse);
+        draw_roundrect_ext(_sx + 2, panel_y + 2, _sx + slot_w - 2, panel_y + panel_h - 2, 5, 5, true);
+        draw_set_alpha(1);
+        draw_set_color(c_white);
+    }
+
     // Иконка
     if (sprite_exists(_e.spr)) {
         draw_sprite_ext(_e.spr, 0, _sx + 8, cy - 12, 0.8, 0.8, 0, c_white, 1);

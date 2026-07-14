@@ -87,6 +87,10 @@ if (TEST_DAY == 1) {
     if (!variable_global_exists("strawberry_planted"))   global.strawberry_planted   = false;
     if (!variable_global_exists("letters_read"))         global.letters_read         = [];
 }
+// --- Туториал огорода (день 1) ---
+// 0=не начат, 1=диалог лопата, 2=диалог семена, 3=диалог лейка, 4=готово
+if (!variable_global_exists("tutorial_farm_step")) global.tutorial_farm_step = 0;
+
 hour = 6;           // часы (6:00 - начало дня)
 minute = 0;         // минуты
 

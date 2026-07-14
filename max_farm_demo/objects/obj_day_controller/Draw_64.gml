@@ -18,6 +18,60 @@ if (_total_dark > 0) {
     draw_set_alpha(1);
 }
 
+// --- Туториал огорода ---
+if (room == rm_farm && variable_global_exists("tutorial_farm_step")) {
+    var _ts = global.tutorial_farm_step;
+    if (_ts >= 1 && _ts <= 3) {
+        var _line1 = "";
+        var _line2 = "";
+        switch (_ts) {
+            case 1:
+                _line1 = "Для начала выберу лопату и нажму [E] —";
+                _line2 = "так я вскопаю грядки!";
+                break;
+            case 2:
+                _line1 = "Теперь выберу семена и посажу их, нажав [E].";
+                _line2 = "";
+                break;
+            case 3:
+                _line1 = "Возьму лейку и полью посевы!";
+                _line2 = "Поливать каждый день — урожай вырастет быстрее!";
+                break;
+        }
+        // Окно диалога
+        var _tw    = 580;
+        var _tpad  = 14;
+        var _tlh   = 24;
+        var _lines = (_line2 != "") ? 2 : 1;
+        var _th    = 46 + _lines * _tlh + 16;
+        var _tx    = (_gui_w - _tw) / 2;
+        var _ty    = _gui_h - _th - 70; // над панелью инструментов
+        var _sp_col = make_color_rgb(255, 210, 100);
+
+        gpu_set_blendmode(bm_normal);
+        draw_set_alpha(0.92);
+        draw_set_color(c_black);
+        draw_roundrect_ext(_tx, _ty, _tx + _tw, _ty + _th, 10, 10, false);
+        draw_set_alpha(1);
+        draw_set_color(_sp_col);
+        draw_roundrect_ext(_tx, _ty, _tx + _tw, _ty + _th, 10, 10, true);
+
+        draw_set_font(fnt_ui);
+        draw_set_halign(fa_left);
+        draw_set_valign(fa_top);
+        draw_set_color(_sp_col);
+        draw_text(_tx + _tpad, _ty + _tpad, "Макс:");
+        draw_set_color(c_white);
+        draw_text(_tx + 80, _ty + _tpad, _line1);
+        if (_line2 != "") draw_text(_tx + 80, _ty + _tpad + _tlh, _line2);
+
+        draw_set_halign(fa_left);
+        draw_set_valign(fa_top);
+        draw_set_color(c_white);
+        draw_set_alpha(1);
+    }
+}
+
 // --- Подсказка: положить пуддинг на огород ---
 if (room == rm_farm
 &&  variable_global_exists("pudding_ready") && global.pudding_ready

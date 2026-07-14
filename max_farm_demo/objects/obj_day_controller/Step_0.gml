@@ -1,5 +1,15 @@
 // === КОНТРОЛЛЕР ДНЯ/НОЧИ (STEP) ===
 
+// --- Туториал огорода: запустить шаг 1 когда Макс пришёл в огород с семенами ---
+if (room == rm_farm && global.tutorial_farm_step == 0 && instance_exists(obj_max)) {
+    if (variable_global_exists("player_inventory")) {
+        var _seeds = inventory_get_amount(ITEM_SEED)
+                   + inventory_get_amount(ITEM_POTATO_SEED)
+                   + inventory_get_amount(ITEM_STRAWBERRY_SEED);
+        if (_seeds > 0) global.tutorial_farm_step = 1;
+    }
+}
+
 // Добавить пуддинг в инвентарь для тестирования (после инициализации)
 if (variable_instance_exists(id, "_need_pudding_in_inv") && _need_pudding_in_inv) {
     if (variable_global_exists("player_inventory")) {
