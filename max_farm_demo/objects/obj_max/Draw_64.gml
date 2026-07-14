@@ -9,14 +9,15 @@ var arrow_w   = 24;  // ширина зоны стрелки
 var has_diary = variable_global_exists("has_diary") && global.has_diary;
 var diary_off = has_diary ? slot_w : 0;
 
-var total_items  = array_length(hotbar_items);
-var can_left     = hotbar_scroll > 0;
-var can_right    = hotbar_scroll < total_items - hotbar_visible;
+var total_items   = array_length(hotbar_items);
+var eff_visible   = min(hotbar_visible, total_items - hotbar_scroll);
+var can_left      = hotbar_scroll > 0;
+var can_right     = hotbar_scroll + hotbar_visible < total_items;
 
 // Панель чуть шире если есть стрелки (слева/справа от слотов)
 var left_pad  = can_left  ? arrow_w : 0;
 var right_pad = can_right ? arrow_w : 0;
-var panel_w   = diary_off + left_pad + slot_w * hotbar_visible + right_pad;
+var panel_w   = diary_off + left_pad + slot_w * eff_visible + right_pad;
 var panel_x   = (gui_w - panel_w) / 2;
 var panel_y   = gui_h - panel_h - 10;
 var cy        = panel_y + panel_h / 2;
@@ -69,7 +70,7 @@ draw_set_font(fnt_ui);
 draw_set_halign(fa_left);
 draw_set_valign(fa_middle);
 
-for (var _i = 0; _i < hotbar_visible; _i++) {
+for (var _i = 0; _i < eff_visible; _i++) {
     var _idx = hotbar_scroll + _i;
     if (_idx >= total_items) break;
     var _e  = hotbar_items[_idx];
@@ -126,7 +127,7 @@ if (can_right) {
 
 // --- Разделители между слотами ---
 draw_set_color(make_color_rgb(80, 80, 80));
-for (var _i = 1; _i < hotbar_visible; _i++) {
+for (var _i = 1; _i < eff_visible; _i++) {
     var _lx = ix + slot_w * _i;
     draw_line(_lx, panel_y + 8, _lx, panel_y + panel_h - 8);
 }

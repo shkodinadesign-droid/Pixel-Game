@@ -284,9 +284,7 @@ function storage_init() {
 
     // === ИНВЕНТАРЬ ИГРОКА ===
     global.player_inventory = ds_map_create();
-    inventory_add(ITEM_SEED,            4);
-    inventory_add(ITEM_POTATO_SEED,     5);
-    inventory_add(ITEM_STRAWBERRY_SEED, 5);
+    // Семена лежат в сарае (chest_inventory) — игрок берёт их оттуда
 
     // === ИНВЕНТАРЬ МАЙЛИ (товары, проданные ей игроком) ===
     global.miley_inventory = ds_map_create();
@@ -306,9 +304,6 @@ function storage_init() {
     ds_map_set(global.fridge_storage, "flour", 2);
     ds_map_set(global.fridge_storage, "yeast", 2);
     ds_map_set(global.fridge_storage, "sugar", 2);
-
-    // ТЕСТ: пирог для сцены Джастина День 2 (убрать после теста)
-    inventory_add("potato_pie", 1);
 
     show_debug_message("Storage system initialized!");
 }
@@ -394,12 +389,49 @@ function storage_get_category_name(category) {
 }
 
 /// @func inventory_add(item_id, amount)
-/// @desc Добавить предмет в инвентарь игрока
+/// @desc Добавить предмет в инвентарь игрока (и в хотбар при первом получении)
 function inventory_add(item_id, amount) {
     var current = ds_map_find_value(global.player_inventory, item_id);
-    if (current == undefined) current = 0;
+    if (current == undefined) {
+        current = 0;
+        hotbar_add_item(item_id); // первый раз — добавить в панель
+    }
     ds_map_set(global.player_inventory, item_id, current + amount);
     return true;
+}
+
+/// @desc Добавить предмет в хотбар Макса (если ещё не там)
+function hotbar_add_item(item_id) {
+    if (!instance_exists(obj_max)) return;
+    var _max = obj_max;
+    // Проверяем — вдруг уже есть
+    for (var _i = 0; _i < array_length(_max.hotbar_items); _i++) {
+        if (_max.hotbar_items[_i].item == item_id) return;
+    }
+    // Определяем спрайт и флаг семени
+    var _spr     = -1;
+    var _is_seed = false;
+    switch (item_id) {
+        case ITEM_CARROT:          _spr = spr_carrot_icon;          break;
+        case ITEM_POTATO:          _spr = spr_potato_icon;          break;
+        case ITEM_STRAWBERRY:      _spr = spr_straberry_icon;       break;
+        case ITEM_APPLE:           _spr = spr_apple_icon;           break;
+        case ITEM_PEAR:            _spr = spr_pear_icon;            break;
+        case ITEM_SEED:            _spr = spr_seed_carrot_icon;     _is_seed = true; break;
+        case ITEM_POTATO_SEED:     _spr = spr_potato_seed_icon;     _is_seed = true; break;
+        case ITEM_STRAWBERRY_SEED: _spr = spr_strawberry_seed_icon; _is_seed = true; break;
+        case "sunflower_seed":     _spr = spr_seed;                 _is_seed = true; break;
+        case "apple_sapling":      _spr = spr_apple_icon;           _is_seed = true; break;
+        case "pear_sapling":       _spr = spr_pear_icon;            _is_seed = true; break;
+        case "coffee_beans":       _spr = spr_cofee_icon;  break;
+        case "milk":               _spr = spr_milk_icon;   break;
+        case "sugar":              _spr = spr_shugar_icon; break;
+        case "flour":              _spr = spr_flour_icon;  break;
+        case "yeast":              _spr = spr_yeast_icon;  break;
+        case "pudding":            _spr = -1; break;
+        default: return; // неизвестный предмет — не добавляем
+    }
+    array_push(_max.hotbar_items, { item: item_id, spr: _spr, is_seed: _is_seed, has_count: true });
 }
 
 /// @func inventory_remove(item_id, amount)

@@ -23,28 +23,12 @@ facing = [0, 1];               // смотрим вниз (x=0, y=1)
 // количество морковки теперь в global.player_inventory через inventory_get_amount(ITEM_CARROT)
 
 // === ХОТБАР (листается стрелками/клавишами [ ]) ===
+// Инструменты всегда первыми. Остальное добавляется через hotbar_add_item() при первом получении.
 hotbar_scroll  = 0;
 hotbar_visible = 8;
 hotbar_items   = [
-    { item: ITEM_CARROT,          spr: spr_carrot_icon,          is_seed: false, has_count: true  },
-    { item: ITEM_POTATO,          spr: spr_potato_icon,          is_seed: false, has_count: true  },
-    { item: ITEM_STRAWBERRY,      spr: spr_straberry_icon,       is_seed: false, has_count: true  },
-    { item: ITEM_APPLE,           spr: spr_apple_icon,           is_seed: false, has_count: true  },
-    { item: ITEM_PEAR,            spr: spr_pear_icon,            is_seed: false, has_count: true  },
-    { item: ITEM_SEED,            spr: spr_seed_carrot_icon,     is_seed: true,  has_count: true  },
-    { item: ITEM_POTATO_SEED,     spr: spr_potato_seed_icon,     is_seed: true,  has_count: true  },
-    { item: ITEM_STRAWBERRY_SEED, spr: spr_strawberry_seed_icon, is_seed: true,  has_count: true  },
-    { item: "sunflower_seed",     spr: spr_seed,                 is_seed: true,  has_count: true  },
-    { item: "apple_sapling",      spr: spr_apple_icon,           is_seed: false, has_count: true  },
-    { item: "pear_sapling",       spr: spr_pear_icon,            is_seed: false, has_count: true  },
-    { item: "tomato",             spr: -1,                       is_seed: false, has_count: true  },
-    { item: "coffee_beans",       spr: spr_cofee_icon,           is_seed: false, has_count: true  },
-    { item: "milk",               spr: spr_milk_icon,            is_seed: false, has_count: true  },
-    { item: "sugar",              spr: spr_shugar_icon,          is_seed: false, has_count: true  },
-    { item: "flour",              spr: spr_flour_icon,           is_seed: false, has_count: true  },
-    { item: "yeast",              spr: spr_yeast_icon,           is_seed: false, has_count: true  },
-    { item: "watering_can",       spr: spr_wateringcan,          is_seed: false, has_count: false },
-    { item: "shovel",             spr: spr_shovel_icon,          is_seed: false, has_count: false },
+    { item: "watering_can", spr: spr_wateringcan, is_seed: false, has_count: false },
+    { item: "shovel",       spr: spr_shovel_icon,  is_seed: false, has_count: false },
 ];
 
 if (!variable_global_exists("input_locked")) global.input_locked = false;
