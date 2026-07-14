@@ -21,7 +21,7 @@ if (_total_dark > 0) {
 // --- Туториал огорода ---
 if (room == rm_farm && variable_global_exists("tutorial_farm_step")) {
     var _ts = global.tutorial_farm_step;
-    if (_ts >= 1 && _ts <= 3) {
+    if (_ts >= 1 && _ts <= 4) {
         var _line1 = "";
         var _line2 = "";
         switch (_ts) {
@@ -36,6 +36,10 @@ if (room == rm_farm && variable_global_exists("tutorial_farm_step")) {
             case 3:
                 _line1 = "Возьму лейку и полью посевы!";
                 _line2 = "Поливать каждый день — урожай вырастет быстрее!";
+                break;
+            case 4:
+                _line1 = "Теперь все семена посажены!";
+                _line2 = "Бабуля будет мной гордиться! =)";
                 break;
         }
         // Окно диалога
@@ -64,6 +68,24 @@ if (room == rm_farm && variable_global_exists("tutorial_farm_step")) {
         draw_set_color(c_white);
         draw_text(_tx + 80, _ty + _tpad, _line1);
         if (_line2 != "") draw_text(_tx + 80, _ty + _tpad + _tlh, _line2);
+
+        // Кнопка "Отлично!" только на финальном шаге
+        if (_ts == 4) {
+            var _bw = 110; var _bh = 28;
+            var _bx1 = _tx + _tw - _bw - _tpad;
+            var _by1 = _ty + _th - _bh - 8;
+            var _bx2 = _bx1 + _bw; var _by2 = _by1 + _bh;
+            var _mhov = (device_mouse_x_to_gui(0) >= _bx1 && device_mouse_x_to_gui(0) <= _bx2
+                      && device_mouse_y_to_gui(0) >= _by1 && device_mouse_y_to_gui(0) <= _by2);
+            draw_set_color(_mhov ? c_white : c_black);
+            draw_rectangle(_bx1, _by1, _bx2, _by2, false);
+            draw_set_color(_sp_col);
+            draw_line(_bx1+1,_by1,_bx2-1,_by1); draw_line(_bx1+1,_by2,_bx2-1,_by2);
+            draw_line(_bx1+1,_by1,_bx1+1,_by2); draw_line(_bx2-1,_by1,_bx2-1,_by2);
+            draw_set_halign(fa_center); draw_set_valign(fa_middle);
+            draw_set_color(_mhov ? c_black : c_white);
+            draw_text((_bx1+_bx2)/2, (_by1+_by2)/2, "Отлично!");
+        }
 
         draw_set_halign(fa_left);
         draw_set_valign(fa_top);

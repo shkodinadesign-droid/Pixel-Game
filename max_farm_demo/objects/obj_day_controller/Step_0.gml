@@ -1,5 +1,21 @@
 // === КОНТРОЛЛЕР ДНЯ/НОЧИ (STEP) ===
 
+// --- Туториал: кнопка "Отлично!" на шаге 4 закрывает диалог ---
+if (room == rm_farm && global.tutorial_farm_step == 4) {
+    if (mouse_check_button_pressed(mb_left)) {
+        var _gui_w = display_get_gui_width();
+        var _tw = 580; var _th = 46 + 2 * 24 + 16;
+        var _tx = (_gui_w - _tw) / 2;
+        var _ty = display_get_gui_height() - _th - 70;
+        var _bw = 110; var _bh = 28;
+        var _bx1 = _tx + _tw - _bw - 14; var _by1 = _ty + _th - _bh - 8;
+        var _mx = device_mouse_x_to_gui(0); var _my = device_mouse_y_to_gui(0);
+        if (_mx >= _bx1 && _mx <= _bx1 + _bw && _my >= _by1 && _my <= _by1 + _bh) {
+            global.tutorial_farm_step = 5; // готово
+        }
+    }
+}
+
 // --- Туториал огорода: запустить шаг 1 когда Макс пришёл в огород с семенами ---
 if (room == rm_farm && global.tutorial_farm_step == 0 && instance_exists(obj_max)) {
     if (variable_global_exists("player_inventory")) {
