@@ -123,11 +123,12 @@ if (mouse_check_button_pressed(mb_left)) {
     var _arw = 24;
     var _hd  = variable_global_exists("has_diary") && global.has_diary;
     var _doff = _hd ? _sw : 0;
+    var _eff_vis   = min(hotbar_visible, _total - hotbar_scroll);
     var _can_left  = hotbar_scroll > 0;
-    var _can_right = hotbar_scroll < _max_scroll;
+    var _can_right = hotbar_scroll + hotbar_visible < _total;
     var _lpad = _can_left  ? _arw : 0;
     var _rpad = _can_right ? _arw : 0;
-    var _pw  = _doff + _lpad + _sw * hotbar_visible + _rpad;
+    var _pw  = _doff + _lpad + _sw * _eff_vis + _rpad;
     var _px  = (_gw - _pw) / 2;
     var _py  = _gh - _ph - 10;
     var _ix  = _px + _doff + _lpad;
@@ -138,13 +139,13 @@ if (mouse_check_button_pressed(mb_left)) {
             hotbar_scroll--;
         }
         // Стрелка вправо
-        else if (_can_right && _gx >= _ix + _sw * hotbar_visible && _gx < _ix + _sw * hotbar_visible + _arw) {
+        else if (_can_right && _gx >= _ix + _sw * _eff_vis && _gx < _ix + _sw * _eff_vis + _arw) {
             hotbar_scroll++;
         }
         // Слоты предметов
         else {
             var _clicked = false;
-            for (var _i = 0; _i < hotbar_visible; _i++) {
+            for (var _i = 0; _i < _eff_vis; _i++) {
                 var _idx = hotbar_scroll + _i;
                 if (_idx >= _total) break;
                 var _slot_x = _ix + _sw * _i;
