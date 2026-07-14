@@ -181,14 +181,14 @@ if ((keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_space)) && so
     if (selected_shovel && !soil_here.dug) {
         // Лопата: вскопать
         with (soil_here) dig_cell();
-        if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 1)
-            global.tutorial_farm_step = 2;
+        if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 2)
+            global.tutorial_farm_step = 3;
     } else if (selected_watering_can && soil_here.dug) {
         // Лейка: полить
         var _was_watered = soil_here.watered;
         with (soil_here) water_cell();
-        if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 3)
-            global.tutorial_farm_step = 4;
+        if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 6)
+            global.tutorial_farm_step = 7;
         if (soil_here.watered && !_was_watered) {
             var fx_layer = layer_get_id("layer_soil");
             if (fx_layer == -1) fx_layer = layer_get_id("Instances_3");
@@ -212,8 +212,8 @@ if ((keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_space)) && so
         if (_seed_type != "") {
             with (soil_here) plant_crop(_seed_type);
             inventory_remove(_seed_item, 1);
-            if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 2)
-                global.tutorial_farm_step = 3;
+            if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 4)
+                global.tutorial_farm_step = 5;
             var hud = instance_find(obj_ui_inventory, 0);
             if (hud != noone) with (hud) show_carrot_pop("-1");
         }

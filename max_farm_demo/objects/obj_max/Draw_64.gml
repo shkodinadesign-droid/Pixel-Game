@@ -89,10 +89,10 @@ for (var _i = 0; _i < eff_visible; _i++) {
     }
 
     // Туториал-подсветка: пульсирующая зелёная рамка
-    var _tut_step = variable_global_exists("tutorial_farm_step") ? global.tutorial_farm_step : 4;
-    var _tut_glow = (_tut_step == 1 && _e.item == "shovel")
-                 || (_tut_step == 2 && _e.is_seed)
-                 || (_tut_step == 3 && _e.item == "watering_can");
+    var _tut_step = variable_global_exists("tutorial_farm_step") ? global.tutorial_farm_step : 8;
+    var _tut_glow = ((_tut_step == 1 || _tut_step == 2) && _e.item == "shovel")
+                 || ((_tut_step == 3 || _tut_step == 4) && _e.is_seed)
+                 || ((_tut_step == 5 || _tut_step == 6) && _e.item == "watering_can");
     if (_tut_glow) {
         var _pulse = 0.5 + sin(current_time / 200) * 0.5;
         draw_set_color(make_color_rgb(80, 255, 120));

@@ -1,17 +1,22 @@
 // === КОНТРОЛЛЕР ДНЯ/НОЧИ (STEP) ===
 
-// --- Туториал: кнопка "Отлично!" на шаге 4 закрывает диалог ---
-if (room == rm_farm && global.tutorial_farm_step == 4) {
+// --- Туториал: кнопка на нечётных шагах → переход к следующему ---
+var _ts = global.tutorial_farm_step;
+if (room == rm_farm && (_ts == 1 || _ts == 3 || _ts == 5 || _ts == 7)) {
     if (mouse_check_button_pressed(mb_left)) {
-        var _gui_w = display_get_gui_width();
-        var _tw = 580; var _th = 46 + 2 * 24 + 16;
-        var _tx = (_gui_w - _tw) / 2;
-        var _ty = display_get_gui_height() - _th - 70;
-        var _bw = 110; var _bh = 28;
-        var _bx1 = _tx + _tw - _bw - 14; var _by1 = _ty + _th - _bh - 8;
+        var _gui_w2 = display_get_gui_width();
+        var _gui_h2 = display_get_gui_height();
+        var _tw2 = 580;
+        var _lines2 = (_ts == 3) ? 1 : 2; // шаг 3 — одна строка
+        var _th2 = 46 + _lines2 * 24 + 44;
+        var _tx2 = (_gui_w2 - _tw2) / 2;
+        var _ty2 = _gui_h2 - _th2 - 70;
+        var _bw2 = 110; var _bh2 = 28;
+        var _bx1 = _tx2 + _tw2 - _bw2 - 14;
+        var _by1 = _ty2 + _th2 - _bh2 - 8;
         var _mx = device_mouse_x_to_gui(0); var _my = device_mouse_y_to_gui(0);
-        if (_mx >= _bx1 && _mx <= _bx1 + _bw && _my >= _by1 && _my <= _by1 + _bh) {
-            global.tutorial_farm_step = 5; // готово
+        if (_mx >= _bx1 && _mx <= _bx1 + _bw2 && _my >= _by1 && _my <= _by1 + _bh2) {
+            global.tutorial_farm_step++; // 1→2, 3→4, 5→6, 7→8
         }
     }
 }
