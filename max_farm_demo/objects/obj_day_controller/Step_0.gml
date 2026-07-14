@@ -7,7 +7,7 @@ if (room == rm_farm && (_ts == 1 || _ts == 3 || _ts == 5 || _ts == 7)) {
         var _gui_w2 = display_get_gui_width();
         var _gui_h2 = display_get_gui_height();
         var _tw2 = 580;
-        var _lines2 = (_ts == 3) ? 1 : 2; // шаг 3 — одна строка
+        var _lines2 = 2; // все диалоги на 2 строки
         var _th2 = 46 + _lines2 * 24 + 44;
         var _tx2 = (_gui_w2 - _tw2) / 2;
         var _ty2 = _gui_h2 - _th2 - 70;
