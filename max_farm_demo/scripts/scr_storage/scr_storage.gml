@@ -435,12 +435,36 @@ function hotbar_add_item(item_id) {
 }
 
 /// @func inventory_remove(item_id, amount)
-/// @desc Убрать предмет из инвентаря игрока
+/// @desc Убрать предмет из инвентаря игрока; при 0 — удалить из инвентаря и хотбара
 function inventory_remove(item_id, amount) {
     var current = ds_map_find_value(global.player_inventory, item_id);
     if (current == undefined || current < amount) return false;
-    ds_map_set(global.player_inventory, item_id, current - amount);
+    var new_amount = current - amount;
+    if (new_amount <= 0) {
+        ds_map_delete(global.player_inventory, item_id);
+        hotbar_remove_item(item_id);
+    } else {
+        ds_map_set(global.player_inventory, item_id, new_amount);
+    }
     return true;
+}
+
+/// @desc Убрать предмет из хотбара Макса (когда кончился)
+function hotbar_remove_item(item_id) {
+    if (!instance_exists(obj_max)) return;
+    var _max  = obj_max;
+    var _arr  = _max.hotbar_items;
+    var _len  = array_length(_arr);
+    for (var _i = 0; _i < _len; _i++) {
+        if (_arr[_i].item == item_id) {
+            array_delete(_arr, _i, 1);
+            // Сдвигаем скролл если нужно
+            var _new_total = array_length(_arr);
+            var _max_scroll = max(0, _new_total - _max.hotbar_visible);
+            _max.hotbar_scroll = min(_max.hotbar_scroll, _max_scroll);
+            return;
+        }
+    }
 }
 
 /// @func inventory_get_amount(item_id)

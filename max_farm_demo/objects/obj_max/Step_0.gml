@@ -1,5 +1,16 @@
 
-if (global.control_locked) exit;
+if (global.control_locked) {
+    // Остановить анимацию — не ходить на месте
+    image_speed = 0;
+    image_index = 0;
+    switch (direction_facing) {
+        case "down":  sprite_index = spr_max_idle_up;    break;
+        case "up":    sprite_index = spr_max_idle_down;  break;
+        case "left":  sprite_index = spr_max_idle_left;  break;
+        case "right": sprite_index = spr_max_idle_right; break;
+    }
+    exit;
+}
 
 
 // ===============================================================
@@ -28,9 +39,11 @@ if (variable_global_exists("has_diary") && global.has_diary) {
         var _gui_h   = display_get_gui_height();
         var _panel_h = 48;
         var _slot_w  = 72;
-        var _can_l = hotbar_scroll > 0;
-        var _can_r = hotbar_scroll < array_length(hotbar_items) - hotbar_visible;
-        var _panel_w = _slot_w + (_can_l ? 24 : 0) + _slot_w * hotbar_visible + (_can_r ? 24 : 0);
+        var _total   = array_length(hotbar_items);
+        var _eff_vis = min(hotbar_visible, _total - hotbar_scroll);
+        var _can_l   = hotbar_scroll > 0;
+        var _can_r   = hotbar_scroll + hotbar_visible < _total;
+        var _panel_w = _slot_w + (_can_l ? 24 : 0) + _slot_w * _eff_vis + (_can_r ? 24 : 0);
         var _panel_x = (_gui_w - _panel_w) / 2;
         var _panel_y = _gui_h - _panel_h - 10;
         var _mx = device_mouse_x_to_gui(0);
@@ -182,14 +195,24 @@ if ((keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_space)) && so
     if (selected_shovel && !soil_here.dug) {
         // Лопата: вскопать
         with (soil_here) dig_cell();
-        if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 2)
-            global.tutorial_farm_step = 3;
+        if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 2) {
+            var _dug_count = 0;
+            with (obj_soil) { if (dug) _dug_count++; }
+            if (_dug_count >= 5) global.tutorial_farm_step = 3;
+        }
     } else if (selected_watering_can && soil_here.dug) {
         // Лейка: полить
         var _was_watered = soil_here.watered;
         with (soil_here) water_cell();
-        if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 6)
-            global.tutorial_farm_step = 7;
+        if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 6) {
+            var _all_w = true; var _has_dug = false;
+            with (obj_soil) { if (dug) { _has_dug = true; if (!watered) { _all_w = false; break; } } }
+            if (_all_w && _has_dug) {
+                global.tutorial_farm_step = 7;
+                if (instance_exists(obj_day_controller))
+                    obj_day_controller.meggie_diary_timer = room_speed * 5; // 5 секунд
+            }
+        }
         if (soil_here.watered && !_was_watered) {
             var fx_layer = layer_get_id("layer_soil");
             if (fx_layer == -1) fx_layer = layer_get_id("Instances_3");

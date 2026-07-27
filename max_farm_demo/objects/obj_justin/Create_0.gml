@@ -14,7 +14,7 @@
   cscene_step = 0;                                          
   if (!variable_global_exists("justin_enter_trigger")) global.justin_enter_trigger = false;                                                                                                   
                                               
-  walk_spd    = 1.2;
+  walk_spd    = 3;
   entry_timer = -1;                                                                                                                                                                               
                                                             
   counter_justin_x = 160;                                                                                                                                                                     

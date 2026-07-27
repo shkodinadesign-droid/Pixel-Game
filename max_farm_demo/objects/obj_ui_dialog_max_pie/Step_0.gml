@@ -26,6 +26,10 @@ if (advance) {
     global.diary_has_new   = true;
     global.diary_was_read  = false;
 
+    // Когда Макс выйдет на улицу — покажем диалог про яблоки и груши
+    if (!variable_global_exists("fruit_quest_pending")) global.fruit_quest_pending = false;
+    global.fruit_quest_pending = true;
+
     // Разблокируем управление
     global.control_locked = false;
     instance_destroy();

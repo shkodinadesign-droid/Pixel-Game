@@ -33,15 +33,15 @@ if (room == rm_farm && variable_global_exists("tutorial_farm_step")) {
                 break;
             case 3:
                 _line1 = "Теперь я посажу все семена —";
-                _line2 = "бабуля мной будет гордиться!";
+                _line2 = "нажми на семена и посади [E]";
                 break;
             case 5:
                 _line1 = "Возьму лейку и полью посевы!";
                 _line2 = "Поливать каждый день — урожай вырастет быстрее!";
                 break;
             case 7:
-                _line1 = "Отлично! Я посадила все зёрна.";
-                _line2 = "Исследую всю ферму бабули!";
+                _line1 = "Я посадила и полила все семена!";
+                _line2 = "Бабуля будет мной гордиться! =)";
                 _btn_label = "Хорошо!";
                 break;
         }
@@ -92,6 +92,121 @@ if (room == rm_farm && variable_global_exists("tutorial_farm_step")) {
         draw_set_color(c_white);
         draw_set_alpha(1);
     }
+}
+
+// --- Попап: все фрукты собраны ---
+if (variable_global_exists("show_fruit_done_popup") && global.show_fruit_done_popup) {
+    var _tw   = 580; var _tpad = 14; var _tlh = 24;
+    var _th   = 46 + 2 * _tlh + 44;
+    var _tx   = (_gui_w - _tw) / 2;
+    var _ty   = _gui_h - _th - 70;
+    var _scol = make_color_rgb(255, 210, 100);
+
+    gpu_set_blendmode(bm_normal);
+    draw_set_alpha(0.92);
+    draw_set_color(c_black);
+    draw_roundrect_ext(_tx, _ty, _tx + _tw, _ty + _th, 10, 10, false);
+    draw_set_alpha(1);
+    draw_set_color(_scol);
+    draw_roundrect_ext(_tx, _ty, _tx + _tw, _ty + _th, 10, 10, true);
+
+    draw_set_font(fnt_ui);
+    draw_set_halign(fa_left); draw_set_valign(fa_top);
+    draw_set_color(_scol);
+    draw_text(_tx + _tpad, _ty + _tpad, "Макс:");
+    draw_set_color(c_white);
+    draw_text(_tx + 80, _ty + _tpad,        "Отлично! Собрала все фрукты —");
+    draw_text(_tx + 80, _ty + _tpad + _tlh, "интересно что с них можно приготовить?");
+
+    var _bw = 110; var _bh = 28;
+    var _bx1 = _tx + _tw - _bw - _tpad;
+    var _by1 = _ty + _th - _bh - 8;
+    var _bx2 = _bx1 + _bw; var _by2 = _by1 + _bh;
+    var _hov = (device_mouse_x_to_gui(0) >= _bx1 && device_mouse_x_to_gui(0) <= _bx2
+             && device_mouse_y_to_gui(0) >= _by1 && device_mouse_y_to_gui(0) <= _by2);
+    draw_set_color(_hov ? c_white : c_black);
+    draw_rectangle(_bx1, _by1, _bx2, _by2, false);
+    draw_set_color(_scol);
+    draw_line(_bx1+1,_by1,_bx2-1,_by1); draw_line(_bx1+1,_by2,_bx2-1,_by2);
+    draw_line(_bx1+1,_by1,_bx1+1,_by2); draw_line(_bx2-1,_by1,_bx2-1,_by2);
+    draw_set_halign(fa_center); draw_set_valign(fa_middle);
+    draw_set_color(_hov ? c_black : c_white);
+    draw_text((_bx1+_bx2)/2, (_by1+_by2)/2, "Далее");
+    draw_set_halign(fa_left); draw_set_valign(fa_top);
+    draw_set_color(c_white); draw_set_alpha(1);
+}
+
+// --- Диалог Макса: нужно собрать яблоки и груши ---
+if (show_fruit_quest_dlg) {
+    var _ftw  = 580; var _ftpad = 14; var _ftlh = 24;
+    var _fth  = 46 + 3 * _ftlh + 44;
+    var _ftx  = (_gui_w - _ftw) / 2;
+    var _fty  = _gui_h - _fth - 70;
+    var _fscol = make_color_rgb(255, 210, 100);
+
+    gpu_set_blendmode(bm_normal);
+    draw_set_alpha(0.92);
+    draw_set_color(c_black);
+    draw_roundrect_ext(_ftx, _fty, _ftx + _ftw, _fty + _fth, 10, 10, false);
+    draw_set_alpha(1);
+    draw_set_color(_fscol);
+    draw_roundrect_ext(_ftx, _fty, _ftx + _ftw, _fty + _fth, 10, 10, true);
+
+    draw_set_font(fnt_ui);
+    draw_set_halign(fa_left); draw_set_valign(fa_top);
+    draw_set_color(_fscol);
+    draw_text(_ftx + _ftpad, _fty + _ftpad, "Макс:");
+    draw_set_color(c_white);
+    draw_text(_ftx + 80, _fty + _ftpad,              "Кажется нужно ещё собрать яблоки и груши —");
+    draw_text(_ftx + 80, _fty + _ftpad + _ftlh,     "и проверить что с них можно приготовить.");
+    draw_text(_ftx + 80, _fty + _ftpad + _ftlh * 2, "Кажется бабуля будет рада яблочному пирогу по её рецепту =)");
+
+    var _fbw = 110; var _fbh = 28;
+    var _fbx1 = _ftx + _ftw - _fbw - _ftpad;
+    var _fby1 = _fty + _fth - _fbh - 8;
+    var _fbx2 = _fbx1 + _fbw; var _fby2 = _fby1 + _fbh;
+    var _fhov = (device_mouse_x_to_gui(0) >= _fbx1 && device_mouse_x_to_gui(0) <= _fbx2
+              && device_mouse_y_to_gui(0) >= _fby1 && device_mouse_y_to_gui(0) <= _fby2);
+    draw_set_color(_fhov ? c_white : c_black);
+    draw_rectangle(_fbx1, _fby1, _fbx2, _fby2, false);
+    draw_set_color(_fscol);
+    draw_line(_fbx1+1,_fby1,_fbx2-1,_fby1); draw_line(_fbx1+1,_fby2,_fbx2-1,_fby2);
+    draw_line(_fbx1+1,_fby1,_fbx1+1,_fby2); draw_line(_fbx2-1,_fby1,_fbx2-1,_fby2);
+    draw_set_halign(fa_center); draw_set_valign(fa_middle);
+    draw_set_color(_fhov ? c_black : c_white);
+    draw_text((_fbx1+_fbx2)/2, (_fby1+_fby2)/2, "Хорошо!");
+    draw_set_halign(fa_left); draw_set_valign(fa_top);
+    draw_set_color(c_white); draw_set_alpha(1);
+}
+
+// --- Подсказка: войти в сарай ---
+if (room == rm_farm && instance_exists(obj_max)) {
+    var _barn_wx = 96; var _barn_wy = 256;
+    if (point_distance(_barn_wx, _barn_wy, obj_max.x, obj_max.y) < 96) {
+        var _cam = view_camera[0];
+        var _hint_gx = (_barn_wx - camera_get_view_x(_cam)) / camera_get_view_width(_cam)  * display_get_gui_width();
+        var _hint_gy = (_barn_wy - camera_get_view_y(_cam)) / camera_get_view_height(_cam) * display_get_gui_height() - 20;
+        draw_hint("[E] Войти", _hint_gx, _hint_gy, true);
+    }
+}
+
+// --- Уведомление: Мэгги принесла дневник ---
+if (variable_instance_exists(id, "meggie_diary_msg_timer") && meggie_diary_msg_timer > 0) {
+    var _fade = min(1, meggie_diary_msg_timer / 30.0);
+    var _mw = 400; var _mh = 44;
+    var _mx2 = (_gui_w - _mw) / 2; var _my2 = _gui_h / 2 - 60;
+    draw_set_alpha(0.88 * _fade);
+    draw_set_color(c_black);
+    draw_roundrect_ext(_mx2, _my2, _mx2 + _mw, _my2 + _mh, 8, 8, false);
+    draw_set_alpha(_fade);
+    draw_set_color(make_color_rgb(120, 200, 240));
+    draw_roundrect_ext(_mx2, _my2, _mx2 + _mw, _my2 + _mh, 8, 8, true);
+    draw_set_font(fnt_ui);
+    draw_set_halign(fa_center); draw_set_valign(fa_middle);
+    draw_set_color(c_white);
+    draw_text(_mx2 + _mw / 2, _my2 + _mh / 2, "Мэгги принесла тебе дневник!");
+    draw_set_alpha(1);
+    draw_set_halign(fa_left); draw_set_valign(fa_top);
 }
 
 // --- Подсказка: положить пуддинг на огород ---
@@ -235,6 +350,48 @@ if (show_morning_dialog) {
     draw_set_valign(fa_top);
     draw_set_color(c_white);
     draw_set_alpha(1);
+}
+
+// --- Подсказка Макс после ухода Джастина (картофель в сарае) ---
+if (room == rm_bakery && variable_global_exists("show_potato_hint") && global.show_potato_hint) {
+    var _tw   = 580; var _tpad = 14; var _tlh = 24;
+    var _th   = 46 + 2 * _tlh + 44;
+    var _tx   = (_gui_w - _tw) / 2;
+    var _ty   = _gui_h - _th - 70;
+    var _scol = make_color_rgb(255, 210, 100);
+
+    gpu_set_blendmode(bm_normal);
+    draw_set_alpha(0.92);
+    draw_set_color(c_black);
+    draw_roundrect_ext(_tx, _ty, _tx + _tw, _ty + _th, 10, 10, false);
+    draw_set_alpha(1);
+    draw_set_color(_scol);
+    draw_roundrect_ext(_tx, _ty, _tx + _tw, _ty + _th, 10, 10, true);
+
+    draw_set_font(fnt_ui);
+    draw_set_halign(fa_left); draw_set_valign(fa_top);
+    draw_set_color(_scol);
+    draw_text(_tx + _tpad, _ty + _tpad, "Макс:");
+    draw_set_color(c_white);
+    draw_text(_tx + 80, _ty + _tpad,          "Чтобы приготовить картофельный пирог нужно найти картофель —");
+    draw_text(_tx + 80, _ty + _tpad + _tlh,   "кажется я помню что картофель был у бабули в сарае!");
+
+    var _bw = 110; var _bh = 28;
+    var _bx1 = _tx + _tw - _bw - _tpad;
+    var _by1 = _ty + _th - _bh - 8;
+    var _bx2 = _bx1 + _bw; var _by2 = _by1 + _bh;
+    var _hov = (device_mouse_x_to_gui(0) >= _bx1 && device_mouse_x_to_gui(0) <= _bx2
+             && device_mouse_y_to_gui(0) >= _by1 && device_mouse_y_to_gui(0) <= _by2);
+    draw_set_color(_hov ? c_white : c_black);
+    draw_rectangle(_bx1, _by1, _bx2, _by2, false);
+    draw_set_color(_scol);
+    draw_line(_bx1+1,_by1,_bx2-1,_by1); draw_line(_bx1+1,_by2,_bx2-1,_by2);
+    draw_line(_bx1+1,_by1,_bx1+1,_by2); draw_line(_bx2-1,_by1,_bx2-1,_by2);
+    draw_set_halign(fa_center); draw_set_valign(fa_middle);
+    draw_set_color(_hov ? c_black : c_white);
+    draw_text((_bx1+_bx2)/2, (_by1+_by2)/2, "Далее");
+    draw_set_halign(fa_left); draw_set_valign(fa_top);
+    draw_set_color(c_white); draw_set_alpha(1);
 }
 
 // --- Майли: спрайт в мире + диалог ---

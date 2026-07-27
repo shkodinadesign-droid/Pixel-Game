@@ -16,12 +16,14 @@ if (!variable_instance_exists(id, "crop_type")) crop_type = "carrot";
 // МАССИВ СПРАЙТОВ ПО СТАДИЯМ (0..ready)
 // Можно переопределить снаружи через plant_crop() — здесь дефолт для моркови
 if (crop_type == "potato") {
-    spr_stages = [spr_seed, spr_potato_stage1, spr_potato_ready];
+    // 3 дня
+    spr_stages = [spr_seed, spr_potato_stage1, spr_potato_stage1, spr_potato_ready];
 } else if (crop_type == "strawberry") {
-    spr_stages = [spr_seed, spr_strawberry_stage1, spr_strawberry_ready];
+    // 1 день
+    spr_stages = [spr_seed, spr_strawberry_ready];
 } else {
-    // carrot (по умолчанию)
-    spr_stages = [spr_seed, spr_carrot_stage1, spr_carrot_stage2, spr_carrot_ready];
+    // carrot — 2 дня
+    spr_stages = [spr_seed, spr_carrot_stage1, spr_carrot_ready];
 }
 
 // хелперы

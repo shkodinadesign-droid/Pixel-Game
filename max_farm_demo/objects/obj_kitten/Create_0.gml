@@ -53,8 +53,10 @@ farm_return_y = 280;
 _initialized = false;
 depth = -bbox_bottom;
 
-// На День 2 до прихода Мэгги — кот невидим с самого создания
+// Котёнок появляется только со 2-го дня и только после прихода Мэгги
 var _kday = instance_exists(obj_day_controller) ? obj_day_controller.day_index : 1;
-if (_kday >= 2 && variable_global_exists("kitten_arrived") && !global.kitten_arrived) {
-    visible = false;
+var _arrived = variable_global_exists("kitten_arrived") && global.kitten_arrived;
+if (_kday < 2 || !_arrived) {
+    instance_destroy();
+    exit;
 }

@@ -12,4 +12,14 @@ if (_dist < 64 && keyboard_check_pressed(ord("E"))) {
     }
     fruit_count = 0;
     tree_update_sprite();
+    // Проверяем — собраны ли все фрукты со всех деревьев
+    if (variable_global_exists("fruit_quest_started") && global.fruit_quest_started
+    &&  !(variable_global_exists("fruit_quest_done") && global.fruit_quest_done)) {
+        var _any_left = false;
+        with (obj_fruit_tree) { if (fruit_count > 0) { _any_left = true; break; } }
+        if (!_any_left) {
+            global.fruit_quest_done       = true;
+            global.show_fruit_done_popup  = true;
+        }
+    }
 }

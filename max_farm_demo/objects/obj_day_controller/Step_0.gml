@@ -21,6 +21,35 @@ if (room == rm_farm && (_ts == 1 || _ts == 3 || _ts == 5 || _ts == 7)) {
     }
 }
 
+// --- Кнопка "Далее" попапа про фрукты ---
+if (variable_global_exists("show_fruit_done_popup") && global.show_fruit_done_popup) {
+    if (mouse_check_button_pressed(mb_left)) {
+        var _gui_w2 = display_get_gui_width(); var _gui_h2 = display_get_gui_height();
+        var _tw2 = 580; var _th2 = 46 + 2 * 24 + 44;
+        var _tx2 = (_gui_w2 - _tw2) / 2; var _ty2 = _gui_h2 - _th2 - 70;
+        var _bx1 = _tx2 + _tw2 - 110 - 14; var _by1 = _ty2 + _th2 - 28 - 8;
+        var _mx2 = device_mouse_x_to_gui(0); var _my2 = device_mouse_y_to_gui(0);
+        if (_mx2 >= _bx1 && _mx2 <= _bx1 + 110 && _my2 >= _by1 && _my2 <= _by1 + 28) {
+            global.show_fruit_done_popup = false;
+        }
+    }
+}
+
+// --- Кнопка "Далее" подсказки про картофель ---
+if (room == rm_bakery && variable_global_exists("show_potato_hint") && global.show_potato_hint) {
+    if (mouse_check_button_pressed(mb_left)) {
+        var _gui_w2 = display_get_gui_width();
+        var _gui_h2 = display_get_gui_height();
+        var _tw2 = 580; var _th2 = 46 + 2 * 24 + 44;
+        var _tx2 = (_gui_w2 - _tw2) / 2; var _ty2 = _gui_h2 - _th2 - 70;
+        var _bx1 = _tx2 + _tw2 - 110 - 14; var _by1 = _ty2 + _th2 - 28 - 8;
+        var _mx2 = device_mouse_x_to_gui(0); var _my2 = device_mouse_y_to_gui(0);
+        if (_mx2 >= _bx1 && _mx2 <= _bx1 + 110 && _my2 >= _by1 && _my2 <= _by1 + 28) {
+            global.show_potato_hint = false;
+        }
+    }
+}
+
 // --- Туториал огорода: запустить шаг 1 когда Макс пришёл в огород с семенами ---
 if (room == rm_farm && global.tutorial_farm_step == 0 && instance_exists(obj_max)) {
     if (variable_global_exists("player_inventory")) {
@@ -82,6 +111,60 @@ if (variable_instance_exists(id, "_need_house_start") && _need_house_start) {
     global.next_spawn_y = 320;
     room_goto(rm_house_inside);
     exit;
+}
+
+// --- Таймер: Мэгги приносит дневник после туториала ---
+if (variable_instance_exists(id, "meggie_diary_timer") && meggie_diary_timer > 0) {
+    meggie_diary_timer--;
+    if (meggie_diary_timer == 0) {
+        meggie_diary_timer = -1;
+        if (!variable_global_exists("has_diary") || !global.has_diary) {
+            global.has_diary          = true;
+            global.diary_appear_alpha = 1;
+            global.diary_has_new      = true;
+            global.diary_was_read     = false;
+            if (!variable_global_exists("meggi_intro_done")) global.meggi_intro_done = false;
+            global.meggi_intro_done   = true;
+        }
+        meggie_diary_msg_timer = 210; // ~3.5 сек сообщение
+    }
+}
+if (variable_instance_exists(id, "meggie_diary_msg_timer") && meggie_diary_msg_timer > 0) {
+    meggie_diary_msg_timer--;
+}
+
+// --- Диалог о фруктах: запустить когда Макс вышла на ферму после пирога ---
+if (!show_fruit_quest_dlg
+&&  variable_global_exists("fruit_quest_pending") && global.fruit_quest_pending
+&&  room == rm_farm && instance_exists(obj_max)
+&&  !(variable_global_exists("control_locked") && global.control_locked)) {
+    global.fruit_quest_pending  = false;
+    show_fruit_quest_dlg        = true;
+    fruit_quest_dlg_click_prev  = mouse_check_button(mb_left);
+    global.control_locked       = true;
+}
+
+// Кнопка диалога о фруктах
+if (show_fruit_quest_dlg) {
+    var _fgw = display_get_gui_width();
+    var _fgh = display_get_gui_height();
+    var _ftw = 580; var _fth = 46 + 3 * 24 + 44;
+    var _ftx = (_fgw - _ftw) / 2; var _fty = _fgh - _fth - 70;
+    var _fbx1 = _ftx + _ftw - 110 - 14; var _fby1 = _fty + _fth - 28 - 8;
+    var _fmx = device_mouse_x_to_gui(0); var _fmy = device_mouse_y_to_gui(0);
+    var _fclk = mouse_check_button(mb_left);
+    var _fadv = (!fruit_quest_dlg_click_prev && _fclk &&
+                 _fmx >= _fbx1 && _fmx <= _fbx1 + 110 && _fmy >= _fby1 && _fmy <= _fby1 + 28)
+             || keyboard_check_pressed(vk_return)
+             || keyboard_check_pressed(vk_space);
+    fruit_quest_dlg_click_prev = _fclk;
+    if (_fadv) {
+        show_fruit_quest_dlg       = false;
+        global.control_locked      = false;
+        global.fruit_quest_started = true;
+        global.diary_has_new       = true;
+        global.diary_was_read      = false;
+    }
 }
 
 // --- Обработка сна ---

@@ -23,6 +23,10 @@ if (TEST_DAY >= 2) {
         global.diary_has_new    = true;
         global.diary_was_read   = false;
     }
+    // Квест яблоки/груши: в день 2 уже выдан
+    if (!variable_global_exists("fruit_quest_started")) global.fruit_quest_started = true;
+    global.fruit_quest_pending = false;
+
     // Кофейный квест: письмо уже прочитано — квест активен
     if (!variable_global_exists("coffee_letter_read"))  global.coffee_letter_read  = true;
     if (!variable_global_exists("coffee_made"))         global.coffee_made         = false;
@@ -87,6 +91,18 @@ if (TEST_DAY == 1) {
     if (!variable_global_exists("strawberry_planted"))   global.strawberry_planted   = false;
     if (!variable_global_exists("letters_read"))         global.letters_read         = [];
 }
+// --- Подсказка после Джастина ---
+if (!variable_global_exists("show_potato_hint"))     global.show_potato_hint     = false;
+// --- Квест: сбор фруктов ---
+if (!variable_global_exists("fruit_quest_started"))  global.fruit_quest_started  = false;
+if (!variable_global_exists("fruit_quest_done"))     global.fruit_quest_done     = false;
+if (!variable_global_exists("show_fruit_done_popup"))global.show_fruit_done_popup= false;
+if (!variable_global_exists("fruit_quest_pending"))  global.fruit_quest_pending  = false;
+
+// Диалог о фруктах (показывается когда Макс выходит на улицу после пирога)
+show_fruit_quest_dlg      = false;
+fruit_quest_dlg_click_prev = false;
+
 // --- Туториал огорода (день 1) ---
 // 0=не начат, 1=диалог лопата, 2=диалог семена, 3=диалог лейка, 4=готово
 if (!variable_global_exists("tutorial_farm_step")) global.tutorial_farm_step = 0;
@@ -144,3 +160,7 @@ miley_mug_sy         = 0;
 miley_mug_ex         = 0;
 miley_mug_ey         = 0;
 miley_enter_wp       = 0;   // 0=идём к wp1, 1=идём к obj_max
+
+// Таймер Мэгги (дневник после туториала)
+meggie_diary_timer     = -1; // -1=не активен, >0=отсчёт
+meggie_diary_msg_timer = 0;  // время показа уведомления

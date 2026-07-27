@@ -433,6 +433,32 @@ switch (current_tab) {
             draw_text(content_x + _tbox + _tgap, _ty, "Изучить пекарню");
         }
 
+        // --- Задание: Собери яблоки и груши ---
+        if (variable_global_exists("fruit_quest_started") && global.fruit_quest_started) {
+            _ty += round(32 * bs);
+            var _fruit_done = variable_global_exists("fruit_quest_done") && global.fruit_quest_done;
+            if (_fruit_done) {
+                draw_set_color(make_color_rgb(70, 150, 70));
+                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
+                draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle);
+                draw_set_color(c_white);
+                draw_text(content_x + _tbox / 2, _ty + _tbox / 2, "v");
+                draw_set_halign(fa_left); draw_set_valign(fa_top);
+                draw_set_color(make_color_rgb(140, 115, 90));
+                var _taskF = "Собери яблоки и груши с деревьев";
+                draw_text(content_x + _tbox + _tgap, _ty, _taskF);
+                draw_line(content_x + _tbox + _tgap, _ty + string_height(_taskF) / 2,
+                          content_x + _tbox + _tgap + string_width(_taskF), _ty + string_height(_taskF) / 2);
+            } else {
+                draw_set_color(make_color_rgb(200, 80, 60));
+                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
+                draw_set_color(make_color_rgb(160, 50, 30));
+                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, true);
+                draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
+                draw_text(content_x + _tbox + _tgap + 5, _ty, "Собери яблоки и груши с деревьев");
+            }
+        }
+
         // ===== ПРАВАЯ СТРАНИЦА: ОСНОВНЫЕ ЗАДАНИЯ =====
         if (variable_global_exists("secret_quest_started") && global.secret_quest_started) {
             var _rp_x = book_x + round(295 * bs);

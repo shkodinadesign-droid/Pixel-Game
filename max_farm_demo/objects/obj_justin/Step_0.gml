@@ -11,7 +11,7 @@ switch (cscene_step) {
 
     case 1:
         // Задержка перед входом
-        if (entry_timer < 0) entry_timer = 240; // 4 секунды
+        if (entry_timer < 0) entry_timer = 120; // 2 секунды
         if (entry_timer > 0) {
             entry_timer--;
         } else {
@@ -113,6 +113,7 @@ switch (cscene_step) {
             } else if (!leave_wp2_done) {
                 leave_wp2_done = true;
             } else {
+                global.show_potato_hint = true;
                 instance_destroy();
             }
         }
