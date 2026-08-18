@@ -13,7 +13,10 @@
     "name":"все",
     "path":"folders/Objects/все.yy",
   },
-  "parentObjectId":null,
+  "parentObjectId":{
+    "name":"obj_solid",
+    "path":"objects/obj_solid/obj_solid.yy",
+  },
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
@@ -30,7 +33,7 @@
   "properties":[],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
-  "solid":false,
+  "solid":true,
   "spriteId":{
     "name":"spr_mail_box",
     "path":"sprites/spr_mail_box/spr_mail_box.yy",

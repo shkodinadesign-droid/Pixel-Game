@@ -1,11 +1,11 @@
 {
   "$GMSprite":"v2",
   "%Name":"spr_trees_1",
-  "bboxMode":2,
-  "bbox_bottom":127,
-  "bbox_left":20,
-  "bbox_right":60,
-  "bbox_top":110,
+  "bboxMode":0,
+  "bbox_bottom":161,
+  "bbox_left":7,
+  "bbox_right":148,
+  "bbox_top":7,
   "collisionKind":1,
   "collisionTolerance":0,
   "DynamicTexturePage":false,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":128,
+  "height":162,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"c03188a7-f77a-4243-9b9a-422f760b9375","blendMode":0,"displayName":"default","isLocked":false,"name":"c03188a7-f77a-4243-9b9a-422f760b9375","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":80,
+  "width":154,
 }

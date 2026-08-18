@@ -27,10 +27,7 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":true,
-  "spriteId":{
-    "name":"spr_bush_long",
-    "path":"sprites/spr_bush_long/spr_bush_long.yy",
-  },
+  "spriteId":null,
   "spriteMaskId":null,
   "visible":true,
 }

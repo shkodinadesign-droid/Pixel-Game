@@ -32,10 +32,7 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":true,
-  "spriteId":{
-    "name":"spr_v_bench",
-    "path":"sprites/spr_v_bench/spr_v_bench.yy",
-  },
+  "spriteId":null,
   "spriteMaskId":null,
   "visible":true,
 }

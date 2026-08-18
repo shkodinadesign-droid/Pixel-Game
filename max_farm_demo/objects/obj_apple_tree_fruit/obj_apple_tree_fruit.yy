@@ -34,10 +34,7 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":true,
-  "spriteId":{
-    "name":"spr_apple_tree_fruit",
-    "path":"sprites/spr_apple_tree_fruit/spr_apple_tree_fruit.yy",
-  },
+  "spriteId":null,
   "spriteMaskId":null,
   "visible":true,
 }

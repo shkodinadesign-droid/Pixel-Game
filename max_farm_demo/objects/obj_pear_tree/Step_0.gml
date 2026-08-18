@@ -1,4 +1,16 @@
-depth = -bbox_bottom;
+depth = -y;
+
+// Прозрачность только когда Макс ВЫШЕ ствола (сзади дерева)
+if (instance_exists(obj_max)) {
+    var _in_x = obj_max.x > x - 40 && obj_max.x < x + 40;
+    if (obj_max.y < y && _in_x) {
+        image_alpha = 0.4;
+    } else {
+        image_alpha = 1;
+    }
+} else {
+    image_alpha = 1;
+}
 
 if (!instance_exists(obj_max)) exit;
 
@@ -7,12 +19,10 @@ with (obj_pear_on_tree) {
     if (my_tree == other.id && !collected) _pear_count++;
 }
 has_fruit = (_pear_count > 0);
+
 if (!has_fruit) exit;
 
-var _cx = (bbox_left + bbox_right) * 0.5;
-var _cy = (bbox_top + bbox_bottom) * 0.5;
-
-if (point_distance(_cx, _cy, obj_max.x, obj_max.y) < 96
+if (point_distance(x, y, obj_max.x, obj_max.y) < 96
 &&  keyboard_check_pressed(ord("E"))) {
     var _today = instance_exists(obj_day_controller) ? obj_day_controller.day_index : 0;
     var _picked = noone;
