@@ -38,7 +38,13 @@ switch (phase) {
         // Открываем дневник на вкладке "Задания" — там квест "Проверь пекарню"
         if (!variable_global_exists("bakery_check_started")) global.bakery_check_started = false;
         global.bakery_check_started = true;
-        var _d = instance_create_layer(0, 0, layer, obj_diary);
+        var _dlyr = layer_get_id("GUI");
+        if (_dlyr == -1) _dlyr = layer_get_id("Instances");
+        if (_dlyr == -1) _dlyr = layer_get_id("Instances_3");
+        if (_dlyr == -1) _dlyr = layer_get_id("letter");
+        var _d = (_dlyr != -1)
+            ? instance_create_layer(0, 0, _dlyr, obj_diary)
+            : instance_create_depth(0, 0, 0, obj_diary); // гарантированно валидно, без привязки к слою
         _d.current_tab = 1;
 
         // Разблокируем управление

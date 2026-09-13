@@ -89,6 +89,14 @@ if (TEST_DAY == 1) {
     if (!variable_global_exists("plant_quest_done"))     global.plant_quest_done     = false;
     if (!variable_global_exists("potato_planted"))       global.potato_planted       = false;
     if (!variable_global_exists("strawberry_planted"))   global.strawberry_planted   = false;
+
+    // Бабуля Мэгги встречает Макс в самом начале дня 1 — здоровается и отдаёт дневник
+    if (!variable_global_exists("meggi_intro_done")) global.meggi_intro_done = false;
+    if (!global.meggi_intro_done && !instance_exists(obj_grandma_Maggie)) {
+        var _lyr = layer_get_id("Max");
+        if (_lyr == -1) _lyr = layer;
+        instance_create_layer(736, -50, _lyr, obj_grandma_Maggie);
+    }
     if (!variable_global_exists("letters_read"))         global.letters_read         = [];
 }
 // --- Подсказка после Джастина ---

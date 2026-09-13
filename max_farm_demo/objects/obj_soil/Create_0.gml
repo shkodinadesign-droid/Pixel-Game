@@ -95,32 +95,6 @@ function water_cell() {
     watered = true;
     soil_update_sprite();
     show_debug_message("[WATER] ✔ at (" + string(cell_cx) + "," + string(cell_cy) + ")");
-
-    // Проверяем, все ли грядки политы (триггер появления Мэгги)
-    if (!variable_global_exists("meggi_intro_done")) global.meggi_intro_done = false;
-
-    if (!global.meggi_intro_done && !instance_exists(obj_grandma_Maggie) && room == rm_farm) {
-        // Считаем сколько грядок полито
-        var watered_count = 0;
-        var total_count = 0;
-        with (obj_soil) {
-            total_count += 1;
-            if (watered) watered_count += 1;
-        }
-
-        show_debug_message("Watered: " + string(watered_count) + "/" + string(total_count));
-
-        // Если все 4 грядки политы - вызываем Мэгги
-        if (watered_count >= 4 && total_count >= 4) {
-            // Создаём Мэгги сверху — из-за дома Макс
-            var _lyr = layer_get_id("Max");
-            if (_lyr == -1) _lyr = layer;
-            // Появляется сверху за экраном, на x дома Макс (~736)
-            var _spawn_x = (instance_exists(obj_max)) ? obj_max.x + 40 : 736;
-            var _maggie = instance_create_layer(_spawn_x, -50, _lyr, obj_grandma_Maggie);
-            show_debug_message("Все грядки политы! Grandma Maggie появилась!");
-        }
-    }
 }
 
 // --- ОЧИСТИТЬ КЛЕТКУ (после сбора) ---
