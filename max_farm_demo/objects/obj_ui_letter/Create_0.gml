@@ -12,8 +12,8 @@ title_text = "";
 lines      = [];
 hint_text  = "";
 
-// размеры окна (GUI-координаты)
-win_w = 620;
+// размеры окна (GUI-координаты; ширина увеличена под портрет справа)
+win_w = 720;
 win_h = 300;
 win_x = (display_get_gui_width()  - win_w) / 2;
 win_y = (display_get_gui_height() - win_h) / 2;

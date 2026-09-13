@@ -1,7 +1,7 @@
 // === HINT OVER BARN STORAGE ===
 if (place_meeting(x, y, obj_max)) {
     var inv = variable_global_exists("inv_carrot") ? global.inv_carrot : 0;
-    var txt = (inv > 0) ? ("↑ — сдать (" + string(inv) + ")") : "↑ — сдать";
+    var txt = (inv > 0) ? ("[E] сдать (" + string(inv) + ")") : "[E] сдать";
     var yy = y - (sprite_exists(sprite_index) ? sprite_height : 16) - 6;
 
     draw_set_halign(fa_center);

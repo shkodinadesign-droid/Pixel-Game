@@ -21,12 +21,13 @@ var _bar_w = 110;
 var _bar_h = 10;
 var _r     = 5;
 
-// ♥ сердечко слева
-draw_set_font(fnt_ui);
-draw_set_halign(fa_left);
-draw_set_valign(fa_middle);
+// сердечко слева (примитивами — символ ♥ не поддерживается шрифтом)
+var _hx = _x + 6;
+var _hy = _y + _bar_h / 2;
 draw_set_color(make_color_rgb(235, 80, 110));
-draw_text(_x, _y + _bar_h / 2, "♥");
+draw_circle(_hx - 3, _hy - 2, 4, false);
+draw_circle(_hx + 3, _hy - 2, 4, false);
+draw_triangle(_hx - 7, _hy - 1, _hx + 7, _hy - 1, _hx, _hy + 7, false);
 
 // Фон полоски
 var _bx = _x + 18;

@@ -2,6 +2,10 @@ var cam = view_get_camera(0);
 camera_set_view_size(cam, view_w, view_h);
 view_set_camera(0, cam);
 view_set_visible(0, true);
+view_set_wport(0, view_w);
+view_set_hport(0, view_h);
+view_set_xport(0, 0);
+view_set_yport(0, 0);
 display_set_gui_size(view_w, view_h);
 gpu_set_texfilter(false);
 

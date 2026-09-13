@@ -35,6 +35,12 @@ switch (phase) {
         global.has_diary = true;
         global.diary_appear_alpha = 0; // начинаем с прозрачного
 
+        // Открываем дневник на вкладке "Задания" — там квест "Проверь пекарню"
+        if (!variable_global_exists("bakery_check_started")) global.bakery_check_started = false;
+        global.bakery_check_started = true;
+        var _d = instance_create_layer(0, 0, layer, obj_diary);
+        _d.current_tab = 1;
+
         // Разблокируем управление
         global.control_locked = false;
 

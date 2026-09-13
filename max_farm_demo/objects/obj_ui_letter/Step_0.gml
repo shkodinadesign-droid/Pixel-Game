@@ -10,10 +10,20 @@ if (!ready) {
         lines      = letter_data.lines;
         hint_text  = variable_struct_exists(letter_data, "hint") ? letter_data.hint : "";
 
-        // пересчитываем высоту окна по содержимому
-        var _line_count = array_length(lines);
-        var _hint_extra = (hint_text != "") ? (line_h * 2) : 0;
-        win_h = pad + line_h * 2 + _line_count * line_h + _hint_extra + btn_h + pad * 3;
+        // пересчитываем высоту окна по содержимому (с учётом переноса строк —
+        // текст сужен портретом справа, поэтому длинные строки могут занимать 2 визуальные строки)
+        var _scale_x     = win_w / 580;
+        var _portrait_x1 = win_x + 565 * _scale_x - 8 - 140;
+        var _text_x      = win_x + 15 * _scale_x + 8;
+        var _text_max_w  = _portrait_x1 - _text_x - 16;
+
+        var _content_h = 0;
+        for (var i = 0; i < array_length(lines); i++) {
+            _content_h += string_height_ext(lines[i], -1, _text_max_w) + 6;
+        }
+        var _hint_extra = (hint_text != "") ? (line_h * 0.5 + string_height_ext("Подсказка: " + hint_text, -1, _text_max_w)) : 0;
+
+        win_h = pad + _content_h + _hint_extra + btn_h + pad * 3;
         win_h = max(win_h, 260);
 
         // перерасчёт позиций

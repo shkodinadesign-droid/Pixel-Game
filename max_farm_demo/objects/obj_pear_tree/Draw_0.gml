@@ -2,19 +2,14 @@ draw_self();
 
 if (!has_fruit) exit;
 
-// Груши всегда видны — рисуем с той же прозрачностью что и дерево
-var _a = image_alpha;
-draw_set_alpha(_a);
-
 var _positions = [
     { dx: -20, dy: -80 },
     { dx:   8, dy: -100 },
     { dx:  32, dy: -78 },
 ];
 for (var _i = 0; _i < 3; _i++) {
-    draw_sprite(spr_pear_icon, 0, x + _positions[_i].dx, y + _positions[_i].dy);
+    draw_sprite_ext(spr_pear_icon, 0, x + _positions[_i].dx, y + _positions[_i].dy, 1.5, 1.5, 0, c_white, 1);
 }
-draw_set_alpha(1);
 
 // Подсказка [E] когда Макс рядом
 if (instance_exists(obj_max)) {

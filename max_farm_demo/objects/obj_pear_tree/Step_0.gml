@@ -1,17 +1,5 @@
 depth = -y;
 
-// Прозрачность только когда Макс ВЫШЕ ствола (сзади дерева)
-if (instance_exists(obj_max)) {
-    var _in_x = obj_max.x > x - 40 && obj_max.x < x + 40;
-    if (obj_max.y < y && _in_x) {
-        image_alpha = 0.4;
-    } else {
-        image_alpha = 1;
-    }
-} else {
-    image_alpha = 1;
-}
-
 if (!instance_exists(obj_max)) exit;
 
 var _pear_count = 0;

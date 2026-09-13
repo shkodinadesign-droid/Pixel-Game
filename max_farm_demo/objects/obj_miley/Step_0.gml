@@ -1,4 +1,4 @@
-// === МАЙЛИ (STEP) ===
+// === МЭГГИ (STEP) ===
 if (room != rm_farm) { visible = false; exit; }
 depth = -bbox_bottom;
 
@@ -22,7 +22,8 @@ switch (state) {
             var _dir = point_direction(x, y, target_x, target_y);
             x = round(x + lengthdir_x(move_speed, _dir));
             y = round(y + lengthdir_y(move_speed, _dir));
-            image_xscale = (cos(degtorad(_dir)) < 0) ? -1 : 1;
+            sprite_index = spr_maggie_walk_left;
+            image_speed  = 1;
         } else {
             // Дошла — поворачиваем Макс навстречу
             if (instance_exists(obj_max)) {
@@ -31,7 +32,9 @@ switch (state) {
                 obj_max.image_speed      = 0;
                 obj_max.image_index      = 0;
             }
-            image_xscale           = -1;
+            sprite_index           = spr_maggie_idle_left;
+            image_speed            = 1;
+            image_xscale           = 1;
             dlg_show               = true;
             dlg_step               = 1;
             dlg_click_prev         = mouse_check_button(mb_left);
@@ -73,7 +76,7 @@ switch (state) {
                 dlg_step++;
                 dlg_click_prev = mouse_check_button(mb_left);
             } else {
-                // Финал — Майли уходит
+                // Финал — Мэгги уходит
                 dlg_show              = false;
                 global.control_locked = false;
                 if (!variable_global_exists("miley_visited")) global.miley_visited = false;
@@ -87,6 +90,8 @@ switch (state) {
         var _lx = room_width + 100;
         if (x < _lx) {
             x = round(x + move_speed);
+            sprite_index = spr_magiie_walk_right;
+            image_speed  = 1;
             image_xscale = 1;
         } else {
             instance_destroy();

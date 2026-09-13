@@ -10,7 +10,7 @@ var click_press = (click_now && !_click_prev);
 _click_prev = click_now;
 
 if ((hover && click_press) || keyboard_check_pressed(vk_enter) || keyboard_check_pressed(vk_space)) {
-    // Создаём второй диалог (про дневник)
+    // Второй диалог сразу же следом — отдаём дневник
     instance_create_layer(0, 0, layer, obj_ui_letter_Maggie_diary);
 
     instance_destroy();

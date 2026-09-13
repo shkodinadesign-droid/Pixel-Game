@@ -302,8 +302,8 @@ if (shop_state == 4) {
         draw_set_color(make_color_rgb(160, 120, 70));
         draw_set_halign(fa_center);
         draw_set_valign(fa_middle);
-        draw_text(_left_x  + _arr_w / 2, _qty_y + _arr_h / 2, "◄");
-        draw_text(_right_x + _arr_w / 2, _qty_y + _arr_h / 2, "►");
+        draw_text(_left_x  + _arr_w / 2, _qty_y + _arr_h / 2, "<");
+        draw_text(_right_x + _arr_w / 2, _qty_y + _arr_h / 2, ">");
 
         draw_set_color(make_color_rgb(50, 30, 10));
         draw_text(_bar_cx, _qty_y + _arr_h / 2, string(shop_buy_qty));
@@ -359,8 +359,8 @@ if (shop_state == 4) {
         draw_set_color(make_color_rgb(160, 120, 70));
         draw_set_halign(fa_center);
         draw_set_valign(fa_middle);
-        draw_text(_left_x  + _arr_w / 2, _qty_y + _arr_h / 2, "◄");
-        draw_text(_right_x + _arr_w / 2, _qty_y + _arr_h / 2, "►");
+        draw_text(_left_x  + _arr_w / 2, _qty_y + _arr_h / 2, "<");
+        draw_text(_right_x + _arr_w / 2, _qty_y + _arr_h / 2, ">");
         draw_set_color(make_color_rgb(50, 30, 10));
         draw_text(_bar_cx_r, _qty_y + _arr_h / 2, string(sell_qty));
 

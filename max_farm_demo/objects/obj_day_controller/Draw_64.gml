@@ -22,27 +22,22 @@ if (_total_dark > 0) {
 // Нечётные шаги = диалог с кнопкой, чётные = ждём действия игрока
 if (room == rm_farm && variable_global_exists("tutorial_farm_step")) {
     var _ts = global.tutorial_farm_step;
-    if (_ts == 1 || _ts == 3 || _ts == 5 || _ts == 7) {
+    if (_ts == 1 || _ts == 3 || _ts == 5) {
         var _line1 = "";
         var _line2 = "";
         var _btn_label = "Хорошо!";
         switch (_ts) {
             case 1:
-                _line1 = "Для начала выберу лопату и нажму [E] —";
+                _line1 = "Для начала выберу лопату и нажму [E] -";
                 _line2 = "так я вскопаю грядки!";
                 break;
             case 3:
-                _line1 = "Теперь я посажу все семена —";
+                _line1 = "Теперь я посажу все семена -";
                 _line2 = "нажми на семена и посади [E]";
                 break;
             case 5:
-                _line1 = "Возьму лейку и полью посевы!";
-                _line2 = "Поливать каждый день — урожай вырастет быстрее!";
-                break;
-            case 7:
-                _line1 = "Я посадила и полила все семена!";
-                _line2 = "Бабуля будет мной гордиться! =)";
-                _btn_label = "Хорошо!";
+                _line1 = "Теперь нужно полить все семена,";
+                _line2 = "чтобы они быстрее росли!";
                 break;
         }
         var _tw    = 580;
@@ -52,24 +47,19 @@ if (room == rm_farm && variable_global_exists("tutorial_farm_step")) {
         var _th    = 46 + _lines * _tlh + 44; // +44 место под кнопку
         var _tx    = (_gui_w - _tw) / 2;
         var _ty    = _gui_h - _th - 70;
-        var _sp_col = make_color_rgb(255, 210, 100);
 
         gpu_set_blendmode(bm_normal);
-        draw_set_alpha(0.92);
-        draw_set_color(c_black);
-        draw_roundrect_ext(_tx, _ty, _tx + _tw, _ty + _th, 10, 10, false);
-        draw_set_alpha(1);
-        draw_set_color(_sp_col);
-        draw_roundrect_ext(_tx, _ty, _tx + _tw, _ty + _th, 10, 10, true);
+        scr_dialog_draw_bg(_tx, _ty, _tw, _th);
 
-        draw_set_font(fnt_ui);
+        scr_dialog_draw_speaker(_tx, _ty, _tw, _th, "Макс:");
         draw_set_halign(fa_left);
         draw_set_valign(fa_top);
-        draw_set_color(_sp_col);
-        draw_text(_tx + _tpad, _ty + _tpad, "Макс:");
-        draw_set_color(c_white);
-        draw_text(_tx + 80, _ty + _tpad, _line1);
-        if (_line2 != "") draw_text(_tx + 80, _ty + _tpad + _tlh, _line2);
+
+        var _body_ty = scr_dialog_body_top(_tx, _ty, _tw, _th);
+        draw_set_font(fnt_ui);
+        draw_set_color(c_black);
+        draw_text(_tx + 80, _body_ty, _line1);
+        if (_line2 != "") draw_text(_tx + 80, _body_ty + _tlh, _line2);
 
         // Кнопка
         var _bw = 110; var _bh = 28;
@@ -78,14 +68,7 @@ if (room == rm_farm && variable_global_exists("tutorial_farm_step")) {
         var _bx2 = _bx1 + _bw; var _by2 = _by1 + _bh;
         var _mhov = (device_mouse_x_to_gui(0) >= _bx1 && device_mouse_x_to_gui(0) <= _bx2
                   && device_mouse_y_to_gui(0) >= _by1 && device_mouse_y_to_gui(0) <= _by2);
-        draw_set_color(_mhov ? c_white : c_black);
-        draw_rectangle(_bx1, _by1, _bx2, _by2, false);
-        draw_set_color(_sp_col);
-        draw_line(_bx1+1,_by1,_bx2-1,_by1); draw_line(_bx1+1,_by2,_bx2-1,_by2);
-        draw_line(_bx1+1,_by1,_bx1+1,_by2); draw_line(_bx2-1,_by1,_bx2-1,_by2);
-        draw_set_halign(fa_center); draw_set_valign(fa_middle);
-        draw_set_color(_mhov ? c_black : c_white);
-        draw_text((_bx1+_bx2)/2, (_by1+_by2)/2, _btn_label);
+        scr_dialog_draw_button(_bx1, _by1, _bx2, _by2, _btn_label, _mhov);
 
         draw_set_halign(fa_left);
         draw_set_valign(fa_top);
@@ -100,23 +83,18 @@ if (variable_global_exists("show_fruit_done_popup") && global.show_fruit_done_po
     var _th   = 46 + 2 * _tlh + 44;
     var _tx   = (_gui_w - _tw) / 2;
     var _ty   = _gui_h - _th - 70;
-    var _scol = make_color_rgb(255, 210, 100);
 
     gpu_set_blendmode(bm_normal);
-    draw_set_alpha(0.92);
-    draw_set_color(c_black);
-    draw_roundrect_ext(_tx, _ty, _tx + _tw, _ty + _th, 10, 10, false);
-    draw_set_alpha(1);
-    draw_set_color(_scol);
-    draw_roundrect_ext(_tx, _ty, _tx + _tw, _ty + _th, 10, 10, true);
+    scr_dialog_draw_bg(_tx, _ty, _tw, _th);
 
-    draw_set_font(fnt_ui);
+    scr_dialog_draw_speaker(_tx, _ty, _tw, _th, "Макс:");
     draw_set_halign(fa_left); draw_set_valign(fa_top);
-    draw_set_color(_scol);
-    draw_text(_tx + _tpad, _ty + _tpad, "Макс:");
-    draw_set_color(c_white);
-    draw_text(_tx + 80, _ty + _tpad,        "Отлично! Собрала все фрукты —");
-    draw_text(_tx + 80, _ty + _tpad + _tlh, "интересно что с них можно приготовить?");
+
+    var _body_ty = scr_dialog_body_top(_tx, _ty, _tw, _th);
+    draw_set_font(fnt_ui);
+    draw_set_color(c_black);
+    draw_text(_tx + 80, _body_ty,         "Отлично! Собрала все фрукты -");
+    draw_text(_tx + 80, _body_ty + _tlh,  "интересно что с них можно приготовить?");
 
     var _bw = 110; var _bh = 28;
     var _bx1 = _tx + _tw - _bw - _tpad;
@@ -124,14 +102,7 @@ if (variable_global_exists("show_fruit_done_popup") && global.show_fruit_done_po
     var _bx2 = _bx1 + _bw; var _by2 = _by1 + _bh;
     var _hov = (device_mouse_x_to_gui(0) >= _bx1 && device_mouse_x_to_gui(0) <= _bx2
              && device_mouse_y_to_gui(0) >= _by1 && device_mouse_y_to_gui(0) <= _by2);
-    draw_set_color(_hov ? c_white : c_black);
-    draw_rectangle(_bx1, _by1, _bx2, _by2, false);
-    draw_set_color(_scol);
-    draw_line(_bx1+1,_by1,_bx2-1,_by1); draw_line(_bx1+1,_by2,_bx2-1,_by2);
-    draw_line(_bx1+1,_by1,_bx1+1,_by2); draw_line(_bx2-1,_by1,_bx2-1,_by2);
-    draw_set_halign(fa_center); draw_set_valign(fa_middle);
-    draw_set_color(_hov ? c_black : c_white);
-    draw_text((_bx1+_bx2)/2, (_by1+_by2)/2, "Далее");
+    scr_dialog_draw_button(_bx1, _by1, _bx2, _by2, "Далее", _hov);
     draw_set_halign(fa_left); draw_set_valign(fa_top);
     draw_set_color(c_white); draw_set_alpha(1);
 }
@@ -142,24 +113,19 @@ if (show_fruit_quest_dlg) {
     var _fth  = 46 + 3 * _ftlh + 44;
     var _ftx  = (_gui_w - _ftw) / 2;
     var _fty  = _gui_h - _fth - 70;
-    var _fscol = make_color_rgb(255, 210, 100);
 
     gpu_set_blendmode(bm_normal);
-    draw_set_alpha(0.92);
-    draw_set_color(c_black);
-    draw_roundrect_ext(_ftx, _fty, _ftx + _ftw, _fty + _fth, 10, 10, false);
-    draw_set_alpha(1);
-    draw_set_color(_fscol);
-    draw_roundrect_ext(_ftx, _fty, _ftx + _ftw, _fty + _fth, 10, 10, true);
+    scr_dialog_draw_bg(_ftx, _fty, _ftw, _fth);
 
-    draw_set_font(fnt_ui);
+    scr_dialog_draw_speaker(_ftx, _fty, _ftw, _fth, "Макс:");
     draw_set_halign(fa_left); draw_set_valign(fa_top);
-    draw_set_color(_fscol);
-    draw_text(_ftx + _ftpad, _fty + _ftpad, "Макс:");
-    draw_set_color(c_white);
-    draw_text(_ftx + 80, _fty + _ftpad,              "Кажется нужно ещё собрать яблоки и груши —");
-    draw_text(_ftx + 80, _fty + _ftpad + _ftlh,     "и проверить что с них можно приготовить.");
-    draw_text(_ftx + 80, _fty + _ftpad + _ftlh * 2, "Кажется бабуля будет рада яблочному пирогу по её рецепту =)");
+
+    var _fbody_ty = scr_dialog_body_top(_ftx, _fty, _ftw, _fth);
+    draw_set_font(fnt_ui);
+    draw_set_color(c_black);
+    draw_text(_ftx + 80, _fbody_ty,               "Кажется нужно ещё собрать яблоки и груши -");
+    draw_text(_ftx + 80, _fbody_ty + _ftlh,       "и проверить что с них можно приготовить.");
+    draw_text(_ftx + 80, _fbody_ty + _ftlh * 2,   "Кажется бабуля будет рада яблочному пирогу по её рецепту =)");
 
     var _fbw = 110; var _fbh = 28;
     var _fbx1 = _ftx + _ftw - _fbw - _ftpad;
@@ -167,14 +133,7 @@ if (show_fruit_quest_dlg) {
     var _fbx2 = _fbx1 + _fbw; var _fby2 = _fby1 + _fbh;
     var _fhov = (device_mouse_x_to_gui(0) >= _fbx1 && device_mouse_x_to_gui(0) <= _fbx2
               && device_mouse_y_to_gui(0) >= _fby1 && device_mouse_y_to_gui(0) <= _fby2);
-    draw_set_color(_fhov ? c_white : c_black);
-    draw_rectangle(_fbx1, _fby1, _fbx2, _fby2, false);
-    draw_set_color(_fscol);
-    draw_line(_fbx1+1,_fby1,_fbx2-1,_fby1); draw_line(_fbx1+1,_fby2,_fbx2-1,_fby2);
-    draw_line(_fbx1+1,_fby1,_fbx1+1,_fby2); draw_line(_fbx2-1,_fby1,_fbx2-1,_fby2);
-    draw_set_halign(fa_center); draw_set_valign(fa_middle);
-    draw_set_color(_fhov ? c_black : c_white);
-    draw_text((_fbx1+_fbx2)/2, (_fby1+_fby2)/2, "Хорошо!");
+    scr_dialog_draw_button(_fbx1, _fby1, _fbx2, _fby2, "Хорошо!", _fhov);
     draw_set_halign(fa_left); draw_set_valign(fa_top);
     draw_set_color(c_white); draw_set_alpha(1);
 }
@@ -292,11 +251,8 @@ if (show_morning_dialog) {
     gpu_set_blendmode(bm_normal);
     draw_set_alpha(1);
 
-    // Фон и рамка
-    draw_set_color(c_black);
-    draw_roundrect_ext(_win_x, _win_y, _win_x + _win_w, _win_y + _win_h, 12, 12, false);
-    draw_set_color(_sp_col);
-    draw_roundrect_ext(_win_x, _win_y, _win_x + _win_w, _win_y + _win_h, 12, 12, true);
+    // Фон
+    scr_dialog_draw_bg(_win_x, _win_y, _win_w, _win_h);
 
     // Иконка: восходящее солнце
     var _cx = _win_x + 52;
@@ -314,38 +270,33 @@ if (show_morning_dialog) {
                         _cx + lengthdir_x(30, _angle), _cy - 2 + lengthdir_y(30, _angle), 2);
     }
 
+    // Имя — жирным, в бирке
+    scr_dialog_draw_speaker(_win_x, _win_y, _win_w, _win_h, "Макс:");
+
+    // Портрет Макса — справа
+    var _portrait_size = 100;
+    var _portrait_x1 = _win_x + 565 * (_win_w / 580) - 8 - _portrait_size;
+    scr_dialog_draw_portrait(_win_x, _win_y, _win_w, _win_h, _btn_y1, spr_max_portrait, _portrait_size);
+
     // Текст
     var _tx = _win_x + 100;
-    var _ty = _win_y + _pad;
+    var _ty = scr_dialog_body_top(_win_x, _win_y, _win_w, _win_h);
+    var _text_max_w = _portrait_x1 - _tx - 16;
     draw_set_font(fnt_ui);
     draw_set_halign(fa_left);
     draw_set_valign(fa_top);
-    draw_set_color(_sp_col);
-    draw_text(_tx, _ty, "Макс:");
-    _ty += _line_h * 1.5;
-    draw_set_color(c_white);
-    draw_text(_tx, _ty, "Пожалуй надо подкрепиться!"); _ty += _line_h;
-    draw_text(_tx, _ty, "Я помню, бабуля варила вкуснейшее кофе —"); _ty += _line_h;
-    draw_text(_tx, _ty, "попробую сварить его сама."); _ty += _line_h;
-    draw_set_color(make_color_rgb(255, 220, 80));
-    draw_text(_tx, _ty, "▸ Зёрна в сарае");
+    draw_set_color(c_black);
+    draw_text_ext(_tx, _ty, "Пожалуй надо подкрепиться!", -1, _text_max_w); _ty += _line_h;
+    draw_text_ext(_tx, _ty, "Я помню, бабуля варила вкуснейшее кофе -", -1, _text_max_w); _ty += _line_h;
+    draw_text_ext(_tx, _ty, "попробую сварить его сама.", -1, _text_max_w); _ty += _line_h;
+    draw_set_color(make_color_rgb(150, 105, 10));
+    draw_text_ext(_tx, _ty, "> Зёрна в сарае", -1, _text_max_w);
 
     // Кнопка
     var _mx  = device_mouse_x_to_gui(0);
     var _my  = device_mouse_y_to_gui(0);
     var _hov = (_mx >= _btn_x1 && _mx <= _btn_x2 && _my >= _btn_y1 && _my <= _btn_y2);
-    draw_set_color(_hov ? c_white : c_black);
-    draw_rectangle(_btn_x1, _btn_y1, _btn_x2, _btn_y2, false);
-    draw_set_color(_sp_col);
-    draw_line(_btn_x1+1, _btn_y1, _btn_x2-1, _btn_y1);
-    draw_line(_btn_x1+1, _btn_y2, _btn_x2-1, _btn_y2);
-    draw_line(_btn_x1+1, _btn_y1, _btn_x1+1, _btn_y2);
-    draw_line(_btn_x2-1, _btn_y1, _btn_x2-1, _btn_y2);
-    draw_set_font(fnt_ui);
-    draw_set_halign(fa_center);
-    draw_set_valign(fa_middle);
-    draw_set_color(_hov ? c_black : c_white);
-    draw_text((_btn_x1+_btn_x2)/2, (_btn_y1+_btn_y2)/2, "Далее");
+    scr_dialog_draw_button(_btn_x1, _btn_y1, _btn_x2, _btn_y2, "Далее", _hov);
     draw_set_halign(fa_left);
     draw_set_valign(fa_top);
     draw_set_color(c_white);
@@ -361,20 +312,16 @@ if (room == rm_bakery && variable_global_exists("show_potato_hint") && global.sh
     var _scol = make_color_rgb(255, 210, 100);
 
     gpu_set_blendmode(bm_normal);
-    draw_set_alpha(0.92);
-    draw_set_color(c_black);
-    draw_roundrect_ext(_tx, _ty, _tx + _tw, _ty + _th, 10, 10, false);
-    draw_set_alpha(1);
-    draw_set_color(_scol);
-    draw_roundrect_ext(_tx, _ty, _tx + _tw, _ty + _th, 10, 10, true);
+    scr_dialog_draw_bg(_tx, _ty, _tw, _th);
 
-    draw_set_font(fnt_ui);
+    scr_dialog_draw_speaker(_tx, _ty, _tw, _th, "Макс:");
     draw_set_halign(fa_left); draw_set_valign(fa_top);
-    draw_set_color(_scol);
-    draw_text(_tx + _tpad, _ty + _tpad, "Макс:");
-    draw_set_color(c_white);
-    draw_text(_tx + 80, _ty + _tpad,          "Чтобы приготовить картофельный пирог нужно найти картофель —");
-    draw_text(_tx + 80, _ty + _tpad + _tlh,   "кажется я помню что картофель был у бабули в сарае!");
+
+    var _body_ty = scr_dialog_body_top(_tx, _ty, _tw, _th);
+    draw_set_font(fnt_ui);
+    draw_set_color(c_black);
+    draw_text(_tx + 80, _body_ty,          "Чтобы приготовить картофельный пирог нужно найти картофель -");
+    draw_text(_tx + 80, _body_ty + _tlh,   "кажется я помню что картофель был у бабули в сарае!");
 
     var _bw = 110; var _bh = 28;
     var _bx1 = _tx + _tw - _bw - _tpad;
@@ -382,14 +329,7 @@ if (room == rm_bakery && variable_global_exists("show_potato_hint") && global.sh
     var _bx2 = _bx1 + _bw; var _by2 = _by1 + _bh;
     var _hov = (device_mouse_x_to_gui(0) >= _bx1 && device_mouse_x_to_gui(0) <= _bx2
              && device_mouse_y_to_gui(0) >= _by1 && device_mouse_y_to_gui(0) <= _by2);
-    draw_set_color(_hov ? c_white : c_black);
-    draw_rectangle(_bx1, _by1, _bx2, _by2, false);
-    draw_set_color(_scol);
-    draw_line(_bx1+1,_by1,_bx2-1,_by1); draw_line(_bx1+1,_by2,_bx2-1,_by2);
-    draw_line(_bx1+1,_by1,_bx1+1,_by2); draw_line(_bx2-1,_by1,_bx2-1,_by2);
-    draw_set_halign(fa_center); draw_set_valign(fa_middle);
-    draw_set_color(_hov ? c_black : c_white);
-    draw_text((_bx1+_bx2)/2, (_by1+_by2)/2, "Далее");
+    scr_dialog_draw_button(_bx1, _by1, _bx2, _by2, "Далее", _hov);
     draw_set_halign(fa_left); draw_set_valign(fa_top);
     draw_set_color(c_white); draw_set_alpha(1);
 }
@@ -409,7 +349,7 @@ if (miley_active && room == rm_bakery) {
         draw_set_valign(fa_middle);
         draw_set_color(miley_dlg_col);
         draw_set_alpha(0.85);
-        draw_text(display_get_gui_width() / 2, 70, "Майли ждёт кофе — сварите латте!");
+        draw_text(display_get_gui_width() / 2, 70, "Майли ждёт кофе - сварите латте!");
         draw_set_alpha(1);
         draw_set_halign(fa_left);
         draw_set_valign(fa_top);
@@ -477,10 +417,7 @@ if (miley_active && room == rm_bakery) {
 
         gpu_set_blendmode(bm_normal);
         draw_set_alpha(1);
-        draw_set_color(c_black);
-        draw_roundrect_ext(_mwx, _mwy, _mwx+_mww, _mwy+_mwh, 12, 12, false);
-        draw_set_color(_msp_col);
-        draw_roundrect_ext(_mwx, _mwy, _mwx+_mww, _mwy+_mwh, 12, 12, true);
+        scr_dialog_draw_bg(_mwx, _mwy, _mww, _mwh);
 
         // Иконка кружки кофе (слева)
         var _mcx = _mwx + 52;
@@ -503,34 +440,23 @@ if (miley_active && room == rm_bakery) {
         draw_circle(_mcx+5, _mcy-26, 2, false);
         draw_set_alpha(1);
 
+        // Имя — жирным, в бирке
+        scr_dialog_draw_speaker(_mwx, _mwy, _mww, _mwh, _mspeaker);
+
         // Текст
         var _mtx = _mwx + 100;
-        var _mty = _mwy + _mpad;
+        var _mty = scr_dialog_body_top(_mwx, _mwy, _mww, _mwh);
         draw_set_font(fnt_ui);
         draw_set_halign(fa_left);
         draw_set_valign(fa_top);
-        draw_set_color(_msp_col);
-        draw_text(_mtx, _mty, _mspeaker);
-        _mty += _mlh * 1.5;
-        draw_set_color(c_white);
+        draw_set_color(c_black);
         if (_mline1 != "") { draw_text_ext(_mtx, _mty, _mline1, -1, _mww-120); _mty += _mlh; }
         if (_mline2 != "") draw_text_ext(_mtx, _mty, _mline2, -1, _mww-120);
 
         // Кнопка
         var _mhov = (device_mouse_x_to_gui(0) >= _mbx1 && device_mouse_x_to_gui(0) <= _mbx2
                   && device_mouse_y_to_gui(0) >= _mby1 && device_mouse_y_to_gui(0) <= _mby2);
-        draw_set_color(_mhov ? c_white : c_black);
-        draw_rectangle(_mbx1, _mby1, _mbx2, _mby2, false);
-        draw_set_color(_msp_col);
-        draw_line(_mbx1+1,_mby1,_mbx2-1,_mby1);
-        draw_line(_mbx1+1,_mby2,_mbx2-1,_mby2);
-        draw_line(_mbx1+1,_mby1,_mbx1+1,_mby2);
-        draw_line(_mbx2-1,_mby1,_mbx2-1,_mby2);
-        draw_set_font(fnt_ui);
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_middle);
-        draw_set_color(_mhov ? c_black : c_white);
-        draw_text((_mbx1+_mbx2)/2, (_mby1+_mby2)/2, _mbtn_lbl);
+        scr_dialog_draw_button(_mbx1, _mby1, _mbx2, _mby2, _mbtn_lbl, _mhov);
         draw_set_halign(fa_left);
         draw_set_valign(fa_top);
         draw_set_color(c_white);

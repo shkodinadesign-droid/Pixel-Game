@@ -38,7 +38,7 @@ win_y  = 20;
 // Портрет Макса
 icon_size = 64;
 icon_x    = win_x + pad;
-icon_y    = win_y + pad + round(line_h * 1.5);
+icon_y    = scr_dialog_body_top(win_x, win_y, win_w, win_h);
 
 btn_label = "Понятно";
 btn_w  = 130;

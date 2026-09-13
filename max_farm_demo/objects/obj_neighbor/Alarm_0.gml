@@ -3,7 +3,7 @@
 // =====================
 // Показываем приветственный диалог при старте игры
 
-if (!intro_done && !global.intro_neighbor_done) {
+if (!intro_done && !global.intro_neighbor_done && !instance_exists(obj_ui_letter_neighbor)) {
     intro_done = true;
     global.intro_neighbor_done = true;
 

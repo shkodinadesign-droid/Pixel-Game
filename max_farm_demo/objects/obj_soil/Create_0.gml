@@ -99,7 +99,7 @@ function water_cell() {
     // Проверяем, все ли грядки политы (триггер появления Мэгги)
     if (!variable_global_exists("meggi_intro_done")) global.meggi_intro_done = false;
 
-    if (!global.meggi_intro_done && room == rm_farm) {
+    if (!global.meggi_intro_done && !instance_exists(obj_grandma_Maggie) && room == rm_farm) {
         // Считаем сколько грядок полито
         var watered_count = 0;
         var total_count = 0;

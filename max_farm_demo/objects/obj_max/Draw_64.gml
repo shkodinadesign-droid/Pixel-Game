@@ -127,7 +127,7 @@ if (can_left) {
     draw_roundrect_ext(_ax - 10, panel_y + 8, _ax + 10, panel_y + panel_h - 8, 3, 3, false);
     draw_set_alpha(1);
     draw_set_color(c_white);
-    draw_text(_ax, cy, "◄");
+    draw_text(_ax, cy, "<");
 }
 if (can_right) {
     var _ax = ix + slot_w * hotbar_visible + arrow_w / 2;
@@ -136,7 +136,7 @@ if (can_right) {
     draw_roundrect_ext(_ax - 10, panel_y + 8, _ax + 10, panel_y + panel_h - 8, 3, 3, false);
     draw_set_alpha(1);
     draw_set_color(c_white);
-    draw_text(_ax, cy, "►");
+    draw_text(_ax, cy, ">");
 }
 
 // --- Разделители между слотами ---

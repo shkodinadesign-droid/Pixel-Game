@@ -209,8 +209,6 @@ if ((keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_space)) && so
             with (obj_soil) { if (dug) { _has_dug = true; if (!watered) { _all_w = false; break; } } }
             if (_all_w && _has_dug) {
                 global.tutorial_farm_step = 7;
-                if (instance_exists(obj_day_controller))
-                    obj_day_controller.meggie_diary_timer = room_speed * 5; // 5 секунд
             }
         }
         if (soil_here.watered && !_was_watered) {

@@ -33,8 +33,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_Miley",
-    "path":"sprites/spr_Miley/spr_Miley.yy",
+    "name":"spr_maggie_idle_right",
+    "path":"sprites/spr_maggie_idle_right/spr_maggie_idle_right.yy",
   },
   "spriteMaskId":null,
   "visible":true,

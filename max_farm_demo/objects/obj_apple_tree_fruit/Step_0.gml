@@ -1,18 +1,5 @@
 depth = -y;
 
-// Прозрачность только когда Макс ВЫШЕ ствола (сзади дерева)
-if (instance_exists(obj_max)) {
-    var _stump_y = y;  // основание дерева = позиция объекта
-    var _in_x    = obj_max.x > x - 40 && obj_max.x < x + 40;
-    if (obj_max.y < _stump_y && _in_x) {
-        image_alpha = 0.4;
-    } else {
-        image_alpha = 1;
-    }
-} else {
-    image_alpha = 1;
-}
-
 if (!instance_exists(obj_max)) exit;
 
 // Считаем несобранные яблоки

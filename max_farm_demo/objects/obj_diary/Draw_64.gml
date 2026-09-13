@@ -459,6 +459,32 @@ switch (current_tab) {
             }
         }
 
+        // --- Задание: Проверь пекарню ---
+        if (variable_global_exists("bakery_check_started") && global.bakery_check_started) {
+            _ty += round(32 * bs);
+            var _bakery_done = variable_global_exists("bakery_check_done") && global.bakery_check_done;
+            if (_bakery_done) {
+                draw_set_color(make_color_rgb(70, 150, 70));
+                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
+                draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle);
+                draw_set_color(c_white);
+                draw_text(content_x + _tbox / 2, _ty + _tbox / 2, "v");
+                draw_set_halign(fa_left); draw_set_valign(fa_top);
+                draw_set_color(make_color_rgb(140, 115, 90));
+                var _taskB = "Проверь пекарню";
+                draw_text(content_x + _tbox + _tgap, _ty, _taskB);
+                draw_line(content_x + _tbox + _tgap, _ty + string_height(_taskB) / 2,
+                          content_x + _tbox + _tgap + string_width(_taskB), _ty + string_height(_taskB) / 2);
+            } else {
+                draw_set_color(make_color_rgb(200, 80, 60));
+                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
+                draw_set_color(make_color_rgb(160, 50, 30));
+                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, true);
+                draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
+                draw_text(content_x + _tbox + _tgap + 5, _ty, "Проверь пекарню");
+            }
+        }
+
         // ===== ПРАВАЯ СТРАНИЦА: ОСНОВНЫЕ ЗАДАНИЯ =====
         if (variable_global_exists("secret_quest_started") && global.secret_quest_started) {
             var _rp_x = book_x + round(295 * bs);
@@ -775,12 +801,13 @@ switch (current_tab) {
         if (!variable_global_exists("kitten_arrived")) global.kitten_arrived = false;
         if (global.kitten_arrived) {
             var _ky = content_y + 32;
-            // Иконка сердечко
-            draw_set_font(fnt_ui);
-            draw_set_halign(fa_left);
-            draw_set_valign(fa_top);
+            // Иконка сердечко (примитивами — символ ♥ не поддерживается шрифтом)
             draw_set_color(make_color_rgb(255, 80, 120));
-            draw_text(content_x, _ky, "♥");
+            var _hx2 = content_x + 6;
+            var _hy2 = _ky + 6;
+            draw_circle(_hx2 - 3, _hy2 - 2, 4, false);
+            draw_circle(_hx2 + 3, _hy2 - 2, 4, false);
+            draw_triangle(_hx2 - 7, _hy2 - 1, _hx2 + 7, _hy2 - 1, _hx2, _hy2 + 7, false);
             // Имя и описание
             draw_set_font(fnt_ui);
             draw_set_color(make_color_rgb(80, 50, 20));
@@ -809,7 +836,7 @@ switch (current_tab) {
         draw_set_halign(fa_left);
         draw_set_valign(fa_top);
         draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(content_x + 30, content_y + 4, "C — " + string(global.coins));
+        draw_text(content_x + 30, content_y + 4, "C - " + string(global.coins));
         break;
 }
 

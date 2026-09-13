@@ -2,7 +2,7 @@
 
 // --- Туториал: кнопка на нечётных шагах → переход к следующему ---
 var _ts = global.tutorial_farm_step;
-if (room == rm_farm && (_ts == 1 || _ts == 3 || _ts == 5 || _ts == 7)) {
+if (room == rm_farm && (_ts == 1 || _ts == 3 || _ts == 5)) {
     if (mouse_check_button_pressed(mb_left)) {
         var _gui_w2 = display_get_gui_width();
         var _gui_h2 = display_get_gui_height();
@@ -16,9 +16,14 @@ if (room == rm_farm && (_ts == 1 || _ts == 3 || _ts == 5 || _ts == 7)) {
         var _by1 = _ty2 + _th2 - _bh2 - 8;
         var _mx = device_mouse_x_to_gui(0); var _my = device_mouse_y_to_gui(0);
         if (_mx >= _bx1 && _mx <= _bx1 + _bw2 && _my >= _by1 && _my <= _by1 + _bh2) {
-            global.tutorial_farm_step++; // 1→2, 3→4, 5→6, 7→8
+            global.tutorial_farm_step++; // 1→2, 3→4, 5→6
         }
     }
+}
+
+// --- Квест: проверить пекарню — завершается заходом в пекарню ---
+if (room == rm_bakery && global.bakery_check_started && !global.bakery_check_done) {
+    global.bakery_check_done = true;
 }
 
 // --- Кнопка "Далее" попапа про фрукты ---

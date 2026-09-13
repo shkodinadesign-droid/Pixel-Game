@@ -1,10 +1,10 @@
-// ===== MAX PUDDING DIALOG — CREATE =====
+// ===== MAX PUDDING DIALOG - CREATE =====
 
 speaker     = "Макс:";
 speaker_col = make_color_rgb(255, 210, 100);
 
 line1 = "Пуддинг готов!";
-line2 = "Теперь как стемнеет — положу его на крыльцо.";
+line2 = "Теперь как стемнеет - положу его на крыльцо.";
 line3 = "Интересно что будет дальше...";
 line4 = "";
 

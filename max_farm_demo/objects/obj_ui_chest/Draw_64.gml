@@ -101,8 +101,8 @@ draw_set_font(fnt_ui);
 draw_set_halign(fa_center);
 draw_set_valign(fa_bottom);
 draw_set_color(make_color_rgb(130, 100, 70));
-draw_text(panel_x + panel_w / 4,     panel_y + panel_h - 10, "Клик — взять");
-draw_text(panel_x + panel_w * 3 / 4, panel_y + panel_h - 10, "Клик — положить");
+draw_text(panel_x + panel_w / 4,     panel_y + panel_h - 10, "Клик - взять");
+draw_text(panel_x + panel_w * 3 / 4, panel_y + panel_h - 10, "Клик - положить");
 
 // Кнопка закрытия
 draw_set_halign(fa_right);
