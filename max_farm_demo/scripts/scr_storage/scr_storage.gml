@@ -189,7 +189,8 @@ function storage_init() {
     });
     ds_map_add(global.item_database, "water", {
         name: "Вода",
-        category: "dairy"
+        category: "dairy",
+        icon: spr_water_drop
     });
     ds_map_add(global.item_database, "latte", {
         name: "Латте",
@@ -428,6 +429,7 @@ function hotbar_add_item(item_id) {
         case "sugar":              _spr = spr_shugar_icon; break;
         case "flour":              _spr = spr_flour_icon;  break;
         case "yeast":              _spr = spr_yeast_icon;  break;
+        case "water":              _spr = spr_water_drop;  break;
         case "pudding":            _spr = -1; break;
         default: return; // неизвестный предмет — не добавляем
     }

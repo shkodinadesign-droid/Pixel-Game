@@ -248,8 +248,20 @@ if ((keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_space)) && so
 
 
 // ---------- перемещение (с коллизиями) ----------
-if (!place_meeting(x + move_x, y, obj_solid)) x += move_x;
-if (!place_meeting(x, y + move_y, obj_solid)) y += move_y;
+var _moved = false;
+if (!place_meeting(x + move_x, y, obj_solid)) { x += move_x; if (move_x != 0) _moved = true; }
+if (!place_meeting(x, y + move_y, obj_solid)) { y += move_y; if (move_y != 0) _moved = true; }
+
+// ---------- звук шагов ----------
+if (_moved && !global.control_locked) {
+    footstep_timer -= 1;
+    if (footstep_timer <= 0) {
+        footstep_timer = footstep_interval;
+        audio_play_sound(footstep_sounds[irandom(array_length(footstep_sounds) - 1)], 1, false, 0.5);
+    }
+} else {
+    footstep_timer = 0;
+}
 
 if (instance_exists(obj_kitten)) {
     var _kd = point_distance(x, y, obj_kitten.x, obj_kitten.y);

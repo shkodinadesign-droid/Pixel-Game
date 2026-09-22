@@ -15,13 +15,22 @@ scr_dialog_draw_speaker(win_x, win_y, win_w, win_h, speaker);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
 
+// Портрет — только для реплик Джастина (для Макс портрета пока нет в этом окне)
+var _text_max_w = win_w - (tx - win_x) - 16;
+if (speaker == "Джастин:") {
+    var _portrait_size = 90;
+    var _portrait_x1   = win_x + 565 * (win_w / 580) - 8 - _portrait_size;
+    scr_dialog_draw_portrait(win_x, win_y, win_w, win_h, btn_y1, spr_justin_portrait, _portrait_size);
+    _text_max_w = _portrait_x1 - tx - 16;
+}
+
 // Строки диалога
 draw_set_font(fnt_ui);
 draw_set_color(c_black);
-if (line1 != "") { draw_text(tx, ty, line1); ty += line_h; }
-if (line2 != "") { draw_text(tx, ty, line2); ty += line_h; }
-if (line3 != "") { draw_text(tx, ty, line3); ty += line_h; }
-if (line4 != "") { draw_text(tx, ty, line4); }
+if (line1 != "") { draw_text_ext(tx, ty, line1, -1, _text_max_w); ty += line_h; }
+if (line2 != "") { draw_text_ext(tx, ty, line2, -1, _text_max_w); ty += line_h; }
+if (line3 != "") { draw_text_ext(tx, ty, line3, -1, _text_max_w); ty += line_h; }
+if (line4 != "") { draw_text_ext(tx, ty, line4, -1, _text_max_w); }
 
 // Кнопка
 var mx = device_mouse_x_to_gui(0);

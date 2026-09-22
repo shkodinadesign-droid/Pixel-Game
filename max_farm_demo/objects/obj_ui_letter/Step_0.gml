@@ -51,5 +51,6 @@ if ((hover && click_press)
     || keyboard_check_pressed(vk_space)) {
 
     global.control_locked = false;
+    audio_play_sound(snd_ui_click, 1, false, 0.6);
     instance_destroy();
 }

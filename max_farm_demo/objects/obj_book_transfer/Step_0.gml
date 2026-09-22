@@ -45,7 +45,7 @@ switch (phase) {
         var _d = (_dlyr != -1)
             ? instance_create_layer(0, 0, _dlyr, obj_diary)
             : instance_create_depth(0, 0, 0, obj_diary); // гарантированно валидно, без привязки к слою
-        _d.current_tab = 1;
+        _d.current_tab = 0;
 
         // Разблокируем управление
         global.control_locked = false;

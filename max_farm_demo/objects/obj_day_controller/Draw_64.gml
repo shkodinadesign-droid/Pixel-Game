@@ -476,3 +476,73 @@ if (is_sleeping && sleep_fade > 0.3) {
     draw_set_halign(fa_left);
     draw_set_valign(fa_top);
 }
+
+// --- ПРЕДУПРЕЖДЕНИЕ: тестовый режим активен ---
+// TEST_DAY в Create_0 стоит не на 1 — билд пропускает часть сюжета.
+// Баннер держит это на виду, чтобы такое не ушло в релиз незамеченным.
+if (variable_instance_exists(id, "test_day_value") && test_day_value != 1) {
+    draw_set_font(fnt_ui);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_color(c_red);
+    draw_set_alpha(1);
+    draw_text(8, 8, "ТЕСТ: TEST_DAY = " + string(test_day_value) + " - не для релиза");
+    draw_set_color(c_white);
+}
+
+// --- ЭКРАН ОТЛАДКИ КВЕСТОВЫХ ФЛАГОВ (F1) ---
+// Показывает все ключевые глобальные флаги сюжета разом, чтобы сразу
+// было видно, какой из них не выставился и где цепочка квеста остановилась.
+if (variable_instance_exists(id, "show_debug_flags") && show_debug_flags) {
+    var _flag_names = [
+        "meggi_intro_done", "tutorial_farm_step",
+        "has_diary", "diary_has_new", "diary_was_read",
+        "bakery_check_started", "bakery_check_done",
+        "coffee_letter_read", "coffee_made",
+        "fruit_quest_started", "fruit_quest_pending", "fruit_quest_done",
+        "secret_quest_started",
+        "pudding_quest", "pudding_ready", "pudding_on_porch",
+        "magic_map_placed", "magic_map_taken",
+        "kitten_arrived", "maggie_day2_started",
+        "letters_read"
+    ];
+
+    var _px = 8; var _py = 30;
+    var _row_h = 16;
+    var _panel_w = 300;
+    var _panel_h = 20 + array_length(_flag_names) * _row_h;
+
+    draw_set_alpha(0.85);
+    draw_set_color(c_black);
+    draw_rectangle(_px, _py, _px + _panel_w, _py + _panel_h, false);
+    draw_set_alpha(1);
+
+    draw_set_font(fnt_ui);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_color(c_yellow);
+    draw_text(_px + 6, _py + 4, "F1: день " + string(day_index) + " " + day_get_time_string());
+
+    for (var _i = 0; _i < array_length(_flag_names); _i++) {
+        var _name = _flag_names[_i];
+        var _val_text;
+        if (!variable_global_exists(_name)) {
+            _val_text = "-- (не создан)";
+            draw_set_color(c_gray);
+        } else {
+            var _val = variable_global_get(_name);
+            if (is_array(_val)) {
+                _val_text = "[" + string(array_length(_val)) + "] " + string(_val);
+                draw_set_color(c_white);
+            } else if (is_bool(_val)) {
+                _val_text = string(_val);
+                draw_set_color(_val ? c_lime : c_red);
+            } else {
+                _val_text = string(_val);
+                draw_set_color(c_white);
+            }
+        }
+        draw_text(_px + 6, _py + 20 + _i * _row_h, _name + " = " + _val_text);
+    }
+    draw_set_color(c_white);
+}

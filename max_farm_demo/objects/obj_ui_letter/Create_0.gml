@@ -34,3 +34,5 @@ _click_prev = false;
 // блокируем управление
 if (!variable_global_exists("control_locked")) global.control_locked = false;
 global.control_locked = true;
+
+audio_play_sound(snd_letter_open, 1, false, 0.6);

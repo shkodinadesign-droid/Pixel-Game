@@ -1,5 +1,8 @@
 // === КОНТРОЛЛЕР ДНЯ/НОЧИ (STEP) ===
 
+// --- F1: экран отладки квестовых флагов (см. Draw_64) ---
+if (keyboard_check_pressed(vk_f1)) show_debug_flags = !show_debug_flags;
+
 // --- Туториал: кнопка на нечётных шагах → переход к следующему ---
 var _ts = global.tutorial_farm_step;
 if (room == rm_farm && (_ts == 1 || _ts == 3 || _ts == 5)) {
