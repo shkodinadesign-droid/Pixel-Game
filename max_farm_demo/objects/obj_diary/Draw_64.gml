@@ -363,7 +363,7 @@ switch (current_tab) {
         var _qd_sx = book_w / 824;
         var _qd_sy = book_h / 453;
         var _qd_x  = book_x + 471 * _qd_sx;
-        var _qd_y  = book_y + 91  * _qd_sy;
+        var _qd_y  = book_y + 108 * _qd_sy;
         var _qd_w  = (721 - 471) * _qd_sx;
 
         var _sel_q = undefined;
@@ -384,9 +384,9 @@ switch (current_tab) {
             draw_set_color(make_color_rgb(160, 120, 70));
             draw_line(_qd_x, _qd_y + 22 * _qd_sy, _qd_x + _qd_w, _qd_y + 22 * _qd_sy);
 
-            draw_set_font(fnt_diary_hand);
+            draw_set_font(fnt_ui);
             draw_set_color(c_black);
-            draw_text_ext(_qd_x, _qd_y + 32 * _qd_sy, _sel_q.desc, round(20 * bs), _qd_w);
+            draw_text_ext(_qd_x, _qd_y + 32 * _qd_sy, _sel_q.desc, round(18 * bs), _qd_w);
         } else {
             // Центр белого листочка целиком (457-735, 77-356 в исходных пикселях арта)
             var _qd_cx = book_x + 596 * _qd_sx;

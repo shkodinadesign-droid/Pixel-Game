@@ -9,7 +9,7 @@ function diary_get_quest_list() {
     array_push(_list, {
         id: "plant_seeds",
         text: "Посадить зерна",
-        desc: "Бабуля доверила мне посадить зерна. Их я могу взять в сарае.\n\nМне нужно вскопать грядку далее посадить и полить.",
+        desc: "Бабуля просила посадить зерна.\n\nДля этого надо взять зерна в сарае, раскопать землю в огороде, посадить и полить.",
         done: variable_global_exists("grain_planted") && global.grain_planted,
         category: "main"
     });
@@ -67,7 +67,7 @@ function diary_get_quest_list() {
         array_push(_list, {
             id: "bakery_check",
             text: "Проверь пекарню",
-            desc: "Джастин просил заглянуть в пекарню и проверить, всё ли в порядке.",
+            desc: "Бабуля просила заглянуть в пекарню и проверить, всё ли в порядке.",
             done: variable_global_exists("bakery_check_done") && global.bakery_check_done,
             category: "side"
         });

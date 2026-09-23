@@ -139,7 +139,8 @@ if (show_fruit_quest_dlg) {
 }
 
 // --- Подсказка: войти в сарай ---
-if (room == rm_farm && instance_exists(obj_max)) {
+if (room == rm_farm && instance_exists(obj_max)
+&&  (!variable_global_exists("control_locked") || !global.control_locked)) {
     var _barn_wx = 96; var _barn_wy = 256;
     if (point_distance(_barn_wx, _barn_wy, obj_max.x, obj_max.y) < 96) {
         var _cam = view_camera[0];
@@ -173,7 +174,8 @@ if (room == rm_farm
 &&  variable_global_exists("pudding_ready") && global.pudding_ready
 &&  variable_global_exists("pudding_on_porch") && !global.pudding_on_porch
 &&  !(variable_global_exists("magic_map_placed") && global.magic_map_placed)
-&&  instance_exists(obj_max)) {
+&&  instance_exists(obj_max)
+&&  (!variable_global_exists("control_locked") || !global.control_locked)) {
     var _gx = 240; var _gy = 430;
     if (point_distance(_gx, _gy, obj_max.x, obj_max.y) < 48) {
         var _cam = view_camera[0];
@@ -187,7 +189,8 @@ if (room == rm_farm
 if (room == rm_farm
 &&  variable_global_exists("magic_map_placed") && global.magic_map_placed
 &&  !variable_global_exists("magic_map_taken")
-&&  instance_exists(obj_frog_map) && instance_exists(obj_max)) {
+&&  instance_exists(obj_frog_map) && instance_exists(obj_max)
+&&  (!variable_global_exists("control_locked") || !global.control_locked)) {
     var _map = instance_find(obj_frog_map, 0);
     if (point_distance(_map.x, _map.y, obj_max.x, obj_max.y) < 48) {
         var _cam = view_camera[0];
