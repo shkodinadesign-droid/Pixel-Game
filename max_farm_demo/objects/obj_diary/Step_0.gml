@@ -8,8 +8,6 @@ var click_press = (click_now && !_click_prev);
 _click_prev = click_now;
 
 // Проверка клика по вкладкам (нарисованы внутри спрайта книги, координаты в исходных 824x453 px)
-var _recipes_unlocked = variable_global_exists("justin_bakery_intro_done") && global.justin_bakery_intro_done;
-
 var _tab_local = [
     [63, 0, 96, 27],    // 0 - Задания
     [111, 0, 144, 27],  // 1 - Инвентарь
@@ -30,8 +28,6 @@ for (var i = 0; i < 7; i++) {
 
     if (mx >= tx1 && mx <= tx2 && my >= ty1 && my <= ty2) {
         if (click_press) {
-            // Вкладка Рецепты (2) заблокирована до катсцены Джастина
-            if (i == 2 && !_recipes_unlocked) break;
             current_tab = i;
         }
     }
@@ -40,8 +36,7 @@ for (var i = 0; i < 7; i++) {
 // Клик по заданиям (вкладка 0)
 if (current_tab == 0 && click_press) {
     var _q_content_x = book_x + round(60 * book_scale);
-    var _q_content_y = book_y + round(60 * book_scale);
-    var _q_rows_y     = _q_content_y + round(26 * book_scale);
+    var _q_rows_y     = book_y + round(52 * book_scale);
     var _q_list_w     = round(205 * book_scale);
 
     var _q_rows = diary_quest_build_rows(_q_content_x, _q_rows_y, book_scale);
@@ -62,9 +57,9 @@ if (current_tab == 1 && click_press) {
     var _slot_size = round(38 * book_scale);
     var _slot_gap  = round(4  * book_scale);
     var _grid_cols = 5;
-    var _grid_rows = 3;
+    var _grid_rows = 4;
     var _grid_x    = book_x + round(60 * book_scale);
-    var _grid_y    = book_y + round(48 * book_scale);
+    var _grid_y    = book_y + round(52 * book_scale);
 
     var _hit = false;
     for (var _r = 0; _r < _grid_rows; _r++) {
@@ -83,20 +78,57 @@ if (current_tab == 1 && click_press) {
     if (!_hit && mx < book_x + book_w / 2) selected_item = -1;
 }
 
-// Клик на кнопку "Подробнее" в рецептах (вкладка 2)
+// Клики во вкладке "Рецепты" (вкладка 2): категории + сетка 4x4
+// Координаты — как в Draw_64.gml, замерены по пикселям spr_diary_bg_recipes (824x453)
 if (current_tab == 2 && click_press) {
-    var _recipes_unlocked2 = variable_global_exists("justin_bakery_intro_done") && global.justin_bakery_intro_done;
-    if (_recipes_unlocked2) {
-        var _bs = book_scale;
-        var _content_x2 = book_x + round(60 * _bs);
-        var _content_y2 = book_y + round(60 * _bs);
-        var _pbtn_x2 = _content_x2;
-        var _pbtn_y2 = _content_y2 + round(56 * _bs);
-        var _pbtn_w2 = round(90 * _bs);
-        var _pbtn_h2 = round(22 * _bs);
-        if (mx >= _pbtn_x2 && mx <= _pbtn_x2 + _pbtn_w2 &&
-            my >= _pbtn_y2 && my <= _pbtn_y2 + _pbtn_h2) {
-            recipe_detail_open = !recipe_detail_open;
+    var _rsx = book_w / 824;
+    var _rsy = book_h / 453;
+
+    var _categories = diary_get_recipe_categories();
+    var _cat_x0 = book_x + 128 * _rsx;
+    var _cat_x1 = book_x + 369 * _rsx;
+    var _cat_y0 = book_y + 64  * _rsy;
+    var _cat_y1 = book_y + 96  * _rsy;
+    var _cat_w  = (_cat_x1 - _cat_x0) / array_length(_categories);
+
+    var _hit_cat = false;
+    for (var _ci = 0; _ci < array_length(_categories); _ci++) {
+        var _cx0 = _cat_x0 + _ci * _cat_w;
+        var _cx1 = _cx0 + _cat_w;
+        if (mx >= _cx0 && mx <= _cx1 && my >= _cat_y0 && my <= _cat_y1) {
+            recipe_category = _categories[_ci].id;
+            selected_recipe = "";
+            _hit_cat = true;
+            break;
+        }
+    }
+
+    if (!_hit_cat) {
+        var _grid_cols = 4;
+        var _grid_rows = 4;
+        var _grid_gap  = 15 * _rsx;
+        var _slot_size = ((369 - 128) * _rsx - (_grid_cols - 1) * _grid_gap) / _grid_cols;
+        var _grid_x    = book_x + 128 * _rsx;
+        var _grid_y    = book_y + 128 * _rsy;
+
+        var _cat_recipes = [];
+        var _all_recipes = diary_get_recipe_list();
+        for (var _ri = 0; _ri < array_length(_all_recipes); _ri++) {
+            if (_all_recipes[_ri].category == recipe_category && _all_recipes[_ri].unlocked) {
+                array_push(_cat_recipes, _all_recipes[_ri]);
+            }
+        }
+
+        for (var _row = 0; _row < _grid_rows; _row++) {
+            for (var _col = 0; _col < _grid_cols; _col++) {
+                var _idx = _row * _grid_cols + _col;
+                if (_idx >= array_length(_cat_recipes)) continue;
+                var _sx = _grid_x + _col * (_slot_size + _grid_gap);
+                var _sy = _grid_y + _row * (_slot_size + _grid_gap);
+                if (mx >= _sx && mx <= _sx + _slot_size && my >= _sy && my <= _sy + _slot_size) {
+                    selected_recipe = _cat_recipes[_idx].id;
+                }
+            }
         }
     }
 }

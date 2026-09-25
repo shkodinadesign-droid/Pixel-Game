@@ -11,7 +11,9 @@ draw_rectangle(0, 0, display_get_gui_width(), display_get_gui_height(), false);
 draw_set_alpha(1);
 
 // Фон книги — растягиваем в область book_w x book_h (иконки вкладок уже нарисованы внутри спрайта)
-draw_sprite_stretched_ext(spr_diary_bg, 0, book_x, book_y, book_w, book_h, c_white, 1);
+// Вкладка "Рецепты" использует отдельную подложку с уже нарисованными сеткой/таблицей
+var _bg_spr = (current_tab == 2) ? spr_diary_bg_recipes : spr_diary_bg;
+draw_sprite_stretched_ext(_bg_spr, 0, book_x, book_y, book_w, book_h, c_white, 1);
 
 // Координаты вкладок внутри спрайта (в исходных пикселях 824x453) — подсветка активной/замок поверх арта
 var _tab_local = [
@@ -26,7 +28,6 @@ var _tab_local = [
 var _tab_sx = book_w / 824;
 var _tab_sy = book_h / 453;
 var _tab_corner = round(4 * bs);
-var _recipes_unlocked = variable_global_exists("justin_bakery_intro_done") && global.justin_bakery_intro_done;
 
 for (var i = 0; i < 7; i++) {
     var tx1 = book_x + _tab_local[i][0] * _tab_sx;
@@ -34,30 +35,12 @@ for (var i = 0; i < 7; i++) {
     var tx2 = book_x + _tab_local[i][2] * _tab_sx;
     var ty2 = book_y + _tab_local[i][3] * _tab_sy;
 
-    var _locked = (i == 2 && !_recipes_unlocked);
-
     // Подсветка активной вкладки
-    if (i == current_tab && !_locked) {
+    if (i == current_tab) {
         draw_set_alpha(0.35);
         draw_set_color(make_color_rgb(255, 250, 230));
         draw_roundrect_ext(tx1, ty1, tx2, ty2, _tab_corner, _tab_corner, false);
         draw_set_alpha(1);
-    }
-
-    // Затемнение + замок поверх заблокированной вкладки
-    if (_locked) {
-        draw_set_alpha(0.55);
-        draw_set_color(make_color_rgb(60, 50, 45));
-        draw_roundrect_ext(tx1, ty1, tx2, ty2, _tab_corner, _tab_corner, false);
-        draw_set_alpha(1);
-
-        var _lx = (tx1 + tx2) / 2;
-        var _ly = (ty1 + ty2) / 2 + round(1 * bs);
-        var _lw = round(7 * bs);
-        var _lh = round(6 * bs);
-        draw_set_color(make_color_rgb(230, 220, 210));
-        draw_roundrect_ext(_lx - _lw / 2, _ly, _lx + _lw / 2, _ly + _lh, 2, 2, false);
-        draw_ellipse(_lx - _lw / 3, _ly - _lh * 0.8, _lx + _lw / 3, _ly + 1, true);
     }
 }
 
@@ -75,12 +58,14 @@ draw_line_width(_close_cx - _cross_r, _close_cy - _cross_r, _close_cx + _cross_r
 draw_line_width(_close_cx - _cross_r, _close_cy + _cross_r, _close_cx + _cross_r, _close_cy - _cross_r, round(2 * bs));
 
 // Заголовок текущей вкладки (вкладка "Задания" рисует свой крупный заголовок сама, ниже)
+// Отступ слева выровнен по левому краю ячеек этой вкладки (у "Рецептов" сетка начинается левее content_x)
 if (current_tab != 0) {
     draw_set_font(fnt_ui);
     draw_set_halign(fa_left);
     draw_set_valign(fa_top);
     draw_set_color(make_color_rgb(80, 50, 20));
-    draw_text(book_x + round(40 * bs), book_y + round(20 * bs), tab_names[current_tab]);
+    var _title_x = (current_tab == 2) ? (book_x + 128 * (book_w / 824)) : (book_x + round(60 * bs));
+    draw_text(_title_x, book_y + round(26 * bs), tab_names[current_tab]);
 }
 
 // Контент вкладки
@@ -156,9 +141,9 @@ switch (current_tab) {
         var slot_size = round(38 * bs);  // ~48
         var slot_gap  = round(4  * bs);  // ~5
         var grid_cols = 5;
-        var grid_rows = 3;
+        var grid_rows = 4;
         var grid_x    = book_x + round(60 * bs);
-        var grid_y    = book_y + round(48 * bs);
+        var grid_y    = book_y + round(52 * bs);
         var _slot_corner = round(4 * bs);
 
         // --- Сетка слотов ---
@@ -286,13 +271,14 @@ switch (current_tab) {
         draw_set_halign(fa_left);
         draw_set_valign(fa_top);
 
-        // Заголовок вкладки — крупный, жирный шрифт
+        // Заголовок вкладки — на одной линии с заголовками остальных вкладок
+        var _tab0_title_y = book_y + round(26 * bs);
         draw_set_font(fnt_dialog_ru_bold);
         draw_set_color(make_color_rgb(70, 40, 15));
-        draw_text_transformed(content_x, content_y, "Задания", 1.15, 1.15, 0);
+        draw_text_transformed(content_x, _tab0_title_y, "Задания", 1.15, 1.15, 0);
 
         var _q_list_w = round(205 * bs);
-        var _q_rows_y = content_y + round(26 * bs);
+        var _q_rows_y = book_y + round(52 * bs);
         var _q_rows   = diary_quest_build_rows(content_x, _q_rows_y, bs);
         var _icon_r   = round(6 * bs);
 
@@ -430,115 +416,194 @@ switch (current_tab) {
         draw_set_color(c_white);
         break;
     case 2: // Рецепты
-        if (!_recipes_unlocked) {
+        // Координаты замерены по пикселям подложки spr_diary_bg_recipes (824x453)
+        var _rsx = book_w / 824;
+        var _rsy = book_h / 453;
+        var _all_recipes = diary_get_recipe_list();
+        var _categories  = diary_get_recipe_categories();
+
+        // --- Вкладки-категории (левая страница, x 128-369, y 64-96) ---
+        var _cat_x0 = book_x + 128 * _rsx;
+        var _cat_x1 = book_x + 369 * _rsx;
+        var _cat_y0 = book_y + 64  * _rsy;
+        var _cat_y1 = book_y + 96  * _rsy;
+        var _cat_w  = (_cat_x1 - _cat_x0) / array_length(_categories);
+
+        for (var _ci = 0; _ci < array_length(_categories); _ci++) {
+            var _cx0 = _cat_x0 + _ci * _cat_w;
+            var _cx1 = _cx0 + _cat_w;
+            var _cat_active = (_categories[_ci].id == recipe_category);
+
+            if (_cat_active) {
+                draw_set_alpha(0.35);
+                draw_set_color(make_color_rgb(255, 250, 230));
+                draw_rectangle(_cx0, _cat_y0, _cx1, _cat_y1, false);
+                draw_set_alpha(1);
+            }
+
+            draw_set_font(fnt_ui);
+            draw_set_halign(fa_center);
+            draw_set_valign(fa_middle);
+            draw_set_color(_cat_active ? make_color_rgb(60, 35, 10) : make_color_rgb(120, 95, 65));
+            draw_text((_cx0 + _cx1) / 2, (_cat_y0 + _cat_y1) / 2, _categories[_ci].name);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+        }
+
+        // --- Сетка рецептов 4x4 (левая страница, x 128-369, y 128-369) ---
+        var _grid_cols = 4;
+        var _grid_rows = 4;
+        var _grid_gap  = 15 * _rsx;
+        var _slot_size = ((369 - 128) * _rsx - (_grid_cols - 1) * _grid_gap) / _grid_cols;
+        var _grid_x    = book_x + 128 * _rsx;
+        var _grid_y    = book_y + 128 * _rsy;
+        var _icon_area_h = _slot_size * 0.62;
+
+        var _cat_recipes = [];
+        for (var _ri = 0; _ri < array_length(_all_recipes); _ri++) {
+            if (_all_recipes[_ri].category == recipe_category && _all_recipes[_ri].unlocked) {
+                array_push(_cat_recipes, _all_recipes[_ri]);
+            }
+        }
+
+        for (var _row = 0; _row < _grid_rows; _row++) {
+            for (var _col = 0; _col < _grid_cols; _col++) {
+                var _idx = _row * _grid_cols + _col;
+                var _sx = _grid_x + _col * (_slot_size + _grid_gap);
+                var _sy = _grid_y + _row * (_slot_size + _grid_gap);
+                var _has_recipe = (_idx < array_length(_cat_recipes));
+                var _is_sel_slot = _has_recipe && (_cat_recipes[_idx].id == selected_recipe);
+
+                if (_is_sel_slot) {
+                    draw_set_alpha(0.35);
+                    draw_set_color(make_color_rgb(255, 250, 230));
+                    draw_rectangle(_sx, _sy, _sx + _slot_size, _sy + _slot_size, false);
+                    draw_set_alpha(1);
+                }
+
+                if (_has_recipe) {
+                    var _rc  = _cat_recipes[_idx];
+                    var _icx = _sx + _slot_size / 2;
+                    var _icy = _sy + _icon_area_h / 2;
+
+                    if (sprite_exists(_rc.icon)) {
+                        var _iw  = sprite_get_width(_rc.icon);
+                        var _ih  = sprite_get_height(_rc.icon);
+                        var _pad = 6 * _rsx;
+                        var _sc  = min((_slot_size - _pad) / _iw, (_icon_area_h - _pad) / _ih);
+                        var _dw  = _iw * _sc;
+                        var _dh  = _ih * _sc;
+                        draw_sprite_stretched_ext(_rc.icon, 0, _icx - _dw / 2, _icy - _dh / 2, _dw, _dh, c_white, 1);
+                    } else {
+                        draw_set_color(make_color_rgb(200, 170, 120));
+                        draw_circle(_icx, _icy, _icon_area_h * 0.32, false);
+                    }
+
+                    draw_set_font(fnt_ui);
+                    draw_set_halign(fa_center);
+                    draw_set_valign(fa_top);
+                    draw_set_color(make_color_rgb(70, 45, 20));
+                    draw_text_ext(_sx + _slot_size / 2, _sy + _icon_area_h + 2 * _rsy, _rc.name, -1, _slot_size - 4 * _rsx);
+                    draw_set_halign(fa_left);
+                    draw_set_valign(fa_top);
+                }
+            }
+        }
+
+        if (array_length(_cat_recipes) == 0) {
+            draw_set_font(fnt_ui);
+            draw_set_halign(fa_center);
+            draw_set_valign(fa_middle);
+            draw_set_color(make_color_rgb(170, 145, 115));
+            draw_text_ext(_grid_x + (_slot_size + _grid_gap) * 2 - _grid_gap / 2,
+                          _grid_y + (_slot_size + _grid_gap) * 2 - _grid_gap / 2,
+                          "Рецептов этой\nкатегории пока нет", -1, (369 - 128) * _rsx - 10 * _rsx);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+        }
+
+        // --- Правая страница: картинка блюда (x 449-736, y 65-162) + таблица ингредиентов (y 191-384, 6 строк) ---
+        var _rp_x0 = book_x + 449 * _rsx;
+        var _rp_x1 = book_x + 736 * _rsx;
+        var _rp_w  = _rp_x1 - _rp_x0;
+
+        var _sel_r = undefined;
+        if (selected_recipe != "") {
+            for (var _li = 0; _li < array_length(_all_recipes); _li++) {
+                if (_all_recipes[_li].id == selected_recipe) { _sel_r = _all_recipes[_li]; break; }
+            }
+        }
+
+        if (_sel_r != undefined) {
+            // Картинка блюда внутри прямоугольника, уже нарисованного на подложке
+            var _img_y0 = book_y + 65  * _rsy;
+            var _img_y1 = book_y + 162 * _rsy;
+            var _img_cx = _rp_x0 + _rp_w / 2;
+            var _img_cy = (_img_y0 + _img_y1) / 2;
+
+            if (sprite_exists(_sel_r.image)) {
+                var _iw2  = sprite_get_width(_sel_r.image);
+                var _ih2  = sprite_get_height(_sel_r.image);
+                var _pad2 = 14 * _rsx;
+                var _sc2  = min((_rp_w - _pad2) / _iw2, (_img_y1 - _img_y0 - _pad2) / _ih2);
+                var _dw2  = _iw2 * _sc2;
+                var _dh2  = _ih2 * _sc2;
+                draw_sprite_stretched_ext(_sel_r.image, 0, _img_cx - _dw2 / 2, _img_cy - _dh2 / 2, _dw2, _dh2, c_white, 1);
+            } else {
+                draw_set_color(make_color_rgb(200, 170, 120));
+                draw_circle(_img_cx, _img_cy, min(_rp_w, _img_y1 - _img_y0) * 0.32, false);
+            }
+
+            // Название крупным шрифтом поверх картинки снизу
+            draw_set_font(fnt_ui);
+            draw_set_halign(fa_center);
+            draw_set_valign(fa_bottom);
+            draw_set_color(make_color_rgb(70, 35, 5));
+            draw_text(_img_cx, _img_y1 - 4 * _rsy, _sel_r.name);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+
+            // Таблица ингредиентов: колонка иконки (449-481) + колонка названия (482-624), 6 строк (191-384)
+            var _tbl_icon_cx = book_x + ((449 + 481) / 2) * _rsx;
+            var _tbl_name_x  = book_x + 486 * _rsx;
+            var _tbl_y0      = book_y + 191 * _rsy;
+            var _tbl_row_h   = (384 - 191) * _rsy / 6;
+            var _icon_sz     = 11 * _rsx;
+
+            for (var _gi = 0; _gi < array_length(_sel_r.ingredients) && _gi < 6; _gi++) {
+                var _ing = _sel_r.ingredients[_gi];
+                var _gcy = _tbl_y0 + _gi * _tbl_row_h + _tbl_row_h / 2;
+
+                if (sprite_exists(_ing.icon)) {
+                    var _iiw = sprite_get_width(_ing.icon);
+                    var _iih = sprite_get_height(_ing.icon);
+                    var _isc = min((_icon_sz * 2) / _iiw, (_icon_sz * 2) / _iih);
+                    var _idw = _iiw * _isc;
+                    var _idh = _iih * _isc;
+                    draw_sprite_stretched_ext(_ing.icon, 0, _tbl_icon_cx - _idw / 2, _gcy - _idh / 2, _idw, _idh, c_white, 1);
+                } else {
+                    draw_set_color(_ing.color);
+                    draw_circle(_tbl_icon_cx, _gcy, _icon_sz, false);
+                }
+
+                draw_set_font(fnt_ui);
+                draw_set_halign(fa_left);
+                draw_set_valign(fa_middle);
+                draw_set_color(make_color_rgb(55, 35, 15));
+                draw_text(_tbl_name_x, _gcy, _ing.name);
+                draw_set_halign(fa_left);
+                draw_set_valign(fa_top);
+            }
+        } else {
+            var _rd_cx = _rp_x0 + _rp_w / 2;
+            var _rd_cy = book_y + 113 * _rsy;
             draw_set_font(fnt_ui);
             draw_set_halign(fa_center);
             draw_set_valign(fa_middle);
             draw_set_color(make_color_rgb(160, 130, 100));
-            draw_text(book_x + book_w / 2, book_y + book_h / 2, "Рецепты пока недоступны");
+            draw_text(_rd_cx, _rd_cy, "Выбери рецепт\nиз списка");
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
-            break;
-        }
-
-        // --- Карточка рецепта: Картофельный пирог ---
-        var _rec_x = content_x;
-        var _rec_y = content_y;
-
-        // Название
-        draw_set_font(fnt_ui);
-        draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(_rec_x, _rec_y, "Картофельный пирог");
-
-        // Разделитель
-        draw_set_color(make_color_rgb(160, 120, 70));
-        draw_line(_rec_x, _rec_y + round(22 * bs),
-                  _rec_x + round(220 * bs), _rec_y + round(22 * bs));
-
-        // Ингредиенты одной строкой
-        draw_set_font(fnt_ui);
-        draw_set_color(make_color_rgb(80, 55, 25));
-        draw_text(_rec_x, _rec_y + round(30 * bs),
-                  "Картофель, Молоко, Яйцо, Мука, Дрожжи");
-
-        // Кнопка "Подробнее"
-        var _pbtn_w = round(90 * bs);
-        var _pbtn_h = round(22 * bs);
-        var _pbtn_x = _rec_x;
-        var _pbtn_y = _rec_y + round(56 * bs);
-        var _pbtn_hover = (device_mouse_x_to_gui(0) >= _pbtn_x && device_mouse_x_to_gui(0) <= _pbtn_x + _pbtn_w &&
-                           device_mouse_y_to_gui(0) >= _pbtn_y && device_mouse_y_to_gui(0) <= _pbtn_y + _pbtn_h);
-
-        draw_set_color(recipe_detail_open
-            ? make_color_rgb(100, 65, 25)
-            : (_pbtn_hover ? make_color_rgb(120, 80, 35) : make_color_rgb(160, 115, 60)));
-        draw_roundrect_ext(_pbtn_x, _pbtn_y, _pbtn_x + _pbtn_w, _pbtn_y + _pbtn_h, 4, 4, false);
-        draw_set_color(make_color_rgb(230, 200, 155));
-        draw_roundrect_ext(_pbtn_x, _pbtn_y, _pbtn_x + _pbtn_w, _pbtn_y + _pbtn_h, 4, 4, true);
-        draw_set_font(fnt_ui);
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_middle);
-        draw_set_color(c_white);
-        draw_text(_pbtn_x + _pbtn_w / 2, _pbtn_y + _pbtn_h / 2,
-                  recipe_detail_open ? "Свернуть" : "Подробнее");
-        draw_set_halign(fa_left);
-        draw_set_valign(fa_top);
-
-        // --- Рецепт кофе (после письма бабули) ---
-        if (variable_global_exists("coffee_letter_read") && global.coffee_letter_read) {
-            var _coffee_y = _pbtn_y + _pbtn_h + round(18 * bs);
-
-            // Разделитель перед рецептом
-            draw_set_color(make_color_rgb(160, 120, 70));
-            draw_line(_rec_x, _coffee_y, _rec_x + round(220 * bs), _coffee_y);
-            _coffee_y += round(10 * bs);
-
-            // Название рецепта
-            draw_set_font(fnt_ui);
-            draw_set_color(make_color_rgb(80, 50, 20));
-            draw_text(_rec_x, _coffee_y, "Латте");
-
-            // Линия под названием
-            draw_set_color(make_color_rgb(160, 120, 70));
-            draw_line(_rec_x, _coffee_y + round(22 * bs),
-                      _rec_x + round(220 * bs), _coffee_y + round(22 * bs));
-
-            // Ингредиенты
-            draw_set_font(fnt_ui);
-            draw_set_color(make_color_rgb(80, 55, 25));
-            draw_text(_rec_x, _coffee_y + round(30 * bs),
-                      "Зерна кофе, Молоко, Сахар");
-        }
-
-        // --- Правая страница: детали рецепта ---
-        if (recipe_detail_open) {
-            var _det_x = book_x + round(288 * bs);
-            var _det_y = book_y + round(20  * bs);
-            var _det_w = book_w - round(288 * bs) - round(20 * bs);
-            var _det_h = book_h - round(20  * bs) - round(38 * bs);
-
-            draw_set_alpha(0.93);
-            draw_set_color(make_color_rgb(250, 242, 220));
-            draw_roundrect_ext(_det_x, _det_y, _det_x + _det_w, _det_y + _det_h, 6, 6, false);
-            draw_set_alpha(1);
-            draw_set_color(make_color_rgb(160, 120, 70));
-            draw_roundrect_ext(_det_x, _det_y, _det_x + _det_w, _det_y + _det_h, 6, 6, true);
-
-            draw_set_font(fnt_ui);
-            draw_set_color(make_color_rgb(80, 50, 20));
-            draw_text(_det_x + 12, _det_y + 12, "Картофельный пирог");
-            draw_set_color(make_color_rgb(160, 120, 70));
-            draw_line(_det_x + 10, _det_y + 34, _det_x + _det_w - 10, _det_y + 34);
-
-            draw_set_font(fnt_ui);
-            draw_set_color(make_color_rgb(55, 35, 15));
-            draw_text_ext(_det_x + 12, _det_y + 42,
-                "Любимый пирог Джастина по рецепту бабушки Сони." +
-                "\n\nИнгредиенты:" +
-                "\nКартофель x1, Молоко x1, Яйцо x1" +
-                "\nМука x1, Дрожжи x1" +
-                "\n\nПриготовить: подойди к рабочему столу в пекарне и нажми E.",
-                -1, _det_w - 22);
         }
         break;
     case 5: // Дружба
