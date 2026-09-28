@@ -59,16 +59,18 @@ draw_line_width(_close_cx - _cross_r, _close_cy + _cross_r, _close_cx + _cross_r
 
 // Заголовок текущей вкладки — единый стиль для всех вкладок (жирный, один размер, один уровень)
 // Отступ слева выровнен по левому краю ячеек этой вкладки (у "Рецептов" сетка начинается левее content_x)
+// _hdr_dy — общий сдвиг вниз для заголовка и следующей за ним сетки/списка, чтобы заголовок не налипал на рамку книги
+var _hdr_dy = 16;
 draw_set_font(fnt_dialog_ru_bold);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
 draw_set_color(make_color_rgb(70, 40, 15));
 var _title_x = (current_tab == 2) ? (book_x + 128 * (book_w / 824)) : (book_x + round(60 * bs));
-draw_text(_title_x, book_y + round(33 * bs), tab_names[current_tab]);
+draw_text(_title_x, book_y + round(33 * bs) + _hdr_dy, tab_names[current_tab]);
 
 // Контент вкладки
 var content_x = book_x + round(60 * bs);
-var content_y = book_y + round(60 * bs);
+var content_y = book_y + round(60 * bs) + _hdr_dy;
 
 switch (current_tab) {
     case 1: // Инвентарь
@@ -141,7 +143,7 @@ switch (current_tab) {
         var grid_cols = 5;
         var grid_rows = 4;
         var grid_x    = book_x + round(60 * bs);
-        var grid_y    = book_y + round(59 * bs);
+        var grid_y    = book_y + round(59 * bs) + _hdr_dy;
         var _slot_corner = round(4 * bs);
 
         // --- Сетка слотов ---
@@ -271,7 +273,7 @@ switch (current_tab) {
 
         // Заголовок вкладки рисуется общим кодом выше (единый стиль для всех вкладок)
         var _q_list_w = round(205 * bs);
-        var _q_rows_y = book_y + round(59 * bs);
+        var _q_rows_y = book_y + round(59 * bs) + _hdr_dy;
         var _q_rows   = diary_quest_build_rows(content_x, _q_rows_y, bs);
         var _icon_r   = round(6 * bs);
 
@@ -418,8 +420,8 @@ switch (current_tab) {
         // --- Вкладки-категории (левая страница, x 128-369, y 64-96) ---
         var _cat_x0 = book_x + 128 * _rsx;
         var _cat_x1 = book_x + 369 * _rsx;
-        var _cat_y0 = book_y + 64  * _rsy;
-        var _cat_y1 = book_y + 96  * _rsy;
+        var _cat_y0 = book_y + 64  * _rsy + _hdr_dy;
+        var _cat_y1 = book_y + 96  * _rsy + _hdr_dy;
         var _cat_w  = (_cat_x1 - _cat_x0) / array_length(_categories);
 
         for (var _ci = 0; _ci < array_length(_categories); _ci++) {
@@ -449,7 +451,7 @@ switch (current_tab) {
         var _grid_gap  = 15 * _rsx;
         var _slot_size = ((369 - 128) * _rsx - (_grid_cols - 1) * _grid_gap) / _grid_cols;
         var _grid_x    = book_x + 128 * _rsx;
-        var _grid_y    = book_y + 128 * _rsy;
+        var _grid_y    = book_y + 128 * _rsy + _hdr_dy;
         var _icon_area_h = _slot_size * 0.62;
 
         var _cat_recipes = [];

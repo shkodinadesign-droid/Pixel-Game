@@ -33,10 +33,13 @@ for (var i = 0; i < 7; i++) {
     }
 }
 
+// _hdr_dy — общий сдвиг вниз заголовка/сетки, должен совпадать со значением в Draw_64.gml
+var _hdr_dy = 16;
+
 // Клик по заданиям (вкладка 0)
 if (current_tab == 0 && click_press) {
     var _q_content_x = book_x + round(60 * book_scale);
-    var _q_rows_y     = book_y + round(59 * book_scale);
+    var _q_rows_y     = book_y + round(59 * book_scale) + _hdr_dy;
     var _q_list_w     = round(205 * book_scale);
 
     var _q_rows = diary_quest_build_rows(_q_content_x, _q_rows_y, book_scale);
@@ -59,7 +62,7 @@ if (current_tab == 1 && click_press) {
     var _grid_cols = 5;
     var _grid_rows = 4;
     var _grid_x    = book_x + round(60 * book_scale);
-    var _grid_y    = book_y + round(59 * book_scale);
+    var _grid_y    = book_y + round(59 * book_scale) + _hdr_dy;
 
     var _hit = false;
     for (var _r = 0; _r < _grid_rows; _r++) {
@@ -87,8 +90,8 @@ if (current_tab == 2 && click_press) {
     var _categories = diary_get_recipe_categories();
     var _cat_x0 = book_x + 128 * _rsx;
     var _cat_x1 = book_x + 369 * _rsx;
-    var _cat_y0 = book_y + 64  * _rsy;
-    var _cat_y1 = book_y + 96  * _rsy;
+    var _cat_y0 = book_y + 64  * _rsy + _hdr_dy;
+    var _cat_y1 = book_y + 96  * _rsy + _hdr_dy;
     var _cat_w  = (_cat_x1 - _cat_x0) / array_length(_categories);
 
     var _hit_cat = false;
@@ -109,7 +112,7 @@ if (current_tab == 2 && click_press) {
         var _grid_gap  = 15 * _rsx;
         var _slot_size = ((369 - 128) * _rsx - (_grid_cols - 1) * _grid_gap) / _grid_cols;
         var _grid_x    = book_x + 128 * _rsx;
-        var _grid_y    = book_y + 128 * _rsy;
+        var _grid_y    = book_y + 128 * _rsy + _hdr_dy;
 
         var _cat_recipes = [];
         var _all_recipes = diary_get_recipe_list();
