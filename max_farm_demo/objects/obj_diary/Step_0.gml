@@ -89,14 +89,15 @@ if (current_tab == 2 && click_press) {
     var _rsy = book_h / 453;
 
     // Должно совпадать со значениями в Draw_64.gml
-    var _cat_dy    = 40;
-    var _cat_lift  = 12;
-    var _cat_inset = 2;
+    var _cat_dy        = 40;
+    var _cat_lift      = 12;
+    var _cat_inset     = 2;
+    var _cat_inset_bot = 2;
     var _categories = diary_get_recipe_categories();
     var _cat_x0 = book_x + 128 * _rsx;
     var _cat_x1 = book_x + 369 * _rsx;
     var _cat_y0 = book_y + 64  * _rsy + _cat_dy - _cat_lift + _cat_inset;
-    var _cat_y1 = book_y + 96  * _rsy + _cat_dy - _cat_lift - _cat_inset;
+    var _cat_y1 = book_y + 96  * _rsy + _cat_dy - _cat_lift - _cat_inset - _cat_inset_bot;
     var _cat_w  = (_cat_x1 - _cat_x0) / array_length(_categories);
 
     var _hit_cat = false;
