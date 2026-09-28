@@ -90,7 +90,7 @@ if (current_tab == 2 && click_press) {
 
     // Должно совпадать со значениями в Draw_64.gml
     var _cat_dy    = 40;
-    var _cat_lift  = 8;
+    var _cat_lift  = 12;
     var _cat_inset = 2;
     var _categories = diary_get_recipe_categories();
     var _cat_x0 = book_x + 128 * _rsx;
