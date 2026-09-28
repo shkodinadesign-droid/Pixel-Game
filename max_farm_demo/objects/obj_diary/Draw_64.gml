@@ -526,18 +526,6 @@ switch (current_tab) {
             }
         }
 
-        if (array_length(_cat_recipes) == 0) {
-            draw_set_font(fnt_ui);
-            draw_set_halign(fa_center);
-            draw_set_valign(fa_middle);
-            draw_set_color(make_color_rgb(170, 145, 115));
-            draw_text_ext(_grid_x + (_slot_size + _grid_gap) * 2 - _grid_gap / 2,
-                          _grid_y + (_slot_size + _grid_gap) * 2 - _grid_gap / 2,
-                          "Рецептов этой\nкатегории пока нет", -1, (369 - 128) * _rsx - 10 * _rsx);
-            draw_set_halign(fa_left);
-            draw_set_valign(fa_top);
-        }
-
         // --- Правая страница: картинка блюда (x 449-736, y 65-162) + таблица ингредиентов (y 191-384, 6 строк) ---
         var _rp_x0 = book_x + 449 * _rsx;
         var _rp_x1 = book_x + 736 * _rsx;
