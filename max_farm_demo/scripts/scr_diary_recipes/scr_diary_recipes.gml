@@ -23,7 +23,7 @@ function diary_get_recipe_list() {
             name: "Картофельный пирог",
             category: "baking",
             icon: spr_potatoes_pie,
-            image: spr_potatoes_pie,
+            image: spr_potato_pie_dish,
             unlocked: _justin_done,
             ingredients: [
                 {icon: spr_potato_icon, name: "Картофель", color: make_color_rgb(220,170,50)},
