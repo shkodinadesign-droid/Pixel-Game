@@ -57,16 +57,14 @@ var _cross_r = _close_r * 0.45;
 draw_line_width(_close_cx - _cross_r, _close_cy - _cross_r, _close_cx + _cross_r, _close_cy + _cross_r, round(2 * bs));
 draw_line_width(_close_cx - _cross_r, _close_cy + _cross_r, _close_cx + _cross_r, _close_cy - _cross_r, round(2 * bs));
 
-// Заголовок текущей вкладки (вкладка "Задания" рисует свой крупный заголовок сама, ниже)
+// Заголовок текущей вкладки — единый стиль для всех вкладок (жирный, один размер, один уровень)
 // Отступ слева выровнен по левому краю ячеек этой вкладки (у "Рецептов" сетка начинается левее content_x)
-if (current_tab != 0) {
-    draw_set_font(fnt_ui);
-    draw_set_halign(fa_left);
-    draw_set_valign(fa_top);
-    draw_set_color(make_color_rgb(80, 50, 20));
-    var _title_x = (current_tab == 2) ? (book_x + 128 * (book_w / 824)) : (book_x + round(60 * bs));
-    draw_text(_title_x, book_y + round(26 * bs), tab_names[current_tab]);
-}
+draw_set_font(fnt_dialog_ru_bold);
+draw_set_halign(fa_left);
+draw_set_valign(fa_top);
+draw_set_color(make_color_rgb(70, 40, 15));
+var _title_x = (current_tab == 2) ? (book_x + 128 * (book_w / 824)) : (book_x + round(60 * bs));
+draw_text(_title_x, book_y + round(33 * bs), tab_names[current_tab]);
 
 // Контент вкладки
 var content_x = book_x + round(60 * bs);
@@ -143,7 +141,7 @@ switch (current_tab) {
         var grid_cols = 5;
         var grid_rows = 4;
         var grid_x    = book_x + round(60 * bs);
-        var grid_y    = book_y + round(52 * bs);
+        var grid_y    = book_y + round(59 * bs);
         var _slot_corner = round(4 * bs);
 
         // --- Сетка слотов ---
@@ -271,14 +269,9 @@ switch (current_tab) {
         draw_set_halign(fa_left);
         draw_set_valign(fa_top);
 
-        // Заголовок вкладки — на одной линии с заголовками остальных вкладок
-        var _tab0_title_y = book_y + round(26 * bs);
-        draw_set_font(fnt_dialog_ru_bold);
-        draw_set_color(make_color_rgb(70, 40, 15));
-        draw_text_transformed(content_x, _tab0_title_y, "Задания", 1.15, 1.15, 0);
-
+        // Заголовок вкладки рисуется общим кодом выше (единый стиль для всех вкладок)
         var _q_list_w = round(205 * bs);
-        var _q_rows_y = book_y + round(52 * bs);
+        var _q_rows_y = book_y + round(59 * bs);
         var _q_rows   = diary_quest_build_rows(content_x, _q_rows_y, bs);
         var _icon_r   = round(6 * bs);
 

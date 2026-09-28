@@ -36,7 +36,7 @@ for (var i = 0; i < 7; i++) {
 // Клик по заданиям (вкладка 0)
 if (current_tab == 0 && click_press) {
     var _q_content_x = book_x + round(60 * book_scale);
-    var _q_rows_y     = book_y + round(52 * book_scale);
+    var _q_rows_y     = book_y + round(59 * book_scale);
     var _q_list_w     = round(205 * book_scale);
 
     var _q_rows = diary_quest_build_rows(_q_content_x, _q_rows_y, book_scale);
@@ -59,7 +59,7 @@ if (current_tab == 1 && click_press) {
     var _grid_cols = 5;
     var _grid_rows = 4;
     var _grid_x    = book_x + round(60 * book_scale);
-    var _grid_y    = book_y + round(52 * book_scale);
+    var _grid_y    = book_y + round(59 * book_scale);
 
     var _hit = false;
     for (var _r = 0; _r < _grid_rows; _r++) {
