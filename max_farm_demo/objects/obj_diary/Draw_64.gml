@@ -423,11 +423,14 @@ switch (current_tab) {
 
         // --- Вкладки-категории (левая страница, x 128-369, y 64-96) ---
         // _cat_dy больше, чем у заголовка (_title_dy) — категории спущены ниже, под приподнятый заголовок "Рецепты"
-        var _cat_dy = 40;
+        // _cat_lift — все три кнопки подняты выше; _cat_inset — кнопки ниже по высоте (по 2px сверху/снизу), текст остаётся по центру
+        var _cat_dy    = 40;
+        var _cat_lift  = 8;
+        var _cat_inset = 2;
         var _cat_x0 = book_x + 128 * _rsx;
         var _cat_x1 = book_x + 369 * _rsx;
-        var _cat_y0 = book_y + 64  * _rsy + _cat_dy;
-        var _cat_y1 = book_y + 96  * _rsy + _cat_dy;
+        var _cat_y0 = book_y + 64  * _rsy + _cat_dy - _cat_lift + _cat_inset;
+        var _cat_y1 = book_y + 96  * _rsy + _cat_dy - _cat_lift - _cat_inset;
         var _cat_w  = (_cat_x1 - _cat_x0) / array_length(_categories);
 
         var _cat_gap = round(3 * bs);
