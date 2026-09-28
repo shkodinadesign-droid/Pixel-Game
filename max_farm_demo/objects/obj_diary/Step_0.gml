@@ -33,12 +33,13 @@ for (var i = 0; i < 7; i++) {
     }
 }
 
-// _hdr_dy — общий сдвиг вниз заголовка/сетки, должен совпадать со значением в Draw_64.gml
+// _hdr_dy/_hdr_dx — сдвиг заголовка/сетки вниз и влево-направо, должен совпадать со значением в Draw_64.gml
 var _hdr_dy = 16;
+var _hdr_dx = 8;
 
 // Клик по заданиям (вкладка 0)
 if (current_tab == 0 && click_press) {
-    var _q_content_x = book_x + round(60 * book_scale);
+    var _q_content_x = book_x + round(60 * book_scale) + _hdr_dx;
     var _q_rows_y     = book_y + round(59 * book_scale) + _hdr_dy;
     var _q_list_w     = round(205 * book_scale);
 
@@ -61,7 +62,7 @@ if (current_tab == 1 && click_press) {
     var _slot_gap  = round(4  * book_scale);
     var _grid_cols = 5;
     var _grid_rows = 4;
-    var _grid_x    = book_x + round(60 * book_scale);
+    var _grid_x    = book_x + round(60 * book_scale) + _hdr_dx;
     var _grid_y    = book_y + round(59 * book_scale) + _hdr_dy;
 
     var _hit = false;

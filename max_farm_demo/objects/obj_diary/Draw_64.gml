@@ -60,16 +60,18 @@ draw_line_width(_close_cx - _cross_r, _close_cy + _cross_r, _close_cx + _cross_r
 // Заголовок текущей вкладки — единый стиль для всех вкладок (жирный, один размер, один уровень)
 // Отступ слева выровнен по левому краю ячеек этой вкладки (у "Рецептов" сетка начинается левее content_x)
 // _hdr_dy — общий сдвиг вниз для заголовка и следующей за ним сетки/списка, чтобы заголовок не налипал на рамку книги
+// _hdr_dx — доп. отступ слева для всех вкладок кроме "Рецептов", чтобы текст не налипал на уголок рамки
 var _hdr_dy = 16;
+var _hdr_dx = 8;
 draw_set_font(fnt_dialog_ru_bold);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
 draw_set_color(make_color_rgb(70, 40, 15));
-var _title_x = (current_tab == 2) ? (book_x + 128 * (book_w / 824)) : (book_x + round(60 * bs));
+var _title_x = (current_tab == 2) ? (book_x + 128 * (book_w / 824)) : (book_x + round(60 * bs) + _hdr_dx);
 draw_text(_title_x, book_y + round(33 * bs) + _hdr_dy, tab_names[current_tab]);
 
 // Контент вкладки
-var content_x = book_x + round(60 * bs);
+var content_x = book_x + round(60 * bs) + _hdr_dx;
 var content_y = book_y + round(60 * bs) + _hdr_dy;
 
 switch (current_tab) {
@@ -142,7 +144,7 @@ switch (current_tab) {
         var slot_gap  = round(4  * bs);  // ~5
         var grid_cols = 5;
         var grid_rows = 4;
-        var grid_x    = book_x + round(60 * bs);
+        var grid_x    = book_x + round(60 * bs) + _hdr_dx;
         var grid_y    = book_y + round(59 * bs) + _hdr_dy;
         var _slot_corner = round(4 * bs);
 
