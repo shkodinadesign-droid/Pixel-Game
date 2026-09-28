@@ -63,12 +63,14 @@ draw_line_width(_close_cx - _cross_r, _close_cy + _cross_r, _close_cx + _cross_r
 // _hdr_dx — доп. отступ слева для всех вкладок кроме "Рецептов", чтобы текст не налипал на уголок рамки
 var _hdr_dy = 24;
 var _hdr_dx = 8;
+// У "Рецептов" под заголовком ещё есть ряд вкладок-категорий — сам заголовок поднят выше, а категории спущены ниже (_cat_dy)
+var _title_dy = (current_tab == 2) ? 16 : _hdr_dy;
 draw_set_font(fnt_dialog_ru_bold);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
 draw_set_color(make_color_rgb(70, 40, 15));
 var _title_x = (current_tab == 2) ? (book_x + 128 * (book_w / 824)) : (book_x + round(60 * bs) + _hdr_dx);
-draw_text(_title_x, book_y + round(33 * bs) + _hdr_dy, tab_names[current_tab]);
+draw_text(_title_x, book_y + round(33 * bs) + _title_dy, tab_names[current_tab]);
 
 // Контент вкладки
 var content_x = book_x + round(60 * bs) + _hdr_dx;
@@ -420,10 +422,12 @@ switch (current_tab) {
         var _categories  = diary_get_recipe_categories();
 
         // --- Вкладки-категории (левая страница, x 128-369, y 64-96) ---
+        // _cat_dy больше, чем у заголовка (_title_dy) — категории спущены ниже, под приподнятый заголовок "Рецепты"
+        var _cat_dy = 40;
         var _cat_x0 = book_x + 128 * _rsx;
         var _cat_x1 = book_x + 369 * _rsx;
-        var _cat_y0 = book_y + 64  * _rsy + _hdr_dy;
-        var _cat_y1 = book_y + 96  * _rsy + _hdr_dy;
+        var _cat_y0 = book_y + 64  * _rsy + _cat_dy;
+        var _cat_y1 = book_y + 96  * _rsy + _cat_dy;
         var _cat_w  = (_cat_x1 - _cat_x0) / array_length(_categories);
 
         for (var _ci = 0; _ci < array_length(_categories); _ci++) {
@@ -453,7 +457,7 @@ switch (current_tab) {
         var _grid_gap  = 15 * _rsx;
         var _slot_size = ((369 - 128) * _rsx - (_grid_cols - 1) * _grid_gap) / _grid_cols;
         var _grid_x    = book_x + 128 * _rsx;
-        var _grid_y    = book_y + 128 * _rsy + _hdr_dy;
+        var _grid_y    = book_y + 128 * _rsy + _cat_dy;
         var _icon_area_h = _slot_size * 0.62;
 
         var _cat_recipes = [];
