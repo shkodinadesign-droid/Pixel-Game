@@ -430,15 +430,25 @@ switch (current_tab) {
         var _cat_y1 = book_y + 96  * _rsy + _cat_dy;
         var _cat_w  = (_cat_x1 - _cat_x0) / array_length(_categories);
 
+        var _cat_gap = round(3 * bs);
+        var _cat_corner = round(4 * bs);
         for (var _ci = 0; _ci < array_length(_categories); _ci++) {
             var _cx0 = _cat_x0 + _ci * _cat_w;
             var _cx1 = _cx0 + _cat_w;
             var _cat_active = (_categories[_ci].id == recipe_category);
 
+            // Подложка-кнопка (в новой подложке книги баковый арт для этих кнопок убран — рисуем сами)
+            var _bx0 = _cx0 + _cat_gap / 2;
+            var _bx1 = _cx1 - _cat_gap / 2;
+            draw_set_color(make_color_rgb(221, 196, 141));
+            draw_roundrect_ext(_bx0, _cat_y0, _bx1, _cat_y1, _cat_corner, _cat_corner, false);
+            draw_set_color(make_color_rgb(160, 120, 80));
+            draw_roundrect_ext(_bx0, _cat_y0, _bx1, _cat_y1, _cat_corner, _cat_corner, true);
+
             if (_cat_active) {
                 draw_set_alpha(0.35);
                 draw_set_color(make_color_rgb(255, 250, 230));
-                draw_rectangle(_cx0, _cat_y0, _cx1, _cat_y1, false);
+                draw_roundrect_ext(_bx0, _cat_y0, _bx1, _cat_y1, _cat_corner, _cat_corner, false);
                 draw_set_alpha(1);
             }
 
