@@ -148,8 +148,8 @@ if (current_tab == 5 && click_press) {
     var _fr_content_x = book_x + round(60 * book_scale) + _hdr_dx;
     var _fr_content_y = book_y + round(60 * book_scale) + _hdr_dy;
 
-    var _fr_icon_sz = 28;
-    var _fr_name_h  = 18;
+    var _fr_icon_sz = 36;
+    var _fr_name_h  = 24;
     var _fr_row_gap = 12;
     var _fr_row_h   = max(_fr_icon_sz, _fr_name_h + 16) + _fr_row_gap;
     var _fr_list_w  = round(205 * book_scale);

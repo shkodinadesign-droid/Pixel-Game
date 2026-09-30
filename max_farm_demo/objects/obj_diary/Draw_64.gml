@@ -623,9 +623,9 @@ switch (current_tab) {
         var _fr_list = diary_get_friend_list();
 
         // --- Список персонажей (левая страница): иконка-портрет + имя + короткое описание ---
-        var _fr_icon_sz = 28;
+        var _fr_icon_sz = 36;
         var _fr_gap_x   = 10;
-        var _fr_name_h  = 18;
+        var _fr_name_h  = 24;
         var _fr_row_gap = 12;
         var _fr_row_h   = max(_fr_icon_sz, _fr_name_h + 16) + _fr_row_gap;
         var _fr_list_w  = round(205 * bs);
@@ -672,7 +672,7 @@ switch (current_tab) {
         var _fd_x  = book_x + 471 * _fd_sx;
         var _fd_y  = book_y + 108 * _fd_sy;
         var _fd_w  = (721 - 471) * _fd_sx;
-        var _fd_portrait_sz = 48;
+        var _fd_portrait_sz = 64;
 
         var _sel_f = undefined;
         for (var _li = 0; _li < array_length(_fr_list); _li++) {
@@ -680,7 +680,7 @@ switch (current_tab) {
         }
 
         if (_sel_f != undefined) {
-            // Большой портрет 48x48
+            // Большой портрет
             if (sprite_exists(_sel_f.portrait)) {
                 draw_sprite_stretched_ext(_sel_f.portrait, 0, _fd_x, _fd_y, _fd_portrait_sz, _fd_portrait_sz, c_white, 1);
             } else {
