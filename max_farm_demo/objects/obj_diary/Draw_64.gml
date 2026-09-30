@@ -258,13 +258,16 @@ switch (current_tab) {
             draw_set_halign(fa_left);
 
         } else {
-            // Подсказка — по центру правой страницы, на уровне сетки
+            // Подсказка — по центру белого листочка на арте книги (как и в других вкладках, см. вкладку "Задания")
+            var _hint_sx = book_w / 824;
+            var _hint_sy = book_h / 453;
+            var _hint_cx = book_x + 596 * _hint_sx;
+            var _hint_cy = book_y + 216 * _hint_sy;
             draw_set_font(fnt_ui);
             draw_set_halign(fa_center);
-            draw_set_valign(fa_top);
+            draw_set_valign(fa_middle);
             draw_set_color(make_color_rgb(160, 130, 100));
-            draw_text(detail_x + detail_w / 2, detail_y,
-                      "Выбери предмет\nиз инвентаря");
+            draw_text(_hint_cx, _hint_cy, "Выбери предмет\nиз инвентаря");
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
         }
