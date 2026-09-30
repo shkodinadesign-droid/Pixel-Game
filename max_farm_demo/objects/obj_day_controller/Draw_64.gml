@@ -238,7 +238,7 @@ if (show_morning_dialog) {
     var _gui_w  = display_get_gui_width();
     var _gui_h  = display_get_gui_height();
     var _win_w  = 620;
-    var _pad    = 14;
+    var _pad    = 8;
     var _line_h = 24;
     var _win_h  = 50 + 4 * _line_h + 50;
     var _win_x  = (_gui_w - _win_w) / 2;
@@ -257,27 +257,11 @@ if (show_morning_dialog) {
     // Фон
     scr_dialog_draw_bg(_win_x, _win_y, _win_w, _win_h);
 
-    // Иконка: восходящее солнце
-    var _cx = _win_x + 52;
-    var _cy = _win_y + _win_h / 2;
-    draw_set_color(make_color_rgb(180, 130, 80));
-    draw_rectangle(_cx - 24, _cy + 10, _cx + 24, _cy + 12, false);
-    draw_set_color(make_color_rgb(255, 195, 50));
-    draw_ellipse(_cx - 18, _cy - 14, _cx + 18, _cy + 10, false);
-    draw_set_color(make_color_rgb(255, 220, 100));
-    draw_ellipse(_cx - 14, _cy - 10, _cx + 14, _cy + 6, false);
-    draw_set_color(make_color_rgb(255, 220, 80));
-    for (var _r = 0; _r < 7; _r++) {
-        var _angle = -150 + _r * 25;
-        draw_line_width(_cx + lengthdir_x(22, _angle), _cy - 2 + lengthdir_y(22, _angle),
-                        _cx + lengthdir_x(30, _angle), _cy - 2 + lengthdir_y(30, _angle), 2);
-    }
-
     // Имя — жирным, в бирке
     scr_dialog_draw_speaker(_win_x, _win_y, _win_w, _win_h, "Макс:");
 
-    // Портрет Макса — справа
-    var _portrait_size = 100;
+    // Портрет Макса — справа (почти во весь квадрат отведённой под него области)
+    var _portrait_size = 108;
     var _portrait_x1 = _win_x + 565 * (_win_w / 580) - 8 - _portrait_size;
     scr_dialog_draw_portrait(_win_x, _win_y, _win_w, _win_h, _btn_y1, spr_max_portrait, _portrait_size);
 
