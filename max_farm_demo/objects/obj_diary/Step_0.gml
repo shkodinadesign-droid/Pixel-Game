@@ -89,7 +89,7 @@ if (current_tab == 2 && click_press) {
     var _rsy = book_h / 453;
 
     // Должно совпадать со значениями в Draw_64.gml
-    var _cat_dy        = 40 + 15;
+    var _cat_dy        = 40 + 15 - 8;
     var _cat_lift      = 12;
     var _cat_inset     = 2;
     var _cat_inset_bot = 2;
