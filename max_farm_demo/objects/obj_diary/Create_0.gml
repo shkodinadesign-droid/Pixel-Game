@@ -33,6 +33,9 @@ selected_quest = "";
 recipe_category = "baking";
 selected_recipe = "";
 
+// Выбранный персонаж во вкладке "Дружба" ("" = ничего)
+selected_friend = "";
+
 // Отслеживание кликов
 // true = пропускаем клик открытия, иначе дневник закроется в первом же кадре
 _click_prev = true;

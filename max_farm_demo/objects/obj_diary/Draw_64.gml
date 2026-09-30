@@ -620,27 +620,101 @@ switch (current_tab) {
         }
         break;
     case 5: // Дружба
-        draw_set_font(fnt_ui);
-        draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(content_x, content_y, "Бабушка Мэгги");
+        var _fr_list = diary_get_friend_list();
 
-        // Кекс — появляется только после того как Мэгги привела котика
-        if (!variable_global_exists("kitten_arrived")) global.kitten_arrived = false;
-        if (global.kitten_arrived) {
-            var _ky = content_y + 32;
-            // Иконка сердечко (примитивами — символ ♥ не поддерживается шрифтом)
-            draw_set_color(make_color_rgb(255, 80, 120));
-            var _hx2 = content_x + 6;
-            var _hy2 = _ky + 6;
-            draw_circle(_hx2 - 3, _hy2 - 2, 4, false);
-            draw_circle(_hx2 + 3, _hy2 - 2, 4, false);
-            draw_triangle(_hx2 - 7, _hy2 - 1, _hx2 + 7, _hy2 - 1, _hx2, _hy2 + 7, false);
-            // Имя и описание
-            draw_set_font(fnt_ui);
+        // --- Список персонажей (левая страница): иконка-портрет + имя + короткое описание ---
+        var _fr_icon_sz = 28;
+        var _fr_gap_x   = 10;
+        var _fr_name_h  = 18;
+        var _fr_row_gap = 12;
+        var _fr_row_h   = max(_fr_icon_sz, _fr_name_h + 16) + _fr_row_gap;
+        var _fr_list_w  = round(205 * bs);
+
+        for (var _fi = 0; _fi < array_length(_fr_list); _fi++) {
+            var _f     = _fr_list[_fi];
+            var _row_y = content_y + _fi * _fr_row_h;
+            var _is_sel = (_f.id == selected_friend);
+
+            if (_is_sel) {
+                draw_set_alpha(0.18);
+                draw_set_color(c_black);
+                draw_rectangle(content_x - round(3 * bs), _row_y - round(1 * bs),
+                                content_x + _fr_list_w, _row_y + _fr_row_h - round(3 * bs), false);
+                draw_set_alpha(1);
+            }
+
+            // Иконка-портрет
+            if (sprite_exists(_f.portrait)) {
+                draw_sprite_stretched_ext(_f.portrait, 0, content_x, _row_y, _fr_icon_sz, _fr_icon_sz, c_white, 1);
+            } else {
+                draw_set_color(make_color_rgb(255, 80, 120));
+                draw_circle(content_x + _fr_icon_sz / 2, _row_y + _fr_icon_sz / 2, _fr_icon_sz / 2, false);
+            }
+
+            // Имя (заголовок строки)
+            draw_set_font(fnt_dialog_ru_bold);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
             draw_set_color(make_color_rgb(80, 50, 20));
-            draw_text(content_x + 20, _ky, "Кекс");
-            draw_set_color(make_color_rgb(120, 80, 40));
-            draw_text(content_x + 20, _ky + 20, "Мой любимый друг");
+            draw_text(content_x + _fr_icon_sz + _fr_gap_x, _row_y, _f.name);
+
+            // Короткое описание
+            draw_set_font(fnt_ui);
+            draw_set_color(make_color_rgb(120, 95, 65));
+            draw_text(content_x + _fr_icon_sz + _fr_gap_x, _row_y + _fr_name_h, _f.short_desc);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+        }
+
+        // --- Правая страница: подробная информация о выбранном персонаже (белый листочек на арте) ---
+        var _fd_sx = book_w / 824;
+        var _fd_sy = book_h / 453;
+        var _fd_x  = book_x + 471 * _fd_sx;
+        var _fd_y  = book_y + 108 * _fd_sy;
+        var _fd_w  = (721 - 471) * _fd_sx;
+        var _fd_portrait_sz = 48;
+
+        var _sel_f = undefined;
+        for (var _li = 0; _li < array_length(_fr_list); _li++) {
+            if (_fr_list[_li].id == selected_friend) { _sel_f = _fr_list[_li]; break; }
+        }
+
+        if (_sel_f != undefined) {
+            // Большой портрет 48x48
+            if (sprite_exists(_sel_f.portrait)) {
+                draw_sprite_stretched_ext(_sel_f.portrait, 0, _fd_x, _fd_y, _fd_portrait_sz, _fd_portrait_sz, c_white, 1);
+            } else {
+                draw_set_color(make_color_rgb(255, 80, 120));
+                draw_circle(_fd_x + _fd_portrait_sz / 2, _fd_y + _fd_portrait_sz / 2, _fd_portrait_sz / 2, false);
+            }
+
+            // Имя — заголовок справа от портрета, по центру его высоты
+            draw_set_font(fnt_dialog_ru_bold);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_middle);
+            draw_set_color(make_color_rgb(70, 35, 5));
+            draw_text(_fd_x + _fd_portrait_sz + 14, _fd_y + _fd_portrait_sz / 2, _sel_f.name);
+
+            // Разделитель
+            draw_set_color(make_color_rgb(160, 120, 70));
+            draw_line(_fd_x, _fd_y + _fd_portrait_sz + 14, _fd_x + _fd_w, _fd_y + _fd_portrait_sz + 14);
+
+            // Описание
+            draw_set_font(fnt_ui);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+            draw_set_color(c_black);
+            draw_text_ext(_fd_x, _fd_y + _fd_portrait_sz + 24, _sel_f.desc, round(18 * bs), _fd_w);
+        } else {
+            var _fd_cx = book_x + 596 * _fd_sx;
+            var _fd_cy = book_y + 216 * _fd_sy;
+            draw_set_font(fnt_ui);
+            draw_set_halign(fa_center);
+            draw_set_valign(fa_middle);
+            draw_set_color(make_color_rgb(160, 130, 100));
+            draw_text(_fd_cx, _fd_cy, "Выбери персонажа\nиз списка");
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
         }
         break;
     case 4: // Приключения

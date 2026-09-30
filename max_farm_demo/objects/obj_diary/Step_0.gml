@@ -143,6 +143,28 @@ if (current_tab == 2 && click_press) {
     }
 }
 
+// Клик по списку персонажей (вкладка 5 "Дружба")
+if (current_tab == 5 && click_press) {
+    var _fr_content_x = book_x + round(60 * book_scale) + _hdr_dx;
+    var _fr_content_y = book_y + round(60 * book_scale) + _hdr_dy;
+
+    var _fr_icon_sz = 28;
+    var _fr_name_h  = 18;
+    var _fr_row_gap = 12;
+    var _fr_row_h   = max(_fr_icon_sz, _fr_name_h + 16) + _fr_row_gap;
+    var _fr_list_w  = round(205 * book_scale);
+
+    var _fr_list = diary_get_friend_list();
+    for (var _fi = 0; _fi < array_length(_fr_list); _fi++) {
+        var _row_y = _fr_content_y + _fi * _fr_row_h;
+        if (mx >= _fr_content_x && mx <= _fr_content_x + _fr_list_w &&
+            my >= _row_y && my <= _row_y + _fr_row_h) {
+            selected_friend = _fr_list[_fi].id;
+            break;
+        }
+    }
+}
+
 // Закрытие по ESC или повторному нажатию
 if (keyboard_check_pressed(vk_escape) || keyboard_check_pressed(ord("I"))) {
     global.control_locked = false;

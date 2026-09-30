@@ -256,6 +256,7 @@
     {"id":{"name":"room_video_intro","path":"rooms/room_video_intro/room_video_intro.yy",},},
     {"id":{"name":"draw_hint","path":"scripts/draw_hint/draw_hint.yy",},},
     {"id":{"name":"scr_dialog_draw_bg","path":"scripts/scr_dialog_draw_bg/scr_dialog_draw_bg.yy",},},
+    {"id":{"name":"scr_diary_friends","path":"scripts/scr_diary_friends/scr_diary_friends.yy",},},
     {"id":{"name":"scr_diary_quests","path":"scripts/scr_diary_quests/scr_diary_quests.yy",},},
     {"id":{"name":"scr_diary_recipes","path":"scripts/scr_diary_recipes/scr_diary_recipes.yy",},},
     {"id":{"name":"scr_globals","path":"scripts/scr_globals/scr_globals.yy",},},
