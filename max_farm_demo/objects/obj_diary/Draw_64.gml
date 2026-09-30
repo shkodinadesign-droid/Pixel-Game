@@ -64,7 +64,8 @@ draw_line_width(_close_cx - _cross_r, _close_cy + _cross_r, _close_cx + _cross_r
 var _hdr_dy = 24;
 var _hdr_dx = 8;
 // У "Рецептов" под заголовком ещё есть ряд вкладок-категорий — сам заголовок поднят выше, а категории спущены ниже (_cat_dy)
-var _title_dy = (current_tab == 2) ? 16 : _hdr_dy;
+// +15 — весь левый блок "Рецептов" (заголовок+кнопки+сетка) опущен, чтобы низ сетки совпал с низом таблицы на правой странице
+var _title_dy = (current_tab == 2) ? (16 + 15) : _hdr_dy;
 draw_set_font(fnt_dialog_ru_bold);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
@@ -428,7 +429,8 @@ switch (current_tab) {
         // _cat_dy больше, чем у заголовка (_title_dy) — категории спущены ниже, под приподнятый заголовок "Рецепты"
         // _cat_lift — все три кнопки подняты выше; _cat_inset — кнопки ниже по высоте (по 2px сверху/снизу);
         // _cat_inset_bot — доп. уменьшение высоты снизу; _cat_inset_x — кнопки уже по ширине (по 2px слева/справа)
-        var _cat_dy        = 40;
+        // +15 — весь левый блок опущен, чтобы низ сетки совпал с низом таблицы на правой странице (см. _grid_dy ниже)
+        var _cat_dy        = 40 + 15;
         var _cat_lift      = 12;
         var _cat_inset     = 2;
         var _cat_inset_bot = 2;
@@ -470,13 +472,16 @@ switch (current_tab) {
             draw_set_valign(fa_top);
         }
 
-        // --- Сетка рецептов 4x4 (левая страница, x 128-369, y 128-369) ---
+        // --- Сетка рецептов 4x4 (левая страница, x 128-369, y 128-369 в арте) ---
+        // _grid_dy=15 — реальный сдвиг вниз ячеек сетки в самом арте (см. spr_diary_bg_recipes), низ теперь совпадает
+        // с низом таблицы ингредиентов на правой странице (там же 15px запаса до нижней рамки страницы)
+        var _grid_dy   = 15;
         var _grid_cols = 4;
         var _grid_rows = 4;
         var _grid_gap  = 15 * _rsx;
         var _slot_size = ((369 - 128) * _rsx - (_grid_cols - 1) * _grid_gap) / _grid_cols;
         var _grid_x    = book_x + 128 * _rsx;
-        var _grid_y    = book_y + 128 * _rsy + _cat_dy;
+        var _grid_y    = book_y + 128 * _rsy + _grid_dy;
         var _icon_area_h = _slot_size * 0.62;
 
         var _cat_recipes = [];

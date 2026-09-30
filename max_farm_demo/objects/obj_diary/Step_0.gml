@@ -89,7 +89,7 @@ if (current_tab == 2 && click_press) {
     var _rsy = book_h / 453;
 
     // Должно совпадать со значениями в Draw_64.gml
-    var _cat_dy        = 40;
+    var _cat_dy        = 40 + 15;
     var _cat_lift      = 12;
     var _cat_inset     = 2;
     var _cat_inset_bot = 2;
@@ -113,12 +113,13 @@ if (current_tab == 2 && click_press) {
     }
 
     if (!_hit_cat) {
+        var _grid_dy   = 15; // должно совпадать со значением в Draw_64.gml
         var _grid_cols = 4;
         var _grid_rows = 4;
         var _grid_gap  = 15 * _rsx;
         var _slot_size = ((369 - 128) * _rsx - (_grid_cols - 1) * _grid_gap) / _grid_cols;
         var _grid_x    = book_x + 128 * _rsx;
-        var _grid_y    = book_y + 128 * _rsy + _cat_dy;
+        var _grid_y    = book_y + 128 * _rsy + _grid_dy;
 
         var _cat_recipes = [];
         var _all_recipes = diary_get_recipe_list();
