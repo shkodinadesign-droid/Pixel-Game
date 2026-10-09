@@ -238,6 +238,13 @@ function storage_init() {
         grow_days: 0,
         icon: asset_get_index("spr_apple_bun_icon")
     });
+    ds_map_add(global.item_database, "pear_bun", {
+        name: "Булочки с грушей",
+        category: "baked",
+        sell_price: 10,
+        grow_days: 0,
+        icon: asset_get_index("spr_pear_bun_icon")
+    });
     ds_map_add(global.item_database, "apple_jam", {
         name: "Варенье яблочное",
         category: "baked",

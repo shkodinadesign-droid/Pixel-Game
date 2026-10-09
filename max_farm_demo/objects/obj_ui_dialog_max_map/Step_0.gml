@@ -13,5 +13,5 @@ var advance = (hover && click_press)
 
 if (advance) {
     instance_destroy();
-    instance_create_depth(0, 0, -9999, obj_ui_fullscreen_map);
+    map_open(true);   // блокировку управления (поставлена этим диалогом) снимет карта при закрытии
 }

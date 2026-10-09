@@ -32,7 +32,10 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":{"name":"spr_Miley","path":"sprites/spr_Miley/spr_Miley.yy",},
+  "spriteId":{
+    "name":"spr_Miley",
+    "path":"sprites/spr_Miley/spr_Miley.yy",
+  },
   "spriteMaskId":null,
   "visible":true,
 }

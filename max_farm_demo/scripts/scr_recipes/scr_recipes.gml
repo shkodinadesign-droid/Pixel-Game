@@ -45,6 +45,20 @@ function recipes_init() {
     };
     array_push(global.recipes, _r4);
 
+    var _r4b = {
+        id:          "pear_bun",
+        name:        "Булочки с грушей",
+        ingredients: [
+            { item: ITEM_PEAR, amount: 2 },
+            { item: "sugar",   amount: 1 },
+            { item: "milk",    amount: 1 },
+            { item: "egg",     amount: 1 },
+            { item: "flour",   amount: 1 }
+        ],
+        result: { item: ITEM_PEAR_BUN, amount: 1 }
+    };
+    array_push(global.recipes, _r4b);
+
     // water появится после добавления колодца
     var _r5 = {
         id:          "apple_jam",
@@ -107,6 +121,15 @@ function recipe_can_craft(idx) {
             return false;
     }
     return true;
+}
+
+/// @func recipe_find_index(_id)
+/// @desc Индекс рецепта в global.recipes по его id (-1, если нет)
+function recipe_find_index(_id) {
+    for (var i = 0; i < array_length(global.recipes); i++) {
+        if (global.recipes[i].id == _id) return i;
+    }
+    return -1;
 }
 
 function recipe_craft(idx) {

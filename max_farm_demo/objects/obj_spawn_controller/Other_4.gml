@@ -29,14 +29,25 @@ if (p != noone) {
         placed = true;
     }
 
-    // Аккуратно выталкиваем из солидов (замени obj_solid на свой класс коллизий, если он другой)
-    var tries = 0;
-    while (place_meeting(p.x, p.y, obj_solid) && tries < 16) {
-        p.y -= 1;
-        tries++;
-    }
-    if (place_meeting(p.x, p.y, obj_solid)) {
-        p.x += 2; p.y -= 2;
+    // Выталкиваем из солидов: ищем ближайшую свободную точку по расширяющимся кольцам.
+    // Проверка через with(p) — place_meeting берёт маску вызывающего инстанса (Макс, а не контроллера)
+    with (p) {
+        if (place_meeting(x, y, obj_solid)) {
+            var _sx = x, _sy = y;
+            var _found = false;
+            for (var _r = 4; _r <= 160 && !_found; _r += 4) {
+                for (var _a = 0; _a < 360; _a += 15) {
+                    var _tx = round(_sx + lengthdir_x(_r, _a));
+                    var _ty = round(_sy + lengthdir_y(_r, _a));
+                    if (_tx < 0 || _ty < 0 || _tx > room_width || _ty > room_height) continue;
+                    if (!place_meeting(_tx, _ty, obj_solid)) {
+                        x = _tx; y = _ty;
+                        _found = true;
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     // Подстраховка от «заморозки» управления (если такие флаги есть у игрока)

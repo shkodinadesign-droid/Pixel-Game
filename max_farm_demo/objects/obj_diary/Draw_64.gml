@@ -484,7 +484,7 @@ switch (current_tab) {
         var _slot_size = ((369 - 128) * _rsx - (_grid_cols - 1) * _grid_gap) / _grid_cols;
         var _grid_x    = book_x + 128 * _rsx;
         var _grid_y    = book_y + 128 * _rsy + _grid_dy;
-        var _icon_area_h = _slot_size * 0.62;
+        var _icon_area_h = _slot_size; // в ячейке только иконка — название показывается справа
 
         var _cat_recipes = [];
         for (var _ri = 0; _ri < array_length(_all_recipes); _ri++) {
@@ -526,13 +526,6 @@ switch (current_tab) {
                         draw_circle(_icx, _icy, _icon_area_h * 0.32, false);
                     }
 
-                    draw_set_font(fnt_ui);
-                    draw_set_halign(fa_center);
-                    draw_set_valign(fa_top);
-                    draw_set_color(make_color_rgb(70, 45, 20));
-                    draw_text_ext(_sx + _slot_size / 2, _sy + _icon_area_h + 2 * _rsy, _rc.name, -1, _slot_size - 4 * _rsx);
-                    draw_set_halign(fa_left);
-                    draw_set_valign(fa_top);
                 }
             }
         }
@@ -554,23 +547,25 @@ switch (current_tab) {
             var _img_y0 = book_y + 65  * _rsy;
             var _img_y1 = book_y + 162 * _rsy;
             var _img_cx = _rp_x0 + _rp_w / 2;
-            var _img_cy = (_img_y0 + _img_y1) / 2;
+            draw_set_font(fnt_dialog_ru_bold);
+            var _cap_h  = string_height(_sel_r.name) + 6 * _rsy; // место под подпись внизу прямоугольника
+            var _img_cy = (_img_y0 + _img_y1 - _cap_h) / 2;
 
             if (sprite_exists(_sel_r.image)) {
                 var _iw2  = sprite_get_width(_sel_r.image);
                 var _ih2  = sprite_get_height(_sel_r.image);
-                var _pad2 = 14 * _rsx;
-                var _sc2  = min((_rp_w - _pad2) / _iw2, (_img_y1 - _img_y0 - _pad2) / _ih2);
+                var _pad2 = 8 * _rsx;
+                var _sc2  = min((_rp_w - _pad2) / _iw2, (_img_y1 - _img_y0 - _cap_h - _pad2) / _ih2);
                 var _dw2  = _iw2 * _sc2;
                 var _dh2  = _ih2 * _sc2;
                 draw_sprite_stretched_ext(_sel_r.image, 0, _img_cx - _dw2 / 2, _img_cy - _dh2 / 2, _dw2, _dh2, c_white, 1);
             } else {
                 draw_set_color(make_color_rgb(200, 170, 120));
-                draw_circle(_img_cx, _img_cy, min(_rp_w, _img_y1 - _img_y0) * 0.32, false);
+                draw_circle(_img_cx, _img_cy, (_img_y1 - _img_y0 - _cap_h) * 0.4, false);
             }
 
-            // Название крупным шрифтом поверх картинки снизу
-            draw_set_font(fnt_ui);
+            // Название — под картинкой, внизу прямоугольника
+            draw_set_font(fnt_dialog_ru_bold);
             draw_set_halign(fa_center);
             draw_set_valign(fa_bottom);
             draw_set_color(make_color_rgb(70, 35, 5));
@@ -578,9 +573,10 @@ switch (current_tab) {
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
 
-            // Таблица ингредиентов: колонка иконки (449-481) + колонка названия (482-624), 6 строк (191-384)
+            // Таблица ингредиентов: иконка (449-481) | название (482-624) | количество (630-736), 6 строк (191-384)
             var _tbl_icon_cx = book_x + ((449 + 481) / 2) * _rsx;
-            var _tbl_name_x  = book_x + 486 * _rsx;
+            var _tbl_name_x  = book_x + 490 * _rsx;
+            var _tbl_amt_cx  = book_x + ((630 + 736) / 2) * _rsx;
             var _tbl_y0      = book_y + 191 * _rsy;
             var _tbl_row_h   = (384 - 191) * _rsy / 6;
             var _icon_sz     = 11 * _rsx;
@@ -606,6 +602,9 @@ switch (current_tab) {
                 draw_set_valign(fa_middle);
                 draw_set_color(make_color_rgb(55, 35, 15));
                 draw_text(_tbl_name_x, _gcy, _ing.name);
+                var _amt = variable_struct_exists(_ing, "amount") ? _ing.amount : 1;
+                draw_set_halign(fa_center);
+                draw_text(_tbl_amt_cx, _gcy, string(_amt) + " шт");
                 draw_set_halign(fa_left);
                 draw_set_valign(fa_top);
             }
@@ -673,7 +672,7 @@ switch (current_tab) {
         var _fd_sy = book_h / 453;
         var _fd_x  = book_x + 471 * _fd_sx;
         var _fd_y  = book_y + 108 * _fd_sy;
-        var _fd_w  = (721 - 471) * _fd_sx;
+        var _fd_w  = (730 - 471) * _fd_sx;
         var _fd_portrait_sz = 64;
 
         var _sel_f = undefined;
@@ -701,12 +700,31 @@ switch (current_tab) {
             draw_set_color(make_color_rgb(160, 120, 70));
             draw_line(_fd_x, _fd_y + _fd_portrait_sz + 14, _fd_x + _fd_w, _fd_y + _fd_portrait_sz + 14);
 
-            // Описание
+            // Описание — абзацы с небольшим отступом; если не влезает в белый лист, текст уменьшается
             draw_set_font(fnt_ui);
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
             draw_set_color(c_black);
-            draw_text_ext(_fd_x, _fd_y + _fd_portrait_sz + 24, _sel_f.desc, round(18 * bs), _fd_w);
+            var _desc_y     = _fd_y + _fd_portrait_sz + 24;
+            var _desc_max_h = (book_y + 345 * _fd_sy) - _desc_y; // нижний край белого листа
+            var _line_sep   = 20;
+            var _para_gap   = 8;
+            var _paras      = string_split(_sel_f.desc, "\n\n");
+            var _desc_s     = 1;
+            repeat (10) {
+                var _tot_h = 0;
+                for (var _pi = 0; _pi < array_length(_paras); _pi++) {
+                    _tot_h += string_height_ext(_paras[_pi], _line_sep, _fd_w / _desc_s) * _desc_s;
+                    if (_pi > 0) _tot_h += _para_gap * _desc_s;
+                }
+                if (_tot_h <= _desc_max_h) break;
+                _desc_s -= 0.05;
+            }
+            var _py = _desc_y;
+            for (var _pi = 0; _pi < array_length(_paras); _pi++) {
+                draw_text_ext_transformed(_fd_x, _py, _paras[_pi], _line_sep, _fd_w / _desc_s, _desc_s, _desc_s, 0);
+                _py += (string_height_ext(_paras[_pi], _line_sep, _fd_w / _desc_s) + _para_gap) * _desc_s;
+            }
         } else {
             var _fd_cx = book_x + 596 * _fd_sx;
             var _fd_cy = book_y + 216 * _fd_sy;

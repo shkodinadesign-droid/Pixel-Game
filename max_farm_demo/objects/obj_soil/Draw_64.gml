@@ -4,13 +4,14 @@ if (variable_global_exists("control_locked") && global.control_locked) exit;
 var _p = instance_find(obj_max, 0);
 if (point_distance(x, y, _p.x, _p.y) > 64) exit;
 
+// Порядок: вскопать -> посадить -> полить
 var _hint = "";
 if (!dug && _p.selected_shovel) {
     _hint = "[E] Вскопать";
-} else if (dug && !watered && _p.selected_watering_can) {
-    _hint = "[E] Полить";
 } else if (dug && !has_seed && _p.selected_seed != "") {
     _hint = "[E] Посадить";
+} else if (has_seed && !watered && _p.selected_watering_can) {
+    _hint = "[E] Полить";
 }
 if (_hint == "") exit;
 

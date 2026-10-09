@@ -12,7 +12,7 @@ var advance = (hover && click_press)
            || keyboard_check_pressed(ord("E"));
 
 if (advance) {
-    // control_locked остаётся true — катсцена возьмёт управление
+    // Ночная сцена запускается сном (obj_day_controller), а не этим диалогом
+    global.control_locked = false;
     instance_destroy();
-    instance_create_depth(0, 0, -9999, obj_cutscene_frog_night);
 }

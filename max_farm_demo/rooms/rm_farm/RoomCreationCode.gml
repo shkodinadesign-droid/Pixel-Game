@@ -60,6 +60,13 @@ if (!global.kitten_arrived && _farm_day >= 2 && !instance_exists(obj_maggie_day2
     instance_create_layer(-60, 300, "Instances", obj_maggie_day2);
 }
 
+// === КАРТА ЛЯГУШОНКА — лежит в огороде, пока Макс её не взяла ===
+if (variable_global_exists("magic_map_placed") && global.magic_map_placed
+&&  !(variable_global_exists("magic_map_taken") && global.magic_map_taken)
+&&  !instance_exists(obj_frog_map)) {
+    instance_create_depth(global.PUDDING_SPOT_X, global.PUDDING_SPOT_Y, 0, obj_frog_map);
+}
+
 // === ГРЯДКИ ПУСТЫЕ ПРИ СТАРТЕ ===
 // Игрок должен сам посадить семена после прочтения письма от бабушки
 

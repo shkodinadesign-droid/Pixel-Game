@@ -4,8 +4,13 @@
 // Поставь TEST_DAY = 1 для обычного старта
 // Поставь TEST_DAY = 2 для тестирования кофейного квеста
 // Поставь TEST_DAY = 3 для тестирования дня 3 / секретной двери
+// Поставь TEST_DAY = 5 для тестирования лесного эпизода (карта уже получена, старт в доме)
 // Поставь TEST_DAY = 4 для тестирования письма с пуддингом
-var TEST_DAY = 1;
+//   TEST_FROM_PUDDING_LETTER = true  — старт ДО письма: письмо ждёт в ящике, ингредиенты в инвентаре,
+//                                      пуддинг надо приготовить самой (полная проверка эпизода)
+//   TEST_FROM_PUDDING_LETTER = false — старт ПОСЛЕ готовки: готовый пуддинг сразу в инвентаре
+var TEST_DAY = 4;   // СЕЙЧАС ВКЛЮЧЁН ТЕСТ ДНЯ 4 (с письма про пуддинг). Для обычной игры с первого дня поставь 1.
+var TEST_FROM_PUDDING_LETTER = true;
 
 // Запоминаем как переменную инстанса — нужно в Draw для баннера-предупреждения
 // "TEST_DAY активен", чтобы билд с TEST_DAY != 1 нельзя было случайно не заметить.
@@ -17,13 +22,21 @@ show_debug_flags = false;
 // --- Текущее время ---
 day_index = TEST_DAY;
 
-if (TEST_DAY >= 2) {
+// Подготовка тестового старта выполняется ОДИН раз за запуск игры (не при каждом входе в комнату):
+// письма, флаги и тестовые ингредиенты не выдаются повторно.
+var _apply_test = (TEST_DAY >= 2) && !variable_global_exists("_test_start_applied");
+if (_apply_test) global._test_start_applied = TEST_DAY;
+
+if (_apply_test && TEST_DAY >= 2) {
     // День 2 — все задания дня 1 выполнены, дневник есть
     global.justin_bakery_intro_done = true;
     if (!variable_global_exists("kitten_arrived")) global.kitten_arrived = false;
     global.potato_pie_done          = true;
     global.has_diary                = true;
     global.diary_appear_alpha       = 1;
+    // Обучение огороду (день 1) пройдено — его диалоги не всплывают в тестовых днях
+    global.tutorial_farm_step       = 7;
+    if (!variable_global_exists("grain_planted")) global.grain_planted = true;
     // Один раз при первом входе на ферму ставим дневник "с новым заданием"
     if (!variable_global_exists("_day2_diary_init")) {
         global._day2_diary_init = true;
@@ -56,7 +69,7 @@ if (TEST_DAY >= 2) {
         for (var _i = 0; _i < array_length(_pre); _i++) array_push(global.letters_read, _pre[_i]);
     }
 }
-if (TEST_DAY >= 3) {
+if (_apply_test && TEST_DAY >= 3) {
     // День 3 — письмо про секретную комнату ещё не прочитано (появится "!" на ящике)
     global.maggie_day2_started  = true;
     global.kitten_arrived       = true;
@@ -67,19 +80,34 @@ if (TEST_DAY >= 3) {
     // Флаг: на первом кадре перейти в дом
     _need_house_start = true;
 }
-if (TEST_DAY >= 4) {
-    // День 4 — письмо с пуддингом прочитано, рецепт разблокирован
+if (_apply_test && TEST_DAY >= 4) {
+    // День 4. При TEST_FROM_PUDDING_LETTER = true письмо 7 (рецепт пуддинга) ещё НЕ прочитано и ждёт в ящике
     global.maggie_day2_started  = true;
     global.kitten_arrived       = true;
     global.coffee_made          = true;
     global.secret_quest_started = true;
     // Письма до пуддинга прочитаны; письмо 7 (рецепт бабули) доставит почтовый ящик
     global.letters_read  = [0, 1, 2, 3, 5, 6];
-    global.pudding_quest = true;
     if (!variable_global_exists("pudding_on_porch")) global.pudding_on_porch = false;
-    global.pudding_ready = true;
-    _need_pudding_in_inv = true;
-    _need_house_start = true;
+    if (TEST_DAY >= 5) {
+        // Эпизод с пуддингом пройден: лягушонок приходил, карта у Макс
+        global.letters_read     = [0, 1, 2, 3, 5, 6, 7];
+        global.pudding_quest    = true;
+        global.pudding_ready    = true;
+        global.frog_night_done  = true;
+        global.magic_map_placed = true;
+        global.magic_map_taken  = true;
+    } else if (TEST_FROM_PUDDING_LETTER) {
+        // Письмо 7 (рецепт пуддинга) ещё не прочитано — "!" на почтовом ящике
+        global.pudding_quest = false;
+        global.pudding_ready = false;
+        _need_pudding_ingredients = true; // молоко, яйцо, сахар, яблоко — чтобы сразу приготовить
+    } else {
+        global.pudding_quest = true;
+        global.pudding_ready = true;
+        _need_pudding_in_inv = true;
+    }
+    if (TEST_DAY == 4) _need_house_start = true;
 }
 if (TEST_DAY == 1) {
     // День 1 — чистый старт
@@ -106,6 +134,23 @@ if (TEST_DAY == 1) {
     }
     if (!variable_global_exists("letters_read"))         global.letters_read         = [];
 }
+// --- Лесной эпизод (после карты): флаги в scr_forest_episode ---
+forest_episode_init();
+
+// --- Эпизод "Пуддинг -> лягушонок -> карта" ---
+// Точка в огороде, куда кладётся пуддинг (и где утром лежит карта)
+if (!variable_global_exists("control_locked")) global.control_locked = false;
+global.PUDDING_SPOT_X = 240;
+global.PUDDING_SPOT_Y = 430;
+if (!variable_global_exists("pudding_quest"))       global.pudding_quest       = false;
+if (!variable_global_exists("pudding_ready"))       global.pudding_ready       = false;
+if (!variable_global_exists("pudding_on_porch"))    global.pudding_on_porch    = false; // пуддинг лежит в огороде
+if (!variable_global_exists("frog_night_pending"))  global.frog_night_pending  = false; // ночная сцена ждёт запуска на ферме
+if (!variable_global_exists("frog_night_done"))     global.frog_night_done     = false;
+if (!variable_global_exists("frog_morning_dialog")) global.frog_morning_dialog = false; // реплика Макс утром после сцены
+if (!variable_global_exists("magic_map_placed"))    global.magic_map_placed    = false;
+if (!variable_global_exists("magic_map_taken"))     global.magic_map_taken     = false;
+
 // --- Подсказка после Джастина ---
 if (!variable_global_exists("show_potato_hint"))     global.show_potato_hint     = false;
 // --- Квест: сбор фруктов ---

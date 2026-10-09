@@ -53,10 +53,11 @@ farm_return_y = 280;
 _initialized = false;
 depth = -bbox_bottom;
 
-// Котёнок появляется только со 2-го дня и только после прихода Мэгги
+// Котёнок появляется только со 2-го дня и только вместе с Мэгги (или после её прихода)
 var _kday = instance_exists(obj_day_controller) ? obj_day_controller.day_index : 1;
 var _arrived = variable_global_exists("kitten_arrived") && global.kitten_arrived;
-if (_kday < 2 || !_arrived) {
+var _maggie_scene = variable_global_exists("maggie_day2_started") && global.maggie_day2_started;
+if (_kday < 2 || (!_arrived && !_maggie_scene)) {
     instance_destroy();
     exit;
 }

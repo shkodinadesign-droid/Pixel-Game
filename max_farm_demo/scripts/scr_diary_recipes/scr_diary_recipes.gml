@@ -12,6 +12,7 @@ function diary_get_recipe_categories() {
 
 /// @func diary_get_recipe_list()
 /// @desc Список рецептов. Каждый: { id, name, category, icon, image, unlocked, ingredients:[{icon,name,color}] }
+/// ingredient.amount — количество (по умолчанию 1).
 /// icon/image = -1, если спрайта нет — тогда рисуется цветной кружок по полю color.
 function diary_get_recipe_list() {
     var _justin_done = variable_global_exists("justin_bakery_intro_done") && global.justin_bakery_intro_done;
@@ -31,6 +32,21 @@ function diary_get_recipe_list() {
                 {icon: spr_egg_icon,    name: "Яйцо",      color: make_color_rgb(255,220,80)},
                 {icon: spr_flour_icon,  name: "Мука",      color: make_color_rgb(235,225,205)},
                 {icon: spr_yeast_icon,  name: "Дрожжи",    color: make_color_rgb(160,110,55)},
+            ]
+        },
+        {
+            id: "pear_bun",
+            name: "Булочки с грушей",
+            category: "baking",
+            icon: -1,
+            image: -1,
+            unlocked: _justin_done,
+            ingredients: [
+                {icon: spr_pear_icon,   name: "Груша",     color: make_color_rgb(180,200,80), amount: 2},
+                {icon: spr_shugar_icon, name: "Сахар",     color: make_color_rgb(250,250,240)},
+                {icon: spr_milk_icon,   name: "Молоко",    color: make_color_rgb(220,235,255)},
+                {icon: spr_egg_icon,    name: "Яйцо",      color: make_color_rgb(255,220,80)},
+                {icon: spr_flour_icon,  name: "Мука",      color: make_color_rgb(235,225,205)},
             ]
         },
         {

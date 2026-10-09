@@ -14,11 +14,7 @@ var advance = (hover && click_press)
            || keyboard_check_pressed(ord("E"));
 
 if (advance) {
-    // Ингредиенты уже списаны в recipe_craft — добавляем результат напрямую
-    if (!recipe_craft(2)) {
-        inventory_add(ITEM_CARROT_MUFFIN, 1);
-    }
-
+    // Результат уже выдан в obj_ui_bakery (recipe_craft по id рецепта)
     if (!variable_global_exists("carrot_muffin_done")) global.carrot_muffin_done = false;
     global.carrot_muffin_done = true;
     global.diary_has_new      = true;

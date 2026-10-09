@@ -13,7 +13,7 @@ draw_text(x, y - npc_h - 24, npc_name);
 
 // Речевой пузырь
 if (say_timer > 0) {
-    var _msg = "Мясная лавка\nоткроется позже!";
+    var _msg = say_msg;
     var _mw  = string_width(_msg) + 16;
     var _mh  = string_height(_msg) + 10;
     var _mx  = x - _mw / 2;

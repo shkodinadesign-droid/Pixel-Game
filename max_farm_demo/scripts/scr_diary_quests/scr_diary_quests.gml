@@ -73,6 +73,84 @@ function diary_get_quest_list() {
         });
     }
 
+    // --- Эпизод "Пуддинг -> лягушонок -> карта" ---
+    var _pud_ready  = variable_global_exists("pudding_ready")   && global.pudding_ready;
+    var _frog_done  = variable_global_exists("frog_night_done") && global.frog_night_done;
+    var _map_taken  = variable_global_exists("magic_map_taken") && global.magic_map_taken;
+    if (variable_global_exists("pudding_quest") && global.pudding_quest) {
+        array_push(_list, {
+            id: "pudding_cook",
+            text: "Приготовить пуддинг",
+            desc: "Бабуля прислала рецепт пуддинга.\n\nНужны молоко, яйцо, сахар и яблоко.\n\nПриготовить можно на рабочем столе в пекарне.",
+            done: _pud_ready,
+            category: "main"
+        });
+    }
+    if (_pud_ready) {
+        array_push(_list, {
+            id: "pudding_leave",
+            text: "Оставить пуддинг в огороде",
+            desc: "Бабуля просила оставить немного пуддинга в огороде, а самой лечь спать.\n\nУтром меня ждёт сюрприз!",
+            done: (variable_global_exists("pudding_on_porch") && global.pudding_on_porch) || _frog_done,
+            category: "main"
+        });
+    }
+    if (_frog_done) {
+        array_push(_list, {
+            id: "find_map",
+            text: "Проверить огород",
+            desc: "Пуддинга на месте нет... Вместо него в огороде что-то лежит.",
+            done: _map_taken,
+            category: "main"
+        });
+    }
+    // --- Лесной эпизод: карта -> лесная тропа -> большой камень -> лягушонок (scr_forest_episode) ---
+    // Появляется и тогда, когда карта была взята до этого обновления: всё считается от magic_map_taken.
+    if (_map_taken) {
+        forest_episode_init();
+        var _forest_desc;
+        if (global.forest_found) {
+            _forest_desc = "Я на лесной тропе.\n\nНа развилке тропа ведёт вверх, в тупик, и направо - к большому камню с крестиком.\n\nКарта открывается клавишей [M].";
+        } else {
+            _forest_desc = "На карте лягушонка отмечен крестик у большого камня в лесу.\n\nДорога: ферма -> деревня (направо) -> указатель \"Лесная тропа\" у правого края деревни.\n\nКарта открывается клавишей [M].";
+        }
+        array_push(_list, {
+            id: "forest_find_stone",
+            text: "Найти место с крестиком",
+            desc: _forest_desc,
+            done: global.forest_glade_found,
+            category: "main"
+        });
+        if (global.forest_glade_found) {
+            array_push(_list, {
+                id: "forest_frog_talk",
+                text: "Поговорить с лягушонком",
+                desc: "У большого камня сидит тот самый лягушонок!\n\nНадо узнать, зачем он оставил мне карту.",
+                done: global.frog_talk_done,
+                category: "main"
+            });
+        }
+        if (global.frog_talk_done) {
+            array_push(_list, {
+                id: "forest_tell_justin",
+                text: "Рассказать Джастину о лягушонке",
+                desc: "Лягушонок оставил карту в благодарность за пуддинг и показал мне место у большого камня.\n\nНа камне появился странный светящийся знак.\n\nЛягушонок сказал, что дальше лучше идти не одной. Надо рассказать обо всём Джастину.",
+                done: false,
+                category: "main"
+            });
+        }
+    }
+
+    if (variable_global_exists("ivan_quest_started") && global.ivan_quest_started) {
+        array_push(_list, {
+            id: "ivan_carrots",
+            text: "Морковь для Ивана",
+            desc: "Иван из мясной лавки готовит рагу к открытию, и ему не хватает моркови.\n\nНужно отнести ему 5 морковок в деревню - он заплатит 25 монет.",
+            done: variable_global_exists("ivan_quest_done") && global.ivan_quest_done,
+            category: "side"
+        });
+    }
+
     if (variable_global_exists("secret_quest_started") && global.secret_quest_started) {
         var _all_done =
             (variable_global_exists("three_pies_done")       && global.three_pies_done) &&

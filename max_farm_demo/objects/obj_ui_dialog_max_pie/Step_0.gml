@@ -14,11 +14,7 @@ var advance = (hover && click_press)
            || keyboard_check_pressed(ord("E"));
 
 if (advance) {
-    // Добавляем пирог в инвентарь
-    // Пробуем через recipe_craft, если ингредиенты уже убраны — добавляем напрямую
-    if (!recipe_craft(1)) {
-        inventory_add("potato_pie", 1);
-    }
+    // Пирог уже выдан в obj_ui_bakery (recipe_craft по id рецепта)
 
     // Флаги прогрессии
     if (!variable_global_exists("potato_pie_done")) global.potato_pie_done = false;
