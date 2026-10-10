@@ -8,7 +8,7 @@ var _positions = [
     { dx:  32, dy: -78 },
 ];
 for (var _i = 0; _i < 3; _i++) {
-    draw_sprite_ext(spr_pear_icon, 0, x + _positions[_i].dx, y + _positions[_i].dy, 1.5, 1.5, 0, c_white, 1);
+    draw_sprite(spr_pear_icon, 0, x + _positions[_i].dx, y + _positions[_i].dy);
 }
 
 // Подсказка [E] когда Макс рядом
