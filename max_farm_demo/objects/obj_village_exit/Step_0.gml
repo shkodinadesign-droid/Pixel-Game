@@ -6,9 +6,9 @@ if (instance_exists(obj_max)) {
     if (_dist < 96) {
         near_player = true;
         if (keyboard_check_pressed(ord("E"))) {
-            if (variable_global_exists("return_spawn_x") && !is_undefined(global.return_spawn_x)) {
-                global.next_spawn_x = global.return_spawn_x;
-                global.next_spawn_y = global.return_spawn_y;
+            if (variable_global_exists("farm_return_x") && !is_undefined(global.farm_return_x)) {
+                global.next_spawn_x = global.farm_return_x;
+                global.next_spawn_y = global.farm_return_y;
             } else {
                 global.next_spawn_x = 1200;
                 global.next_spawn_y = 368;

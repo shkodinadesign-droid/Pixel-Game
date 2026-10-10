@@ -4,8 +4,13 @@ if (!variable_global_exists("control_locked")) global.control_locked = false;
 
 walk_speed = 2;
 direction_facing = "down";
+
+// --- звук шагов ---
+footstep_timer    = 0;
+footstep_interval = game_get_speed(gamespeed_fps) * 0.28;
+footstep_sounds   = [snd_footstep_grass_1, snd_footstep_grass_2, snd_footstep_grass_3];
 state = "idle";
-sprite_index = spr_max_idle_up;
+sprite_index = spr_max_idle_down;   // смотрит вниз, на игрока (direction_facing = "down")
 image_speed = 0;
 
 hp_max = 100;

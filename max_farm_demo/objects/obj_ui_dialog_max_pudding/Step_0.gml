@@ -14,8 +14,7 @@ var advance = (hover && click_press)
            || keyboard_check_pressed(ord("E"));
 
 if (advance) {
-    inventory_add("pudding", 1);
-
+    // Пуддинг уже выдан в obj_ui_bakery (recipe_craft по id рецепта)
     if (!variable_global_exists("pudding_ready")) global.pudding_ready = false;
     global.pudding_ready = true;
 

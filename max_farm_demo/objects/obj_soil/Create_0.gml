@@ -35,6 +35,7 @@ function dig_cell() {
     dug     = true;
     covered = true;
     soil_update_sprite();
+    audio_play_sound(snd_dig_soil, 1, false, 0.7);
 }
 
 // --- ПОСАДИТЬ РАСТЕНИЕ В ЭТУ КЛЕТКУ ---
@@ -73,6 +74,7 @@ function plant_crop(seed_type = "carrot") {
         has_seed = true;
         covered  = true; // автоматически — шага "закопать" нет
         // Отмечаем посев для задания дневника
+        if (seed_type == "carrot")     { if (!variable_global_exists("grain_planted"))      global.grain_planted      = false; global.grain_planted      = true; }
         if (seed_type == "potato")     { if (!variable_global_exists("potato_planted"))     global.potato_planted     = false; global.potato_planted     = true; }
         if (seed_type == "strawberry") { if (!variable_global_exists("strawberry_planted")) global.strawberry_planted = false; global.strawberry_planted = true; }
         if (variable_global_exists("potato_planted") && global.potato_planted
@@ -94,6 +96,7 @@ function water_cell() {
     if (!covered) { show_debug_message("[WATER] SKIPPED — covered=false"); exit; }
     watered = true;
     soil_update_sprite();
+    audio_play_sound(snd_water_can, 1, false, 0.6);
     show_debug_message("[WATER] ✔ at (" + string(cell_cx) + "," + string(cell_cy) + ")");
 }
 

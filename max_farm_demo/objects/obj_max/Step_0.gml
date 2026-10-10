@@ -4,11 +4,17 @@ if (global.control_locked) {
     image_speed = 0;
     image_index = 0;
     switch (direction_facing) {
-        case "down":  sprite_index = spr_max_idle_up;    break;
-        case "up":    sprite_index = spr_max_idle_down;  break;
+        case "down":  sprite_index = spr_max_idle_down;  break;
+        case "up":    sprite_index = spr_max_idle_up;    break;
         case "left":  sprite_index = spr_max_idle_left;  break;
         case "right": sprite_index = spr_max_idle_right; break;
     }
+    exit;
+}
+
+// ---------- карта лягушонка: M — открыть (scr_forest_episode) ----------
+if (keyboard_check_pressed(ord("M")) && map_can_open()) {
+    map_open(false);
     exit;
 }
 
@@ -195,22 +201,10 @@ if ((keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_space)) && so
     if (selected_shovel && !soil_here.dug) {
         // Лопата: вскопать
         with (soil_here) dig_cell();
-        if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 2) {
-            var _dug_count = 0;
-            with (obj_soil) { if (dug) _dug_count++; }
-            if (_dug_count >= 5) global.tutorial_farm_step = 3;
-        }
-    } else if (selected_watering_can && soil_here.dug) {
+    } else if (selected_watering_can && soil_here.has_seed) {
         // Лейка: полить
         var _was_watered = soil_here.watered;
         with (soil_here) water_cell();
-        if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 6) {
-            var _all_w = true; var _has_dug = false;
-            with (obj_soil) { if (dug) { _has_dug = true; if (!watered) { _all_w = false; break; } } }
-            if (_all_w && _has_dug) {
-                global.tutorial_farm_step = 7;
-            }
-        }
         if (soil_here.watered && !_was_watered) {
             var fx_layer = layer_get_id("layer_soil");
             if (fx_layer == -1) fx_layer = layer_get_id("Instances_3");
@@ -234,12 +228,6 @@ if ((keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_space)) && so
         if (_seed_type != "") {
             with (soil_here) plant_crop(_seed_type);
             inventory_remove(_seed_item, 1);
-            if (variable_global_exists("tutorial_farm_step") && global.tutorial_farm_step == 4) {
-                var _rem = inventory_get_amount(ITEM_SEED)
-                         + inventory_get_amount(ITEM_POTATO_SEED)
-                         + inventory_get_amount(ITEM_STRAWBERRY_SEED);
-                if (_rem <= 0) global.tutorial_farm_step = 5;
-            }
             var hud = instance_find(obj_ui_inventory, 0);
             if (hud != noone) with (hud) show_carrot_pop("-1");
         }
@@ -248,8 +236,20 @@ if ((keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_space)) && so
 
 
 // ---------- перемещение (с коллизиями) ----------
-if (!place_meeting(x + move_x, y, obj_solid)) x += move_x;
-if (!place_meeting(x, y + move_y, obj_solid)) y += move_y;
+var _moved = false;
+if (!place_meeting(x + move_x, y, obj_solid)) { x += move_x; if (move_x != 0) _moved = true; }
+if (!place_meeting(x, y + move_y, obj_solid)) { y += move_y; if (move_y != 0) _moved = true; }
+
+// ---------- звук шагов ----------
+if (_moved && !global.control_locked) {
+    footstep_timer -= 1;
+    if (footstep_timer <= 0) {
+        footstep_timer = footstep_interval;
+        audio_play_sound(footstep_sounds[irandom(array_length(footstep_sounds) - 1)], 1, false, 0.5);
+    }
+} else {
+    footstep_timer = 0;
+}
 
 if (instance_exists(obj_kitten)) {
     var _kd = point_distance(x, y, obj_kitten.x, obj_kitten.y);
@@ -263,8 +263,8 @@ if (instance_exists(obj_kitten)) {
 // ---------- idle спрайты ----------
 if (state == "idle") {
     switch (direction_facing) {
-        case "down":  sprite_index = spr_max_idle_up;    break;
-        case "up":    sprite_index = spr_max_idle_down;  break;
+        case "down":  sprite_index = spr_max_idle_down;  break;
+        case "up":    sprite_index = spr_max_idle_up;    break;
         case "left":  sprite_index = spr_max_idle_left;  break;
         case "right": sprite_index = spr_max_idle_right; break;
     }

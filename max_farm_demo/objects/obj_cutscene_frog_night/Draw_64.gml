@@ -7,14 +7,14 @@ draw_set_color(c_black);
 draw_rectangle(0, 0, _gw, _gh, false);
 draw_set_alpha(1);
 
-// Фаза 3 — перемотка часов
+// Фаза 3 — надпись перед ночной сценой
 if (phase == 3) {
     draw_set_alpha(text_alpha);
     draw_set_font(fnt_ui);
     draw_set_halign(fa_center);
     draw_set_valign(fa_middle);
     draw_set_color(c_white);
-    draw_text(_gw / 2, _gh / 2, "09:00");
+    draw_text(_gw / 2, _gh / 2, "Ночью в огороде...");
     draw_set_alpha(1);
 }
 

@@ -65,78 +65,71 @@ if (shop_state >= 1 && shop_state <= 3) {
 
     gpu_set_blendmode(bm_normal);
     draw_set_alpha(1);
-    draw_set_color(c_black);
-    draw_roundrect_ext(dx, dy, dx + dw, dy + dh, 12, 12, false);
-    draw_set_color(_col);
-    draw_roundrect_ext(dx, dy, dx + dw, dy + dh, 12, 12, true);
 
-    var tx = dx + dpad + 8;
-    var ty = dy + dpad;
-    draw_set_font(fnt_ui);
-    draw_set_halign(fa_left);
-    draw_set_valign(fa_top);
-    draw_set_color(_col);
-    draw_text(tx, ty, _speaker);
-    ty += dlh * 1.5;
-    draw_set_color(c_white);
-    draw_text(tx, ty, _l1); ty += dlh;
-    draw_text(tx, ty, _l2);
+    // Фон + бирка с именем — общий шаблон, как у остальных персонажей
+    scr_dialog_draw_bg(dx, dy, dw, dh);
+    scr_dialog_draw_speaker(dx, dy, dw, dh, _speaker);
+
+    var tx = dx + 15 * (dw / 580) + 8;
+    var ty = scr_dialog_body_top(dx, dy, dw, dh);
+    var _text_max_w = dw - (tx - dx) - 16;
 
     var _bx1 = dx + dw - btn_w - dpad;
     var _by1 = dy + dh - btn_h - dpad;
     var _bx2 = _bx1 + btn_w;
     var _by2 = _by1 + btn_h;
-    var _hover = (_mx >= _bx1 && _mx <= _bx2 && _my >= _by1 && _my <= _by2);
 
-    draw_set_color(_hover ? c_white : c_black);
-    draw_rectangle(_bx1, _by1, _bx2, _by2, false);
-    draw_set_color(_col);
-    draw_line(_bx1+1,_by1,_bx2-1,_by1); draw_line(_bx1+1,_by2,_bx2-1,_by2);
-    draw_line(_bx1+1,_by1,_bx1+1,_by2); draw_line(_bx2-1,_by1,_bx2-1,_by2);
-    draw_set_halign(fa_center);
-    draw_set_valign(fa_middle);
-    draw_set_color(_hover ? c_black : c_white);
-    draw_text((_bx1+_bx2)/2, (_by1+_by2)/2, "Далее");
+    // Портрет Майли — только в её репликах
+    if (_speaker == "Майли:") {
+        var _portrait_size = 72;
+        var _portrait_x1   = dx + 565 * (dw / 580) - 8 - _portrait_size;
+        scr_dialog_draw_portrait(dx, dy, dw, dh, _by1, spr_miley_portrait, _portrait_size);
+        _text_max_w = _portrait_x1 - tx - 16;
+    }
+
+    draw_set_font(fnt_ui);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_color(c_black);
+    draw_text_ext(tx, ty, _l1, -1, _text_max_w); ty += dlh;
+    draw_text_ext(tx, ty, _l2, -1, _text_max_w);
+
+    var _hover = (_mx >= _bx1 && _mx <= _bx2 && _my >= _by1 && _my <= _by2);
+    scr_dialog_draw_button(_bx1, _by1, _bx2, _by2, "Далее", _hover);
 }
 
 // ===== КОРОТКИЙ ДИАЛОГ (фаза 5) — повторный визит =====
 if (shop_state == 5) {
     dx = (_gui_w - dw) / 2;
-    var _col5 = make_color_rgb(80, 180, 120);
 
     gpu_set_blendmode(bm_normal);
     draw_set_alpha(1);
-    draw_set_color(c_black);
-    draw_roundrect_ext(dx, dy, dx + dw, dy + dh, 12, 12, false);
-    draw_set_color(_col5);
-    draw_roundrect_ext(dx, dy, dx + dw, dy + dh, 12, 12, true);
 
-    var tx5 = dx + dpad + 8;
-    var ty5 = dy + dpad;
-    draw_set_font(fnt_ui);
-    draw_set_halign(fa_left);
-    draw_set_valign(fa_top);
-    draw_set_color(_col5);
-    draw_text(tx5, ty5, "Майли:");
-    ty5 += dlh * 1.5;
-    draw_set_color(c_white);
-    draw_text(tx5, ty5, "Добрый день! Что желаете купить?");
+    scr_dialog_draw_bg(dx, dy, dw, dh);
+    scr_dialog_draw_speaker(dx, dy, dw, dh, "Майли:");
+
+    var tx5 = dx + 15 * (dw / 580) + 8;
+    var ty5 = scr_dialog_body_top(dx, dy, dw, dh);
 
     var _bx1 = dx + dw - btn_w - dpad;
     var _by1 = dy + dh - btn_h - dpad;
     var _bx2 = _bx1 + btn_w;
     var _by2 = _by1 + btn_h;
+
+    var _portrait_size5 = 72;
+    var _portrait_x1_5  = dx + 565 * (dw / 580) - 8 - _portrait_size5;
+    scr_dialog_draw_portrait(dx, dy, dw, dh, _by1, spr_miley_portrait, _portrait_size5);
+    var _text_max_w5 = _portrait_x1_5 - tx5 - 16;
+
+    draw_set_font(fnt_ui);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_color(c_black);
+    draw_text_ext(tx5, ty5, "Добрый день! Что желаете купить?", -1, _text_max_w5);
+
     var _hover5 = (device_mouse_x_to_gui(0) >= _bx1 && device_mouse_x_to_gui(0) <= _bx2
                && device_mouse_y_to_gui(0) >= _by1 && device_mouse_y_to_gui(0) <= _by2);
-    draw_set_color(_hover5 ? c_white : c_black);
-    draw_rectangle(_bx1, _by1, _bx2, _by2, false);
-    draw_set_color(_col5);
-    draw_line(_bx1+1,_by1,_bx2-1,_by1); draw_line(_bx1+1,_by2,_bx2-1,_by2);
-    draw_line(_bx1+1,_by1,_bx1+1,_by2); draw_line(_bx2-1,_by1,_bx2-1,_by2);
-    draw_set_halign(fa_center);
-    draw_set_valign(fa_middle);
-    draw_set_color(_hover5 ? c_black : c_white);
-    draw_text((_bx1+_bx2)/2, (_by1+_by2)/2, "Далее");
+    scr_dialog_draw_button(_bx1, _by1, _bx2, _by2, "Далее", _hover5);
 }
 
 // ===== МАГАЗИН (фаза 4) — идентично chest =====

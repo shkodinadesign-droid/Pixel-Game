@@ -1,8 +1,11 @@
+// Ночной визит лягушонка. Запускается obj_day_controller на ферме после сна,
+// когда пуддинг оставлен в огороде. Макс спит — её не видно, игрок видит сцену.
 global.control_locked = true;
+if (instance_exists(obj_max)) obj_max.visible = false;
 
-phase       = 0;
+phase       = 2;   // сразу ночь: затемнение -> надпись -> лягушонок
 phase_timer = 0;
-darkness    = 0;
+darkness    = 1;
 frog_anim   = 0;
 text_alpha  = 0;
 
@@ -13,7 +16,7 @@ door_x = 496; door_y = 208; // дверь дома в rm_farm
 waypoints = [
     { x: 920, y: 750 },   // старт — справа внизу (за деревьями)
     { x: 380, y: 750 },   // идёт влево вдоль нижней дорожки
-    { x: 240, y: 430 },   // поворачивает вверх к огороду (цель)
+    { x: global.PUDDING_SPOT_X, y: global.PUDDING_SPOT_Y },   // к пуддингу в огороде (цель)
 ];
 wp_index = 0;  // текущая точка маршрута
 frog_speed = 4.0;

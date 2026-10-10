@@ -1,5 +1,8 @@
 // === КОНТРОЛЛЕР ДНЯ/НОЧИ (STEP) ===
 
+// --- F1: экран отладки квестовых флагов (см. Draw_64) ---
+if (keyboard_check_pressed(vk_f1)) show_debug_flags = !show_debug_flags;
+
 // --- Туториал: кнопка на нечётных шагах → переход к следующему ---
 var _ts = global.tutorial_farm_step;
 if (room == rm_farm && (_ts == 1 || _ts == 3 || _ts == 5)) {
@@ -65,6 +68,41 @@ if (room == rm_farm && global.tutorial_farm_step == 0 && instance_exists(obj_max
     }
 }
 
+// --- Туториал огорода: чётные шаги ждут действия игрока (копать -> сажать -> полить) ---
+if (room == rm_farm && variable_global_exists("player_inventory")
+&&  (global.tutorial_farm_step == 2 || global.tutorial_farm_step == 4 || global.tutorial_farm_step == 6)) {
+    var _seeds_left = inventory_get_amount(ITEM_SEED)
+                    + inventory_get_amount(ITEM_POTATO_SEED)
+                    + inventory_get_amount(ITEM_STRAWBERRY_SEED);
+    var _dug_empty = 0, _planted = 0, _planted_dry = 0;
+    with (obj_soil) {
+        if (dug && !has_seed) _dug_empty++;
+        if (has_seed) { _planted++; if (!watered) _planted_dry++; }
+    }
+    switch (global.tutorial_farm_step) {
+        case 2: // вскопать: хватит ямок под все семена (но не больше 5)
+            if (_dug_empty + _planted > 0 && _dug_empty >= min(5, _seeds_left)) global.tutorial_farm_step = 3;
+            break;
+        case 4: // посадить: семена кончились или вскопанные ямки заняты
+            if (_planted > 0 && (_seeds_left <= 0 || _dug_empty == 0)) global.tutorial_farm_step = 5;
+            break;
+        case 6: // полить: все посаженные грядки политы
+            if (_planted > 0 && _planted_dry == 0) global.tutorial_farm_step = 7;
+            break;
+    }
+}
+
+// Тест: ингредиенты для пуддинга (старт с письма, TEST_FROM_PUDDING_LETTER)
+if (variable_instance_exists(id, "_need_pudding_ingredients") && _need_pudding_ingredients) {
+    if (variable_global_exists("player_inventory")) {
+        _need_pudding_ingredients = false;
+        inventory_add("milk",     1);
+        inventory_add("egg",      1);
+        inventory_add("sugar",    1);
+        inventory_add(ITEM_APPLE, 1);
+    }
+}
+
 // Добавить пуддинг в инвентарь для тестирования (после инициализации)
 if (variable_instance_exists(id, "_need_pudding_in_inv") && _need_pudding_in_inv) {
     if (variable_global_exists("player_inventory")) {
@@ -73,40 +111,59 @@ if (variable_instance_exists(id, "_need_pudding_in_inv") && _need_pudding_in_inv
     }
 }
 
-// --- Подсказка положить пуддинг на огород ---
+// --- Положить пуддинг в огород (единственная точка — global.PUDDING_SPOT_X/Y) ---
 if (room == rm_farm
-&&  variable_global_exists("pudding_ready") && global.pudding_ready
-&&  variable_global_exists("pudding_on_porch") && !global.pudding_on_porch
-&&  !(variable_global_exists("magic_map_placed") && global.magic_map_placed)
-&&  instance_exists(obj_max)) {
-    var _gx = 240; var _gy = 430; // центр огорода
-    if (point_distance(_gx, _gy, obj_max.x, obj_max.y) < 48) {
-        if (keyboard_check_pressed(ord("E"))) {
-            inventory_remove("pudding", 1);
+&&  global.pudding_ready && !global.pudding_on_porch && !global.frog_night_done
+&&  !global.control_locked && instance_exists(obj_max)) {
+    var _gx = global.PUDDING_SPOT_X; var _gy = global.PUDDING_SPOT_Y;
+    if (point_distance(_gx, _gy, obj_max.x, obj_max.y) < 48 && keyboard_check_pressed(ord("E"))) {
+        if (inventory_remove(ITEM_PUDDING, 1)) {
             global.pudding_on_porch = true;
             if (instance_exists(obj_pudding_icon)) {
                 obj_pudding_icon.x       = _gx;
                 obj_pudding_icon.y       = _gy;
                 obj_pudding_icon.visible = true;
             }
-            instance_create_depth(0, 0, -9999, obj_ui_dialog_max_pudding_porch);
+            var _dlg = instance_create_depth(0, 0, -9999, obj_ui_dialog_max_pudding_porch);
+            _dlg.line1 = "Оставлю пуддинг здесь, в огороде.";
+            _dlg.line2 = "Вечером лягу спать - посмотрим, что будет утром!";
+        } else {
+            var _dlg_no = instance_create_depth(0, 0, -9999, obj_ui_dialog_max_pudding_porch);
+            _dlg_no.line1 = "Ой, у меня нет пуддинга...";
+            _dlg_no.line2 = "Сначала приготовлю его в пекарне.";
         }
     }
 }
 
-// --- Взять карту лягушонка ---
+// --- Взять карту лягушонка (один раз) ---
 if (room == rm_farm
-&&  variable_global_exists("magic_map_placed") && global.magic_map_placed
-&&  !variable_global_exists("magic_map_taken")
+&&  global.magic_map_placed && !global.magic_map_taken
+&&  !global.control_locked
 &&  instance_exists(obj_frog_map) && instance_exists(obj_max)) {
     var _map = instance_find(obj_frog_map, 0);
     if (point_distance(_map.x, _map.y, obj_max.x, obj_max.y) < 48) {
         if (keyboard_check_pressed(ord("E"))) {
             global.magic_map_taken = true;
+            global.diary_has_new   = true;  // новая цель: "Показать карту Джастину"
+            global.diary_was_read  = false;
             instance_destroy(_map);
             instance_create_depth(0, 0, -9999, obj_ui_dialog_max_map);
         }
     }
+}
+
+// --- Ночная сцена: запускается на ферме после сна (см. обработку сна) ---
+if (room == rm_farm && global.frog_night_pending && !instance_exists(obj_cutscene_frog_night)) {
+    global.frog_night_pending = false;
+    instance_create_depth(0, 0, -9999, obj_cutscene_frog_night);
+}
+
+// --- Утро после ночной сцены: Макс просыпается и вспоминает про пуддинг ---
+if (room == rm_house_inside && global.frog_morning_dialog && !global.control_locked) {
+    global.frog_morning_dialog = false;
+    var _mdlg = instance_create_depth(0, 0, -9999, obj_ui_dialog_max_pudding_porch);
+    _mdlg.line1 = "Доброе утро! Интересно, что стало с пуддингом?";
+    _mdlg.line2 = "Надо проверить огород.";
 }
 
 // Тест-старт день 3: перенести Макса в дом на первом кадре
@@ -180,6 +237,14 @@ if (is_sleeping) {
         day_start_new();
         sleep_fade = 1;
         is_sleeping = false;
+
+        // Пуддинг оставлен в огороде — ночью приходит лягушонок (сцена на ферме)
+        if (global.pudding_on_porch && !global.frog_night_done) {
+            global.frog_night_pending = true;
+            global.next_spawn_x = 496;  // у двери дома (Макс скрыта на время сцены)
+            global.next_spawn_y = 240;
+            room_goto(rm_farm);
+        }
     }
     exit;
 }
@@ -222,21 +287,6 @@ if (hour >= 6 && hour < 12) {
     phase = "night";
     // Ночь: 21:00=0.4, 24:00=0.7
     target_darkness = 0.4 + (hour - 21 + minute/60) / 3 * 0.3;
-}
-
-// --- Ночная сцена с лягушонком: пуддинг на крыльце + наступил вечер ---
-if (variable_global_exists("pudding_on_porch") && global.pudding_on_porch
-&&  phase == "evening" && hour >= 20
-&& !variable_global_exists("frog_night_done")) {
-    if (!variable_global_exists("frog_night_done")) global.frog_night_done = false;
-    global.frog_night_done = true;
-    // Запускаем ночную катсцену
-    if (!instance_exists(obj_cutscene_frog_night)) {
-        var _lyr = layer_get_id("GUI");
-        if (_lyr == -1) _lyr = layer_get_id("Instances");
-        if (_lyr == -1) _lyr = layer;
-        instance_create_layer(0, 0, _lyr, obj_cutscene_frog_night);
-    }
 }
 
 // --- Утреннее приветствие Дня 2 (встроенный диалог в obj_day_controller) ---

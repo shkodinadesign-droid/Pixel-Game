@@ -53,7 +53,7 @@ if (pending_action != "" && !instance_exists(obj_ui_letter)) {
             if (_dlyr == -1) _dlyr = layer_get_id("Instances_3");
             if (_dlyr == -1) _dlyr = layer;
             var _d = instance_create_layer(0, 0, _dlyr, obj_diary);
-            _d.current_tab = 1;
+            _d.current_tab = 0;
         }
     }
     if (pending_action == "pudding_quest_start") {

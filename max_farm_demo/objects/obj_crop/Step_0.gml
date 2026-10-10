@@ -24,6 +24,7 @@ if (stage >= ready_index() && _player != noone
         _harvest_spr  = spr_straberry_icon;
     }
     inventory_add(_harvest_item, 1);
+    audio_play_sound(snd_harvest, 1, false, 0.7);
 
     // Попап с иконкой собранного предмета
     var _hud = instance_find(obj_ui_inventory, 0);

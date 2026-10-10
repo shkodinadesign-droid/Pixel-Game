@@ -30,7 +30,7 @@ switch (phase) {
 
     case 3: // Перемотка времени "09:00 ☀"
         text_alpha = min(text_alpha + 0.06, 1);
-        if (phase_timer > 40) {
+        if (phase_timer > 90) {
             darkness  = 0.78;
             phase     = 4;
             phase_timer = 0;
@@ -52,12 +52,14 @@ switch (phase) {
         }
     break;
 
-    case 5: // Лягушонок у пуддинга — забирает его
+    case 5: // Лягушонок у пуддинга — забирает его и оставляет свёрток
         if (phase_timer > 120) {
             global.pudding_on_porch = false;
             if (instance_exists(obj_pudding_icon)) obj_pudding_icon.visible = false;
             global.magic_map_placed = true;
-            instance_create_depth(240, 430, 0, obj_frog_map);
+            if (!instance_exists(obj_frog_map)) {
+                instance_create_depth(global.PUDDING_SPOT_X, global.PUDDING_SPOT_Y, 0, obj_frog_map);
+            }
             phase = 6; phase_timer = 0; wp_index = 0;
         }
     break;
@@ -84,13 +86,14 @@ switch (phase) {
         if (darkness <= 0 && phase_timer > 60) { phase = 8; phase_timer = 0; }
     break;
 
-    case 8: // Переход в дом — Макс просыпается
+    case 8: // Переход в дом — Макс просыпается у кровати
         if (phase_timer > 90) {
-            global.frog_night_done = true;
-            global.control_locked  = false;
+            global.frog_night_done     = true;
+            global.frog_morning_dialog = true;  // реплика "надо проверить огород" (obj_day_controller)
+            global.control_locked      = false;
             if (instance_exists(obj_max)) obj_max.visible = true;
             global.next_spawn_x = 96;
-            global.next_spawn_y = 200;
+            global.next_spawn_y = 320;
             room_goto(rm_house_inside);
             instance_destroy();
         }

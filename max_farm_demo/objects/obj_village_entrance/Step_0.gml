@@ -6,8 +6,10 @@ if (p != noone) {
     if (point_distance(x, y, foot_cx, foot_y) < 160) {
         near_player = true;
         if (keyboard_check_pressed(ord("E"))) {
-            global.return_spawn_x = p.x;
-            global.return_spawn_y = p.y;
+            // Отдельная точка возврата на ферму — return_spawn_* перезаписывается
+            // магазином Майли в деревне, и Макс потом появлялась на ферме в чужих координатах
+            global.farm_return_x  = p.x;
+            global.farm_return_y  = p.y;
             global.next_spawn_x   = 96;
             global.next_spawn_y   = 368;
             room_goto(rm_village);

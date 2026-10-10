@@ -51,15 +51,21 @@ if (cook_done && cook_done_timer > 0) {
                 obj_max.image_index  = 0;
             }
         } else {
+            // Списываем ингредиенты и кладём результат в инвентарь (диалоги ниже ничего не выдают)
+            var _craft_idx = recipe_find_index(_r_done.id);
+            if (_craft_idx >= 0) recipe_craft(_craft_idx);
             var _dialog_obj;
-            if (_r_done.id == "carrot_muffin" || _r_done.id == "apple_bun") {
+            if (_r_done.id == "carrot_muffin" || _r_done.id == "apple_bun" || _r_done.id == "pear_bun") {
                 _dialog_obj = obj_ui_dialog_max_muffin;
             } else if (_r_done.id == "pudding") {
                 _dialog_obj = obj_ui_dialog_max_pudding;
             } else {
                 _dialog_obj = obj_ui_dialog_max_pie;
             }
-            instance_create_layer(0, 0, "GUI", _dialog_obj);
+            var _dlg = instance_create_layer(0, 0, "GUI", _dialog_obj);
+            // Диалог маффина общий для выпечки — подставляем правильное название
+            if (_r_done.id == "apple_bun") _dlg.line1 = "Булочки с яблоками готовы!";
+            if (_r_done.id == "pear_bun")  _dlg.line1 = "Булочки с грушей готовы!";
             instance_destroy();
             exit;
         }

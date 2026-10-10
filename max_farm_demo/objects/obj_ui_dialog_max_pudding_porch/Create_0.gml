@@ -2,6 +2,7 @@ global.control_locked = true;
 
 speaker     = "Макс:";
 speaker_col = make_color_rgb(255, 210, 100);
+// Реплика Макс в эпизоде с пуддингом — line1/line2 подставляет obj_day_controller
 line1 = "Пуддинг стоит в огороде.";
 line2 = "Подождём до утра...";
 line3 = "";

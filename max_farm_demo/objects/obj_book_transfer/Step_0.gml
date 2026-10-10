@@ -35,9 +35,7 @@ switch (phase) {
         global.has_diary = true;
         global.diary_appear_alpha = 0; // начинаем с прозрачного
 
-        // Открываем дневник на вкладке "Задания" — там квест "Проверь пекарню"
-        if (!variable_global_exists("bakery_check_started")) global.bakery_check_started = false;
-        global.bakery_check_started = true;
+        // Открываем дневник на вкладке "Задания"
         var _dlyr = layer_get_id("GUI");
         if (_dlyr == -1) _dlyr = layer_get_id("Instances");
         if (_dlyr == -1) _dlyr = layer_get_id("Instances_3");
@@ -45,10 +43,9 @@ switch (phase) {
         var _d = (_dlyr != -1)
             ? instance_create_layer(0, 0, _dlyr, obj_diary)
             : instance_create_depth(0, 0, 0, obj_diary); // гарантированно валидно, без привязки к слою
-        _d.current_tab = 1;
-
-        // Разблокируем управление
-        global.control_locked = false;
+        _d.current_tab = 0;
+        // Управление остаётся заблокированным — это уже сделал Create дневника (obj_diary),
+        // снимется само, когда игрок закроет дневник.
 
         instance_destroy();
         break;

@@ -61,7 +61,7 @@ switch (cscene_step) {
                 // Гарантируем что Макс смотрит на Джастина
                 if (instance_exists(obj_max)) {
                     obj_max.direction_facing = "down";
-                    obj_max.sprite_index = spr_max_idle_up;
+                    obj_max.sprite_index = spr_max_idle_down;
                     obj_max.image_speed  = 0;
                     obj_max.image_index  = 0;
                 }

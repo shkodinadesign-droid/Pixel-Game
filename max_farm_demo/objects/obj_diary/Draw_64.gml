@@ -10,84 +10,76 @@ draw_set_alpha(0.5);
 draw_rectangle(0, 0, display_get_gui_width(), display_get_gui_height(), false);
 draw_set_alpha(1);
 
-// Фон книги — масштабируем спрайт
-draw_sprite_ext(spr_diary_bg, 0, book_x, book_y, bs, bs, 0, c_white, 1);
+// Фон книги — растягиваем в область book_w x book_h (иконки вкладок уже нарисованы внутри спрайта)
+// Вкладка "Рецепты" использует отдельную подложку с уже нарисованными сеткой/таблицей
+var _bg_spr = (current_tab == 2) ? spr_diary_bg_recipes : spr_diary_bg;
+draw_sprite_stretched_ext(_bg_spr, 0, book_x, book_y, book_w, book_h, c_white, 1);
 
-// Спрайты вкладок
-var tab_sprites = [
-    spr_tab_inventory,   // 0 - Инвентарь
-    spr_tab_quests,      // 1 - Задания
-    spr_tab_plants,      // 2 - Растения
-    spr_tab_diary,       // 3 - Рецепты
-    spr_tab_friends,     // 4 - Друзья
-    spr_tab_adventures,  // 5 - Приключения
-    spr_tab_currency     // 6 - Валюта
+// Координаты вкладок внутри спрайта (в исходных пикселях 824x453) — подсветка активной/замок поверх арта
+var _tab_local = [
+    [63, 0, 96, 27],    // 0 - Задания
+    [111, 0, 144, 27],  // 1 - Инвентарь
+    [160, 0, 192, 27],  // 2 - Рецепты
+    [207, 0, 240, 27],  // 3 - Растения
+    [254, 0, 288, 27],  // 4 - Приключения
+    [302, 0, 336, 27],  // 5 - Дружба
+    [351, 0, 384, 27],  // 6 - Деньги
 ];
-
-// Вкладки сверху
-var _tab_corner = round(6 * bs);
-var _recipes_unlocked = variable_global_exists("justin_bakery_intro_done") && global.justin_bakery_intro_done;
+var _tab_sx = book_w / 824;
+var _tab_sy = book_h / 453;
+var _tab_corner = round(4 * bs);
 
 for (var i = 0; i < 7; i++) {
-    var tx1 = tab_start_x + i * (tab_w + tab_spacing);
-    var ty1 = book_y - tab_h + round(5 * bs);
-    var tx2 = tx1 + tab_w;
-    var ty2 = ty1 + tab_h;
+    var tx1 = book_x + _tab_local[i][0] * _tab_sx;
+    var ty1 = book_y + _tab_local[i][1] * _tab_sy;
+    var tx2 = book_x + _tab_local[i][2] * _tab_sx;
+    var ty2 = book_y + _tab_local[i][3] * _tab_sy;
 
-    var _locked = (i == 3 && !_recipes_unlocked);
-
-    if (_locked) {
-        draw_set_color(make_color_rgb(160, 150, 145)); // серая заблокированная
-    } else if (i == current_tab) {
-        draw_set_color(make_color_rgb(245, 235, 220));
-    } else {
-        draw_set_color(make_color_rgb(200, 180, 160));
-    }
-    draw_roundrect_ext(tx1, ty1, tx2, ty2, _tab_corner, _tab_corner, false);
-    draw_set_color(_locked ? make_color_rgb(100, 90, 85) : make_color_rgb(139, 90, 43));
-    draw_roundrect_ext(tx1, ty1, tx2, ty2, _tab_corner, _tab_corner, true);
-
-    // Иконка вкладки
-    var spr = tab_sprites[i];
-    if (sprite_exists(spr)) {
-        var spr_w = sprite_get_width(spr)  * bs;
-        var spr_h = sprite_get_height(spr) * bs;
-        var spr_x = tx1 + (tab_w - spr_w) / 2;
-        var spr_y = ty1 + (tab_h - spr_h) / 2;
-        var spr_alpha = _locked ? 0.25 : ((i == current_tab) ? 1.0 : 0.6);
-        draw_sprite_ext(spr, 0, spr_x, spr_y, bs, bs, 0, c_white, spr_alpha);
-    }
-
-    // Замок поверх заблокированной вкладки (нарисованный примитивами)
-    if (_locked) {
-        var _lx = tx1 + tab_w / 2;
-        var _ly = ty1 + tab_h / 2 + round(2 * bs);
-        var _lw = round(7 * bs);
-        var _lh = round(6 * bs);
-        // Корпус замка
-        draw_set_color(make_color_rgb(80, 70, 65));
-        draw_roundrect_ext(_lx - _lw / 2, _ly, _lx + _lw / 2, _ly + _lh, 2, 2, false);
-        // Дужка (полукруг сверху)
-        draw_set_color(make_color_rgb(80, 70, 65));
-        draw_ellipse(_lx - _lw / 3, _ly - _lh * 0.8, _lx + _lw / 3, _ly + 1, true);
-        draw_set_color(make_color_rgb(160, 150, 145));
-        draw_ellipse(_lx - _lw / 3 + 2, _ly - _lh * 0.8 + 2, _lx + _lw / 3 - 2, _ly, true);
+    // Подсветка активной вкладки
+    if (i == current_tab) {
+        draw_set_alpha(0.35);
+        draw_set_color(make_color_rgb(255, 250, 230));
+        draw_roundrect_ext(tx1, ty1, tx2, ty2, _tab_corner, _tab_corner, false);
+        draw_set_alpha(1);
     }
 }
 
-// Заголовок текущей вкладки
-draw_set_font(fnt_ui);
+// Кнопка закрытия (зелёный крестик) — верхний правый угол книги
+var _close_cx = book_x + 798 * _tab_sx;
+var _close_cy = book_y + 16  * _tab_sy;
+var _close_r  = round(10 * bs);
+draw_set_color(make_color_rgb(70, 160, 90));
+draw_circle(_close_cx, _close_cy, _close_r, false);
+draw_set_color(make_color_rgb(40, 110, 60));
+draw_circle(_close_cx, _close_cy, _close_r, true);
+draw_set_color(c_white);
+var _cross_r = _close_r * 0.45;
+draw_line_width(_close_cx - _cross_r, _close_cy - _cross_r, _close_cx + _cross_r, _close_cy + _cross_r, round(2 * bs));
+draw_line_width(_close_cx - _cross_r, _close_cy + _cross_r, _close_cx + _cross_r, _close_cy - _cross_r, round(2 * bs));
+
+// Заголовок текущей вкладки — единый стиль для всех вкладок (жирный, один размер, один уровень)
+// Отступ слева выровнен по левому краю ячеек этой вкладки (у "Рецептов" сетка начинается левее content_x)
+// _hdr_dy — общий сдвиг вниз для заголовка и следующей за ним сетки/списка, чтобы заголовок не налипал на рамку книги
+// _hdr_dx — доп. отступ слева для всех вкладок кроме "Рецептов", чтобы текст не налипал на уголок рамки
+var _hdr_dy = 24;
+var _hdr_dx = 8;
+// У "Рецептов" под заголовком ещё есть ряд вкладок-категорий — сам заголовок поднят выше, а категории спущены ниже (_cat_dy)
+// +15 — весь левый блок "Рецептов" (заголовок+кнопки+сетка) опущен, чтобы низ сетки совпал с низом таблицы на правой странице
+// -16 — заголовок "Рецепты" затем снова приподнят
+var _title_dy = (current_tab == 2) ? (16 + 15 - 16) : _hdr_dy;
+draw_set_font(fnt_dialog_ru_bold);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
-draw_set_color(make_color_rgb(80, 50, 20));
-draw_text(book_x + round(40 * bs), book_y + round(20 * bs), tab_names[current_tab]);
+draw_set_color(make_color_rgb(70, 40, 15));
+var _title_x = (current_tab == 2) ? (book_x + 128 * (book_w / 824)) : (book_x + round(60 * bs) + _hdr_dx);
+draw_text(_title_x, book_y + round(33 * bs) + _title_dy, tab_names[current_tab]);
 
 // Контент вкладки
-var content_x = book_x + round(30 * bs);
-var content_y = book_y + round(60 * bs);
+var content_x = book_x + round(60 * bs) + _hdr_dx;
+var content_y = book_y + round(60 * bs) + _hdr_dy;
 
 switch (current_tab) {
-    case 0: // Инвентарь
+    case 1: // Инвентарь
 
         // [спрайт (-1 = нет), цвет-заглушка, количество, название, описание]
         var inv_items = [
@@ -155,9 +147,9 @@ switch (current_tab) {
         var slot_size = round(38 * bs);  // ~48
         var slot_gap  = round(4  * bs);  // ~5
         var grid_cols = 5;
-        var grid_rows = 3;
-        var grid_x    = book_x + round(40 * bs);
-        var grid_y    = book_y + round(48 * bs);
+        var grid_rows = 4;
+        var grid_x    = book_x + round(60 * bs) + _hdr_dx;
+        var grid_y    = book_y + round(59 * bs) + _hdr_dy;
         var _slot_corner = round(4 * bs);
 
         // --- Сетка слотов ---
@@ -268,390 +260,137 @@ switch (current_tab) {
             draw_set_halign(fa_left);
 
         } else {
-            // Подсказка — по центру правой страницы, на уровне сетки
+            // Подсказка — по центру белого листочка на арте книги (как и в других вкладках, см. вкладку "Задания")
+            var _hint_sx = book_w / 824;
+            var _hint_sy = book_h / 453;
+            var _hint_cx = book_x + 596 * _hint_sx;
+            var _hint_cy = book_y + 216 * _hint_sy;
             draw_set_font(fnt_ui);
             draw_set_halign(fa_center);
-            draw_set_valign(fa_top);
+            draw_set_valign(fa_middle);
             draw_set_color(make_color_rgb(160, 130, 100));
-            draw_text(detail_x + detail_w / 2, detail_y,
-                      "Выбери предмет\nиз инвентаря");
+            draw_text(_hint_cx, _hint_cy, "Выбери предмет\nиз инвентаря");
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
         }
 
         break;
 
-    case 1: // Задания
+    case 0: // Задания
         draw_set_halign(fa_left);
         draw_set_valign(fa_top);
 
-        // Заголовок раздела
-        draw_set_font(fnt_ui);
-        draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(content_x, content_y, "Основные задания");
+        // Заголовок вкладки рисуется общим кодом выше (единый стиль для всех вкладок)
+        var _q_list_w = round(205 * bs);
+        var _q_rows_y = book_y + round(59 * bs) + _hdr_dy;
+        var _q_rows   = diary_quest_build_rows(content_x, _q_rows_y, bs);
+        var _icon_r   = round(6 * bs);
 
-        var _tbox = round(13 * bs);   // размер чекбокса
-        var _tgap = round(7  * bs);   // отступ текста от чекбокса
-        var _ty   = content_y + round(28 * bs);
+        for (var _qi = 0; _qi < array_length(_q_rows); _qi++) {
+            var _row = _q_rows[_qi];
 
-        // --- Задание 1: Посадить зерна (ВЫПОЛНЕНО) ---
-        draw_set_color(make_color_rgb(70, 150, 70));
-        draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-        draw_set_font(fnt_ui);
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_middle);
-        draw_set_color(c_white);
-        draw_text(content_x + _tbox / 2, _ty + _tbox / 2, "v");
-        draw_set_halign(fa_left);
-        draw_set_valign(fa_top);
-        draw_set_color(make_color_rgb(140, 115, 90));
-        var _task1 = "Посадить зерна";
-        draw_text(content_x + _tbox + _tgap, _ty, _task1);
-        // Зачеркивание
-        var _st_y = _ty + string_height(_task1) / 2;
-        draw_line(content_x + _tbox + _tgap, _st_y,
-                  content_x + _tbox + _tgap + string_width(_task1), _st_y);
+            if (_row.type == "header") {
+                draw_set_font(fnt_ui);
+                draw_set_color(make_color_rgb(120, 80, 35));
+                draw_text(content_x, _row.y, _row.text);
+                continue;
+            }
 
-        // --- Задание 2: Изучить пекарню ---
-        _ty += round(32 * bs);
-        var _justin_done = variable_global_exists("justin_bakery_intro_done") && global.justin_bakery_intro_done;
+            var _q       = _row.q;
+            var _is_sel  = (_q.id == selected_quest);
+            var _is_read = diary_quest_is_read(_q.id);
 
-        if (_justin_done) {
-            // Выполнено — зелёный чекбокс + зачёркивание
-            draw_set_color(make_color_rgb(70, 150, 70));
-            draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
+            // Подсветка выбранной (активной) строки
+            if (_is_sel) {
+                draw_set_alpha(0.18);
+                draw_set_color(c_black);
+                draw_rectangle(content_x - round(3 * bs), _row.y - round(1 * bs),
+                                content_x + _q_list_w, _row.y + _row.h - round(3 * bs), false);
+                draw_set_alpha(1);
+            }
+
+            // Текст задания (зачёркнут, если выполнено)
             draw_set_font(fnt_ui);
-            draw_set_halign(fa_center);
-            draw_set_valign(fa_middle);
-            draw_set_color(c_white);
-            draw_text(content_x + _tbox / 2, _ty + _tbox / 2, "v");
-            draw_set_halign(fa_left);
-            draw_set_valign(fa_top);
-            draw_set_color(make_color_rgb(140, 115, 90));
-            var _task2 = "Изучить пекарню";
-            draw_text(content_x + _tbox + _tgap, _ty, _task2);
-            var _st2_y = _ty + string_height(_task2) / 2;
-            draw_line(content_x + _tbox + _tgap, _st2_y,
-                      content_x + _tbox + _tgap + string_width(_task2), _st2_y);
+            draw_set_color(_q.done ? make_color_rgb(140, 115, 90) : make_color_rgb(55, 35, 15));
+            draw_text(content_x, _row.y, _q.text);
+            if (_q.done) {
+                var _sy2 = _row.y + string_height(_q.text) / 2;
+                draw_line(content_x, _sy2, content_x + string_width(_q.text), _sy2);
+            }
 
-            // --- Задание 3: Приготовить картофельный пирог ---
-            _ty += round(32 * bs);
-            var _pie_done = variable_global_exists("potato_pie_done") && global.potato_pie_done;
-            if (_pie_done) {
-                // Выполнено
+            // Статус-иконка справа: зелёный чек (выполнено) / серый чек (прочитано) / красный ! (новое)
+            var _icx = content_x + _q_list_w - _icon_r;
+            var _icy = _row.y + _row.h / 2 - round(4 * bs);
+
+            if (_q.done) {
                 draw_set_color(make_color_rgb(70, 150, 70));
-                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
+                draw_roundrect_ext(_icx - _icon_r, _icy - _icon_r, _icx + _icon_r, _icy + _icon_r, 2, 2, false);
                 draw_set_font(fnt_ui);
                 draw_set_halign(fa_center);
                 draw_set_valign(fa_middle);
                 draw_set_color(c_white);
-                draw_text(content_x + _tbox / 2, _ty + _tbox / 2, "v");
-                draw_set_halign(fa_left);
-                draw_set_valign(fa_top);
-                draw_set_color(make_color_rgb(140, 115, 90));
-                var _task3 = "Приготовить картофельный пирог";
-                draw_text(content_x + _tbox + _tgap, _ty, _task3);
-                var _st3_y = _ty + string_height(_task3) / 2;
-                draw_line(content_x + _tbox + _tgap, _st3_y,
-                          content_x + _tbox + _tgap + string_width(_task3), _st3_y);
+                draw_text(_icx, _icy, "v");
+            } else if (_is_read) {
+                draw_set_color(make_color_rgb(160, 150, 145));
+                draw_roundrect_ext(_icx - _icon_r, _icy - _icon_r, _icx + _icon_r, _icy + _icon_r, 2, 2, true);
             } else {
-                draw_set_color(make_color_rgb(139, 90, 43));
-                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, true);
-                draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(content_x + _tbox + _tgap + 5, _ty, "Приготовить картофельный пирог");
-            }
-
-            // --- Задание 4: Приготовить кофе ---
-            if (variable_global_exists("coffee_letter_read") && global.coffee_letter_read) {
-                _ty += round(32 * bs);
-                var _coffee_task_done = variable_global_exists("coffee_made") && global.coffee_made;
-                if (_coffee_task_done) {
-                    draw_set_color(make_color_rgb(70, 150, 70));
-                    draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-                    draw_set_font(fnt_ui);
-                    draw_set_halign(fa_center);
-                    draw_set_valign(fa_middle);
-                    draw_set_color(c_white);
-                    draw_text(content_x + _tbox / 2, _ty + _tbox / 2, "v");
-                    draw_set_halign(fa_left);
-                    draw_set_valign(fa_top);
-                    draw_set_color(make_color_rgb(140, 115, 90));
-                    var _task4 = "Приготовить себе кофе";
-                    draw_text(content_x + _tbox + _tgap, _ty, _task4);
-                    var _st4_y = _ty + string_height(_task4) / 2;
-                    draw_line(content_x + _tbox + _tgap, _st4_y,
-                              content_x + _tbox + _tgap + string_width(_task4), _st4_y);
-                } else {
-                    draw_set_color(make_color_rgb(200, 80, 60));
-                    draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-                    draw_set_color(make_color_rgb(160, 50, 30));
-                    draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, true);
-                    draw_set_font(fnt_ui);
-                    draw_set_color(make_color_rgb(55, 35, 15));
-                    draw_text(content_x + _tbox + _tgap + 5, _ty, "Приготовить себе кофе");
-                }
-            }
-
-            // --- Задание 5: Посади клубнику и картофель ---
-            if (variable_global_exists("plant_quest_started") && global.plant_quest_started) {
-                _ty += round(32 * bs);
-                var _plant_done = variable_global_exists("plant_quest_done") && global.plant_quest_done;
-                if (_plant_done) {
-                    // Выполнено — зелёный чекбокс + зачёркивание
-                    draw_set_color(make_color_rgb(70, 150, 70));
-                    draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-                    draw_set_font(fnt_ui);
-                    draw_set_halign(fa_center);
-                    draw_set_valign(fa_middle);
-                    draw_set_color(c_white);
-                    draw_text(content_x + _tbox / 2, _ty + _tbox / 2, "v");
-                    draw_set_halign(fa_left);
-                    draw_set_valign(fa_top);
-                    draw_set_color(make_color_rgb(140, 115, 90));
-                    var _task5 = "Посади клубнику и картофель";
-                    draw_text(content_x + _tbox + _tgap, _ty, _task5);
-                    var _st5_y = _ty + string_height(_task5) / 2;
-                    draw_line(content_x + _tbox + _tgap, _st5_y,
-                              content_x + _tbox + _tgap + string_width(_task5), _st5_y);
-                } else {
-                    // Активное — красный чекбокс + описание
-                    draw_set_color(make_color_rgb(200, 80, 60));
-                    draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-                    draw_set_color(make_color_rgb(160, 50, 30));
-                    draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, true);
-                    draw_set_font(fnt_ui);
-                    draw_set_color(make_color_rgb(55, 35, 15));
-                    draw_text(content_x + _tbox + _tgap + 5, _ty, "Посади клубнику и картофель");
-                }
-            }
-
-        } else {
-            // Не выполнено — пустой чекбокс
-            draw_set_color(make_color_rgb(139, 90, 43));
-            draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, true);
-            draw_set_color(make_color_rgb(55, 35, 15));
-            draw_text(content_x + _tbox + _tgap, _ty, "Изучить пекарню");
-        }
-
-        // --- Задание: Собери яблоки и груши ---
-        if (variable_global_exists("fruit_quest_started") && global.fruit_quest_started) {
-            _ty += round(32 * bs);
-            var _fruit_done = variable_global_exists("fruit_quest_done") && global.fruit_quest_done;
-            if (_fruit_done) {
-                draw_set_color(make_color_rgb(70, 150, 70));
-                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-                draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle);
+                draw_set_color(make_color_rgb(200, 60, 50));
+                draw_circle(_icx, _icy, _icon_r, false);
+                // "!" рисуем примитивами, а не шрифтом — так он идеально по центру кружка
                 draw_set_color(c_white);
-                draw_text(content_x + _tbox / 2, _ty + _tbox / 2, "v");
-                draw_set_halign(fa_left); draw_set_valign(fa_top);
-                draw_set_color(make_color_rgb(140, 115, 90));
-                var _taskF = "Собери яблоки и груши с деревьев";
-                draw_text(content_x + _tbox + _tgap, _ty, _taskF);
-                draw_line(content_x + _tbox + _tgap, _ty + string_height(_taskF) / 2,
-                          content_x + _tbox + _tgap + string_width(_taskF), _ty + string_height(_taskF) / 2);
-            } else {
-                draw_set_color(make_color_rgb(200, 80, 60));
-                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-                draw_set_color(make_color_rgb(160, 50, 30));
-                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, true);
-                draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(content_x + _tbox + _tgap + 5, _ty, "Собери яблоки и груши с деревьев");
+                var _bar_hw  = max(1, round(1 * bs));
+                var _bar_top = _icy - _icon_r * 0.55;
+                var _bar_bot = _icy + _icon_r * 0.05;
+                draw_rectangle(_icx - _bar_hw, _bar_top, _icx + _bar_hw, _bar_bot, false);
+                draw_circle(_icx, _icy + _icon_r * 0.55, max(1, round(1.2 * bs)), false);
+            }
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+        }
+
+        // --- Правая страница: подробное описание выбранного задания (внутри белого листочка на арте) ---
+        // Белый листочек на спрайте книги (824x453): x 457-735, y 77-356 — замерено по пикселям арта
+        var _qd_sx = book_w / 824;
+        var _qd_sy = book_h / 453;
+        var _qd_x  = book_x + 471 * _qd_sx;
+        var _qd_y  = book_y + 108 * _qd_sy;
+        var _qd_w  = (721 - 471) * _qd_sx;
+
+        var _sel_q = undefined;
+        if (selected_quest != "") {
+            var _full_list = diary_get_quest_list();
+            for (var _li = 0; _li < array_length(_full_list); _li++) {
+                if (_full_list[_li].id == selected_quest) { _sel_q = _full_list[_li]; break; }
             }
         }
 
-        // --- Задание: Проверь пекарню ---
-        if (variable_global_exists("bakery_check_started") && global.bakery_check_started) {
-            _ty += round(32 * bs);
-            var _bakery_done = variable_global_exists("bakery_check_done") && global.bakery_check_done;
-            if (_bakery_done) {
-                draw_set_color(make_color_rgb(70, 150, 70));
-                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-                draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle);
-                draw_set_color(c_white);
-                draw_text(content_x + _tbox / 2, _ty + _tbox / 2, "v");
-                draw_set_halign(fa_left); draw_set_valign(fa_top);
-                draw_set_color(make_color_rgb(140, 115, 90));
-                var _taskB = "Проверь пекарню";
-                draw_text(content_x + _tbox + _tgap, _ty, _taskB);
-                draw_line(content_x + _tbox + _tgap, _ty + string_height(_taskB) / 2,
-                          content_x + _tbox + _tgap + string_width(_taskB), _ty + string_height(_taskB) / 2);
-            } else {
-                draw_set_color(make_color_rgb(200, 80, 60));
-                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, false);
-                draw_set_color(make_color_rgb(160, 50, 30));
-                draw_roundrect_ext(content_x, _ty, content_x + _tbox, _ty + _tbox, 2, 2, true);
-                draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(content_x + _tbox + _tgap + 5, _ty, "Проверь пекарню");
-            }
-        }
-
-        // ===== ПРАВАЯ СТРАНИЦА: ОСНОВНЫЕ ЗАДАНИЯ =====
-        if (variable_global_exists("secret_quest_started") && global.secret_quest_started) {
-            var _rp_x = book_x + round(295 * bs);
-            var _rp_y = book_y + round(20 * bs);
-            var _rp_w = book_w - round(295 * bs) - round(15 * bs);
-            var _rp_lh = round(26 * bs);  // высота строки
-            var _rtbox = round(12 * bs);  // чекбокс
-            var _rtgap = round(6  * bs);  // отступ
-
-            // Заголовок
+        if (_sel_q != undefined) {
             draw_set_font(fnt_ui);
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
-            draw_set_color(make_color_rgb(120, 60, 10));
-            draw_text(_rp_x, _rp_y, "Сюжетный квест");
+            draw_set_color(make_color_rgb(70, 35, 5));
+            draw_text_ext(_qd_x, _qd_y, _sel_q.text, -1, _qd_w);
 
-            // Разделитель
             draw_set_color(make_color_rgb(160, 120, 70));
-            draw_line(_rp_x, _rp_y + round(20 * bs), _rp_x + _rp_w, _rp_y + round(20 * bs));
+            draw_line(_qd_x, _qd_y + 22 * _qd_sy, _qd_x + _qd_w, _qd_y + 22 * _qd_sy);
 
-            var _ry = _rp_y + round(28 * bs);
-
-            // Главная задача
-            var _all_done =
-                (variable_global_exists("three_pies_done")       && global.three_pies_done) &&
-                (variable_global_exists("all_coffees_done")      && global.all_coffees_done) &&
-                (variable_global_exists("pizza_recipe_done")     && global.pizza_recipe_done) &&
-                (variable_global_exists("helped_villagers_done") && global.helped_villagers_done) &&
-                (variable_global_exists("pear_jam_done")         && global.pear_jam_done);
-
-            if (_all_done) {
-                draw_set_color(make_color_rgb(70, 150, 70));
-                draw_roundrect_ext(_rp_x, _ry, _rp_x + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle);
-                draw_set_color(c_white);
-                draw_text(_rp_x + _rtbox / 2, _ry + _rtbox / 2, "v");
-                draw_set_halign(fa_left); draw_set_valign(fa_top);
-                draw_set_color(make_color_rgb(140, 115, 90));
-                draw_text(_rp_x + _rtbox + _rtgap, _ry, "Узнать где ключ от тайной двери");
-                draw_line(_rp_x + _rtbox + _rtgap, _ry + _rp_lh * 0.5,
-                          _rp_x + _rp_w, _ry + _rp_lh * 0.5);
-            } else {
-                draw_set_color(make_color_rgb(139, 90, 43));
-                draw_roundrect_ext(_rp_x, _ry, _rp_x + _rtbox, _ry + _rtbox, 2, 2, true);
-                draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(_rp_x + _rtbox + _rtgap, _ry, "Узнать где ключ от тайной двери");
-            }
-            _ry += round(32 * bs);
-
-            // Вспомогательная функция отрисовки под-задачи
-            // [1] Три пирога
-            var _t1 = variable_global_exists("three_pies_done") && global.three_pies_done;
-            var _ind = round(14 * bs);
-            if (_t1) {
-                draw_set_color(make_color_rgb(70, 150, 70));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle);
-                draw_set_color(c_white);
-                draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
-                draw_set_halign(fa_left); draw_set_valign(fa_top);
-                draw_set_color(make_color_rgb(140, 115, 90));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Приготовить три пирога");
-                draw_line(_rp_x + _ind + _rtbox + _rtgap, _ry + _rp_lh * 0.5,
-                          _rp_x + _ind + _rtbox + _rtgap + string_width("Приготовить три пирога"), _ry + _rp_lh * 0.5);
-            } else {
-                draw_set_color(make_color_rgb(200, 80, 60));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_color(make_color_rgb(160, 50, 30));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
-                draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Приготовить три пирога");
-            }
-            _ry += _rp_lh;
-
-            // [2] Все виды кофе
-            var _t2 = variable_global_exists("all_coffees_done") && global.all_coffees_done;
-            if (_t2) {
-                draw_set_color(make_color_rgb(70, 150, 70));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle);
-                draw_set_color(c_white);
-                draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
-                draw_set_halign(fa_left); draw_set_valign(fa_top);
-                draw_set_color(make_color_rgb(140, 115, 90));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Сварить все виды кофе");
-                draw_line(_rp_x + _ind + _rtbox + _rtgap, _ry + _rp_lh * 0.5,
-                          _rp_x + _ind + _rtbox + _rtgap + string_width("Сварить все виды кофе"), _ry + _rp_lh * 0.5);
-            } else {
-                draw_set_color(make_color_rgb(200, 80, 60));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_color(make_color_rgb(160, 50, 30));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
-                draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Сварить все виды кофе");
-            }
-            _ry += _rp_lh;
-
-            // [3] Рецепт пиццы бабули
-            var _t3 = variable_global_exists("pizza_recipe_done") && global.pizza_recipe_done;
-            if (_t3) {
-                draw_set_color(make_color_rgb(70, 150, 70));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle);
-                draw_set_color(c_white);
-                draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
-                draw_set_halign(fa_left); draw_set_valign(fa_top);
-                draw_set_color(make_color_rgb(140, 115, 90));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Открыть рецепт пиццы бабули");
-                draw_line(_rp_x + _ind + _rtbox + _rtgap, _ry + _rp_lh * 0.5,
-                          _rp_x + _rp_w, _ry + _rp_lh * 0.5);
-            } else {
-                draw_set_color(make_color_rgb(200, 80, 60));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_color(make_color_rgb(160, 50, 30));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
-                draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Открыть рецепт пиццы бабули");
-            }
-            _ry += _rp_lh;
-
-            // [4] Помочь жителям деревни
-            var _t4 = variable_global_exists("helped_villagers_done") && global.helped_villagers_done;
-            if (_t4) {
-                draw_set_color(make_color_rgb(70, 150, 70));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle);
-                draw_set_color(c_white);
-                draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
-                draw_set_halign(fa_left); draw_set_valign(fa_top);
-                draw_set_color(make_color_rgb(140, 115, 90));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Помочь жителям деревни");
-                draw_line(_rp_x + _ind + _rtbox + _rtgap, _ry + _rp_lh * 0.5,
-                          _rp_x + _rp_w, _ry + _rp_lh * 0.5);
-            } else {
-                draw_set_color(make_color_rgb(200, 80, 60));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_color(make_color_rgb(160, 50, 30));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
-                draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Помочь жителям деревни");
-            }
-            _ry += _rp_lh;
-
-            // [5] Грушевое варенье
-            var _t5 = variable_global_exists("pear_jam_done") && global.pear_jam_done;
-            if (_t5) {
-                draw_set_color(make_color_rgb(70, 150, 70));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle);
-                draw_set_color(c_white);
-                draw_text(_rp_x + _ind + _rtbox / 2, _ry + _rtbox / 2, "v");
-                draw_set_halign(fa_left); draw_set_valign(fa_top);
-                draw_set_color(make_color_rgb(140, 115, 90));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Приготовить грушевое варенье");
-                draw_line(_rp_x + _ind + _rtbox + _rtgap, _ry + _rp_lh * 0.5,
-                          _rp_x + _rp_w, _ry + _rp_lh * 0.5);
-            } else {
-                draw_set_color(make_color_rgb(200, 80, 60));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, false);
-                draw_set_color(make_color_rgb(160, 50, 30));
-                draw_roundrect_ext(_rp_x + _ind, _ry, _rp_x + _ind + _rtbox, _ry + _rtbox, 2, 2, true);
-                draw_set_font(fnt_ui); draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(_rp_x + _ind + _rtbox + _rtgap, _ry, "Приготовить грушевое варенье");
-            }
+            draw_set_font(fnt_ui);
+            draw_set_color(c_black);
+            draw_text_ext(_qd_x, _qd_y + 32 * _qd_sy, _sel_q.desc, round(18 * bs), _qd_w);
+        } else {
+            // Центр белого листочка целиком (457-735, 77-356 в исходных пикселях арта)
+            var _qd_cx = book_x + 596 * _qd_sx;
+            var _qd_cy = book_y + 216 * _qd_sy;
+            draw_set_font(fnt_ui);
+            draw_set_halign(fa_center);
+            draw_set_valign(fa_middle);
+            draw_set_color(make_color_rgb(160, 130, 100));
+            draw_text(_qd_cx, _qd_cy, "Выбери задание\nиз списка");
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
         }
         break;
-    case 2: // Растения
+    case 3: // Растения
         draw_set_font(fnt_ui);
         draw_set_color(make_color_rgb(80, 50, 20));
 
@@ -680,147 +419,329 @@ switch (current_tab) {
 
         draw_set_color(c_white);
         break;
-    case 3: // Рецепты
-        if (!_recipes_unlocked) {
+    case 2: // Рецепты
+        // Координаты замерены по пикселям подложки spr_diary_bg_recipes (824x453)
+        var _rsx = book_w / 824;
+        var _rsy = book_h / 453;
+        var _all_recipes = diary_get_recipe_list();
+        var _categories  = diary_get_recipe_categories();
+
+        // --- Вкладки-категории (левая страница, x 128-369, y 64-96) ---
+        // _cat_dy больше, чем у заголовка (_title_dy) — категории спущены ниже, под приподнятый заголовок "Рецепты"
+        // _cat_lift — все три кнопки подняты выше; _cat_inset — кнопки ниже по высоте (по 2px сверху/снизу);
+        // _cat_inset_bot — доп. уменьшение высоты снизу; _cat_inset_x — кнопки уже по ширине (по 2px слева/справа)
+        // +15 — весь левый блок опущен, чтобы низ сетки совпал с низом таблицы на правой странице (см. _grid_dy ниже)
+        // -8 — таб-бар категорий затем снова приподнят
+        var _cat_dy        = 40 + 15 - 8;
+        var _cat_lift      = 12;
+        var _cat_inset     = 2;
+        var _cat_inset_bot = 2;
+        var _cat_inset_x   = 2;
+        var _cat_x0 = book_x + 128 * _rsx;
+        var _cat_x1 = book_x + 369 * _rsx;
+        var _cat_y0 = book_y + 64  * _rsy + _cat_dy - _cat_lift + _cat_inset;
+        var _cat_y1 = book_y + 96  * _rsy + _cat_dy - _cat_lift - _cat_inset - _cat_inset_bot;
+        var _cat_w  = (_cat_x1 - _cat_x0) / array_length(_categories);
+
+        var _cat_gap = round(3 * bs);
+        var _cat_corner = round(4 * bs);
+        for (var _ci = 0; _ci < array_length(_categories); _ci++) {
+            var _cx0 = _cat_x0 + _ci * _cat_w;
+            var _cx1 = _cx0 + _cat_w;
+            var _cat_active = (_categories[_ci].id == recipe_category);
+
+            // Подложка-кнопка (в новой подложке книги баковый арт для этих кнопок убран — рисуем сами)
+            var _bx0 = _cx0 + _cat_gap / 2 + _cat_inset_x;
+            var _bx1 = _cx1 - _cat_gap / 2 - _cat_inset_x;
+            draw_set_color(make_color_rgb(221, 196, 141));
+            draw_roundrect_ext(_bx0, _cat_y0, _bx1, _cat_y1, _cat_corner, _cat_corner, false);
+            draw_set_color(make_color_rgb(160, 120, 80));
+            draw_roundrect_ext(_bx0, _cat_y0, _bx1, _cat_y1, _cat_corner, _cat_corner, true);
+
+            if (_cat_active) {
+                draw_set_alpha(0.35);
+                draw_set_color(make_color_rgb(255, 250, 230));
+                draw_roundrect_ext(_bx0, _cat_y0, _bx1, _cat_y1, _cat_corner, _cat_corner, false);
+                draw_set_alpha(1);
+            }
+
+            draw_set_font(fnt_ui);
+            draw_set_halign(fa_center);
+            draw_set_valign(fa_middle);
+            draw_set_color(_cat_active ? make_color_rgb(60, 35, 10) : make_color_rgb(120, 95, 65));
+            draw_text((_cx0 + _cx1) / 2, (_cat_y0 + _cat_y1) / 2, _categories[_ci].name);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+        }
+
+        // --- Сетка рецептов 4x4 (левая страница, x 128-369, y 128-369 в арте) ---
+        // _grid_dy=15 — реальный сдвиг вниз ячеек сетки в самом арте (см. spr_diary_bg_recipes), низ теперь совпадает
+        // с низом таблицы ингредиентов на правой странице (там же 15px запаса до нижней рамки страницы)
+        var _grid_dy   = 15;
+        var _grid_cols = 4;
+        var _grid_rows = 4;
+        var _grid_gap  = 15 * _rsx;
+        var _slot_size = ((369 - 128) * _rsx - (_grid_cols - 1) * _grid_gap) / _grid_cols;
+        var _grid_x    = book_x + 128 * _rsx;
+        var _grid_y    = book_y + 128 * _rsy + _grid_dy;
+        var _icon_area_h = _slot_size; // в ячейке только иконка — название показывается справа
+
+        var _cat_recipes = [];
+        for (var _ri = 0; _ri < array_length(_all_recipes); _ri++) {
+            if (_all_recipes[_ri].category == recipe_category && _all_recipes[_ri].unlocked) {
+                array_push(_cat_recipes, _all_recipes[_ri]);
+            }
+        }
+
+        for (var _row = 0; _row < _grid_rows; _row++) {
+            for (var _col = 0; _col < _grid_cols; _col++) {
+                var _idx = _row * _grid_cols + _col;
+                var _sx = _grid_x + _col * (_slot_size + _grid_gap);
+                var _sy = _grid_y + _row * (_slot_size + _grid_gap);
+                var _has_recipe = (_idx < array_length(_cat_recipes));
+                var _is_sel_slot = _has_recipe && (_cat_recipes[_idx].id == selected_recipe);
+
+                if (_is_sel_slot) {
+                    draw_set_alpha(0.35);
+                    draw_set_color(make_color_rgb(255, 250, 230));
+                    draw_rectangle(_sx, _sy, _sx + _slot_size, _sy + _slot_size, false);
+                    draw_set_alpha(1);
+                }
+
+                if (_has_recipe) {
+                    var _rc  = _cat_recipes[_idx];
+                    var _icx = _sx + _slot_size / 2;
+                    var _icy = _sy + _icon_area_h / 2;
+
+                    if (sprite_exists(_rc.icon)) {
+                        var _iw  = sprite_get_width(_rc.icon);
+                        var _ih  = sprite_get_height(_rc.icon);
+                        var _pad = 6 * _rsx;
+                        var _sc  = min((_slot_size - _pad) / _iw, (_icon_area_h - _pad) / _ih);
+                        var _dw  = _iw * _sc;
+                        var _dh  = _ih * _sc;
+                        draw_sprite_stretched_ext(_rc.icon, 0, _icx - _dw / 2, _icy - _dh / 2, _dw, _dh, c_white, 1);
+                    } else {
+                        draw_set_color(make_color_rgb(200, 170, 120));
+                        draw_circle(_icx, _icy, _icon_area_h * 0.32, false);
+                    }
+
+                }
+            }
+        }
+
+        // --- Правая страница: картинка блюда (x 449-736, y 65-162) + таблица ингредиентов (y 191-384, 6 строк) ---
+        var _rp_x0 = book_x + 449 * _rsx;
+        var _rp_x1 = book_x + 736 * _rsx;
+        var _rp_w  = _rp_x1 - _rp_x0;
+
+        var _sel_r = undefined;
+        if (selected_recipe != "") {
+            for (var _li = 0; _li < array_length(_all_recipes); _li++) {
+                if (_all_recipes[_li].id == selected_recipe) { _sel_r = _all_recipes[_li]; break; }
+            }
+        }
+
+        if (_sel_r != undefined) {
+            // Картинка блюда внутри прямоугольника, уже нарисованного на подложке
+            var _img_y0 = book_y + 65  * _rsy;
+            var _img_y1 = book_y + 162 * _rsy;
+            var _img_cx = _rp_x0 + _rp_w / 2;
+            draw_set_font(fnt_dialog_ru_bold);
+            var _cap_h  = string_height(_sel_r.name) + 6 * _rsy; // место под подпись внизу прямоугольника
+            var _img_cy = (_img_y0 + _img_y1 - _cap_h) / 2;
+
+            if (sprite_exists(_sel_r.image)) {
+                var _iw2  = sprite_get_width(_sel_r.image);
+                var _ih2  = sprite_get_height(_sel_r.image);
+                var _pad2 = 8 * _rsx;
+                var _sc2  = min((_rp_w - _pad2) / _iw2, (_img_y1 - _img_y0 - _cap_h - _pad2) / _ih2);
+                var _dw2  = _iw2 * _sc2;
+                var _dh2  = _ih2 * _sc2;
+                draw_sprite_stretched_ext(_sel_r.image, 0, _img_cx - _dw2 / 2, _img_cy - _dh2 / 2, _dw2, _dh2, c_white, 1);
+            } else {
+                draw_set_color(make_color_rgb(200, 170, 120));
+                draw_circle(_img_cx, _img_cy, (_img_y1 - _img_y0 - _cap_h) * 0.4, false);
+            }
+
+            // Название — под картинкой, внизу прямоугольника
+            draw_set_font(fnt_dialog_ru_bold);
+            draw_set_halign(fa_center);
+            draw_set_valign(fa_bottom);
+            draw_set_color(make_color_rgb(70, 35, 5));
+            draw_text(_img_cx, _img_y1 - 4 * _rsy, _sel_r.name);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+
+            // Таблица ингредиентов: иконка (449-481) | название (482-624) | количество (630-736), 6 строк (191-384)
+            var _tbl_icon_cx = book_x + ((449 + 481) / 2) * _rsx;
+            var _tbl_name_x  = book_x + 490 * _rsx;
+            var _tbl_amt_cx  = book_x + ((630 + 736) / 2) * _rsx;
+            var _tbl_y0      = book_y + 191 * _rsy;
+            var _tbl_row_h   = (384 - 191) * _rsy / 6;
+            var _icon_sz     = 11 * _rsx;
+
+            for (var _gi = 0; _gi < array_length(_sel_r.ingredients) && _gi < 6; _gi++) {
+                var _ing = _sel_r.ingredients[_gi];
+                var _gcy = _tbl_y0 + _gi * _tbl_row_h + _tbl_row_h / 2;
+
+                if (sprite_exists(_ing.icon)) {
+                    var _iiw = sprite_get_width(_ing.icon);
+                    var _iih = sprite_get_height(_ing.icon);
+                    var _isc = min((_icon_sz * 2) / _iiw, (_icon_sz * 2) / _iih);
+                    var _idw = _iiw * _isc;
+                    var _idh = _iih * _isc;
+                    draw_sprite_stretched_ext(_ing.icon, 0, _tbl_icon_cx - _idw / 2, _gcy - _idh / 2, _idw, _idh, c_white, 1);
+                } else {
+                    draw_set_color(_ing.color);
+                    draw_circle(_tbl_icon_cx, _gcy, _icon_sz, false);
+                }
+
+                draw_set_font(fnt_ui);
+                draw_set_halign(fa_left);
+                draw_set_valign(fa_middle);
+                draw_set_color(make_color_rgb(55, 35, 15));
+                draw_text(_tbl_name_x, _gcy, _ing.name);
+                var _amt = variable_struct_exists(_ing, "amount") ? _ing.amount : 1;
+                draw_set_halign(fa_center);
+                draw_text(_tbl_amt_cx, _gcy, string(_amt) + " шт");
+                draw_set_halign(fa_left);
+                draw_set_valign(fa_top);
+            }
+        } else {
+            var _rd_cx = _rp_x0 + _rp_w / 2;
+            var _rd_cy = book_y + 113 * _rsy;
             draw_set_font(fnt_ui);
             draw_set_halign(fa_center);
             draw_set_valign(fa_middle);
             draw_set_color(make_color_rgb(160, 130, 100));
-            draw_text(book_x + book_w / 2, book_y + book_h / 2, "Рецепты пока недоступны");
+            draw_text(_rd_cx, _rd_cy, "Выбери рецепт\nиз списка");
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
-            break;
-        }
-
-        // --- Карточка рецепта: Картофельный пирог ---
-        var _rec_x = content_x;
-        var _rec_y = content_y;
-
-        // Название
-        draw_set_font(fnt_ui);
-        draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(_rec_x, _rec_y, "Картофельный пирог");
-
-        // Разделитель
-        draw_set_color(make_color_rgb(160, 120, 70));
-        draw_line(_rec_x, _rec_y + round(22 * bs),
-                  _rec_x + round(220 * bs), _rec_y + round(22 * bs));
-
-        // Ингредиенты одной строкой
-        draw_set_font(fnt_ui);
-        draw_set_color(make_color_rgb(80, 55, 25));
-        draw_text(_rec_x, _rec_y + round(30 * bs),
-                  "Картофель, Молоко, Яйцо, Мука, Дрожжи");
-
-        // Кнопка "Подробнее"
-        var _pbtn_w = round(90 * bs);
-        var _pbtn_h = round(22 * bs);
-        var _pbtn_x = _rec_x;
-        var _pbtn_y = _rec_y + round(56 * bs);
-        var _pbtn_hover = (device_mouse_x_to_gui(0) >= _pbtn_x && device_mouse_x_to_gui(0) <= _pbtn_x + _pbtn_w &&
-                           device_mouse_y_to_gui(0) >= _pbtn_y && device_mouse_y_to_gui(0) <= _pbtn_y + _pbtn_h);
-
-        draw_set_color(recipe_detail_open
-            ? make_color_rgb(100, 65, 25)
-            : (_pbtn_hover ? make_color_rgb(120, 80, 35) : make_color_rgb(160, 115, 60)));
-        draw_roundrect_ext(_pbtn_x, _pbtn_y, _pbtn_x + _pbtn_w, _pbtn_y + _pbtn_h, 4, 4, false);
-        draw_set_color(make_color_rgb(230, 200, 155));
-        draw_roundrect_ext(_pbtn_x, _pbtn_y, _pbtn_x + _pbtn_w, _pbtn_y + _pbtn_h, 4, 4, true);
-        draw_set_font(fnt_ui);
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_middle);
-        draw_set_color(c_white);
-        draw_text(_pbtn_x + _pbtn_w / 2, _pbtn_y + _pbtn_h / 2,
-                  recipe_detail_open ? "Свернуть" : "Подробнее");
-        draw_set_halign(fa_left);
-        draw_set_valign(fa_top);
-
-        // --- Рецепт кофе (после письма бабули) ---
-        if (variable_global_exists("coffee_letter_read") && global.coffee_letter_read) {
-            var _coffee_y = _pbtn_y + _pbtn_h + round(18 * bs);
-
-            // Разделитель перед рецептом
-            draw_set_color(make_color_rgb(160, 120, 70));
-            draw_line(_rec_x, _coffee_y, _rec_x + round(220 * bs), _coffee_y);
-            _coffee_y += round(10 * bs);
-
-            // Название рецепта
-            draw_set_font(fnt_ui);
-            draw_set_color(make_color_rgb(80, 50, 20));
-            draw_text(_rec_x, _coffee_y, "Латте");
-
-            // Линия под названием
-            draw_set_color(make_color_rgb(160, 120, 70));
-            draw_line(_rec_x, _coffee_y + round(22 * bs),
-                      _rec_x + round(220 * bs), _coffee_y + round(22 * bs));
-
-            // Ингредиенты
-            draw_set_font(fnt_ui);
-            draw_set_color(make_color_rgb(80, 55, 25));
-            draw_text(_rec_x, _coffee_y + round(30 * bs),
-                      "Зерна кофе, Молоко, Сахар");
-        }
-
-        // --- Правая страница: детали рецепта ---
-        if (recipe_detail_open) {
-            var _det_x = book_x + round(288 * bs);
-            var _det_y = book_y + round(20  * bs);
-            var _det_w = book_w - round(288 * bs) - round(20 * bs);
-            var _det_h = book_h - round(20  * bs) - round(38 * bs);
-
-            draw_set_alpha(0.93);
-            draw_set_color(make_color_rgb(250, 242, 220));
-            draw_roundrect_ext(_det_x, _det_y, _det_x + _det_w, _det_y + _det_h, 6, 6, false);
-            draw_set_alpha(1);
-            draw_set_color(make_color_rgb(160, 120, 70));
-            draw_roundrect_ext(_det_x, _det_y, _det_x + _det_w, _det_y + _det_h, 6, 6, true);
-
-            draw_set_font(fnt_ui);
-            draw_set_color(make_color_rgb(80, 50, 20));
-            draw_text(_det_x + 12, _det_y + 12, "Картофельный пирог");
-            draw_set_color(make_color_rgb(160, 120, 70));
-            draw_line(_det_x + 10, _det_y + 34, _det_x + _det_w - 10, _det_y + 34);
-
-            draw_set_font(fnt_ui);
-            draw_set_color(make_color_rgb(55, 35, 15));
-            draw_text_ext(_det_x + 12, _det_y + 42,
-                "Любимый пирог Джастина по рецепту бабушки Сони." +
-                "\n\nИнгредиенты:" +
-                "\nКартофель x1, Молоко x1, Яйцо x1" +
-                "\nМука x1, Дрожжи x1" +
-                "\n\nПриготовить: подойди к рабочему столу в пекарне и нажми E.",
-                -1, _det_w - 22);
         }
         break;
-    case 4: // Друзья
-        draw_set_font(fnt_ui);
-        draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(content_x, content_y, "Бабушка Мэгги");
+    case 5: // Дружба
+        var _fr_list = diary_get_friend_list();
 
-        // Кекс — появляется только после того как Мэгги привела котика
-        if (!variable_global_exists("kitten_arrived")) global.kitten_arrived = false;
-        if (global.kitten_arrived) {
-            var _ky = content_y + 32;
-            // Иконка сердечко (примитивами — символ ♥ не поддерживается шрифтом)
-            draw_set_color(make_color_rgb(255, 80, 120));
-            var _hx2 = content_x + 6;
-            var _hy2 = _ky + 6;
-            draw_circle(_hx2 - 3, _hy2 - 2, 4, false);
-            draw_circle(_hx2 + 3, _hy2 - 2, 4, false);
-            draw_triangle(_hx2 - 7, _hy2 - 1, _hx2 + 7, _hy2 - 1, _hx2, _hy2 + 7, false);
-            // Имя и описание
-            draw_set_font(fnt_ui);
+        // --- Список персонажей (левая страница): иконка-портрет + имя + короткое описание ---
+        var _fr_icon_sz = 36;
+        var _fr_gap_x   = 10;
+        var _fr_name_h  = 24;
+        var _fr_row_gap = 12;
+        var _fr_row_h   = max(_fr_icon_sz, _fr_name_h + 16) + _fr_row_gap;
+        var _fr_list_w  = round(205 * bs);
+
+        for (var _fi = 0; _fi < array_length(_fr_list); _fi++) {
+            var _f     = _fr_list[_fi];
+            var _row_y = content_y + _fi * _fr_row_h;
+            var _is_sel = (_f.id == selected_friend);
+
+            if (_is_sel) {
+                draw_set_alpha(0.18);
+                draw_set_color(c_black);
+                draw_rectangle(content_x - round(3 * bs), _row_y - round(1 * bs),
+                                content_x + _fr_list_w, _row_y + _fr_row_h - round(3 * bs), false);
+                draw_set_alpha(1);
+            }
+
+            // Иконка-портрет
+            if (sprite_exists(_f.portrait)) {
+                draw_sprite_stretched_ext(_f.portrait, 0, content_x, _row_y, _fr_icon_sz, _fr_icon_sz, c_white, 1);
+            } else {
+                draw_set_color(make_color_rgb(255, 80, 120));
+                draw_circle(content_x + _fr_icon_sz / 2, _row_y + _fr_icon_sz / 2, _fr_icon_sz / 2, false);
+            }
+
+            // Имя (заголовок строки)
+            draw_set_font(fnt_dialog_ru_bold);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
             draw_set_color(make_color_rgb(80, 50, 20));
-            draw_text(content_x + 20, _ky, "Кекс");
-            draw_set_color(make_color_rgb(120, 80, 40));
-            draw_text(content_x + 20, _ky + 20, "Мой любимый друг");
+            draw_text(content_x + _fr_icon_sz + _fr_gap_x, _row_y, _f.name);
+
+            // Короткое описание
+            draw_set_font(fnt_ui);
+            draw_set_color(make_color_rgb(120, 95, 65));
+            draw_text(content_x + _fr_icon_sz + _fr_gap_x, _row_y + _fr_name_h, _f.short_desc);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+        }
+
+        // --- Правая страница: подробная информация о выбранном персонаже (белый листочек на арте) ---
+        var _fd_sx = book_w / 824;
+        var _fd_sy = book_h / 453;
+        var _fd_x  = book_x + 471 * _fd_sx;
+        var _fd_y  = book_y + 108 * _fd_sy;
+        var _fd_w  = (730 - 471) * _fd_sx;
+        var _fd_portrait_sz = 64;
+
+        var _sel_f = undefined;
+        for (var _li = 0; _li < array_length(_fr_list); _li++) {
+            if (_fr_list[_li].id == selected_friend) { _sel_f = _fr_list[_li]; break; }
+        }
+
+        if (_sel_f != undefined) {
+            // Большой портрет
+            if (sprite_exists(_sel_f.portrait)) {
+                draw_sprite_stretched_ext(_sel_f.portrait, 0, _fd_x, _fd_y, _fd_portrait_sz, _fd_portrait_sz, c_white, 1);
+            } else {
+                draw_set_color(make_color_rgb(255, 80, 120));
+                draw_circle(_fd_x + _fd_portrait_sz / 2, _fd_y + _fd_portrait_sz / 2, _fd_portrait_sz / 2, false);
+            }
+
+            // Имя — заголовок справа от портрета, по центру его высоты
+            draw_set_font(fnt_dialog_ru_bold);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_middle);
+            draw_set_color(make_color_rgb(70, 35, 5));
+            draw_text(_fd_x + _fd_portrait_sz + 14, _fd_y + _fd_portrait_sz / 2, _sel_f.name);
+
+            // Разделитель
+            draw_set_color(make_color_rgb(160, 120, 70));
+            draw_line(_fd_x, _fd_y + _fd_portrait_sz + 14, _fd_x + _fd_w, _fd_y + _fd_portrait_sz + 14);
+
+            // Описание — абзацы с небольшим отступом; если не влезает в белый лист, текст уменьшается
+            draw_set_font(fnt_ui);
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+            draw_set_color(c_black);
+            var _desc_y     = _fd_y + _fd_portrait_sz + 24;
+            var _desc_max_h = (book_y + 345 * _fd_sy) - _desc_y; // нижний край белого листа
+            var _line_sep   = 20;
+            var _para_gap   = 8;
+            var _paras      = string_split(_sel_f.desc, "\n\n");
+            var _desc_s     = 1;
+            repeat (10) {
+                var _tot_h = 0;
+                for (var _pi = 0; _pi < array_length(_paras); _pi++) {
+                    _tot_h += string_height_ext(_paras[_pi], _line_sep, _fd_w / _desc_s) * _desc_s;
+                    if (_pi > 0) _tot_h += _para_gap * _desc_s;
+                }
+                if (_tot_h <= _desc_max_h) break;
+                _desc_s -= 0.05;
+            }
+            var _py = _desc_y;
+            for (var _pi = 0; _pi < array_length(_paras); _pi++) {
+                draw_text_ext_transformed(_fd_x, _py, _paras[_pi], _line_sep, _fd_w / _desc_s, _desc_s, _desc_s, 0);
+                _py += (string_height_ext(_paras[_pi], _line_sep, _fd_w / _desc_s) + _para_gap) * _desc_s;
+            }
+        } else {
+            var _fd_cx = book_x + 596 * _fd_sx;
+            var _fd_cy = book_y + 216 * _fd_sy;
+            draw_set_font(fnt_ui);
+            draw_set_halign(fa_center);
+            draw_set_valign(fa_middle);
+            draw_set_color(make_color_rgb(160, 130, 100));
+            draw_text(_fd_cx, _fd_cy, "Выбери персонажа\nиз списка");
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
         }
         break;
-    case 5: // Приключения
+    case 4: // Приключения
         draw_set_font(fnt_ui);
         draw_text(content_x, content_y, "Приключения скоро!");
         break;
-    case 6: // Валюта
+    case 6: // Деньги
         // Иконка монеты
         draw_set_color(make_color_rgb(255, 210, 50));
         draw_circle(content_x + 12, content_y + 12, 11, false);
@@ -839,12 +760,6 @@ switch (current_tab) {
         draw_text(content_x + 30, content_y + 4, "C - " + string(global.coins));
         break;
 }
-
-// Подсказка закрытия
-draw_set_font(fnt_ui);
-draw_set_halign(fa_right);
-draw_set_color(make_color_rgb(150, 130, 110));
-draw_text(book_x + book_w - 15, book_y + book_h - 20, "Клик вне книги - закрыть");
 
 // Сброс
 draw_set_halign(fa_left);

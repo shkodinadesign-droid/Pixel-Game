@@ -39,6 +39,30 @@ if (pending_action != "" && !instance_exists(obj_ui_letter)) {
             inst.target_id = obj_max;
         }
     }
+    if (pending_action == "coffee_quest_start") {
+        if (!variable_global_exists("coffee_letter_read")) global.coffee_letter_read = false;
+        global.coffee_letter_read = true;
+    }
+    if (pending_action == "secret_quest_start") {
+        if (!variable_global_exists("secret_quest_started")) global.secret_quest_started = false;
+        global.secret_quest_started = true;
+        // Авто-открытие дневника на вкладке "Задания"
+        if (!instance_exists(obj_diary)) {
+            var _dlyr = layer_get_id("GUI");
+            if (_dlyr == -1) _dlyr = layer_get_id("Instances");
+            if (_dlyr == -1) _dlyr = layer_get_id("Instances_3");
+            if (_dlyr == -1) _dlyr = layer;
+            var _d = instance_create_layer(0, 0, _dlyr, obj_diary);
+            _d.current_tab = 0;
+        }
+    }
+    if (pending_action == "pudding_quest_start") {
+        if (!variable_global_exists("pudding_quest")) global.pudding_quest = false;
+        global.pudding_quest = true;
+    }
+    // После любого письма — дневник всегда прыгает с "!"
+    global.diary_has_new  = true;
+    global.diary_was_read = false;
     pending_action = "";
 }
 

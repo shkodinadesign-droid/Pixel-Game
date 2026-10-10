@@ -139,7 +139,8 @@ if (show_fruit_quest_dlg) {
 }
 
 // --- Подсказка: войти в сарай ---
-if (room == rm_farm && instance_exists(obj_max)) {
+if (room == rm_farm && instance_exists(obj_max)
+&&  (!variable_global_exists("control_locked") || !global.control_locked)) {
     var _barn_wx = 96; var _barn_wy = 256;
     if (point_distance(_barn_wx, _barn_wy, obj_max.x, obj_max.y) < 96) {
         var _cam = view_camera[0];
@@ -170,11 +171,10 @@ if (variable_instance_exists(id, "meggie_diary_msg_timer") && meggie_diary_msg_t
 
 // --- Подсказка: положить пуддинг на огород ---
 if (room == rm_farm
-&&  variable_global_exists("pudding_ready") && global.pudding_ready
-&&  variable_global_exists("pudding_on_porch") && !global.pudding_on_porch
-&&  !(variable_global_exists("magic_map_placed") && global.magic_map_placed)
-&&  instance_exists(obj_max)) {
-    var _gx = 240; var _gy = 430;
+&&  global.pudding_ready && !global.pudding_on_porch && !global.frog_night_done
+&&  instance_exists(obj_max)
+&&  !global.control_locked) {
+    var _gx = global.PUDDING_SPOT_X; var _gy = global.PUDDING_SPOT_Y;
     if (point_distance(_gx, _gy, obj_max.x, obj_max.y) < 48) {
         var _cam = view_camera[0];
         var _hx = (_gx - camera_get_view_x(_cam)) / camera_get_view_width(_cam)  * display_get_gui_width();
@@ -185,9 +185,9 @@ if (room == rm_farm
 
 // --- Подсказка: взять карту лягушонка ---
 if (room == rm_farm
-&&  variable_global_exists("magic_map_placed") && global.magic_map_placed
-&&  !variable_global_exists("magic_map_taken")
-&&  instance_exists(obj_frog_map) && instance_exists(obj_max)) {
+&&  global.magic_map_placed && !global.magic_map_taken
+&&  instance_exists(obj_frog_map) && instance_exists(obj_max)
+&&  !global.control_locked) {
     var _map = instance_find(obj_frog_map, 0);
     if (point_distance(_map.x, _map.y, obj_max.x, obj_max.y) < 48) {
         var _cam = view_camera[0];
@@ -235,7 +235,7 @@ if (show_morning_dialog) {
     var _gui_w  = display_get_gui_width();
     var _gui_h  = display_get_gui_height();
     var _win_w  = 620;
-    var _pad    = 14;
+    var _pad    = 8;
     var _line_h = 24;
     var _win_h  = 50 + 4 * _line_h + 50;
     var _win_x  = (_gui_w - _win_w) / 2;
@@ -254,27 +254,11 @@ if (show_morning_dialog) {
     // Фон
     scr_dialog_draw_bg(_win_x, _win_y, _win_w, _win_h);
 
-    // Иконка: восходящее солнце
-    var _cx = _win_x + 52;
-    var _cy = _win_y + _win_h / 2;
-    draw_set_color(make_color_rgb(180, 130, 80));
-    draw_rectangle(_cx - 24, _cy + 10, _cx + 24, _cy + 12, false);
-    draw_set_color(make_color_rgb(255, 195, 50));
-    draw_ellipse(_cx - 18, _cy - 14, _cx + 18, _cy + 10, false);
-    draw_set_color(make_color_rgb(255, 220, 100));
-    draw_ellipse(_cx - 14, _cy - 10, _cx + 14, _cy + 6, false);
-    draw_set_color(make_color_rgb(255, 220, 80));
-    for (var _r = 0; _r < 7; _r++) {
-        var _angle = -150 + _r * 25;
-        draw_line_width(_cx + lengthdir_x(22, _angle), _cy - 2 + lengthdir_y(22, _angle),
-                        _cx + lengthdir_x(30, _angle), _cy - 2 + lengthdir_y(30, _angle), 2);
-    }
-
     // Имя — жирным, в бирке
     scr_dialog_draw_speaker(_win_x, _win_y, _win_w, _win_h, "Макс:");
 
-    // Портрет Макса — справа
-    var _portrait_size = 100;
+    // Портрет Макса — справа (почти во весь квадрат отведённой под него области)
+    var _portrait_size = 108;
     var _portrait_x1 = _win_x + 565 * (_win_w / 580) - 8 - _portrait_size;
     scr_dialog_draw_portrait(_win_x, _win_y, _win_w, _win_h, _btn_y1, spr_max_portrait, _portrait_size);
 
@@ -475,4 +459,86 @@ if (is_sleeping && sleep_fade > 0.3) {
     draw_set_alpha(1);
     draw_set_halign(fa_left);
     draw_set_valign(fa_top);
+}
+
+// --- ПРЕДУПРЕЖДЕНИЕ: тестовый режим активен ---
+// TEST_DAY в Create_0 стоит не на 1 — билд пропускает часть сюжета.
+// Баннер держит это на виду, чтобы такое не ушло в релиз незамеченным.
+if (variable_instance_exists(id, "test_day_value") && test_day_value != 1) {
+    // Заметная плашка: "ТЕСТ: ДЕНЬ N" — обычная игра начинается при TEST_DAY = 1 (obj_day_controller / Create)
+    var _tb_text = "ТЕСТ: ДЕНЬ " + string(test_day_value);
+    draw_set_font(fnt_dialog_ru_bold);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    var _tb_w = string_width(_tb_text) + 20;
+    var _tb_h = string_height(_tb_text) + 10;
+    var _tb_x = (display_get_gui_width() - _tb_w) / 2;   // сверху по центру — не перекрывает HUD
+    draw_set_alpha(0.85);
+    draw_set_color(make_color_rgb(150, 20, 20));
+    draw_rectangle(_tb_x, 8, _tb_x + _tb_w, 8 + _tb_h, false);
+    draw_set_alpha(1);
+    draw_set_color(c_white);
+    draw_rectangle(_tb_x, 8, _tb_x + _tb_w, 8 + _tb_h, true);
+    draw_text(_tb_x + 10, 13, _tb_text);
+    draw_set_color(c_white);
+}
+
+// --- ЭКРАН ОТЛАДКИ КВЕСТОВЫХ ФЛАГОВ (F1) ---
+// Показывает все ключевые глобальные флаги сюжета разом, чтобы сразу
+// было видно, какой из них не выставился и где цепочка квеста остановилась.
+if (variable_instance_exists(id, "show_debug_flags") && show_debug_flags) {
+    var _flag_names = [
+        "meggi_intro_done", "tutorial_farm_step",
+        "has_diary", "diary_has_new", "diary_was_read",
+        "bakery_check_started", "bakery_check_done",
+        "coffee_letter_read", "coffee_made",
+        "fruit_quest_started", "fruit_quest_pending", "fruit_quest_done",
+        "secret_quest_started",
+        "pudding_quest", "pudding_ready", "pudding_on_porch",
+        "frog_night_pending", "frog_night_done", "frog_morning_dialog",
+        "magic_map_placed", "magic_map_taken",
+        "forest_found", "forest_glade_found", "frog_talk_done", "map_hotkey_hint_shown",
+        "kitten_arrived", "maggie_day2_started",
+        "ivan_quest_started", "ivan_quest_done",
+        "letters_read"
+    ];
+
+    var _px = 8; var _py = 30;
+    var _row_h = 16;
+    var _panel_w = 300;
+    var _panel_h = 20 + array_length(_flag_names) * _row_h;
+
+    draw_set_alpha(0.85);
+    draw_set_color(c_black);
+    draw_rectangle(_px, _py, _px + _panel_w, _py + _panel_h, false);
+    draw_set_alpha(1);
+
+    draw_set_font(fnt_ui);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+    draw_set_color(c_yellow);
+    draw_text(_px + 6, _py + 4, "F1: день " + string(day_index) + " " + day_get_time_string());
+
+    for (var _i = 0; _i < array_length(_flag_names); _i++) {
+        var _name = _flag_names[_i];
+        var _val_text;
+        if (!variable_global_exists(_name)) {
+            _val_text = "-- (не создан)";
+            draw_set_color(c_gray);
+        } else {
+            var _val = variable_global_get(_name);
+            if (is_array(_val)) {
+                _val_text = "[" + string(array_length(_val)) + "] " + string(_val);
+                draw_set_color(c_white);
+            } else if (is_bool(_val)) {
+                _val_text = string(_val);
+                draw_set_color(_val ? c_lime : c_red);
+            } else {
+                _val_text = string(_val);
+                draw_set_color(c_white);
+            }
+        }
+        draw_text(_px + 6, _py + 20 + _i * _row_h, _name + " = " + _val_text);
+    }
+    draw_set_color(c_white);
 }

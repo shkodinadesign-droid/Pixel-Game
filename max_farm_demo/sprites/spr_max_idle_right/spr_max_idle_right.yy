@@ -1,7 +1,7 @@
 {
   "$GMSprite":"v2",
   "%Name":"spr_max_idle_right",
-  "bboxMode":0,
+  "bboxMode":2,
   "bbox_bottom":47,
   "bbox_left":0,
   "bbox_right":29,
