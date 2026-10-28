@@ -8,3 +8,6 @@
 # OS
 .DS_Store
 Thumbs.db
+
+# артефакт сборки Igor
+/max_farm_demo/max_farm_demo.zip
