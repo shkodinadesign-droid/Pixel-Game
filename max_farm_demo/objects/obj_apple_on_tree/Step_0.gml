@@ -33,7 +33,8 @@ visible = !collected;
 // по низу ствола, поэтому якорь my_tree для глубины не подходит.
 var _crown_depth = undefined;
 with (obj_tree_apple) {
-    if (point_in_rectangle(other.x, other.y, x, y, x + sprite_width, y + sprite_height)) {
+    var _l = x - sprite_xoffset, _t = y - sprite_yoffset;   // точка привязки дерева — основание ствола
+    if (point_in_rectangle(other.x, other.y, _l, _t, _l + sprite_width, _t + sprite_height)) {
         _crown_depth = depth;
         break;
     }
