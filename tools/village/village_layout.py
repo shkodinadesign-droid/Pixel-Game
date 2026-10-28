@@ -12,7 +12,8 @@ DROP=['inst_55D93BF2','inst_3B33AEC2','inst_3A67705D','inst_48E11718','inst_673D
  'inst_6D80ECBE','inst_ECC0012','inst_4BEF6C47','inst_4E5E320B','inst_7E2EC2BF','inst_47A5C8C6','inst_7BCC6493',
  'inst_787C9C9','inst_70D83BA2']
 MOVE={'inst_JOSHUA_SHOP':(832,128),'inst_94745A7':(960,320),   # магазин и вход (то же смещение 128,192)
-      'inst_IVAN_NPC':(1200,340),'inst_7EA76492':(1316,316)}
+      'inst_IVAN_NPC':(1432,334),'inst_7EA76492':(1460,316),
+      'inst_MEAT_SHOP':(1360,286)}   # лавка Ивана над правой дорогой, дверью к дороге
 pl=[]
 def add(o,x,y): pl.append((o,int(x),int(y)))
 OAK,MAP,PINE,APP,PEAR='obj_tree_oak','obj_tree_maple','obj_tree_pine','obj_tree_apple','obj_tree_pear'
@@ -50,11 +51,11 @@ add(OAK,568,205); add(MAP,437,172); add(B2,494,214); add(PINE,661,218); add(MAP,
 add(OAK,363,110); add(MAP,625,80); add(OAK,740,152); add(MAP,836,142)
 add(OAK,1076,158); add(PINE,1136,196); add(APP,1229,276)
 add(MAP,960,70); # правая верхняя часть (вне кадра концепта)
-add(MAP,1330,240); add(PINE,1420,190); add(OAK,1530,150); add(MAP,1590,250)
+add(OAK,1530,150); add(MAP,1590,250)
 add(MAP,1450,60)
 # забор справа вверху
-for x in (1166,1230,1294,1358): add('obj_village_fence',x,82)
-add('obj_village_fence_post',1422,82)
+for x in (1166,1230,1294,1358): add('obj_village_fence',x,30)
+add('obj_village_fence_post',1422,30)
 # левая часть (вне кадра концепта)
 add(PINE,40,110); add(MAP,170,64); add(OAK,240,250)
 # ---------- левая зелёная зона: заборы вдоль дороги, изгородь ----------

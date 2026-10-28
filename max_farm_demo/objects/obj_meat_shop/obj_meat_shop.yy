@@ -1,7 +1,9 @@
 {
   "$GMObject":"",
   "%Name":"obj_meat_shop",
-  "eventList":[],
+  "eventList":[
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+  ],
   "managed":true,
   "name":"obj_meat_shop",
   "overriddenProperties":[],
@@ -30,7 +32,10 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":null,
+  "spriteId":{
+    "name":"spr_ivan_butcher",
+    "path":"sprites/spr_ivan_butcher/spr_ivan_butcher.yy",
+  },
   "spriteMaskId":null,
   "visible":true,
 }

@@ -531,6 +531,7 @@
     {"id":{"name":"obj_village_flower_lupine","path":"objects/obj_village_flower_lupine/obj_village_flower_lupine.yy",},},
     {"id":{"name":"obj_village_flower_yellow","path":"objects/obj_village_flower_yellow/obj_village_flower_yellow.yy",},},
     {"id":{"name":"obj_village_grass","path":"objects/obj_village_grass/obj_village_grass.yy",},},
+    {"id":{"name":"spr_ivan_butcher","path":"sprites/spr_ivan_butcher/spr_ivan_butcher.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
