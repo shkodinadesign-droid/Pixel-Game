@@ -11,8 +11,8 @@ DROP=['inst_55D93BF2','inst_3B33AEC2','inst_3A67705D','inst_48E11718','inst_673D
  'inst_1C64AFA0','inst_4F06F5C0','inst_24C6022F','inst_58AB53F7','inst_607A7E79','inst_5C571D34','inst_3725637A',
  'inst_6D80ECBE','inst_ECC0012','inst_4BEF6C47','inst_4E5E320B','inst_7E2EC2BF','inst_47A5C8C6','inst_7BCC6493',
  'inst_787C9C9','inst_70D83BA2']
-MOVE={'inst_JOSHUA_SHOP':(832,128),'inst_94745A7':(960,320),   # магазин и вход (то же смещение 128,192)
-      'inst_IVAN_NPC':(1432,334),'inst_7EA76492':(1460,316),
+MOVE={'inst_JOSHUA_SHOP':(831,139),'inst_94745A7':(955,320),   # новый спрайт 226x209: фасад на той же линии   # магазин и вход (то же смещение 128,192)
+      'inst_IVAN_NPC':(1446,334),'inst_7EA76492':(1460,316),
       'inst_MEAT_SHOP':(1360,286)}   # лавка Ивана над правой дорогой, дверью к дороге
 pl=[]
 def add(o,x,y): pl.append((o,int(x),int(y)))
@@ -27,9 +27,7 @@ add('obj_village_lamp',1173,472)         # 4: справа у скамейки
 add('obj_village_notice_board',757,267)  # информационный стенд слева от магазина
 add('obj_village_planter_square',790,299)
 add('obj_village_barrel',817,303)        # бочка слева
-add('obj_village_planter_square',846,352)   # ящики с цветами у фасада
-add('obj_village_planter_square',1045,352)
-add('obj_village_crate',1070,340)        # ящики справа
+# ящики с цветами у фасада и ящик справа теперь нарисованы в самом спрайте магазина
 add('obj_village_crates',1080,265)
 add('obj_village_planter_long',1082,297)
 add('obj_village_sign_aframe',1109,304)  # отдельно стоящая вывеска справа

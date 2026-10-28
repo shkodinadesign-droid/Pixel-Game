@@ -8,7 +8,7 @@
     "TileSerialiseData":[],
   },
   "name":"tls_village_square_paving",
-  "out_columns":8,
+  "out_columns":9,
   "out_tilehborder":2,
   "out_tilevborder":2,
   "parent":{

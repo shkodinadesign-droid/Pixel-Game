@@ -25,16 +25,23 @@ def conv(name,TH,K):
                     R+=r*a*wgt; G+=g*a*wgt; B+=b*a*wgt
             if tot and A/tot>=128: out[ty][tx]=(R/A,G/A,B/A,255)
     pts=[c[:3] for row in out for c in row if c[3]]
-    # k-means
     import random; random.seed(1)
-    cent=[pts[i] for i in sorted(random.sample(range(len(pts)),min(K,len(pts))))]
-    for it in range(25):
-        groups=[[] for _ in cent]
-        for q in pts:
-            j=min(range(len(cent)),key=lambda j:sum((q[i]-cent[j][i])**2 for i in range(3))); groups[j].append(q)
-        cent=[tuple(sum(v[i] for v in g)/len(g) for i in range(3)) if g else cent[j] for j,g in enumerate(groups)]
-    cent=[tuple(int(round(v)) for v in c) for c in cent]
-    res=[[ (min(cent,key=lambda c:sum((c[i]-px[i])**2 for i in range(3)))+(255,)) if px[3] else (0,0,0,0) for px in row] for row in out]
+    def kmeans(pts,K):
+        if not pts or K<=0: return []
+        cent=[pts[i] for i in sorted(random.sample(range(len(pts)),min(K,len(pts))))]
+        for it in range(25):
+            groups=[[] for _ in cent]
+            for q in pts:
+                j=min(range(len(cent)),key=lambda j:sum((q[i]-cent[j][i])**2 for i in range(3))); groups[j].append(q)
+            cent=[tuple(sum(v[i] for v in g)/len(g) for i in range(3)) if g else cent[j] for j,g in enumerate(groups)]
+        return [tuple(int(round(v)) for v in c) for c in cent]
+    # фиолетовые пиксели (виноград, люпины) — отдельная маленькая палитра, чтобы не слились с серым
+    purple=lambda q:q[2]>q[1]+18 and q[0]>q[1]-5
+    pp=[q for q in pts if purple(q)]; KP=4 if len(pp)>=8 else 0
+    cent=kmeans([q for q in pts if not purple(q)],K-KP); cp=kmeans(pp,KP)
+    near=lambda px,cs:min(cs,key=lambda c:sum((c[i]-px[i])**2 for i in range(3)))
+    res=[[ (near(px,cp if (cp and purple(px)) else cent)+(255,)) if px[3] else (0,0,0,0) for px in row] for row in out]
+    cent=cent+cp
     png.write(f'{OUT}/{name}.png',TW,TH,res)
     print(name,TW,'x',TH,'цветов',len(set(cent)))
 for n,(th,k) in JOBS.items(): conv(n,th,k)
