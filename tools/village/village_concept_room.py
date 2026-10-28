@@ -35,7 +35,7 @@ g=json.load(open(f'{V2}/ground.json'))['grid']
 flat=[v for row in g for v in row]
 data=gmtiles.encode(flat)
 tl=('    {"$GMRTileLayer":"","%Name":"ground_concept","depth":640,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"ground_concept","properties":[],"resourceType":"GMRTileLayer","resourceVersion":"2.0","tiles":{"SerialiseHeight":23,"SerialiseWidth":50,"TileCompressedData":['
-    +','.join(str(v) for v in data)+',],"TileDataFormat":1,},"tilesetId":{"name":"tls_village_square_paving","path":"tilesets/tls_village_square_paving/tls_village_square_paving.yy",},"userdefinedDepth":false,"visible":true,"x":0,"y":0,},\n')
+    +','.join(str(v) for v in data)+',],"TileDataFormat":1,},"tilesetId":{"name":"tls_village_plaza_curb_v3","path":"tilesets/tls_village_plaza_curb_v3/tls_village_plaza_curb_v3.yy",},"userdefinedDepth":false,"visible":true,"x":0,"y":0,},\n')
 a='    {"$GMRTileLayer":"","%Name":"ground_v1"'; assert a in s; s=s.replace(a,tl+a,1)
 i=s.index(a); j=s.index('"visible":true,"x":0,"y":0,}',i); k=s.index('"tilesetId"',i)
 assert j>k; s=s[:j]+'"visible":false,"x":0,"y":0,}'+s[j+len('"visible":true,"x":0,"y":0,}'):]

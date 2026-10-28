@@ -532,6 +532,8 @@
     {"id":{"name":"tls_village_ground_v1","path":"tilesets/tls_village_ground_v1/tls_village_ground_v1.yy",},},
     {"id":{"name":"tls_village_square_paving","path":"tilesets/tls_village_square_paving/tls_village_square_paving.yy",},},
     {"id":{"name":"tls_village","path":"tilesets/tls_village/tls_village.yy",},},
+    {"id":{"name":"spr_village_plaza_curb_v3","path":"sprites/spr_village_plaza_curb_v3/spr_village_plaza_curb_v3.yy",},},
+    {"id":{"name":"tls_village_plaza_curb_v3","path":"tilesets/tls_village_plaza_curb_v3/tls_village_plaza_curb_v3.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
