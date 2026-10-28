@@ -488,6 +488,8 @@
     {"id":{"name":"spr_tree_shadow_small","path":"sprites/spr_tree_shadow_small/spr_tree_shadow_small.yy",},},
     {"id":{"name":"spr_tree_shadow_medium","path":"sprites/spr_tree_shadow_medium/spr_tree_shadow_medium.yy",},},
     {"id":{"name":"spr_tree_shadow_large","path":"sprites/spr_tree_shadow_large/spr_tree_shadow_large.yy",},},
+    {"id":{"name":"spr_village_ground_v1","path":"sprites/spr_village_ground_v1/spr_village_ground_v1.yy",},},
+    {"id":{"name":"tls_village_ground_v1","path":"tilesets/tls_village_ground_v1/tls_village_ground_v1.yy",},},
     {"id":{"name":"rm_forest_entrance","path":"rooms/rm_forest_entrance/rm_forest_entrance.yy",},},
   ],
   "resourceType":"GMProject",
