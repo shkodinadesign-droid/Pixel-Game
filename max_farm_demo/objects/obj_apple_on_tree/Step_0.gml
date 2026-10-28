@@ -29,4 +29,14 @@ if (collected && collected_on_day >= 0 && instance_exists(obj_day_controller)) {
 }
 
 visible = !collected;
-depth = (my_tree != noone && instance_exists(my_tree)) ? (my_tree.depth - 1) : -bbox_bottom;
+// Плод рисуется поверх кроны дерева, на котором висит: дерево сортируется
+// по низу ствола, поэтому якорь my_tree для глубины не подходит.
+var _crown_depth = undefined;
+with (obj_tree_apple) {
+    if (point_in_rectangle(other.x, other.y, x, y, x + sprite_width, y + sprite_height)) {
+        _crown_depth = depth;
+        break;
+    }
+}
+if (!is_undefined(_crown_depth)) depth = _crown_depth - 1;
+else depth = (my_tree != noone && instance_exists(my_tree)) ? (my_tree.depth - 1) : -bbox_bottom;
