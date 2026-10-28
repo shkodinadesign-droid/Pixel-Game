@@ -1,0 +1,447 @@
+<title>Походка Макс: разбор</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #f3ecdd;
+    --paper-raised: #fbf7ec;
+    --ink: #2b2118;
+    --ink-soft: #6b5c48;
+    --line: rgba(43, 33, 24, 0.14);
+    --soil: #6b4328;
+    --soil-strong: #4a2d19;
+    --leaf: #4c7a35;
+    --leaf-bg: rgba(76, 122, 53, 0.12);
+    --clay: #c2503b;
+    --clay-bg: rgba(194, 80, 59, 0.1);
+    --sky: #3f6e99;
+    --sky-bg: rgba(63, 110, 153, 0.1);
+    --checker-a: #e4dcc8;
+    --checker-b: #ece5d4;
+    --radius: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1712;
+      --paper-raised: #241f18;
+      --ink: #ece2d0;
+      --ink-soft: #b4a58c;
+      --line: rgba(236, 226, 208, 0.14);
+      --soil: #c79a72;
+      --soil-strong: #e3c6a4;
+      --leaf: #8bc766;
+      --leaf-bg: rgba(139, 199, 102, 0.14);
+      --clay: #e58268;
+      --clay-bg: rgba(229, 130, 104, 0.14);
+      --sky: #7fb0dd;
+      --sky-bg: rgba(127, 176, 221, 0.14);
+      --checker-a: #211c15;
+      --checker-b: #26211a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1712;
+    --paper-raised: #241f18;
+    --ink: #ece2d0;
+    --ink-soft: #b4a58c;
+    --line: rgba(236, 226, 208, 0.14);
+    --soil: #c79a72;
+    --soil-strong: #e3c6a4;
+    --leaf: #8bc766;
+    --leaf-bg: rgba(139, 199, 102, 0.14);
+    --clay: #e58268;
+    --clay-bg: rgba(229, 130, 104, 0.14);
+    --sky: #7fb0dd;
+    --sky-bg: rgba(127, 176, 221, 0.14);
+    --checker-a: #211c15;
+    --checker-b: #26211a;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Figtree", system-ui, sans-serif;
+    line-height: 1.55;
+  }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+  }
+
+  header.page {
+    margin-bottom: 48px;
+  }
+
+  .eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .eyebrow .dot {
+    width: 7px; height: 7px; border-radius: 1px;
+    background: var(--leaf);
+    display: inline-block;
+  }
+
+  h1 {
+    font-family: "Pixelify Sans", "Figtree", sans-serif;
+    font-weight: 700;
+    font-size: clamp(30px, 4.6vw, 44px);
+    line-height: 1.12;
+    margin: 0 0 16px;
+    text-wrap: balance;
+  }
+
+  .lede {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .scope {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .scope div {
+    background: var(--paper-raised);
+    padding: 16px 18px;
+  }
+  .scope .k {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .scope .v { font-size: 14px; }
+  .scope .v.kept { color: var(--leaf); font-weight: 600; }
+
+  section.case {
+    margin-top: 64px;
+    padding-top: 40px;
+    border-top: 1px solid var(--line);
+  }
+
+  .case-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+
+  .case-title {
+    font-family: "Pixelify Sans", sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+  }
+
+  .sprite-name {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    padding: 3px 9px;
+    border-radius: 6px;
+  }
+
+  .verdict {
+    font-size: 15px;
+    color: var(--ink-soft);
+    max-width: 68ch;
+    margin: 10px 0 28px;
+  }
+  .verdict b { color: var(--ink); font-weight: 600; }
+
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 22px;
+  }
+  @media (max-width: 620px) {
+    .compare { grid-template-columns: 1fr; }
+  }
+
+  figure {
+    margin: 0;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  figure .tag {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  figure.before .tag { color: var(--clay); background: var(--clay-bg); }
+  figure.after .tag { color: var(--leaf); background: var(--leaf-bg); }
+
+  .stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px 0 26px;
+    background-image:
+      linear-gradient(45deg, var(--checker-a) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--checker-a) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--checker-a) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--checker-a) 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    background-color: var(--checker-b);
+  }
+  .stage img {
+    image-rendering: pixelated;
+    width: 176px;
+    height: auto;
+    display: block;
+  }
+
+  .strip-wrap {
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: var(--paper-raised);
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+  .strip-wrap .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .strip-wrap img {
+    image-rendering: pixelated;
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 6px;
+  }
+
+  .note {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .note code {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12.5px;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: var(--ink);
+  }
+
+  footer.report {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+  }
+  footer.report h2 {
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: 19px;
+    margin: 0 0 16px;
+  }
+  .filelist {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    overflow-x: auto;
+  }
+  .filelist .row {
+    display: flex;
+    gap: 10px;
+    padding: 5px 0;
+    white-space: nowrap;
+  }
+  .filelist .row + .row { border-top: 1px dashed var(--line); }
+  .filelist .op {
+    color: var(--leaf);
+    width: 1.4em;
+    flex-shrink: 0;
+  }
+  .filelist .path { color: var(--ink); }
+  .filelist .why { color: var(--ink-soft); font-style: normal; }
+
+  .backup {
+    margin-top: 18px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .backup code {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12.5px;
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2px 7px;
+    color: var(--ink);
+  }
+
+  .next {
+    margin-top: 28px;
+    font-size: 14px;
+  }
+  .next ol {
+    padding-left: 20px;
+    margin: 10px 0 0;
+  }
+  .next li { margin-bottom: 6px; }
+</style>
+
+<div class="wrap">
+
+  <header class="page">
+    <div class="eyebrow"><span class="dot"></span>spr_max_walk_left · spr_max_walk_right</div>
+    <h1>Что было не так с боковой походкой Макс</h1>
+    <p class="lede">
+      Построчный разбор альфа-канала всех 4 кадров обеих анимаций нашёл две разные
+      причины на двух разных спрайтах. Обе — дыры в прозрачности между ногой и
+      ботинком, просто разной формы. Ходьба вверх/вниз не тронута.
+    </p>
+
+    <div class="scope">
+      <div><div class="k">Размер / origin</div><div class="v">32×48, (0, 0) — без изменений</div></div>
+      <div><div class="k">Палитра и образ Макс</div><div class="v kept">не менялись</div></div>
+      <div><div class="k">Код, квесты, локации</div><div class="v kept">не менялись</div></div>
+      <div><div class="k">up / down</div><div class="v kept">не тронуты</div></div>
+    </div>
+  </header>
+
+  <section class="case">
+    <div class="case-head">
+      <div class="case-title">Нога «волочится»</div>
+      <div class="sprite-name">spr_max_walk_right</div>
+    </div>
+    <p class="verdict">
+      В исходнике между носком и ботинком шла <b>полностью прозрачная полоса в 2–3 пикселя</b>
+      на всех 4 кадрах (ряды y=40–42 из 48) — ботинок визуально не крепился к ноге и при
+      ходьбе казался отдельным, отстающим объектом. Разрыв закрыт переносом соседних
+      непрозрачных рядов в пустую полосу — без сдвига всей фигуры, чтобы ступня
+      осталась на той же линии земли, что и в остальных трёх направлениях.
+    </p>
+
+    <div class="compare">
+      <figure class="before">
+        <div class="tag">до</div>
+        <div class="stage"><img src="right-before.gif" alt="Ходьба вправо до исправления — ботинок отрывается от ноги"></div>
+      </figure>
+      <figure class="after">
+        <div class="tag">после</div>
+        <div class="stage"><img src="right-after.gif" alt="Ходьба вправо после исправления — нога и ботинок единое целое"></div>
+      </figure>
+    </div>
+
+    <div class="strip-wrap">
+      <div class="tag">4 кадра, зона ног — до</div>
+      <img src="right-legs-before.png" alt="4 кадра spr_max_walk_right до фикса, крупно">
+    </div>
+    <div class="strip-wrap">
+      <div class="tag">4 кадра, зона ног — после</div>
+      <img src="right-legs-after.png" alt="4 кадра spr_max_walk_right после фикса, крупно">
+    </div>
+    <p class="note">
+      Кадр 0 терял 2 ряда (y=41–42), кадры 1–3 — по 3 ряда (y=40–42). Высота разрыва
+      не была одинаковой, поэтому точечная правка одного кадра не чинила остальные —
+      пришлось определять границы разрыва отдельно в каждом кадре.
+    </p>
+  </section>
+
+  <section class="case">
+    <div class="case-head">
+      <div class="case-title">Лишняя полоска у ног</div>
+      <div class="sprite-name">spr_max_walk_left</div>
+    </div>
+    <p class="verdict">
+      Здесь разрыва между ногой и ботинком не было — вместо этого в ряду y=41
+      (место, где бедро переходит в голень) кадры 2 и 4 обрывались на 1–2 прозрачных
+      пикселя, а кадры 1 и 3 были сплошными. При проигрывании 4 кадров подряд это
+      читалось как мигающая вертикальная щель, появляющаяся через кадр. Прозрачные
+      пиксели в этой строке залиты цветом из ряда прямо над ними — силуэт, кадры не
+      сдвигались.
+    </p>
+
+    <div class="compare">
+      <figure class="before">
+        <div class="tag">до</div>
+        <div class="stage"><img src="left-before.gif" alt="Ходьба влево до исправления — мигающая полоска у бедра"></div>
+      </figure>
+      <figure class="after">
+        <div class="tag">после</div>
+        <div class="stage"><img src="left-after.gif" alt="Ходьба влево после исправления — силуэт стабилен"></div>
+      </figure>
+    </div>
+
+    <div class="strip-wrap">
+      <div class="tag">4 кадра, зона ног — до</div>
+      <img src="left-legs-before.png" alt="4 кадра spr_max_walk_left до фикса, крупно">
+    </div>
+    <div class="strip-wrap">
+      <div class="tag">4 кадра, зона ног — после</div>
+      <img src="left-legs-after.png" alt="4 кадра spr_max_walk_left после фикса, крупно">
+    </div>
+    <p class="note">
+      Разделение ног ниже этой строки (голень/ступня) — часть нормального бокового
+      силуэта шага и не трогалось, правка точечная: один конкретный ряд в двух
+      конкретных кадрах.
+    </p>
+  </section>
+
+  <footer class="report">
+    <h2>Что изменено на диске</h2>
+    <div class="filelist">
+      <div class="row"><span class="op">M</span><span class="path">sprites/spr_max_walk_right/{4 PNG кадра + 4 layers/*.png}</span></div>
+      <div class="row"><span class="op">M</span><span class="path">sprites/spr_max_walk_left/{2 из 4 PNG кадра + их layers/*.png}</span></div>
+      <div class="row"><span class="op">·</span><span class="path">spr_max_walk_up, spr_max_walk_down</span> <span class="why">— не открывались</span></div>
+      <div class="row"><span class="op">·</span><span class="path">.yy, .yyp, код, комнаты, квесты</span> <span class="why">— не менялись</span></div>
+    </div>
+
+    <p class="backup">
+      Резервная копия двух исходных папок спрайтов (до правок) лежит в
+      <code>_backup_walk_anim_&lt;дата_время&gt;/</code> в корне репозитория.
+    </p>
+
+    <div class="next">
+      Дальше в GameMaker:
+      <ol>
+        <li>File → Close → Open Project (иначе IDE не увидит новые байты PNG)</li>
+        <li>Открыть <code>spr_max_walk_left</code> / <code>spr_max_walk_right</code> — превью кадров должно совпадать со страницей «после» выше</li>
+        <li>Прогнать Макс влево и вправо в комнате фермы — проверить силуэт вживую на реальной скорости анимации</li>
+      </ol>
+    </div>
+  </footer>
+
+</div>
