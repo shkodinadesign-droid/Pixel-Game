@@ -23,7 +23,7 @@
   ],
   "name":"spr_maggie_idle_diary",
   "nineSlice":null,
-  "origin":0,
+  "origin":9,
   "parent":{
     "name":"idle",
     "path":"folders/Sprites/characters/Maggie/idle.yy",
@@ -64,7 +64,7 @@
     "resourceType":"GMSequence",
     "resourceVersion":"2.0",
     "seqHeight":56.0,
-    "seqWidth":32.0,
+    "seqWidth":37.0,
     "showBackdrop":true,
     "showBackdropImage":false,
     "timeUnits":1,
@@ -77,7 +77,7 @@
     ],
     "visibleRange":null,
     "volume":1.0,
-    "xorigin":0,
+    "xorigin":5,
     "yorigin":0,
   },
   "swatchColours":null,
@@ -88,5 +88,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":32,
+  "width":37,
 }

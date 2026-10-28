@@ -37,7 +37,7 @@ if (instance_exists(obj_max)) {
 }
 
 // Скорость движения
-move_speed = 1.5;
+move_speed = 1.65;   // чуть быстрее; в паре с image_speed = 1/6 ноги не скользят
 
 // Фаза ухода
 leave_phase = 0;

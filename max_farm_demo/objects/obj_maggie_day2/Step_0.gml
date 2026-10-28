@@ -27,7 +27,7 @@ switch (state) {
                     obj_max.state = "idle";
                 }
                 sprite_index = spr_maggie_walk_down;
-                image_speed  = 0.15;
+                image_speed  = 1/6;   // ровно 12 шагов игры на кадр — шаги одинаковые
 
                 // Котик — ставим сразу в steady-state позицию (34px позади Мэгги по X)
                 // Мэгги входит слева, поэтому "позади" = левее неё
@@ -68,7 +68,7 @@ switch (state) {
                 else if (_dir >= 135 && _dir < 225)  sprite_index = spr_maggie_walk_left;
                 else if (_dir >= 225 && _dir < 315)  sprite_index = spr_maggie_walk_down;
                 else                                  sprite_index = spr_magiie_walk_right;
-                image_speed = 0.15;
+                image_speed = 1/6;
 
                 // Макс поворачивается навстречу
                 if (_dist < 80 && instance_exists(obj_max)) {
@@ -114,7 +114,7 @@ switch (state) {
         if (_ld > 4) {
             x = round(x + lengthdir_x(move_speed, point_direction(x, y, _lx, y)));
             sprite_index = spr_maggie_walk_left;
-            image_speed  = 0.15;
+            image_speed  = 1/6;
         } else {
             // Мэгги ушла — котик идёт к Макс
             global.kitten_arrived = true;

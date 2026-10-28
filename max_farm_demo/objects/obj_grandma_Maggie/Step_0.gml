@@ -9,13 +9,13 @@ switch (state) {
     case "appearing":
         // Мэгги появилась сверху — идёт вниз к игроку
         sprite_index = spr_maggie_walk_down;
-        image_speed = 0.15;
+        image_speed = 1/6;   // ровно 12 шагов игры на кадр — шаги одинаковые
         state = "walking_to_player";
         break;
 
     case "walking_to_player":
         // Идём к игроку
-        image_speed = 0.15;
+        image_speed = 1/6;
 
         if (instance_exists(obj_max)) {
             // Цель - рядом с игроком (справа от него)
@@ -102,7 +102,7 @@ switch (state) {
             } else {
                 sprite_index = spr_magiie_walk_right;
             }
-            image_speed = 0.15;
+            image_speed = 1/6;
         } else {
             global.meggi_intro_done = true;
             instance_destroy();
