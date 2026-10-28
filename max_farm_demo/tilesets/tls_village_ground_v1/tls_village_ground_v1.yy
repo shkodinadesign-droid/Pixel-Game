@@ -8,7 +8,7 @@
     "TileSerialiseData":[],
   },
   "name":"tls_village_ground_v1",
-  "out_columns":12,
+  "out_columns":10,
   "out_tilehborder":2,
   "out_tilevborder":2,
   "parent":{
