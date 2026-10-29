@@ -37,6 +37,8 @@ def walk(ls):
             if o in SKIP: continue
             s,vis=objspr(o)
             sx,sy=i['scaleX'],i['scaleY']
+            VAR={'obj_village_hedge_row':[f'spr_village_hedge_mod_h{k}' for k in (1,2,3,4)],'obj_village_hedge_col':[f'spr_village_hedge_mod_v{k}' for k in (1,2,3)]}
+            if o in VAR: s=VAR[o][(int(i['x'])//32+int(i['y'])//32)%len(VAR[o])]
             if o=='obj_pear_on_tree': sx=sy=27/24
             if s and vis:
                 m=objinfo(o)[0] or s

@@ -1,9 +1,9 @@
 {
   "$GMObject":"",
-  "%Name":"obj_joshua_house",
+  "%Name":"obj_justin_house",
   "eventList":[],
   "managed":true,
-  "name":"obj_joshua_house",
+  "name":"obj_justin_house",
   "overriddenProperties":[],
   "parent":{
     "name":"village obj",
@@ -31,8 +31,8 @@
   "resourceVersion":"2.0",
   "solid":true,
   "spriteId":{
-    "name":"spr_joshua_house",
-    "path":"sprites/spr_joshua_house/spr_joshua_house.yy",
+    "name":"spr_justin_house",
+    "path":"sprites/spr_justin_house/spr_justin_house.yy",
   },
   "spriteMaskId":null,
   "visible":true,
