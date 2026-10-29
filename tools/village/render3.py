@@ -44,6 +44,7 @@ def walk(ls):
                 m=objinfo(o)[0] or s
                 l_,t_,r_,b_,mox,moy=sprbb(m)
                 bottom=i['y']+(b_-moy)*sy
+                if objinfo(o)[1]=='obj_village_ground_decal': bottom=-10000
                 items.append([bottom,0,o,s,i['x'],i['y'],sx,sy])
             if False:   # якоря больше не рисуют иконки
                 ic='spr_apple_icon' if o=='obj_apple_tree_fruit' else 'spr_pear_icon'
