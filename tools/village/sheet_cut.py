@@ -9,10 +9,11 @@ def isbg(c):
     a=sum(c[:3])/3
     return 176<=a<=228 and max(c[:3])-min(c[:3])<26 and c[0]>=c[1]>=c[2]
 bg=[[False]*w for _ in range(h)]
+ALPHA=any(p[y][x][3]<128 for y in range(0,h,16) for x in range(0,w,16))
 st=[(x,0) for x in range(w)]+[(x,h-1) for x in range(w)]+[(0,y) for y in range(h)]+[(w-1,y) for y in range(h)]
 while st:
     x,y=st.pop()
-    if bg[y][x] or not isbg(p[y][x]): continue
+    if bg[y][x] or not (p[y][x][3]<128 if ALPHA else isbg(p[y][x])): continue
     bg[y][x]=True
     for dx,dy in((1,0),(-1,0),(0,1),(0,-1)):
         nx,ny=x+dx,y+dy
