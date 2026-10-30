@@ -8,7 +8,7 @@
     "TileSerialiseData":[],
   },
   "name":"tls_village_sand_roads_32",
-  "out_columns":4,
+  "out_columns":5,
   "out_tilehborder":2,
   "out_tilevborder":2,
   "parent":{

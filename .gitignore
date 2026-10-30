@@ -11,3 +11,6 @@ Thumbs.db
 
 # артефакт сборки Igor
 /max_farm_demo/max_farm_demo.zip
+
+# кэш вывода тайлсетов GameMaker
+max_farm_demo/tilesets/*/output_tileset.png
