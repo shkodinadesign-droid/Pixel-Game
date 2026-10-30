@@ -663,6 +663,7 @@
     {"id":{"name":"tls_village_plaza_curb_v3","path":"tilesets/tls_village_plaza_curb_v3/tls_village_plaza_curb_v3.yy",},},
     {"id":{"name":"tls_village_square_paving","path":"tilesets/tls_village_square_paving/tls_village_square_paving.yy",},},
     {"id":{"name":"tls_village","path":"tilesets/tls_village/tls_village.yy",},},
+    {"id":{"name":"obj_justin_house","path":"objects/obj_justin_house/obj_justin_house.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
