@@ -1,0 +1,59 @@
+stage,asset_id,master_target,gm_resource_now,category,note
+01,grass_base,tls_village_ground_32,ground_concept (tls_village_plaza_curb_v3) + Background #418C50,update,"Трава запечена в общий атлас площади/бордюров; цвет фона #418C50 не совпадает с мастером #909D4D"
+01,grass_variants,tls_village_ground_32,—,missing,"Нужны 2-3 очень спокойных варианта 32x32"
+01,ground_sparse_grass,spr_village_ground_tufts,"spr_village2_grass_tuft, spr_village3_grass, spr_grass1",update,"Есть пучки травы (проходимые), сверить цвет с мастером"
+02,sand_center,tls_village_dirt_32,ground_concept (tls_village_plaza_curb_v3),missing,"Песок сгенерирован под текущую схему, не модульный"
+02,sand_straights,tls_village_dirt_32,—,missing,
+02,sand_outer_corners,tls_village_dirt_32,—,missing,
+02,sand_inner_corners,tls_village_dirt_32,—,missing,
+02,sand_tjunction_cross,tls_village_dirt_32,—,missing,"По мастеру нужны Т-перекрёстки (верх/низ/лево) и угол к лесной тропе"
+03,pave_base,tls_village_plaza_32,"ground_concept; tls_village_square_paving (не используется)",update,"Текущая плитка светло-серая, в мастере тёплая бежевая"
+03,pave_variants,tls_village_plaza_32,—,missing,
+03,pave_central_ring,tls_village_plaza_circle_32,—,missing,"Красное кольцо в центре площади — сейчас нет"
+03,pave_central_bed,spr_village_circle_flowerbed,—,missing,"Круглая клумба в центре — сейчас нет"
+04,curb_straights,tls_village_curbs_32,ground_concept (V3 бордюры),update,"V3 запечены в общий атлас; нужен отдельный модульный тайлсет"
+04,curb_outer_corners,tls_village_curbs_32,ground_concept,update,
+04,curb_inner_corners,tls_village_curbs_32,ground_concept,update,
+04,curb_grass,tls_village_curbs_32,ground_concept,update,
+04,curb_sand,tls_village_curbs_32,ground_concept,update,
+05,river_water_base,tls_village_river_32,"spr_village2_river_* (8), spr_village3_river_r*c* (16)",missing,"Есть кусочки речки, но не по сетке 32 и в другом стиле берега; как тайлы непригодны"
+05,river_water_sparkles,tls_village_river_32,—,missing,
+05,river_bank_straights,tls_village_river_32,—,missing,
+05,river_bank_corners,tls_village_river_32,—,missing,
+05,river_stones_plants,spr_village_river_decor,"spr_village2_lily, spr_village2_cattails, spr_village3_cattails, spr_village2_bank_cattails, spr_village2_river_rocks",reuse,"Кувшинки, рогоз, камни — подходят, сверить цвет"
+05,river_bridge,spr_village_wood_bridge,"spr_village2_bridge 104x92, spr_village3_bridge 72x53",update,"Мост в мастере — поперёк вертикальной речки на тропе к ферме; сверить ориентацию и ширину"
+05,river_bridge_edges,tls_village_bridge_32,—,optional,"Нужен, только если мост модульный"
+06,tree_oak,spr_village_oak,spr_oak 144x136 (obj_tree_oak; общий с лесом),update,"Стиль отличается (жёлто-оливковый, крупнее). Делать отдельный спрайт деревни, общий не трогать"
+06,tree_deciduous,spr_village_deciduous,spr_maple 104x116 (общий с фермой и лесом),update,то же
+06,tree_pine,spr_village_pine,spr_pine 88x120 (общий с фермой и лесом),update,то же
+06,tree_pine_small,spr_village_pine_small,—,missing,
+06,tree_trunk_colliders,obj_village_tree_*,"obj_tree_* (parent obj_solid) + spr_tree_shadow_*",update,"Новые объекты деревни с маской по стволу; тени переиспользовать"
+07,bush_small,spr_village_bush_small,"spr_bush (общий), spr_village3_bush_rock",update,"Сверить цвет с оливковым мастером"
+07,bush_medium,spr_village_bush_medium,spr_bush_2 (общий),update,
+07,bush_cluster,spr_village_bush_cluster,—,missing,
+07,hedge_modular,tls_village_hedge_32,"spr_village_hedge_mod_h1-h4, _v1-_v3 (32px), spr_village3_hedge_long/small/thin, obj_village_hedge_row/col",reuse,"Модульная изгородь уже есть (объекты, не тайлы); сверить цвет"
+08,flower_white,spr_village_flower_white,spr_flover_3 (общий с фермой),reuse,"Есть, сверить размер"
+08,flower_yellow,spr_village_flower_yellow,spr_flover_1 (общий с фермой),reuse,
+08,flower_purple,spr_village_lavender,spr_flover_2 (люпин),reuse,
+08,flowerbed_long,spr_village_flowerbed_long,"spr_village3_planter_long, spr_village2_planter_long, spr_village_planter_long",reuse,"Расставлены вручную — не трогать"
+08,flowerbed_small,spr_village_flowerbed_small,"spr_village3_planter_small, spr_village2_planter_small, spr_village3_planter_lupine",reuse,
+08,flower_pot,spr_village_flower_pot,spr_village3_pot,reuse,
+09,house_maggie,spr_house_maggie,spr_maggie_house 232x190 + obj_maggie_house,reuse,"Готов, в комнату не поставлен. Кот запечён в спрайт"
+09,cat_on_maggie_roof,spr_cat_sleep_roof,—,optional,"Если анимировать — убрать кота из дома, чтобы не было двух"
+09,house_justin,spr_house_justin,spr_justin_house 248x160 + obj_justin_house,reuse,"Готов. Бельё, дрова, почтовый ящик запечены. В игре крупнее мастера (~216)"
+09,store_joshua,spr_joshua_shop,spr_joshua_shop 226x209 + obj_joshua_shop,reuse,"Точно совпадает с мастером по масштабу"
+09,butcher_ivan,spr_ivan_butcher,spr_ivan_butcher 224x203 + obj_meat_shop,reuse,"Увеличен на 15% по твоей просьбе — крупнее мастера (~172)"
+09,cart_jack,spr_jack_wagon,spr_farmer_jack_wagon 131x97 + obj_farmer_jack_wagon,reuse,"Готов, лошадь отдельно"
+10,phone_booth,spr_village_phone_booth,spr_village2_phone_booth 87x109,reuse,
+10,bench,spr_village_bench,"spr_village2_bench 84x45 (как в мастере); spr_bench старая",reuse,"В деревне сейчас две разные лавочки"
+10,lantern_street,spr_village_streetlamp,"spr_village2_lamp 23x86; spr_village_lamp 21x84",reuse,"Две версии фонаря (×1 и ×3) — выбрать одну"
+10,bulletin_board,spr_village_noticeboard,spr_village2_notice_board 84x81,reuse,
+10,forest_sign,spr_village_forest_sign,spr_forest_sign 136x64 (obj_forest_sign),update,"В мастере столб с двумя стрелками у тропы в лес + отдельная доска справа на площади"
+10,wood_fence,tls_village_wood_fence_32,"spr_village3_fence_long/short/post, spr_village3_gate",reuse,"Заборы спрайтами, не тайлами — так даже удобнее"
+10,wood_barrel,spr_village_barrel,spr_village_barrel,reuse,
+10,wood_crates,spr_village_crate,"spr_village_crate, spr_village_crates",reuse,
+10,laundry,spr_village_laundry,"запечено в spr_justin_house",reuse,
+10,trash_bin,—,—,missing,"Урна на правой площади есть в мастере, в реестре нет"
+10,a_frame_sign,—,spr_village_sign_aframe,reuse,"У вагончика"
+10,rocks,—,"spr_forest_big_stone (obj_village_rock), spr_village2_rocks",reuse,
+10,roof_shadows,spr_village_building_shadow,—,optional,

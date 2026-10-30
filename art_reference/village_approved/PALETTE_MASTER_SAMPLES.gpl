@@ -1,0 +1,30 @@
+GIMP Palette
+Name: PixelGame_Approved_Master_PixelSamples_2026_10_30
+Columns: 8
+# RGB from approved master screenshot, sample points in PALETTE_SOURCE.csv
+144 157  77 grass_base
+143 156  74 grass_base_2
+146 159  77 grass_ground_light
+142 156  76 foliage_shadow
+101 129  56 foliage_mid
+ 50  70  55 foliage_dark
+ 67  98  56 pine_mid
+ 49  72  54 bush_olive
+221 167  97 sand_path
+140 152  69 sand_path_light
+221 165  94 sand_path_edge
+224 195 157 plaza_stone
+223 195 157 plaza_stone_alt
+224 192 157 plaza_border
+ 36 133 161 river_water
+ 42  99 131 river_water_alt
+ 82  60  56 river_water_light
+ 89  46  28 store_roof
+110  60  33 store_wall
+137 102  64 maggie_wood
+ 78  30  18 justin_roof
+156  53  38 butcher_red_roof
+134 120 119 stone_rock
+246 233 214 flower_white
+191 112  45 flower_orange
+ 93  78 104 flower_purple

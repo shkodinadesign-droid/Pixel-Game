@@ -1,0 +1,61 @@
+﻿stage,group,asset_id,target_file,resource_type,reference_category,rule,current_status
+00,REFERENCE,MASTER_LOCK,MASTER_REFERENCE_APPROVED_UNCHANGED.png,reference,master,Original composition; do not edit.,fixed
+00,REFERENCE,PALETTE_LOCK,PALETTE_MASTER_SAMPLES.gpl,palette,master,"Color source reference, verify samples visually before final indexed art.",sampled
+01,GROUND,grass_base,tls_village_ground_32.png,tileset,grass,"Plain olive grass, primary seamless 32x32.",create
+01,GROUND,grass_variants,tls_village_ground_32.png,tileset,grass,"2-3 VERY sparse variants, no scattered noise.",create
+01,GROUND,ground_sparse_grass,spr_village_ground_tufts.png,sprite,grass,Tiny grass clumps; decoration not collision.,create
+02,DIRT_ROADS,sand_center,tls_village_dirt_32.png,tileset,path,"Warm sandy road center, continuous repeat.",create
+02,DIRT_ROADS,sand_straights,tls_village_dirt_32.png,tileset,path,Four directions of road/grass edge.,create
+02,DIRT_ROADS,sand_outer_corners,tls_village_dirt_32.png,tileset,path,Four outer rounded corners.,create
+02,DIRT_ROADS,sand_inner_corners,tls_village_dirt_32.png,tileset,path,Four concave corners.,create
+02,DIRT_ROADS,sand_tjunction_cross,tls_village_dirt_32.png,tileset,path,"T, cross & narrow-path connections matching approved geometry.",create
+03,PLAZA_PAVING,pave_base,tls_village_plaza_32.png,tileset,square,One 32x32 light square stone; thin soft joint.,create
+03,PLAZA_PAVING,pave_variants,tls_village_plaza_32.png,tileset,square,2-3 low-contrast texture/color variants only.,create
+03,PLAZA_PAVING,pave_central_ring,tls_village_plaza_circle_32.png,tileset,circle,Circular warm red stone ring: modular pieces.,create
+03,PLAZA_PAVING,pave_central_bed,spr_village_circle_flowerbed.png,sprite,circle,Round planted flowerbed located at plaza center.,create
+04,CURBS,curb_straights,tls_village_curbs_32.png,tileset,curb,"Edges all four orientations: beige, not white.",create
+04,CURBS,curb_outer_corners,tls_village_curbs_32.png,tileset,curb,4 soft rounded outer corners.,create
+04,CURBS,curb_inner_corners,tls_village_curbs_32.png,tileset,curb,"4 inner corners, no seams.",create
+04,CURBS,curb_grass,tls_village_curbs_32.png,tileset,curb,Curb transitions against grass.,create
+04,CURBS,curb_sand,tls_village_curbs_32.png,tileset,curb,Curb transitions against dirt path.,create
+05,RIVER_BRIDGE,river_water_base,tls_village_river_32.png,tileset,water,Seamless turquoise water center.,create
+05,RIVER_BRIDGE,river_water_sparkles,tls_village_river_32.png,tileset,water,"Few simple ripples, quiet variation.",create
+05,RIVER_BRIDGE,river_bank_straights,tls_village_river_32.png,tileset,water,"Bank all four orientations, matching olive grass.",create
+05,RIVER_BRIDGE,river_bank_corners,tls_village_river_32.png,tileset,water,Four convex and four concave bank corners.,create
+05,RIVER_BRIDGE,river_stones_plants,spr_village_river_decor.png,sprite,water,"Stones, reeds, lilypads, optional transparent overlays.",create
+05,RIVER_BRIDGE,river_bridge,spr_village_wood_bridge.png,sprite,bridge,"Wood bridge across river, modular if path width changes.",create
+05,RIVER_BRIDGE,river_bridge_edges,tls_village_bridge_32.png,tileset,bridge,Bridge start/middle/end if modularization is needed.,create
+06,TREES,tree_oak,spr_village_oak.png,sprite,trees,"Largest broad deciduous tree from master, separate alpha.",verify_reuse
+06,TREES,tree_deciduous,spr_village_deciduous.png,sprite,trees,Medium broadleaf tree.,verify_reuse
+06,TREES,tree_pine,spr_village_pine.png,sprite,trees,"Tall pine, master olive palette.",verify_reuse
+06,TREES,tree_pine_small,spr_village_pine_small.png,sprite,trees,Smaller pine variant.,verify_reuse
+06,TREES,tree_trunk_colliders,obj_village_tree_*.yy,object,trees,Collision only by trunks; not leaf crowns.,verify_reuse
+07,BUSHES_HEDGES,bush_small,spr_village_bush_small.png,sprite,bushes,Small olive bush.,verify_reuse
+07,BUSHES_HEDGES,bush_medium,spr_village_bush_medium.png,sprite,bushes,Medium rounded bush.,verify_reuse
+07,BUSHES_HEDGES,bush_cluster,spr_village_bush_cluster.png,sprite,bushes,One simple 2-3 bush group.,create
+07,BUSHES_HEDGES,hedge_modular,tls_village_hedge_32.png,tileset,hedge,Long/short/corners/endcap coherent olive low detail.,verify_reuse
+08,FLOWERS_PLANTS,flower_white,spr_village_flower_white.png,sprite,flowers,A few white daisy pixels; isolated.,create
+08,FLOWERS_PLANTS,flower_yellow,spr_village_flower_yellow.png,sprite,flowers,Few yellow flowers; isolated.,create
+08,FLOWERS_PLANTS,flower_purple,spr_village_lavender.png,sprite,flowers,Purple lavender mini stalk.,create
+08,FLOWERS_PLANTS,flowerbed_long,spr_village_flowerbed_long.png,sprite,flowers,Long wood planter matching master.,create
+08,FLOWERS_PLANTS,flowerbed_small,spr_village_flowerbed_small.png,sprite,flowers,Small wooden flower box.,create
+08,FLOWERS_PLANTS,flower_pot,spr_village_flower_pot.png,sprite,flowers,Small terracotta/wood pot.,create
+09,BUILDINGS,house_maggie,spr_house_maggie.png,sprite,house,"Upper left by river; grey roof, sleeping grey cat.",verify_reuse
+09,BUILDINGS,cat_on_maggie_roof,spr_cat_sleep_roof.png,sprite,house,Optional independent layer to animate; no duplicate cat.,optional
+09,BUILDINGS,house_justin,spr_house_justin.png,sprite,house,"Lower left; red roof, laundry, firewood.",verify_reuse
+09,BUILDINGS,store_joshua,spr_joshua_shop.png,sprite,house,"Center, GENERAL STORE, preserve exact form.",verify_reuse
+09,BUILDINGS,butcher_ivan,spr_ivan_butcher.png,sprite,house,"Right, red/cream awning and meat display.",verify_reuse
+09,BUILDINGS,cart_jack,spr_jack_wagon.png,sprite,house,"Lower center-right, cart without horse.",verify_reuse
+10,PROPS,phone_booth,spr_village_phone_booth.png,sprite,props,Red phone booth on right plaza.,verify_reuse
+10,PROPS,bench,spr_village_bench.png,sprite,props,"Wood bench, dark steel ends.",verify_reuse
+10,PROPS,lantern_street,spr_village_streetlamp.png,sprite,props,"Warm yellow glass, dark upright post.",verify_reuse
+10,PROPS,bulletin_board,spr_village_noticeboard.png,sprite,props,Timber stand with two notices.,verify_reuse
+10,PROPS,forest_sign,spr_village_forest_sign.png,sprite,props,"Top-right direction sign, forest path.",verify_reuse
+10,PROPS,wood_fence,tls_village_wood_fence_32.png,tileset,props,"Posts and horizontal rails, modular.",verify_reuse
+10,PROPS,wood_barrel,spr_village_barrel.png,sprite,props,Small wood barrel; no duplicated scattered barrels.,verify_reuse
+10,PROPS,wood_crates,spr_village_crate.png,sprite,props,Wood crate simple compact.,verify_reuse
+10,PROPS,laundry,spr_village_laundry.png,sprite,props,Simple line and hanging white sheet by Justin.,verify_reuse
+10,PROPS,roof_shadows,spr_village_building_shadow.png,sprite,props,Only if needed to fit background lighting; not mandatory.,optional
+11,ASSEMBLY_QA,map_assembly,rm_village,room,integration,"Assemble using approved geography, preserve manual placement and routes.",integration
+11,ASSEMBLY_QA,collisions,rm_village,room,integration,"Accessibility of doors, forest exit, bridge and stalls.",integration
+11,ASSEMBLY_QA,comparison,pixel_diff_visual_report.png,qa,integration,Side-by-side master vs actual GameMaker screenshot.,integration
