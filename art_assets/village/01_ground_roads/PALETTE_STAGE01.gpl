@@ -1,0 +1,12 @@
+GIMP Palette
+Name: PixelGame_Village_Terrain_01_MASTER
+Columns: 4
+# From approved master color regions
+143 156  75 grass_master
+113 135  66 grass_mark_dark
+159 170  91 grass_mark_light
+128 144  68 grass_border
+222 165  94 sand_master
+230 176 106 sand_light
+211 157  87 sand_edge
+204 151  82 sand_dark

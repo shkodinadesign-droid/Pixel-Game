@@ -1,0 +1,3 @@
+Size GRASS: 128x128 (4x4); SAND: 128x160 (4x5).
+Seam-compatibility checks for masks: 128, mismatches: 0.
+All nearest-neighbor, RGBA PNG, 32x32 cell pitch.
