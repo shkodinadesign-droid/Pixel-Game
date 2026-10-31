@@ -29,6 +29,27 @@ if (room == rm_bakery && global.bakery_check_started && !global.bakery_check_don
     global.bakery_check_done = true;
 }
 
+// --- Квест: собрать яблоки и груши — выполнен, когда в саду фермы не осталось несобранных плодов ---
+// Плоды висят на деревьях как obj_apple_on_tree / obj_pear_on_tree (собираются через
+// obj_apple_tree_fruit / obj_pear_tree). Пока плод не прочитал своё состояние (collected) — не считаем.
+if (room == rm_farm && global.fruit_quest_started && !global.fruit_quest_done
+&&  (instance_exists(obj_apple_on_tree) || instance_exists(obj_pear_on_tree))) {
+    var _fruit_left  = false;
+    var _fruit_ready = true;
+    with (obj_apple_on_tree) {
+        if (!variable_instance_exists(id, "collected")) _fruit_ready = false;
+        else if (!collected) _fruit_left = true;
+    }
+    with (obj_pear_on_tree) {
+        if (!variable_instance_exists(id, "collected")) _fruit_ready = false;
+        else if (!collected) _fruit_left = true;
+    }
+    if (_fruit_ready && !_fruit_left) {
+        global.fruit_quest_done      = true;
+        global.show_fruit_done_popup = true;
+    }
+}
+
 // --- Кнопка "Далее" попапа про фрукты ---
 if (variable_global_exists("show_fruit_done_popup") && global.show_fruit_done_popup) {
     if (mouse_check_button_pressed(mb_left)) {
