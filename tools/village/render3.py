@@ -27,7 +27,7 @@ def spr(s):
         w,h,p=png.read(f'{P}/sprites/{s}/{f}.png'); seq=t['sequence']
         cache[s]=(w,h,p,seq['xorigin'],seq['yorigin'],t['bbox_bottom'])
     return cache[s]
-SKIP={'obj_forest_blocker','obj_camera','obj_ui_inventory','obj_ui_hp','obj_ui_coins_hud','obj_day_controller','obj_game_controller','obj_spawn_controller'}
+SKIP={'obj_forest_blocker','obj_village_water_block','obj_camera','obj_ui_inventory','obj_ui_hp','obj_ui_coins_hud','obj_day_controller','obj_game_controller','obj_spawn_controller'}
 items=[]
 def walk(ls):
     for L in ls:
@@ -44,7 +44,7 @@ def walk(ls):
                 m=objinfo(o)[0] or s
                 l_,t_,r_,b_,mox,moy=sprbb(m)
                 bottom=i['y']+(b_-moy)*sy
-                if objinfo(o)[1]=='obj_village_ground_decal': bottom=-10000
+                if objinfo(o)[1]=='obj_village_ground_decal' or o in ('obj_village_bridge','obj_village_plaza_grass_spot'): bottom=-10000
                 items.append([bottom,0,o,s,i['x'],i['y'],sx,sy])
             if False:   # якоря больше не рисуют иконки
                 ic='spr_apple_icon' if o=='obj_apple_tree_fruit' else 'spr_pear_icon'
@@ -86,6 +86,13 @@ def draw_tiles():
     def w2(ls):
         for L in ls:
             if L['resourceType']=='GMRTileLayer' and L.get('visible',True) and L['%Name'] not in os.environ.get('HIDE','').split(','): tl.append(L)
+            if L['resourceType']=='GMRBackgroundLayer' and L.get('spriteId') and L.get('visible',True):
+                bw,bh,bp,_,_,_=spr(L['spriteId']['name'])
+                for yy_ in range(ch):
+                    for xx in range(cw):
+                        X,Y=int(xx/SC+x0),int(yy_/SC+y0)
+                        if L.get('stretch'): X,Y=X*bw//W,Y*bh//H
+                        if 0<=X<bw and 0<=Y<bh and bp[Y][X][3]: img[yy_][xx]=tuple(bp[Y][X][:3])+(255,)
             if L['resourceType']=='GMRBackgroundLayer' and not L.get('spriteId'):
                 c=L['colour']; col=(c&255,(c>>8)&255,(c>>16)&255,255)
                 for yy_ in range(ch):
