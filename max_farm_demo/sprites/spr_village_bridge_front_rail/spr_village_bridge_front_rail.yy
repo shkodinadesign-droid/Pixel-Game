@@ -1,27 +1,27 @@
 {
   "$GMSprite":"v2",
-  "%Name":"spr_village_bridge_master",
+  "%Name":"spr_village_bridge_front_rail",
   "bboxMode":2,
-  "bbox_bottom":108,
-  "bbox_left":6,
+  "bbox_bottom":126,
+  "bbox_left":5,
   "bbox_right":154,
-  "bbox_top":7,
+  "bbox_top":117,
   "collisionKind":1,
   "collisionTolerance":0,
   "DynamicTexturePage":false,
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"f008782d-fb71-4535-8372-8e9d55181e9b","name":"f008782d-fb71-4535-8372-8e9d55181e9b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"188d3b9c-e909-4f03-9ac6-ccf48994e0dd","name":"188d3b9c-e909-4f03-9ac6-ccf48994e0dd","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
   "height":128,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"dfddee51-0c34-4c87-a3e0-67d2306e26c0","blendMode":0,"displayName":"default","isLocked":false,"name":"dfddee51-0c34-4c87-a3e0-67d2306e26c0","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"99269c78-0ae6-419d-aae7-7eb0be94304e","blendMode":0,"displayName":"default","isLocked":false,"name":"99269c78-0ae6-419d-aae7-7eb0be94304e","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
-  "name":"spr_village_bridge_master",
+  "name":"spr_village_bridge_front_rail",
   "nineSlice":null,
   "origin":0,
   "parent":{
@@ -33,7 +33,7 @@
   "resourceVersion":"2.0",
   "sequence":{
     "$GMSequence":"v1",
-    "%Name":"spr_village_bridge_master",
+    "%Name":"spr_village_bridge_front_rail",
     "autoRecord":true,
     "backdropHeight":768,
     "backdropImageOpacity":0.5,
@@ -57,7 +57,7 @@
       "resourceType":"KeyframeStore<MomentsEventKeyframe>",
       "resourceVersion":"2.0",
     },
-    "name":"spr_village_bridge_master",
+    "name":"spr_village_bridge_front_rail",
     "playback":1,
     "playbackSpeed":30.0,
     "playbackSpeedType":0,
@@ -71,8 +71,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"f008782d-fb71-4535-8372-8e9d55181e9b","path":"sprites/spr_village_bridge_master/spr_village_bridge_master.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"1ca9e8a9-91fd-4a1c-84c9-cb370990b535","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"188d3b9c-e909-4f03-9ac6-ccf48994e0dd","path":"sprites/spr_village_bridge_front_rail/spr_village_bridge_front_rail.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"0478abd7-01d2-4fd4-99c3-6225405f37f5","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,

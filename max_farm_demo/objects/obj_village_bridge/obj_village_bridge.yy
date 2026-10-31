@@ -30,8 +30,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_village_bridge_master",
-    "path":"sprites/spr_village_bridge_master/spr_village_bridge_master.yy",
+    "name":"spr_village_bridge_deck",
+    "path":"sprites/spr_village_bridge_deck/spr_village_bridge_deck.yy",
   },
   "spriteMaskId":null,
   "visible":true,

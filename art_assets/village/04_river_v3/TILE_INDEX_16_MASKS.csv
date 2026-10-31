@@ -1,0 +1,21 @@
+﻿tile_index_0_based,tile_index_1_based,col,row,name,water_corners,notes
+0,1,0,0,corner_mask_00,none,Water bit NW=1 NE=2 SE=4 SW=8
+1,2,1,0,corner_mask_01,NW,Water bit NW=1 NE=2 SE=4 SW=8
+2,3,2,0,corner_mask_02,NE,Water bit NW=1 NE=2 SE=4 SW=8
+3,4,3,0,corner_mask_03,NW+NE,Water bit NW=1 NE=2 SE=4 SW=8
+4,5,0,1,corner_mask_04,SE,Water bit NW=1 NE=2 SE=4 SW=8
+5,6,1,1,corner_mask_05,NW+SE,Water bit NW=1 NE=2 SE=4 SW=8
+6,7,2,1,corner_mask_06,NE+SE,Water bit NW=1 NE=2 SE=4 SW=8
+7,8,3,1,corner_mask_07,NW+NE+SE,Water bit NW=1 NE=2 SE=4 SW=8
+8,9,0,2,corner_mask_08,SW,Water bit NW=1 NE=2 SE=4 SW=8
+9,10,1,2,corner_mask_09,NW+SW,Water bit NW=1 NE=2 SE=4 SW=8
+10,11,2,2,corner_mask_10,NE+SW,Water bit NW=1 NE=2 SE=4 SW=8
+11,12,3,2,corner_mask_11,NW+NE+SW,Water bit NW=1 NE=2 SE=4 SW=8
+12,13,0,3,corner_mask_12,SE+SW,Water bit NW=1 NE=2 SE=4 SW=8
+13,14,1,3,corner_mask_13,NW+SE+SW,Water bit NW=1 NE=2 SE=4 SW=8
+14,15,2,3,corner_mask_14,NE+SE+SW,Water bit NW=1 NE=2 SE=4 SW=8
+15,16,3,3,corner_mask_15,NW+NE+SE+SW,Water bit NW=1 NE=2 SE=4 SW=8
+16,17,0,4,water_ripple_1,NW+NE+SE+SW,Subtle variation; tile edges equal to water base
+17,18,1,4,water_ripple_2,NW+NE+SE+SW,Subtle variation; tile edges equal to water base
+18,19,2,4,water_ripple_3,NW+NE+SE+SW,Subtle variation; tile edges equal to water base
+19,20,3,4,grass_low_detail,none,Optional sparse grass; do not use globally if farm grass already approved

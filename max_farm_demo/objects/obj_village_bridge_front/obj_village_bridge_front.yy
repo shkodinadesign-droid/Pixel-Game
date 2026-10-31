@@ -31,8 +31,8 @@
   "resourceVersion":"2.0",
   "solid":true,
   "spriteId":{
-    "name":"spr_village_bridge_front",
-    "path":"sprites/spr_village_bridge_front/spr_village_bridge_front.yy",
+    "name":"spr_village_bridge_front_rail",
+    "path":"sprites/spr_village_bridge_front_rail/spr_village_bridge_front_rail.yy",
   },
   "spriteMaskId":null,
   "visible":true,

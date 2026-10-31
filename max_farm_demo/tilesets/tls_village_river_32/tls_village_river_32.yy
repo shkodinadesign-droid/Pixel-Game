@@ -1,13 +1,13 @@
 {
   "$GMTileSet":"v1",
-  "%Name":"tls_village_river",
+  "%Name":"tls_village_river_32",
   "autoTileSets":[],
   "macroPageTiles":{
     "SerialiseHeight":0,
     "SerialiseWidth":0,
     "TileSerialiseData":[],
   },
-  "name":"tls_village_river",
+  "name":"tls_village_river_32",
   "out_columns":8,
   "out_tilehborder":2,
   "out_tilevborder":2,
@@ -18,8 +18,8 @@
   "resourceType":"GMTileSet",
   "resourceVersion":"2.0",
   "spriteId":{
-    "name":"spr_village_river_tiles",
-    "path":"sprites/spr_village_river_tiles/spr_village_river_tiles.yy",
+    "name":"spr_village_river_32",
+    "path":"sprites/spr_village_river_32/spr_village_river_32.yy",
   },
   "spriteNoExport":false,
   "textureGroupId":{
@@ -34,5 +34,5 @@
   "tileWidth":32,
   "tilexoff":0,
   "tileyoff":0,
-  "tile_count":64,
+  "tile_count":16,
 }
