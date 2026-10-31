@@ -8,7 +8,7 @@
     "TileSerialiseData":[],
   },
   "name":"tls_village_river_32",
-  "out_columns":8,
+  "out_columns":4,
   "out_tilehborder":2,
   "out_tilevborder":2,
   "parent":{
