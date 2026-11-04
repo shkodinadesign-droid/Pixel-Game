@@ -4,7 +4,6 @@
 # усреднение по площади, альфа 0/255, своя палитра k-means у каждого спрайта, обрезка обрывков соседей.
 import sys,os,random
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__))); import png
-SRC,OUT=sys.argv[1],sys.argv[2]
 SCALE=96/342          # самое крупное лиственное дерево -> 96 px (2 роста Макс, как в мастер-сцене)
 K={'trees':20,'bushes':14,'grass':6,'flowers':8}
 def down(p,w,h,f):
@@ -55,13 +54,15 @@ def clean(img,cat):
 def crop(img):
     ys=[y for y,r in enumerate(img) if any(c[3] for c in r)]; xs=[x for x in range(len(img[0])) if any(r[x][3] for r in img)]
     return [r[min(xs):max(xs)+1] for r in img[min(ys):max(ys)+1]]
-for cat in ('trees','bushes','grass','flowers'):
-    os.makedirs(f'{OUT}/{cat}',exist_ok=True)
-    for fn in sorted(os.listdir(f'{SRC}/{cat}')):
-        w,h,p=png.read(f'{SRC}/{cat}/{fn}')
-        img=crop(clean(down(p,w,h,SCALE),cat))
-        pts=[c[:3] for r in img for c in r if c[3]]; cent=kmeans(pts,K[cat])
-        near=lambda px:min(cent,key=lambda c:sum((c[i]-px[i])**2 for i in range(3)))
-        img=[[near(c)+(255,) if c[3] else (0,0,0,0) for c in r] for r in img]
-        png.write(f'{OUT}/{cat}/{fn}',len(img[0]),len(img),img)
-        print(cat,fn,len(img[0]),'x',len(img))
+if __name__=='__main__':
+    SRC,OUT=sys.argv[1],sys.argv[2]
+    for cat in ('trees','bushes','grass','flowers'):
+        os.makedirs(f'{OUT}/{cat}',exist_ok=True)
+        for fn in sorted(os.listdir(f'{SRC}/{cat}')):
+            w,h,p=png.read(f'{SRC}/{cat}/{fn}')
+            img=crop(clean(down(p,w,h,SCALE),cat))
+            pts=[c[:3] for r in img for c in r if c[3]]; cent=kmeans(pts,K[cat])
+            near=lambda px:min(cent,key=lambda c:sum((c[i]-px[i])**2 for i in range(3)))
+            img=[[near(c)+(255,) if c[3] else (0,0,0,0) for c in r] for r in img]
+            png.write(f'{OUT}/{cat}/{fn}',len(img[0]),len(img),img)
+            print(cat,fn,len(img[0]),'x',len(img))

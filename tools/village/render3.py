@@ -75,8 +75,8 @@ def blit(s,x,y,sx,sy):
     for cy in range(max(0,int((ty-y0)*SC)),min(ch,int((ty+h*sy-y0)*SC)+1)):
         py=int(((cy/SC+y0)-ty)/sy)
         if not 0<=py<h: continue
-        for cx in range(max(0,int((lx-x0)*SC)),min(cw,int((lx+w*sx-x0)*SC)+1)):
-            px=int(((cx/SC+x0)-lx)/sx)
+        for cx in range(max(0,int((min(lx,lx+w*sx)-x0)*SC)),min(cw,int((max(lx,lx+w*sx)-x0)*SC)+1)):
+            px=int(((cx/SC+x0)-lx)/sx)   # при sx<0 (зеркало) px идёт от правого края
             if 0<=px<w:
                 r,g,b,a=p[py][px]
                 if a==255 or (a>100 and not s.startswith('spr_tree_shadow')): img[cy][cx]=(r,g,b,255)
@@ -137,8 +137,8 @@ for _,_,o,s,x,y,sx,sy in items:
     for cy in range(max(0,int((ty-y0)*SC)),min(ch,int((ty+h*sy-y0)*SC)+1)):
         py=int(((cy/SC+y0)-ty)/sy)
         if not 0<=py<h: continue
-        for cx in range(max(0,int((lx-x0)*SC)),min(cw,int((lx+w*sx-x0)*SC)+1)):
-            px=int(((cx/SC+x0)-lx)/sx)
+        for cx in range(max(0,int((min(lx,lx+w*sx)-x0)*SC)),min(cw,int((max(lx,lx+w*sx)-x0)*SC)+1)):
+            px=int(((cx/SC+x0)-lx)/sx)   # при sx<0 (зеркало) px идёт от правого края
             if 0<=px<w and p[py][px][3]>100: img[cy][cx]=p[py][px][:3]+(255,)
 if os.environ.get('MASKS'):
     for _,_,o,s,x,y,sx,sy in items:

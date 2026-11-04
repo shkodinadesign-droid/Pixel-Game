@@ -31,8 +31,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_nature_02_grass",
-    "path":"sprites/spr_nature_02_grass/spr_nature_02_grass.yy",
+    "name":"spr_nature_grass_02",
+    "path":"sprites/spr_nature_grass_02/spr_nature_grass_02.yy",
   },
   "spriteMaskId":null,
   "visible":true,
