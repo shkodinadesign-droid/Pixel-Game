@@ -1,5 +1,5 @@
-# Партия 08 (v5): новые домики деревни — магазин Джошуа, мясная лавка Ивана (лист shops_v5.png) и дом Джастина
-# (justin_house_v5.png) из art_incoming/village/08_houses/v5. Фон у листов чёрный и непрозрачный: убирается
+# Партия 08 (v5): новые домики деревни — магазин Джошуа, мясная лавка Ивана (лист shops_v5.png), дом Джастина
+# (justin_house_v5.png) и дом Мэгги (maggie_house_v5.png) из art_incoming/village/08_houses/v5. Фон у листов чёрный и непрозрачный: убирается
 # заливкой от краёв (почти чёрные пиксели, связанные с краем), тёмные контуры внутри рисунка остаются.
 # Скамейки по бокам магазина в спрайт не входят (это отдельный объект obj_village2_bench).
 # Картинки заменяются на месте (те же спрайты и объекты), маска — в тех же долях, что у прежней;
@@ -8,9 +8,11 @@ import sys,os,re
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__))); import png,yy
 from b06_nature_convert import down,kmeans,clean,crop
 A,P=sys.argv[1],sys.argv[2]
+ONLY=sys.argv[3].split(',') if len(sys.argv)>3 else None   # заменить только эти спрайты
 SHOPS=0.44     # общий масштаб листа магазинов: магазин 227 px в ширину, как прежний
 JOBS={'spr_joshua_shop':('shops_v5.png',(191,0,709,10**6),SHOPS),'spr_ivan_butcher':('shops_v5.png',(900,0,1400,10**6),SHOPS),
-      'spr_justin_house':('justin_house_v5.png',(0,0,10**6,10**6),248/1052)}
+      'spr_justin_house':('justin_house_v5.png',(0,0,10**6,10**6),248/1052),
+      'spr_maggie_house':('maggie_house_v5.png',(0,0,10**6,10**6),232/1072)}
 def keyed(fn):
     w,h,p=png.read(f'{A}/{fn}'); bg=lambda c:max(c[:3])<=24
     seen=[[False]*w for _ in range(h)]; st=[(x,y) for x in range(w) for y in (0,h-1)]+[(x,y) for y in range(h) for x in (0,w-1)]
@@ -23,6 +25,7 @@ def keyed(fn):
 src={}
 rp=f'{P}/rooms/rm_village/rm_village.yy'; room=open(rp).read()
 for name,(fn,(x0,y0,x1,y1),f) in JOBS.items():
+    if ONLY and name not in ONLY: continue
     if fn not in src: src[fn]=keyed(fn)
     part=crop([r[x0:x1] for r in src[fn][y0:y1]]); pw,ph=len(part[0]),len(part)
     img=crop(clean(down(part,pw,ph,f),'trees'))
