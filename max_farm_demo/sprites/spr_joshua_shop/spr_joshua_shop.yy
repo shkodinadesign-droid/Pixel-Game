@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_joshua_shop",
   "bboxMode":0,
-  "bbox_bottom":208,
+  "bbox_bottom":234,
   "bbox_left":0,
-  "bbox_right":225,
+  "bbox_right":227,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":209,
+  "height":235,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"fff1ad70-60d5-473b-8853-2867432869ac","blendMode":0,"displayName":"default","isLocked":false,"name":"fff1ad70-60d5-473b-8853-2867432869ac","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":226,
+  "width":228,
 }
