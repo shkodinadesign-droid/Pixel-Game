@@ -83,7 +83,8 @@ if P:
     open(f'{d}/{name}.yy','w').write(y)
     gm_res.obj(P,obj,name,None,events={(0,0,'Create_0.gml'):
         '// ===== КОТ МЭГГИ — CREATE =====\n// Спит на крыше дома Мэгги и тихонько дышит (анимация спрайта, 2 кадра/с).\n'
-        '// Рисуется сразу над домом: глубина на 1 меньше глубины слоя.\ndepth = layer_get_depth(layer) - 1;\n'},solid=False)
+        '// Рисуется сразу над домом: дом (obj_village_prop) стоит на глубине -bbox_bottom, кот — на 1 ближе.\n'
+        'var _house = instance_nearest(x, y, obj_maggie_house);\ndepth = (_house != noone) ? -_house.bbox_bottom - 1 : -y;\n'},solid=False)
     gm_res.add_to_yyp(P,[name,obj])
     rp=f'{P}/rooms/rm_village/rm_village.yy'; r=open(rp).read(); assert obj not in r
     m=re.search(r'\{"\$GMRInstance":"v4","%Name":"inst_3F64F4CE".*?\},(?=\n)',r).group(0)   # дом Мэгги — образец строки
