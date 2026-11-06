@@ -218,7 +218,14 @@ switch (state) {
     case "walking_to_bed":
     case "wander":
     case "going_home_door":
-        sprite_index = spr_kitten_walk_strip4;
+        // Идёт больше по вертикали — спиной (вверх) или мордой (вниз); иначе боком (влево — через image_xscale)
+        var _kdx = x - xprevious;
+        var _kdy = y - yprevious;
+        if (abs(_kdy) > abs(_kdx) * 1.2) {
+            sprite_index = (_kdy > 0) ? spr_kitten_walk_down : spr_kitten_walk_up;
+        } else if (abs(_kdx) > abs(_kdy) * 1.2 || (sprite_index != spr_kitten_walk_down && sprite_index != spr_kitten_walk_up)) {
+            sprite_index = spr_kitten_walk_strip4;
+        }
         image_speed  = 0.2;
         break;
     case "sit_near":
