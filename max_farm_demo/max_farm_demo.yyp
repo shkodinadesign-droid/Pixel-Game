@@ -721,6 +721,8 @@
     {"id":{"name":"tls_village_sand_roads_32","path":"tilesets/tls_village_sand_roads_32/tls_village_sand_roads_32.yy",},},
     {"id":{"name":"tls_village_square_paving","path":"tilesets/tls_village_square_paving/tls_village_square_paving.yy",},},
     {"id":{"name":"tls_village","path":"tilesets/tls_village/tls_village.yy",},},
+    {"id":{"name":"spr_maggie_cat_sleep","path":"sprites/spr_maggie_cat_sleep/spr_maggie_cat_sleep.yy",},},
+    {"id":{"name":"obj_maggie_cat","path":"objects/obj_maggie_cat/obj_maggie_cat.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
