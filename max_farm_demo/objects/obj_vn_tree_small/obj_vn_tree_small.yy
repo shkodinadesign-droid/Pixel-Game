@@ -6,8 +6,8 @@
   "name":"obj_vn_tree_small",
   "overriddenProperties":[],
   "parent":{
-    "name":"village obj",
-    "path":"folders/Objects/village obj.yy",
+    "name":"все",
+    "path":"folders/Objects/все.yy",
   },
   "parentObjectId":{
     "name":"obj_village_prop",
