@@ -14,6 +14,13 @@ if (keyboard_check_pressed(vk_escape) || keyboard_check_pressed(ord("E"))) {
     exit;
 }
 
+// Закрытие по крестику
+if (click_press && mx >= close_x && mx < close_x + 30 && my >= close_y && my < close_y + 30) {
+    global.control_locked = false;
+    instance_destroy();
+    exit;
+}
+
 // Закрытие по клику вне панели
 if (click_press) {
     if (mx < panel_x || mx > panel_x + panel_w ||
@@ -30,10 +37,10 @@ if (click_press) {
         for (var _c = 0; _c < grid_cols; _c++) {
             var _idx = _r * grid_cols + _c;
             if (_idx >= item_def_count) continue;
-            var _sx = fridge_grid_x + _c * (slot_size + slot_gap);
-            var _sy = grid_y        + _r * (slot_size + slot_gap);
-            if (mx >= _sx && mx <= _sx + slot_size &&
-                my >= _sy && my <= _sy + slot_size) {
+            var _sx = fridge_grid_x + _c * slot_step_x;
+            var _sy = grid_y        + _r * slot_step_y;
+            if (mx >= _sx && mx < _sx + slot_size &&
+                my >= _sy && my < _sy + slot_size) {
                 var _id = item_defs[_idx].id;
                 if (fridge_get_amount(_id) > 0) {
                     fridge_remove(_id, 1);
@@ -48,10 +55,10 @@ if (click_press) {
         for (var _c = 0; _c < grid_cols; _c++) {
             var _idx = _r * grid_cols + _c;
             if (_idx >= item_def_count) continue;
-            var _sx = player_grid_x + _c * (slot_size + slot_gap);
-            var _sy = grid_y        + _r * (slot_size + slot_gap);
-            if (mx >= _sx && mx <= _sx + slot_size &&
-                my >= _sy && my <= _sy + slot_size) {
+            var _sx = player_grid_x + _c * slot_step_x;
+            var _sy = grid_y        + _r * slot_step_y;
+            if (mx >= _sx && mx < _sx + slot_size &&
+                my >= _sy && my < _sy + slot_size) {
                 var _id = item_defs[_idx].id;
                 if (inventory_get_amount(_id) > 0) {
                     inventory_remove(_id, 1);

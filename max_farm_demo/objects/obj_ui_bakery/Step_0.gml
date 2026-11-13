@@ -96,36 +96,28 @@ for (var i = array_length(splash_anims) - 1; i >= 0; i--) {
 }
 
 // --- Переключение рецепта (стрелки) ---
-if (cook_anim == 0 && !cook_done && click_press) {
-    var _arr_w = 26;
-    var _nav_y = tab_y;
-    var _nav_h = tab_h + 4;
-    if (my >= _nav_y && my <= _nav_y + _nav_h) {
-        var _count = array_length(visible_recipes);
-        if (mx >= right_x && mx <= right_x + _arr_w) {
-            var _prev = (selected_recipe - 1 + _count) mod _count;
-            if (_prev != selected_recipe) {
-                selected_recipe = _prev;
-                bowl_items   = [];
-                fly_anims    = [];
-                splash_anims = [];
-            }
-        }
-        if (mx >= right_x + right_w - _arr_w && mx <= right_x + right_w) {
-            var _next = (selected_recipe + 1) mod _count;
-            if (_next != selected_recipe) {
-                selected_recipe = _next;
-                bowl_items   = [];
-                fly_anims    = [];
-                splash_anims = [];
-            }
-        }
+if (cook_anim == 0 && !cook_done && click_press && my >= arr_y && my < arr_y + 20) {
+    var _count = array_length(visible_recipes);
+    var _new   = selected_recipe;
+    if (mx >= arr_l_x && mx < arr_l_x + 20) _new = (selected_recipe - 1 + _count) mod _count;
+    if (mx >= arr_r_x && mx < arr_r_x + 20) _new = (selected_recipe + 1) mod _count;
+    if (_new != selected_recipe) {
+        selected_recipe = _new;
+        bowl_items   = [];
+        fly_anims    = [];
+        splash_anims = [];
     }
 }
 
 // --- Закрытие (только пока не началась готовка) ---
 if (cook_anim == 0 && !cook_done) {
     if (keyboard_check_pressed(vk_escape) || keyboard_check_pressed(ord("E"))) {
+        global.control_locked = false;
+        instance_destroy();
+        exit;
+    }
+
+    if (click_press && mx >= close_x && mx < close_x + 30 && my >= close_y && my < close_y + 30) {
         global.control_locked = false;
         instance_destroy();
         exit;
@@ -151,8 +143,8 @@ if (cook_anim == 0 && !cook_done) {
     for (var i = 0; i < _ing_count; i++) {
         var _col = i mod cells_cols;
         var _row = i div cells_cols;
-        var _cx  = right_x + _col * (cell_size + cell_gap);
-        var _cy  = cell_area_y + _row * (cell_size + cell_gap);
+        var _cx  = cells_x + _col * cell_step_x;
+        var _cy  = cell_area_y + _row * cell_step_y;
 
         if (mx >= _cx && mx <= _cx + cell_size &&
             my >= _cy && my <= _cy + cell_size) {

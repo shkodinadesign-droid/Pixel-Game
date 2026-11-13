@@ -12,18 +12,30 @@ for (var _i = 0; _i < array_length(global.recipes); _i++) {
 }
 selected_recipe = 0;
 
+// Книга-подложка spr_storage_bg (836x470, как дневник): слева рецепт и ингредиенты, справа миска; рисуется 1:1
 var gui_w = display_get_gui_width();
 var gui_h = display_get_gui_height();
+panel_w = sprite_get_width(spr_storage_bg);
+panel_h = sprite_get_height(spr_storage_bg);
+panel_x = round((gui_w - panel_w) / 2);
+panel_y = round((gui_h - panel_h) / 2);
 
-panel_w = 560;
-panel_h = 490;
-panel_x = floor((gui_w - panel_w) / 2);
-panel_y = floor((gui_h - panel_h) / 2);
+// Разметка (пиксели подложки)
+title_y   = panel_y + 108;            // центр табличек
+left_cx   = panel_x + 236;            // центр левой страницы
+right_cx  = panel_x + 606;            // центр правой страницы
+hint_y    = panel_y + 372;
+close_x   = panel_x + 790;            // кнопка-крестик 30x30
+close_y   = panel_y + 14;
 
-// Левая область — миска
-bowl_area_w = 200;
-bowl_cx     = panel_x + bowl_area_w / 2;
-bowl_cy     = panel_y + 50 + (panel_h - 90) / 2;
+// Стрелки листания рецептов (20x20) и номер рецепта между ними
+arr_y     = panel_y + 140;
+arr_l_x   = left_cx - 86;
+arr_r_x   = left_cx + 66;
+
+// Миска — по центру правой страницы
+bowl_cx     = right_cx;
+bowl_cy     = panel_y + 228;
 bowl_rx     = 72;   // полуширина миски
 bowl_ry     = 52;   // полувысота миски
 
@@ -33,20 +45,13 @@ bowl_items = [];
 // Анимации полёта ингредиентов
 fly_anims = [];
 
-// Правая область — чеклист + ячейки
-right_x  = panel_x + bowl_area_w + 20;
-right_w  = panel_w - bowl_area_w - 28;
-
-// Вкладки рецептов
-tab_w  = floor((right_w - 6) / 2);
-tab_h  = 22;
-tab_y  = panel_y + 42;
-
-// Ячейки ингредиентов
-cell_size   = 60;
-cell_gap    = 28;
+// Ячейки ингредиентов 48x48: 3 в ряд, под ячейкой — название
+cell_size   = 48;
+cell_step_x = 80;
+cell_step_y = 92;
 cells_cols  = 3;
-cell_area_y = panel_y + 246;
+cells_x     = left_cx - 24 - cell_step_x;
+cell_area_y = panel_y + 176;
 
 // Hover
 hover_cell = -1;
@@ -63,11 +68,11 @@ cook_done_timer = 0;
 drink_phase = false;
 drink_timer = 0;
 
-// Кнопка Готовить — под ячейками, справа
-btn_w = right_w;
-btn_h = 48;
-btn_x = right_x;
-btn_y = cell_area_y + 2 * (cell_size + cell_gap) + 6;
+// Кнопка "Готовить" (плашка 200x28) — под миской
+btn_w = 200;
+btn_h = 28;
+btn_x = right_cx - 100;
+btn_y = panel_y + 316;
 
 // Анимации всплеска при попадании в миску
 splash_anims = [];

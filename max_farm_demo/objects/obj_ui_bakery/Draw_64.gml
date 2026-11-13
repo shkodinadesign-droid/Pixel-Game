@@ -26,31 +26,30 @@ draw_set_color(c_black);
 draw_rectangle(0, 0, display_get_gui_width(), display_get_gui_height(), false);
 draw_set_alpha(1);
 
-// --- Панель (бежевый прямоугольник — поверхность стола) ---
-draw_set_color(make_color_rgb(240, 225, 190));
-draw_roundrect_ext(panel_x, panel_y, panel_x + panel_w, panel_y + panel_h, 8, 8, false);
-draw_set_color(make_color_rgb(160, 120, 70));
-draw_roundrect_ext(panel_x, panel_y, panel_x + panel_w, panel_y + panel_h, 8, 8, true);
+// --- Книга (как дневник): слева рецепт, справа миска ---
+draw_sprite(spr_storage_bg, 0, panel_x, panel_y);
 
-// Заголовок
-draw_set_font(fnt_ui);
+// Крестик
+var _cl_hover = (mx >= close_x && mx < close_x + 30 && my >= close_y && my < close_y + 30);
+draw_sprite(_cl_hover ? spr_ui_close_hover : spr_ui_close_normal, 0, close_x, close_y);
+
+// Заголовки в табличках: название рецепта слева, "Миска" справа
+var _r_title = visible_recipes[selected_recipe];
+draw_set_font(fnt_dialog_ru_bold);
 draw_set_halign(fa_center);
-draw_set_valign(fa_top);
-draw_set_color(make_color_rgb(80, 50, 20));
-draw_text(panel_x + panel_w / 2, panel_y + 10, "ПЕКАРНЯ");
+draw_set_valign(fa_middle);
+draw_set_color(make_color_rgb(70, 40, 15));
+draw_text(left_cx,  title_y, _r_title.name);
+draw_text(right_cx, title_y, "Миска");
 
-// Подсказка закрытия
+// Подсказки внизу страниц
 draw_set_font(fnt_ui);
-draw_set_halign(fa_right);
 draw_set_color(make_color_rgb(130, 100, 70));
-draw_text(panel_x + panel_w - 12, panel_y + 12, "[E] закрыть");
-
-// Разделитель
-draw_set_color(make_color_rgb(160, 120, 70));
-draw_line(panel_x + bowl_area_w + 10, panel_y + 40, panel_x + bowl_area_w + 10, panel_y + panel_h - 10);
+draw_text(left_cx,  hint_y, "Клик по ингредиенту - в миску");
+draw_text(right_cx, hint_y, "[E] закрыть");
 
 // =======================================================
-// ЛЕВАЯ ЧАСТЬ — МИСКА
+// ПРАВАЯ СТРАНИЦА — МИСКА
 // =======================================================
 
 // Тень миски
@@ -176,96 +175,29 @@ if (cook_done) {
 }
 
 // =======================================================
-// ПРАВАЯ ЧАСТЬ — РЕЦЕПТ + ЯЧЕЙКИ
+// ЛЕВАЯ СТРАНИЦА — НОМЕР РЕЦЕПТА + ЯЧЕЙКИ
 // =======================================================
 
 var _r = visible_recipes[selected_recipe];
 var _ing_count = array_length(_r.ingredients);
 
-// --- Стрелки навигации рецептов ---
-var _arr_w  = 26;
-var _nav_y  = tab_y;
-var _nav_h  = tab_h + 4;
-var _arr_lx = right_x;
-var _arr_rx = right_x + right_w - _arr_w;
-var _hover_l = (mx >= _arr_lx && mx <= _arr_lx + _arr_w && my >= _nav_y && my <= _nav_y + _nav_h);
-var _hover_r = (mx >= _arr_rx && mx <= _arr_rx + _arr_w && my >= _nav_y && my <= _nav_y + _nav_h);
-
-draw_set_color(_hover_l ? make_color_rgb(200, 160, 100) : make_color_rgb(160, 120, 70));
-draw_roundrect_ext(_arr_lx, _nav_y, _arr_lx + _arr_w, _nav_y + _nav_h, 4, 4, false);
+// --- Стрелки листания рецептов и номер между ними ---
+var _rc_count = array_length(visible_recipes);
+var _can_nav  = (_rc_count > 1) && cook_anim == 0 && !cook_done;
+draw_sprite(_can_nav ? spr_ui_arrow_left_normal  : spr_ui_arrow_left_disabled,  0, arr_l_x, arr_y);
+draw_sprite(_can_nav ? spr_ui_arrow_right_normal : spr_ui_arrow_right_disabled, 0, arr_r_x, arr_y);
 draw_set_font(fnt_ui);
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
-draw_set_color(make_color_rgb(255, 245, 220));
-draw_text(_arr_lx + _arr_w / 2, _nav_y + _nav_h / 2, "<");
-
-draw_set_color(_hover_r ? make_color_rgb(200, 160, 100) : make_color_rgb(160, 120, 70));
-draw_roundrect_ext(_arr_rx, _nav_y, _arr_rx + _arr_w, _nav_y + _nav_h, 4, 4, false);
-draw_set_color(make_color_rgb(255, 245, 220));
-draw_text(_arr_rx + _arr_w / 2, _nav_y + _nav_h / 2, ">");
-
-// Название рецепта между стрелками
-draw_set_halign(fa_center);
-draw_set_valign(fa_middle);
-draw_set_color(make_color_rgb(80, 50, 20));
-draw_text(right_x + right_w / 2, _nav_y + _nav_h / 2, _r.name);
-
-// --- Чеклист ингредиентов ---
-draw_set_font(fnt_ui);
-var _check_y = panel_y + 96;
-for (var i = 0; i < _ing_count; i++) {
-    var _ing     = _r.ingredients[i];
-    var _item_id = _ing.item;
-
-    // В миске?
-    var _in_bowl = false;
-    for (var j = 0; j < array_length(bowl_items); j++) {
-        if (bowl_items[j] == _item_id) { _in_bowl = true; break; }
-    }
-    // Летит?
-    var _in_fly = false;
-    for (var j = 0; j < array_length(fly_anims); j++) {
-        if (fly_anims[j].item_id == _item_id) { _in_fly = true; break; }
-    }
-
-    var _done = _in_bowl;
-    var _info = storage_get_item_info(_item_id);
-    var _name = (_info != undefined) ? _info.name : _item_id;
-
-    // Чекбокс — красный квадрат = не добавлено, зелёный = добавлено
-    var _col_ic = ds_map_find_value(_ing_color_map, _item_id);
-    if (_col_ic == undefined) _col_ic = make_color_rgb(180,60,60);
-    var _cb_mid_y = _check_y + 8;
-    if (_done) {
-        draw_set_color(make_color_rgb(50, 150, 50));
-        draw_rectangle(right_x, _check_y, right_x + 16, _check_y + 16, false);
-        draw_set_color(c_white);
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_middle);
-        draw_text(right_x + 8, _cb_mid_y, "v");
-        draw_set_halign(fa_left);
-    } else {
-        draw_set_color(make_color_rgb(190, 55, 55));
-        draw_rectangle(right_x, _check_y, right_x + 16, _check_y + 16, false);
-        draw_set_color(make_color_rgb(130, 30, 30));
-        draw_rectangle(right_x, _check_y, right_x + 16, _check_y + 16, true);
-    }
-
-    draw_set_halign(fa_left);
-    draw_set_valign(fa_middle);
-    draw_set_color(_done ? make_color_rgb(60,130,60) : make_color_rgb(80,55,25));
-    draw_text(right_x + 30, _cb_mid_y, _name + " x" + string(_ing.amount));
-    draw_set_valign(fa_top);
-
-    _check_y += 26;
-}
+draw_set_color(make_color_rgb(120, 85, 50));
+draw_text(left_cx, arr_y + 10, "Рецепт " + string(selected_recipe + 1) + " из " + string(_rc_count));
 
 // --- Ячейки ингредиентов ---
 for (var i = 0; i < _ing_count; i++) {
     var _col = i mod cells_cols;
     var _row = i div cells_cols;
-    var _cx  = right_x + _col * (cell_size + cell_gap);
-    var _cy  = cell_area_y + _row * (cell_size + cell_gap);
+    var _cx  = cells_x + _col * cell_step_x;
+    var _cy  = cell_area_y + _row * cell_step_y;
 
     var _item_id = _r.ingredients[i].item;
     var _needed  = _r.ingredients[i].amount;
@@ -290,36 +222,23 @@ for (var i = 0; i < _ing_count; i++) {
     var _cell_alpha = (_in_bowl || _in_fly) ? 0.35 : 1.0;
     draw_set_alpha(_cell_alpha);
 
-    var _col_bg = (_is_hover && _can_add)
-        ? make_color_rgb(220, 200, 160)
-        : make_color_rgb(205, 185, 148);
-    draw_set_color(_col_bg);
-    draw_roundrect_ext(_cx, _cy + _offset_y, _cx + cell_size, _cy + cell_size + _offset_y, 6, 6, false);
-
-    // Обводка ячейки
-    var _col_border = (_have >= _needed)
-        ? make_color_rgb(120, 170, 90)
-        : make_color_rgb(180, 80, 60);
-    draw_set_color(_col_border);
-    draw_roundrect_ext(_cx, _cy + _offset_y, _cx + cell_size, _cy + cell_size + _offset_y, 6, 6, true);
+    // Ячейка: при наведении (если можно добавить) — подсвеченная; уже в миске — бледная
+    draw_sprite_ext((_is_hover && _can_add) ? spr_ui_inventory_slot_hover : ((_have >= _needed) ? spr_ui_inventory_slot_item : spr_ui_inventory_slot_empty),
+                    0, _cx, _cy + _offset_y, 1, 1, 0, c_white, _cell_alpha);
 
     // Иконка по центру ячейки
     var _info_ic  = storage_get_item_info(_item_id);
     var _has_icon = (_info_ic != undefined && variable_struct_exists(_info_ic, "icon") && sprite_exists(_info_ic.icon));
     if (_has_icon) {
         var _spr_ic  = _info_ic.icon;
-        var _icon_sz = cell_size - 10;
-        var _isc     = variable_struct_exists(_info_ic, "icon_scale") ? _info_ic.icon_scale : 1.0;
         var _sw      = sprite_get_width(_spr_ic);
         var _sh      = sprite_get_height(_spr_ic);
-        var _spr_sc  = min(_icon_sz / _sw, _icon_sz / _sh) * _isc;
-        var _dw      = _sw * _spr_sc;
-        var _dh      = _sh * _spr_sc;
-        var _ccx     = _cx + cell_size / 2;
-        var _ccy     = _cy + cell_size / 2 + _offset_y;
-        draw_sprite_stretched_ext(_spr_ic, 0,
-            _ccx - _dw / 2, _ccy - _dh / 2, _dw, _dh,
-            c_white, _cell_alpha);
+        var _spr_sc  = (max(_sw, _sh) <= 40) ? 1 : 36 / max(_sw, _sh);   // иконки 32x32 — 1:1
+        if (variable_struct_exists(_info_ic, "icon_scale")) _spr_sc *= _info_ic.icon_scale;
+        draw_sprite_ext(_spr_ic, 0,
+            _cx + (cell_size - _sw * _spr_sc) / 2 + sprite_get_xoffset(_spr_ic) * _spr_sc,
+            _cy + (cell_size - _sh * _spr_sc) / 2 + sprite_get_yoffset(_spr_ic) * _spr_sc + _offset_y,
+            _spr_sc, _spr_sc, 0, c_white, _cell_alpha);
     } else {
         var _ic = ds_map_find_value(_ing_color_map, _item_id);
         if (_ic == undefined) _ic = make_color_rgb(180, 180, 180);
@@ -331,20 +250,27 @@ for (var i = 0; i < _ing_count; i++) {
         draw_set_alpha(_cell_alpha);
     }
 
-    // Количество — внутри ячейки сверху справа
-    draw_set_font(fnt_ui);
-    draw_set_halign(fa_right);
-    draw_set_valign(fa_top);
-    draw_set_color(_have >= _needed ? make_color_rgb(50, 120, 50) : make_color_rgb(180, 50, 50));
-    draw_text(_cx + cell_size - 4, _cy + 4 + _offset_y, string(_have));
+    // Сколько есть — бейдж в углу (красная цифра, если не хватает); галочка — уже в миске
+    if (_in_bowl) {
+        draw_sprite(spr_ui_quest_status_done, 0, _cx + cell_size - 12, _cy + cell_size - 12 + _offset_y);
+    } else {
+        draw_sprite(spr_ui_count_badge, 0, _cx + cell_size - 12, _cy + cell_size - 12 + _offset_y);
+        draw_set_font(fnt_ui);
+        draw_set_halign(fa_center);
+        draw_set_valign(fa_middle);
+        draw_set_color(_have >= _needed ? c_white : make_color_rgb(255, 120, 110));
+        draw_text(_cx + cell_size - 4, _cy + cell_size - 4 + _offset_y, string(_have));
+    }
 
     // Название — под ячейкой (перенос по ширине ячейки)
     var _info = storage_get_item_info(_item_id);
     var _iname = (_info != undefined) ? _info.name : _item_id;
+    if (_needed > 1) _iname += " x" + string(_needed);
+    draw_set_font(fnt_ui);
     draw_set_halign(fa_center);
     draw_set_valign(fa_top);
     draw_set_color(make_color_rgb(60, 35, 10));
-    draw_text_ext(_cx + cell_size / 2, _cy + cell_size + 3 + _offset_y, _iname, 14, cell_size);
+    draw_text_ext(_cx + cell_size / 2, _cy + cell_size + 6 + _offset_y, _iname, 14, cell_step_x - 4);
 
     draw_set_alpha(1);
 }
@@ -366,17 +292,19 @@ if (_all_added && !cook_done) {
                       my >= btn_y && my <= btn_y + btn_h);
     var _cooking   = (cook_anim > 0);
 
-    draw_set_color(_cooking ? make_color_rgb(180, 130, 50)
-                 : (_btn_hover ? make_color_rgb(100, 60, 15)
-                 : make_color_rgb(139, 90, 43)));
-    draw_roundrect_ext(btn_x, btn_y, btn_x + btn_w, btn_y + btn_h, 6, 6, false);
-    draw_set_color(make_color_rgb(200, 170, 130));
-    draw_roundrect_ext(btn_x, btn_y, btn_x + btn_w, btn_y + btn_h, 6, 6, true);
+    draw_sprite(spr_ui_quantity_label_200x28, 0, btn_x, btn_y);
+    if (_btn_hover || _cooking) {
+        draw_set_alpha(0.3);
+        draw_set_color(c_white);
+        draw_roundrect_ext(btn_x + 3, btn_y + 3, btn_x + btn_w - 3, btn_y + btn_h - 3, 4, 4, false);
+        draw_set_alpha(1);
+    }
 
     draw_set_font(fnt_ui);
     draw_set_halign(fa_center);
     draw_set_valign(fa_middle);
-    draw_set_color(make_color_rgb(255, 245, 220));
+    draw_set_font(fnt_dialog_ru_bold);
+    draw_set_color(make_color_rgb(70, 40, 15));
     draw_text(btn_x + btn_w / 2, btn_y + btn_h / 2,
               _cooking ? "Готовится..." : "Готовить");
 }
