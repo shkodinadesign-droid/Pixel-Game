@@ -1,3 +1,9 @@
+// Сидит на стуле — всем управляет obj_chair
+if (sit_chair != noone) {
+    if (instance_exists(sit_chair)) exit;
+    sit_chair = noone;
+}
+
 
 if (global.control_locked) {
     // Остановить анимацию — не ходить на месте

@@ -30,8 +30,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_pear_icon",
-    "path":"sprites/spr_pear_icon/spr_pear_icon.yy",
+    "name":"spr_pear_on_tree",
+    "path":"sprites/spr_pear_on_tree/spr_pear_on_tree.yy",
   },
   "spriteMaskId":null,
   "visible":true,

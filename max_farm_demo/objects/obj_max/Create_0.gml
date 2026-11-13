@@ -10,6 +10,7 @@ footstep_timer    = 0;
 footstep_interval = game_get_speed(gamespeed_fps) * 0.28;
 footstep_sounds   = [snd_footstep_grass_1, snd_footstep_grass_2, snd_footstep_grass_3];
 state = "idle";
+sit_chair = noone;               // стул, на котором сидит (им управляет obj_chair)
 sprite_index = spr_max_idle_down;   // смотрит вниз, на игрока (direction_facing = "down")
 image_speed = 0;
 

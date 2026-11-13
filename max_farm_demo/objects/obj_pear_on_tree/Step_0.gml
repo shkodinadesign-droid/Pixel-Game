@@ -2,8 +2,6 @@ if (!variable_instance_exists(id, "my_tree")) {
     if (!variable_global_exists("fruit_states")) global.fruit_states = ds_map_create();
     my_tree      = instance_nearest(x, y, obj_pear_tree);
     regrow_days  = 2;
-    image_xscale = 27/24;
-    image_yscale = 27/24;
     var _key = "pear_" + string(x) + "_" + string(y);
     if (ds_map_exists(global.fruit_states, _key)) {
         var _d       = global.fruit_states[? _key];

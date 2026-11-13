@@ -16,6 +16,11 @@ NAMES={(1079,39):'bed',(168,47):'table_set',(630,80):'sofa',(147,344):'bookshelf
        (1081,406):'nightstand',(742,456):'chest',(520,692):'window',(145,709):'shelf_cat',(902,744):'rug',
        (125,876):'shelf_books',(683,926):'flower_pot',(535,944):'stool'}
 a=np.asarray(Image.open(SHEET).convert('RGB')).astype(int)
+if len(sys.argv)>3:                                 # другой лист: SCALE и предметы "x,y:имя;..." из аргументов, фон — самый частый цвет
+    SCALE=float(sys.argv[3])
+    NAMES={tuple(int(v) for v in k.split(',')):nm for k,nm in (e.split(':') for e in sys.argv[4].split(';'))}
+    from collections import Counter
+    BG=np.array(Counter(map(tuple,a[::4,::4].reshape(-1,3))).most_common(1)[0][0])
 d=np.abs(a-BG).sum(2)
 bl,_=ndimage.label(d<=TOL); sz=np.bincount(bl.ravel())   # фон = крупные области цвета фона (снаружи, между ножками);
 fg=~((sz[bl]>=150)&(bl>0))                               # мелкие светлые пятна внутри штор/букета остаются

@@ -1,10 +1,10 @@
 {
   "$GMSprite":"v2",
   "%Name":"spr_cafe_chair_Left",
-  "bboxMode":0,
-  "bbox_bottom":37,
+  "bboxMode":2,
+  "bbox_bottom":42,
   "bbox_left":7,
-  "bbox_right":23,
+  "bbox_right":21,
   "bbox_top":3,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -16,7 +16,7 @@
   ],
   "gridX":0,
   "gridY":0,
-  "height":40,
+  "height":43,
   "HTile":false,
   "layers":[
     {"$GMImageLayer":"","%Name":"17fc8274-28c7-46a7-b2b0-1794e3891e82","blendMode":0,"displayName":"default","isLocked":false,"name":"17fc8274-28c7-46a7-b2b0-1794e3891e82","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":30,
+  "width":28,
 }

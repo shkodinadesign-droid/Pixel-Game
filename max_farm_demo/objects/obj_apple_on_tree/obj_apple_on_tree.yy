@@ -30,8 +30,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_apple_icon",
-    "path":"sprites/spr_apple_icon/spr_apple_icon.yy",
+    "name":"spr_apple_on_tree",
+    "path":"sprites/spr_apple_on_tree/spr_apple_on_tree.yy",
   },
   "spriteMaskId":null,
   "visible":true,
