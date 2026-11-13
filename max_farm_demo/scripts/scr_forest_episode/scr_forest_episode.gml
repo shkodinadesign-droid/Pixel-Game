@@ -24,7 +24,7 @@ function forest_episode_init() {
 /// @desc Текущая область для отметки "Вы здесь" на карте: "farm" / "village" / "forest"
 function forest_area() {
     if (room == rm_forest_entrance) return "forest";
-    if (room == rm_village || room == rm_joshua_shop) return "village";
+    if (room == rm_village || room == rm_joshua_shop || room == rm_butcher_shop) return "village";
     return "farm";
 }
 

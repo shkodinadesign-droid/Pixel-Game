@@ -5,7 +5,7 @@ if (!variable_global_exists("coffee_made") || !global.coffee_made) exit;
 if (!instance_exists(obj_max)) exit;
 
 // Скрываем в помещениях
-if (room == rm_bakery || room == rm_joshua_shop ||
+if (room == rm_bakery || room == rm_joshua_shop || room == rm_butcher_shop ||
     room == rm_house_inside || room == room_barn) exit;
 
 // Плавное появление
