@@ -96,11 +96,11 @@ for (var i = array_length(splash_anims) - 1; i >= 0; i--) {
 }
 
 // --- Переключение рецепта (стрелки) ---
-if (cook_anim == 0 && !cook_done && click_press && my >= arr_y && my < arr_y + 20) {
+if (cook_anim == 0 && !cook_done && click_press && my >= nav_y && my < nav_y + nav_h) {
     var _count = array_length(visible_recipes);
     var _new   = selected_recipe;
-    if (mx >= arr_l_x && mx < arr_l_x + 20) _new = (selected_recipe - 1 + _count) mod _count;
-    if (mx >= arr_r_x && mx < arr_r_x + 20) _new = (selected_recipe + 1) mod _count;
+    if (mx >= nav_l_x && mx < nav_l_x + nav_w) _new = (selected_recipe - 1 + _count) mod _count;
+    if (mx >= nav_r_x && mx < nav_r_x + nav_w) _new = (selected_recipe + 1) mod _count;
     if (_new != selected_recipe) {
         selected_recipe = _new;
         bowl_items   = [];
@@ -112,12 +112,6 @@ if (cook_anim == 0 && !cook_done && click_press && my >= arr_y && my < arr_y + 2
 // --- Закрытие (только пока не началась готовка) ---
 if (cook_anim == 0 && !cook_done) {
     if (keyboard_check_pressed(vk_escape) || keyboard_check_pressed(ord("E"))) {
-        global.control_locked = false;
-        instance_destroy();
-        exit;
-    }
-
-    if (click_press && mx >= close_x && mx < close_x + 30 && my >= close_y && my < close_y + 30) {
         global.control_locked = false;
         instance_destroy();
         exit;
@@ -146,8 +140,8 @@ if (cook_anim == 0 && !cook_done) {
         var _cx  = cells_x + _col * cell_step_x;
         var _cy  = cell_area_y + _row * cell_step_y;
 
-        if (mx >= _cx && mx <= _cx + cell_size &&
-            my >= _cy && my <= _cy + cell_size) {
+        if (mx >= _cx && mx < _cx + cell_w &&
+            my >= _cy && my < _cy + cell_h) {
             hover_cell = i;
 
             if (click_press) {
@@ -167,8 +161,8 @@ if (cook_anim == 0 && !cook_done) {
 
                 if (!_in_bowl && !_in_fly && inventory_get_amount(_item_id) >= _needed) {
                     array_push(fly_anims, {
-                        sx:      _cx + cell_size / 2,
-                        sy:      _cy + cell_size / 2,
+                        sx:      _cx + cell_w / 2,
+                        sy:      _cy + cell_h / 2,
                         t:       0,
                         item_id: _item_id
                     });

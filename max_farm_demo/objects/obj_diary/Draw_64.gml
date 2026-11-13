@@ -358,10 +358,11 @@ switch (current_tab) {
             var _rc = _cat_recipes[_gi];
             if (!_rc.unlocked) { draw_sprite(spr_ui_recipe_slot_locked, 0, _sx, _sy); continue; }
             draw_sprite((_rc.id == selected_recipe) ? spr_ui_recipe_slot_selected : spr_ui_recipe_slot_normal, 0, _sx, _sy);
-            if (sprite_exists(_rc.icon)) {
-                var _isc = min(1, 36 / max(sprite_get_width(_rc.icon), sprite_get_height(_rc.icon)));
-                draw_sprite_ext(_rc.icon, 0, _sx + (46 - sprite_get_width(_rc.icon) * _isc) / 2 + sprite_get_xoffset(_rc.icon) * _isc,
-                                _sy + (46 - sprite_get_height(_rc.icon) * _isc) / 2 + sprite_get_yoffset(_rc.icon) * _isc,
+            var _gicon = sprite_exists(_rc.icon) ? _rc.icon : recipe_dish_image(_rc.id);   // нет иконки — уменьшенное превью блюда
+            if (sprite_exists(_gicon)) {
+                var _isc = min(1, 36 / max(sprite_get_width(_gicon), sprite_get_height(_gicon)));
+                draw_sprite_ext(_gicon, 0, _sx + (46 - sprite_get_width(_gicon) * _isc) / 2 + sprite_get_xoffset(_gicon) * _isc,
+                                _sy + (46 - sprite_get_height(_gicon) * _isc) / 2 + sprite_get_yoffset(_gicon) * _isc,
                                 _isc, _isc, 0, c_white, 1);
             } else {
                 draw_set_color(make_color_rgb(200, 170, 120));
@@ -379,10 +380,12 @@ switch (current_tab) {
         if (_sel_r != undefined) {
             var _df_x = round(_sh_cx - 100), _df_y = _sh_y0 + 26;
             draw_sprite(spr_ui_recipe_large_dish_200x120, 0, _df_x, _df_y);
-            if (sprite_exists(_sel_r.image)) {
-                var _dsc = min(1, min(184 / sprite_get_width(_sel_r.image), 104 / sprite_get_height(_sel_r.image)));
-                draw_sprite_ext(_sel_r.image, 0, _df_x + (200 - sprite_get_width(_sel_r.image) * _dsc) / 2 + sprite_get_xoffset(_sel_r.image) * _dsc,
-                                _df_y + (120 - sprite_get_height(_sel_r.image) * _dsc) / 2 + sprite_get_yoffset(_sel_r.image) * _dsc,
+            var _dimg = recipe_dish_image(_sel_r.id);           // превью блюда spr_dish_<id>, иначе картинка из данных
+            if (!sprite_exists(_dimg)) _dimg = _sel_r.image;
+            if (sprite_exists(_dimg)) {
+                var _dsc = min(1, min(184 / sprite_get_width(_dimg), 104 / sprite_get_height(_dimg)));
+                draw_sprite_ext(_dimg, 0, _df_x + (200 - sprite_get_width(_dimg) * _dsc) / 2 + sprite_get_xoffset(_dimg) * _dsc,
+                                _df_y + (120 - sprite_get_height(_dimg) * _dsc) / 2 + sprite_get_yoffset(_dimg) * _dsc,
                                 _dsc, _dsc, 0, c_white, 1);
             } else {
                 draw_set_color(make_color_rgb(200, 170, 120));

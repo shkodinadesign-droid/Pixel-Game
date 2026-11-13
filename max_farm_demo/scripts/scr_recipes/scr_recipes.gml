@@ -140,3 +140,10 @@ function recipe_craft(idx) {
     inventory_add(_r.result.item, _r.result.amount);
     return true;
 }
+
+/// @func recipe_dish_image(_id)
+/// @desc Картинка готового блюда для окна готовки и дневника: спрайт spr_dish_<id>, иначе -1.
+function recipe_dish_image(_id) {
+    var _s = asset_get_index("spr_dish_" + _id);
+    return (_s != -1 && sprite_exists(_s)) ? _s : -1;
+}
