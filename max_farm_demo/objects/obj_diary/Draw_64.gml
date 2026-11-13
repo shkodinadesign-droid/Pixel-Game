@@ -1,6 +1,11 @@
-// ===== DIARY DRAW GUI =====
+// ===== DIARY DRAW GUI (дневник v2: подложка spr_diary_bg + элементы spr_ui_* 1:1, текст рисует код) =====
 
 var bs = book_scale; // короткий псевдоним
+var _mx = device_mouse_x_to_gui(0);
+var _my = device_mouse_y_to_gui(0);
+var _txt_dark  = make_color_rgb(70, 40, 15);
+var _txt_mid   = make_color_rgb(120, 85, 50);
+var _txt_hint  = make_color_rgb(160, 130, 100);
 
 draw_set_alpha(1);
 
@@ -10,37 +15,25 @@ draw_set_alpha(0.5);
 draw_rectangle(0, 0, display_get_gui_width(), display_get_gui_height(), false);
 draw_set_alpha(1);
 
-// Фон книги — подложка 1:1 (вкладки, табличка заголовка и белый лист нарисованы в спрайте)
+// Книга
 draw_sprite(spr_diary_bg, 0, book_x, book_y);
 
-// Подсветка активной вкладки поверх арта
+// Вкладки: неактивные, затем активная поверх (её низ сливается со страницей)
 for (var i = 0; i < 7; i++) {
-    if (i != current_tab) continue;
-    draw_set_alpha(0.35);
-    draw_set_color(make_color_rgb(255, 250, 230));
-    draw_roundrect_ext(book_x + ui_tabs[i][0] + 3, book_y + ui_tabs[i][1] + 3,
-                       book_x + ui_tabs[i][2] - 3, book_y + ui_tabs[i][3] - 3, 6, 6, false);
-    draw_set_alpha(1);
+    if (i != current_tab) draw_sprite(tab_spr_inactive[i], 0, book_x + ui_tabs[i][0], book_y + ui_tabs[i][1]);
 }
+draw_sprite(tab_spr_active[current_tab], 0, book_x + ui_tabs[current_tab][0], book_y + ui_tabs[current_tab][1]);
 
-// Кнопка закрытия (зелёный крестик) — верхний правый угол книги
-var _close_cx = book_x + ui_close[0];
-var _close_cy = book_y + ui_close[1];
-var _close_r  = ui_close[2];
-draw_set_color(make_color_rgb(70, 160, 90));
-draw_circle(_close_cx, _close_cy, _close_r, false);
-draw_set_color(make_color_rgb(40, 110, 60));
-draw_circle(_close_cx, _close_cy, _close_r, true);
-draw_set_color(c_white);
-var _cross_r = _close_r * 0.45;
-draw_line_width(_close_cx - _cross_r, _close_cy - _cross_r, _close_cx + _cross_r, _close_cy + _cross_r, round(2 * bs));
-draw_line_width(_close_cx - _cross_r, _close_cy + _cross_r, _close_cx + _cross_r, _close_cy - _cross_r, round(2 * bs));
+// Кнопка закрытия
+var _cl_x = book_x + ui_close[0], _cl_y = book_y + ui_close[1];
+var _cl_hover = (_mx >= _cl_x && _mx < _cl_x + 30 && _my >= _cl_y && _my < _cl_y + 30);
+draw_sprite(_cl_hover ? spr_ui_close_hover : spr_ui_close_normal, 0, _cl_x, _cl_y);
 
-// Название раздела — по центру таблички на левой странице
+// Название раздела — по центру таблички
 draw_set_font(fnt_dialog_ru_bold);
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
-draw_set_color(make_color_rgb(70, 40, 15));
+draw_set_color(_txt_dark);
 draw_text(book_x + ui_title[0], book_y + ui_title[1], tab_names[current_tab]);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
@@ -52,8 +45,10 @@ var _sh_x0 = book_x + ui_sheet[0], _sh_y0 = book_y + ui_sheet[1];
 var _sh_x1 = book_x + ui_sheet[2], _sh_y1 = book_y + ui_sheet[3];
 var _sh_cx = (_sh_x0 + _sh_x1) / 2, _sh_cy = (_sh_y0 + _sh_y1) / 2;
 var _sh_tx = _sh_x0 + 14;          // текст на белом листе: отступ слева
-var _sh_ty = _sh_y0 + 30;          // и сверху — ниже закладки
+var _sh_ty = _sh_y0 + 28;          // и сверху — ниже закладки
 var _sh_tw = _sh_x1 - _sh_x0 - 28;
+var _lo_x0 = book_x + ui_low[0], _lo_y0 = book_y + ui_low[1];
+var _lo_x1 = book_x + ui_low[2], _lo_y1 = book_y + ui_low[3];
 
 switch (current_tab) {
     case 1: // Инвентарь
@@ -120,196 +115,136 @@ switch (current_tab) {
 
         var inv_count = array_length(inv_items);
 
-        // --- Константы сетки (масштабированные) ---
+        // --- Сетка 5x4 ---
         var slot_size = ui_inv[2];
-        var slot_gap  = ui_inv[3];
-        var grid_cols = 5;
-        var grid_rows = 4;
+        var slot_step = ui_inv[2] + ui_inv[3];
         var grid_x    = book_x + ui_inv[0];
         var grid_y    = book_y + ui_inv[1];
-        var _slot_corner = round(4 * bs);
+        for (var _row = 0; _row < 4; _row++) {
+            for (var _col = 0; _col < 5; _col++) {
+                var _idx = _row * 5 + _col;
+                var _sx  = grid_x + _col * slot_step;
+                var _sy  = grid_y + _row * slot_step;
+                var _has = (_idx < inv_count) && (inv_items[_idx][2] > 0);
+                var _hov = (_mx >= _sx && _mx < _sx + slot_size && _my >= _sy && _my < _sy + slot_size);
+                var _spr = spr_ui_inventory_slot_empty;
+                if (_has) _spr = spr_ui_inventory_slot_item;
+                if (_has && _hov) _spr = spr_ui_inventory_slot_hover;
+                if (_idx == selected_item && _has) _spr = spr_ui_inventory_slot_selected;
+                draw_sprite(_spr, 0, _sx, _sy);
 
-        // --- Сетка слотов ---
-        for (var _row = 0; _row < grid_rows; _row++) {
-            for (var _col = 0; _col < grid_cols; _col++) {
-                var _idx = _row * grid_cols + _col;
-                var _sx  = grid_x + _col * (slot_size + slot_gap);
-                var _sy  = grid_y + _row * (slot_size + slot_gap);
-
-                var _is_sel = (_idx == selected_item);
-                // цвета ячеек — как у карточек в арте книги; выбранная — светлая, как белый лист
-                draw_set_color(_is_sel ? make_color_rgb(250, 241, 226) : make_color_rgb(234, 198, 152));
-                draw_roundrect_ext(_sx, _sy, _sx + slot_size, _sy + slot_size, _slot_corner, _slot_corner, false);
-                draw_set_color(_is_sel ? make_color_rgb(172, 104, 55) : make_color_rgb(203, 159, 108));
-                draw_roundrect_ext(_sx, _sy, _sx + slot_size, _sy + slot_size, _slot_corner, _slot_corner, true);
-
-                if (_idx < inv_count) {
+                if (_has) {
                     var _ispr = inv_items[_idx][0];
-                    var _icol = inv_items[_idx][1];
-                    var _iqty = inv_items[_idx][2];
-
-                    if (_iqty > 0) {
-                        if (sprite_exists(_ispr)) {
-                            var _iw  = sprite_get_width(_ispr);
-                            var _ih  = sprite_get_height(_ispr);
-                            var _pad = round(6 * bs);
-                            var _sc  = min((slot_size - _pad) / _iw,
-                                           (slot_size - _pad) / _ih);
-                            var _dw  = _iw * _sc;
-                            var _dh  = _ih * _sc;
-                            var _ccx = _sx + slot_size / 2;
-                            var _ccy = _sy + slot_size / 2;
-                            draw_sprite_stretched_ext(_ispr, 0,
-                                _ccx - _dw / 2, _ccy - _dh / 2, _dw, _dh,
-                                c_white, 1);
-                        } else {
-                            // Цветной круг-заглушка
-                            draw_set_color(_icol);
-                            draw_circle(_sx + slot_size / 2, _sy + slot_size / 2, round(13 * bs), false);
-                            draw_set_color(make_color_rgb(0,0,0));
-                            draw_set_alpha(0.15);
-                            draw_circle(_sx + slot_size / 2, _sy + slot_size / 2, round(13 * bs), true);
-                            draw_set_alpha(1);
-                        }
-
-                        // Кружок с цифрой — на правом нижнем углу
-                        var _br = round(6 * bs);
-                        var _bx = _sx + slot_size;
-                        var _by = _sy + slot_size;
-                        draw_set_color(make_color_rgb(70, 40, 10));
-                        draw_circle(_bx, _by, _br, false);
-                        draw_set_font(fnt_ui);
-                        draw_set_halign(fa_center);
-                        draw_set_valign(fa_middle);
-                        draw_set_color(c_white);
-                        draw_text(_bx, _by, string(_iqty));
-                        draw_set_halign(fa_left);
-                        draw_set_valign(fa_top);
+                    if (sprite_exists(_ispr)) {
+                        var _imax = max(sprite_get_width(_ispr), sprite_get_height(_ispr));
+                        var _sc = (_imax <= 40) ? 1 : 36 / _imax;   // иконки 32x32 — 1:1
+                        draw_sprite_ext(_ispr, 0, _sx + (slot_size - sprite_get_width(_ispr) * _sc) / 2 + sprite_get_xoffset(_ispr) * _sc,
+                                        _sy + (slot_size - sprite_get_height(_ispr) * _sc) / 2 + sprite_get_yoffset(_ispr) * _sc,
+                                        _sc, _sc, 0, c_white, 1);
+                    } else {
+                        draw_set_color(inv_items[_idx][1]);
+                        draw_circle(_sx + slot_size / 2, _sy + slot_size / 2, 14, false);
                     }
+                    // бейдж количества
+                    draw_sprite(spr_ui_count_badge, 0, _sx + slot_size - 12, _sy + slot_size - 12);
+                    draw_set_font(fnt_ui);
+                    draw_set_halign(fa_center);
+                    draw_set_valign(fa_middle);
+                    draw_set_color(c_white);
+                    draw_text(_sx + slot_size - 4, _sy + slot_size - 4, string(inv_items[_idx][2]));
+                    draw_set_halign(fa_left);
+                    draw_set_valign(fa_top);
                 }
             }
         }
 
-        // --- Правая страница — карточка предмета на белом листе ---
-        if (selected_item >= 0 && selected_item < inv_count
-            && inv_items[selected_item][2] > 0) {
-
-            var _iname = inv_items[selected_item][3];
-            var _idesc = inv_items[selected_item][4];
-            var _iqty2 = inv_items[selected_item][2];
-
+        // --- Правая страница: большая иконка, название, описание; количество под листом ---
+        if (selected_item >= 0 && selected_item < inv_count && inv_items[selected_item][2] > 0) {
+            var _pv_x = _sh_x0 + 12, _pv_y = _sh_y0 + 30;
+            draw_sprite(spr_ui_inventory_item_preview_96x96, 0, _pv_x, _pv_y);
+            var _bspr = inv_items[selected_item][0];
+            if (sprite_exists(_bspr)) {
+                var _bsc = max(1, floor(72 / max(sprite_get_width(_bspr), sprite_get_height(_bspr))));
+                draw_sprite_ext(_bspr, 0, _pv_x + (96 - sprite_get_width(_bspr) * _bsc) / 2 + sprite_get_xoffset(_bspr) * _bsc,
+                                _pv_y + (96 - sprite_get_height(_bspr) * _bsc) / 2 + sprite_get_yoffset(_bspr) * _bsc,
+                                _bsc, _bsc, 0, c_white, 1);
+            } else {
+                draw_set_color(inv_items[selected_item][1]);
+                draw_circle(_pv_x + 48, _pv_y + 48, 30, false);
+            }
+            var _ix = _pv_x + 108, _iw = _sh_x1 - 12 - _ix;
             draw_set_font(fnt_dialog_ru_bold);
-            draw_set_halign(fa_left);
-            draw_set_valign(fa_top);
-            draw_set_color(make_color_rgb(70, 35, 5));
-            draw_text(_sh_tx, _sh_ty, _iname);
-
-            draw_set_color(make_color_rgb(160, 120, 70));
-            draw_line(_sh_tx, _sh_ty + 24, _sh_tx + _sh_tw, _sh_ty + 24);
-
+            draw_set_color(_txt_dark);
+            draw_text_ext(_ix, _pv_y, inv_items[selected_item][3], -1, _iw);
             draw_set_font(fnt_ui);
             draw_set_color(make_color_rgb(55, 35, 15));
-            draw_text_ext(_sh_tx, _sh_ty + 32, _idesc, -1, _sh_tw);
+            draw_text_ext(_ix, _pv_y + 26, inv_items[selected_item][4], 16, _iw);
 
-            // Количество — под белым листом
+            var _ql_x = round((_lo_x0 + _lo_x1) / 2 - 100), _ql_y = _lo_y0 + 4;
+            draw_sprite(spr_ui_quantity_label_200x28, 0, _ql_x, _ql_y);
             draw_set_font(fnt_dialog_ru_bold);
             draw_set_halign(fa_center);
             draw_set_valign(fa_middle);
-            draw_set_color(make_color_rgb(139, 90, 43));
-            draw_text(book_x + (ui_low[0] + ui_low[2]) / 2, book_y + (ui_low[1] + ui_low[3]) / 2,
-                      "Количество: " + string(_iqty2));
+            draw_set_color(_txt_dark);
+            draw_text(_ql_x + 100, _ql_y + 14, "Количество: " + string(inv_items[selected_item][2]));
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
-
         } else {
             draw_set_font(fnt_ui);
             draw_set_halign(fa_center);
             draw_set_valign(fa_middle);
-            draw_set_color(make_color_rgb(160, 130, 100));
-            draw_text(_sh_cx, _sh_cy + 12, "Выбери предмет\nиз инвентаря");
+            draw_set_color(_txt_hint);
+            draw_text(_sh_cx, _sh_cy + 10, "Выбери предмет\nиз инвентаря");
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
         }
-
         break;
 
     case 0: // Задания
-        draw_set_halign(fa_left);
-        draw_set_valign(fa_top);
-
-        // Заголовок вкладки рисуется общим кодом выше (единый стиль для всех вкладок)
-        var _q_list_w = ui_list[2];
-        var _q_rows_y = content_y;
-        var _q_rows   = diary_quest_build_rows(content_x, _q_rows_y, bs);
-        var _icon_r   = round(6 * bs);
-
-        for (var _qi = 0; _qi < array_length(_q_rows); _qi++) {
-            var _row = _q_rows[_qi];
-
+        var _pages = diary_quest_build_pages(content_x, content_y, ui_list[3]);
+        quest_page = clamp(quest_page, 0, array_length(_pages) - 1);
+        var _rows  = _pages[quest_page];
+        for (var _qi = 0; _qi < array_length(_rows); _qi++) {
+            var _row = _rows[_qi];
             if (_row.type == "header") {
-                draw_set_font(fnt_ui);
-                draw_set_color(make_color_rgb(120, 80, 35));
-                draw_text(content_x, _row.y, _row.text);
-                continue;
-            }
-
-            var _q       = _row.q;
-            var _is_sel  = (_q.id == selected_quest);
-            var _is_read = diary_quest_is_read(_q.id);
-
-            // Подсветка выбранной (активной) строки
-            if (_is_sel) {
-                draw_set_alpha(0.18);
-                draw_set_color(c_black);
-                draw_rectangle(content_x - round(3 * bs), _row.y - round(1 * bs),
-                                content_x + _q_list_w, _row.y + _row.h - round(3 * bs), false);
-                draw_set_alpha(1);
-            }
-
-            // Текст задания (зачёркнут, если выполнено)
-            draw_set_font(fnt_ui);
-            draw_set_color(_q.done ? make_color_rgb(140, 115, 90) : make_color_rgb(55, 35, 15));
-            draw_text(content_x, _row.y, _q.text);
-            if (_q.done) {
-                var _sy2 = _row.y + string_height(_q.text) / 2;
-                draw_line(content_x, _sy2, content_x + string_width(_q.text), _sy2);
-            }
-
-            // Статус-иконка справа: зелёный чек (выполнено) / серый чек (прочитано) / красный ! (новое)
-            var _icx = content_x + _q_list_w - _icon_r;
-            var _icy = _row.y + _row.h / 2 - round(4 * bs);
-
-            if (_q.done) {
-                draw_set_color(make_color_rgb(70, 150, 70));
-                draw_roundrect_ext(_icx - _icon_r, _icy - _icon_r, _icx + _icon_r, _icy + _icon_r, 2, 2, false);
+                draw_sprite(spr_ui_quest_group_heading, 0, _row.x, _row.y);
                 draw_set_font(fnt_ui);
                 draw_set_halign(fa_center);
                 draw_set_valign(fa_middle);
-                draw_set_color(c_white);
-                draw_text(_icx, _icy, "v");
-            } else if (_is_read) {
-                draw_set_color(make_color_rgb(160, 150, 145));
-                draw_roundrect_ext(_icx - _icon_r, _icy - _icon_r, _icx + _icon_r, _icy + _icon_r, 2, 2, true);
-            } else {
-                draw_set_color(make_color_rgb(200, 60, 50));
-                draw_circle(_icx, _icy, _icon_r, false);
-                // "!" рисуем примитивами, а не шрифтом — так он идеально по центру кружка
-                draw_set_color(c_white);
-                var _bar_hw  = max(1, round(1 * bs));
-                var _bar_top = _icy - _icon_r * 0.55;
-                var _bar_bot = _icy + _icon_r * 0.05;
-                draw_rectangle(_icx - _bar_hw, _bar_top, _icx + _bar_hw, _bar_bot, false);
-                draw_circle(_icx, _icy + _icon_r * 0.55, max(1, round(1.2 * bs)), false);
+                draw_set_color(_txt_mid);
+                draw_text(_row.x + 160, _row.y + 10, _row.text);
+                draw_set_halign(fa_left);
+                draw_set_valign(fa_top);
+                continue;
             }
-            draw_set_halign(fa_left);
+            var _q      = _row.q;
+            var _is_sel = (_q.id == selected_quest);
+            var _hov    = (_mx >= _row.x && _mx < _row.x + 320 && _my >= _row.y && _my < _row.y + _row.h);
+            draw_sprite(_is_sel ? spr_ui_quest_card_selected : (_hov ? spr_ui_quest_card_hover : spr_ui_quest_card_normal), 0, _row.x, _row.y);
+            // тип: основное — звезда, дополнительное — листик, выполненное — галочка
+            var _type_spr = _q.done ? spr_ui_quest_type_check : ((_q.category == "main") ? spr_ui_quest_type_star : spr_ui_quest_type_leaf);
+            draw_sprite(_type_spr, 0, _row.x + 12, _row.y + 12);
+            // статус справа: выполнено / прочитано / новое
+            var _st_spr = _q.done ? spr_ui_quest_status_done : (diary_quest_is_read(_q.id) ? spr_ui_quest_status_read : spr_ui_quest_status_new);
+            draw_sprite(_st_spr, 0, _row.x + 292, _row.y + 20);
+            // название (зачёркнуто, если выполнено), до 2 строк
+            draw_set_font(fnt_ui);
+            draw_set_valign(fa_middle);
+            draw_set_color(_q.done ? make_color_rgb(140, 115, 90) : make_color_rgb(55, 35, 15));
+            var _tw = 222;
+            draw_text_ext(_row.x + 58, _row.y + 28, _q.text, 16, _tw);
+            if (_q.done && string_width(_q.text) <= _tw) {
+                draw_line(_row.x + 58, _row.y + 28, _row.x + 58 + string_width(_q.text), _row.y + 28);
+            }
             draw_set_valign(fa_top);
         }
+        // стрелки листания — только если страниц больше одной
+        if (array_length(_pages) > 1) {
+            draw_sprite((quest_page > 0) ? spr_ui_arrow_left_normal : spr_ui_arrow_left_disabled, 0, book_x + ui_arrows[0], book_y + ui_arrows[2]);
+            draw_sprite((quest_page < array_length(_pages) - 1) ? spr_ui_arrow_right_normal : spr_ui_arrow_right_disabled, 0, book_x + ui_arrows[1], book_y + ui_arrows[2]);
+        }
 
-        // --- Правая страница: подробное описание выбранного задания (внутри белого листочка на арте) ---
-        var _qd_x  = _sh_tx;
-        var _qd_y  = _sh_ty;
-        var _qd_w  = _sh_tw;
-
+        // --- Правая страница: описание выбранного задания на белом листе ---
         var _sel_q = undefined;
         if (selected_quest != "") {
             var _full_list = diary_get_quest_list();
@@ -317,220 +252,169 @@ switch (current_tab) {
                 if (_full_list[_li].id == selected_quest) { _sel_q = _full_list[_li]; break; }
             }
         }
-
         if (_sel_q != undefined) {
-            draw_set_font(fnt_ui);
-            draw_set_halign(fa_left);
-            draw_set_valign(fa_top);
-            draw_set_color(make_color_rgb(70, 35, 5));
-            draw_text_ext(_qd_x, _qd_y, _sel_q.text, -1, _qd_w);
-
+            draw_set_font(fnt_dialog_ru_bold);
+            draw_set_color(_txt_dark);
+            draw_text_ext(_sh_tx, _sh_ty, _sel_q.text, -1, _sh_tw);
+            var _ty2 = _sh_ty + string_height_ext(_sel_q.text, -1, _sh_tw) + 4;
             draw_set_color(make_color_rgb(160, 120, 70));
-            draw_line(_qd_x, _qd_y + 22, _qd_x + _qd_w, _qd_y + 22);
-
+            draw_line(_sh_tx, _ty2, _sh_tx + _sh_tw, _ty2);
             draw_set_font(fnt_ui);
             draw_set_color(c_black);
-            draw_text_ext(_qd_x, _qd_y + 32, _sel_q.desc, round(18 * bs), _qd_w);
+            draw_text_ext(_sh_tx, _ty2 + 8, _sel_q.desc, 16, _sh_tw);
         } else {
-            var _qd_cx = _sh_cx;
-            var _qd_cy = _sh_cy + 12;
             draw_set_font(fnt_ui);
             draw_set_halign(fa_center);
             draw_set_valign(fa_middle);
-            draw_set_color(make_color_rgb(160, 130, 100));
-            draw_text(_qd_cx, _qd_cy, "Выбери задание\nиз списка");
+            draw_set_color(_txt_hint);
+            draw_text(_sh_cx, _sh_cy + 10, "Выбери задание\nиз списка");
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
         }
         break;
+
     case 3: // Растения
-        draw_set_font(fnt_ui);
-        draw_set_color(make_color_rgb(80, 50, 20));
-
-        // Морковь
-        draw_sprite_ext(spr_carrot_icon, 0, content_x, content_y, 0.7, 0.7, 0, c_white, 1);
-        draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(content_x + 26, content_y, "Морковь");
-        draw_set_color(make_color_rgb(130, 100, 60));
-        draw_text(content_x + 26, content_y + 18, "Время роста: 3 дня");
-
-        // Картофель
-        var _py = content_y + round(52 * bs);
-        draw_sprite_ext(spr_potato_icon, 0, content_x, _py, 0.7, 0.7, 0, c_white, 1);
-        draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(content_x + 26, _py, "Картофель");
-        draw_set_color(make_color_rgb(130, 100, 60));
-        draw_text(content_x + 26, _py + 18, "Время роста: 2 дня");
-
-        // Клубника
-        var _sy = _py + round(52 * bs);
-        draw_sprite_ext(spr_strawberry_seed_icon, 0, content_x, _sy, 0.7, 0.7, 0, c_white, 1);
-        draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(content_x + 26, _sy, "Клубника");
-        draw_set_color(make_color_rgb(130, 100, 60));
-        draw_text(content_x + 26, _sy + 18, "Время роста: 2 дня");
-
-        draw_set_color(c_white);
+        var _plants = diary_get_plant_list();
+        for (var _pi = 0; _pi < array_length(_plants); _pi++) {
+            var _pl = _plants[_pi];
+            var _px = content_x, _py = content_y + _pi * 62;
+            draw_sprite((_pi == selected_plant) ? spr_ui_plant_card_selected : spr_ui_plant_card_normal, 0, _px, _py);
+            if (sprite_exists(_pl.icon)) {
+                draw_sprite_ext(_pl.icon, 0, _px + 12 + sprite_get_xoffset(_pl.icon), _py + 12 + sprite_get_yoffset(_pl.icon), 1, 1, 0, c_white, 1);
+            }
+            draw_set_font(fnt_dialog_ru_bold);
+            draw_set_color(_txt_dark);
+            draw_text(_px + 58, _py + 8, _pl.name);
+            draw_sprite(spr_ui_plant_icon_clock, 0, _px + 58, _py + 32);
+            draw_set_font(fnt_ui);
+            draw_set_color(_txt_mid);
+            draw_text(_px + 78, _py + 32, _pl.grow_text);
+        }
+        if (selected_plant >= 0 && selected_plant < array_length(_plants)) {
+            var _sp = _plants[selected_plant];
+            draw_set_font(fnt_dialog_ru_bold);
+            draw_set_halign(fa_center);
+            draw_set_color(_txt_dark);
+            draw_text(_sh_cx, _sh_ty, _sp.name + ": стадии роста");
+            draw_set_halign(fa_left);
+            // полоска стадий: 4 клетки 44x44 (левый верх клеток внутри спрайта 260x64)
+            var _gs_x = round(_sh_cx - 130), _gs_y = _sh_ty + 34;
+            draw_sprite(spr_ui_growth_stages_empty_260x64, 0, _gs_x, _gs_y);
+            var _cell_x = [2, 73, 144, 215];
+            for (var _si = 0; _si < min(4, array_length(_sp.stages)); _si++) {
+                var _ss = _sp.stages[_si];
+                if (!sprite_exists(_ss)) continue;
+                var _ssc = min(1, 36 / max(sprite_get_width(_ss), sprite_get_height(_ss)));
+                draw_sprite_ext(_ss, 0, _gs_x + _cell_x[_si] + (44 - sprite_get_width(_ss) * _ssc) / 2 + sprite_get_xoffset(_ss) * _ssc,
+                                _gs_y + 10 + (44 - sprite_get_height(_ss) * _ssc) / 2 + sprite_get_yoffset(_ss) * _ssc,
+                                _ssc, _ssc, 0, c_white, 1);
+            }
+            // под листом: полив и срок
+            draw_sprite(spr_ui_plant_icon_drop, 0, _lo_x0 + 10, _lo_y0 + 10);
+            draw_sprite(spr_ui_plant_icon_clock, 0, _lo_x0 + 10, _lo_y0 + 40);
+            draw_set_font(fnt_ui);
+            draw_set_color(make_color_rgb(55, 35, 15));
+            draw_text(_lo_x0 + 34, _lo_y0 + 10, "Поливать каждый день");
+            draw_text(_lo_x0 + 34, _lo_y0 + 40, _sp.grow_text);
+        } else {
+            draw_set_font(fnt_ui);
+            draw_set_halign(fa_center);
+            draw_set_valign(fa_middle);
+            draw_set_color(_txt_hint);
+            draw_text(_sh_cx, _sh_cy + 10, "Выбери растение\nиз списка");
+            draw_set_halign(fa_left);
+            draw_set_valign(fa_top);
+        }
         break;
+
     case 2: // Рецепты
         var _all_recipes = diary_get_recipe_list();
         var _categories  = diary_get_recipe_categories();
-        var _cell_fill   = make_color_rgb(234, 198, 152);   // цвета ячеек — как у карточек в арте книги
-        var _cell_line   = make_color_rgb(203, 159, 108);
+        var _cat_icons   = [spr_ui_recipe_icon_bread, spr_ui_recipe_icon_plate, spr_ui_recipe_icon_cup];
 
-        // --- Кнопки-категории (левая страница, под табличкой) ---
-        var _cat_x0 = book_x + ui_rcat[0];
-        var _cat_x1 = book_x + ui_rcat[2];
-        var _cat_y0 = book_y + ui_rcat[1];
-        var _cat_y1 = book_y + ui_rcat[3];
-        var _cat_w  = (_cat_x1 - _cat_x0) / array_length(_categories);
-        var _cat_gap = 6;
-        var _cat_corner = 6;
+        // --- Кнопки-категории ---
         for (var _ci = 0; _ci < array_length(_categories); _ci++) {
-            var _cx0 = _cat_x0 + _ci * _cat_w;
-            var _cx1 = _cx0 + _cat_w;
-            var _cat_active = (_categories[_ci].id == recipe_category);
-            var _bx0 = _cx0 + _cat_gap / 2;
-            var _bx1 = _cx1 - _cat_gap / 2;
-            draw_set_color(_cat_active ? make_color_rgb(250, 241, 226) : _cell_fill);
-            draw_roundrect_ext(_bx0, _cat_y0, _bx1, _cat_y1, _cat_corner, _cat_corner, false);
-            draw_set_color(_cat_active ? make_color_rgb(172, 104, 55) : _cell_line);
-            draw_roundrect_ext(_bx0, _cat_y0, _bx1, _cat_y1, _cat_corner, _cat_corner, true);
-
+            var _bx = book_x + ui_rcat[0] + _ci * (ui_rcat[2] + ui_rcat[3]);
+            var _by = book_y + ui_rcat[1];
+            var _act = (_categories[_ci].id == recipe_category);
+            draw_sprite(_act ? spr_ui_recipe_category_active : spr_ui_recipe_category_inactive, 0, _bx, _by);
+            if (_ci < 3) draw_sprite(_cat_icons[_ci], 0, _bx + 8, _by + 5);
             draw_set_font(fnt_ui);
             draw_set_halign(fa_center);
             draw_set_valign(fa_middle);
-            draw_set_color(_cat_active ? make_color_rgb(60, 35, 10) : make_color_rgb(120, 95, 65));
-            draw_text((_cx0 + _cx1) / 2, (_cat_y0 + _cat_y1) / 2, _categories[_ci].name);
+            draw_set_color(_act ? make_color_rgb(60, 35, 10) : _txt_mid);
+            draw_text(_bx + 56, _by + 13, _categories[_ci].name);
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
         }
 
-        // --- Сетка рецептов 4x4 ---
-        var _grid_cols = 4;
-        var _grid_rows = 4;
-        var _slot_size = ui_rgrid[2];
-        var _grid_gap  = ui_rgrid[3];
-        var _grid_x    = book_x + ui_rgrid[0];
-        var _grid_y    = book_y + ui_rgrid[1];
-
-        var _cat_recipes = [];
-        for (var _ri = 0; _ri < array_length(_all_recipes); _ri++) {
-            if (_all_recipes[_ri].category == recipe_category && _all_recipes[_ri].unlocked) {
-                array_push(_cat_recipes, _all_recipes[_ri]);
+        // --- Сетка 4x4: открытые рецепты, затем закрытые (замок), остальное пусто ---
+        var _cat_recipes = diary_recipes_in_category(_all_recipes, recipe_category);
+        var _step = ui_rgrid[2] + ui_rgrid[3];
+        for (var _gi = 0; _gi < 16; _gi++) {
+            var _sx = book_x + ui_rgrid[0] + (_gi mod 4) * _step;
+            var _sy = book_y + ui_rgrid[1] + (_gi div 4) * _step;
+            if (_gi >= array_length(_cat_recipes)) { draw_sprite(spr_ui_recipe_slot_empty, 0, _sx, _sy); continue; }
+            var _rc = _cat_recipes[_gi];
+            if (!_rc.unlocked) { draw_sprite(spr_ui_recipe_slot_locked, 0, _sx, _sy); continue; }
+            draw_sprite((_rc.id == selected_recipe) ? spr_ui_recipe_slot_selected : spr_ui_recipe_slot_normal, 0, _sx, _sy);
+            if (sprite_exists(_rc.icon)) {
+                var _isc = min(1, 36 / max(sprite_get_width(_rc.icon), sprite_get_height(_rc.icon)));
+                draw_sprite_ext(_rc.icon, 0, _sx + (46 - sprite_get_width(_rc.icon) * _isc) / 2 + sprite_get_xoffset(_rc.icon) * _isc,
+                                _sy + (46 - sprite_get_height(_rc.icon) * _isc) / 2 + sprite_get_yoffset(_rc.icon) * _isc,
+                                _isc, _isc, 0, c_white, 1);
+            } else {
+                draw_set_color(make_color_rgb(200, 170, 120));
+                draw_circle(_sx + 23, _sy + 23, 13, false);
             }
         }
 
-        for (var _row = 0; _row < _grid_rows; _row++) {
-            for (var _col = 0; _col < _grid_cols; _col++) {
-                var _idx = _row * _grid_cols + _col;
-                var _sx = _grid_x + _col * (_slot_size + _grid_gap);
-                var _sy = _grid_y + _row * (_slot_size + _grid_gap);
-                var _has_recipe = (_idx < array_length(_cat_recipes));
-                var _is_sel_slot = _has_recipe && (_cat_recipes[_idx].id == selected_recipe);
-
-                draw_set_color(_is_sel_slot ? make_color_rgb(250, 241, 226) : _cell_fill);
-                draw_roundrect_ext(_sx, _sy, _sx + _slot_size, _sy + _slot_size, 6, 6, false);
-                draw_set_color(_is_sel_slot ? make_color_rgb(172, 104, 55) : _cell_line);
-                draw_roundrect_ext(_sx, _sy, _sx + _slot_size, _sy + _slot_size, 6, 6, true);
-
-                if (_has_recipe) {
-                    var _rc  = _cat_recipes[_idx];
-                    var _icx = _sx + _slot_size / 2;
-                    var _icy = _sy + _slot_size / 2;
-
-                    if (sprite_exists(_rc.icon)) {
-                        var _iw  = sprite_get_width(_rc.icon);
-                        var _ih  = sprite_get_height(_rc.icon);
-                        var _pad = 8;
-                        var _sc  = min((_slot_size - _pad) / _iw, (_slot_size - _pad) / _ih);
-                        var _dw  = _iw * _sc;
-                        var _dh  = _ih * _sc;
-                        draw_sprite_stretched_ext(_rc.icon, 0, _icx - _dw / 2, _icy - _dh / 2, _dw, _dh, c_white, 1);
-                    } else {
-                        draw_set_color(make_color_rgb(200, 170, 120));
-                        draw_circle(_icx, _icy, _slot_size * 0.32, false);
-                    }
-                }
-            }
-        }
-
-        // --- Правая страница: картинка блюда на белом листе + ингредиенты под ним (2 колонки по 3 строки) ---
+        // --- Правая страница: картинка блюда в рамке + ингредиенты под листом ---
         var _sel_r = undefined;
         if (selected_recipe != "") {
             for (var _li = 0; _li < array_length(_all_recipes); _li++) {
                 if (_all_recipes[_li].id == selected_recipe) { _sel_r = _all_recipes[_li]; break; }
             }
         }
-
         if (_sel_r != undefined) {
-            var _img_y0 = _sh_y0 + 28;     // ниже закладки
-            var _img_y1 = _sh_y1 - 6;
-            var _rp_w   = _sh_x1 - _sh_x0;
-            var _img_cx = _sh_cx;
-            draw_set_font(fnt_dialog_ru_bold);
-            var _cap_h  = string_height(_sel_r.name) + 6;
-            var _img_cy = (_img_y0 + _img_y1 - _cap_h) / 2;
-
+            var _df_x = round(_sh_cx - 100), _df_y = _sh_y0 + 26;
+            draw_sprite(spr_ui_recipe_large_dish_200x120, 0, _df_x, _df_y);
             if (sprite_exists(_sel_r.image)) {
-                var _iw2  = sprite_get_width(_sel_r.image);
-                var _ih2  = sprite_get_height(_sel_r.image);
-                var _pad2 = 24;
-                var _sc2  = min((_rp_w - _pad2) / _iw2, (_img_y1 - _img_y0 - _cap_h - 4) / _ih2);
-                var _dw2  = _iw2 * _sc2;
-                var _dh2  = _ih2 * _sc2;
-                draw_sprite_stretched_ext(_sel_r.image, 0, _img_cx - _dw2 / 2, _img_cy - _dh2 / 2, _dw2, _dh2, c_white, 1);
+                var _dsc = min(1, min(184 / sprite_get_width(_sel_r.image), 104 / sprite_get_height(_sel_r.image)));
+                draw_sprite_ext(_sel_r.image, 0, _df_x + (200 - sprite_get_width(_sel_r.image) * _dsc) / 2 + sprite_get_xoffset(_sel_r.image) * _dsc,
+                                _df_y + (120 - sprite_get_height(_sel_r.image) * _dsc) / 2 + sprite_get_yoffset(_sel_r.image) * _dsc,
+                                _dsc, _dsc, 0, c_white, 1);
             } else {
                 draw_set_color(make_color_rgb(200, 170, 120));
-                draw_circle(_img_cx, _img_cy, (_img_y1 - _img_y0 - _cap_h) * 0.4, false);
+                draw_circle(_df_x + 100, _df_y + 60, 34, false);
             }
-
             draw_set_font(fnt_dialog_ru_bold);
             draw_set_halign(fa_center);
-            draw_set_valign(fa_bottom);
-            draw_set_color(make_color_rgb(70, 35, 5));
-            draw_text(_img_cx, _img_y1, _sel_r.name);
+            draw_set_valign(fa_middle);
+            draw_set_color(_txt_dark);
+            draw_text(_sh_cx, _df_y + 120 + 18, _sel_r.name);
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
 
-            // Ингредиенты: две ячейки под белым листом, в каждой до 3 строк (иконка | название | количество)
-            var _lw    = ui_low[2] - ui_low[0];
-            var _box_w = (_lw - 16) / 2;
-            var _row_h = (ui_low[3] - ui_low[1] - 8) / 3;
-            for (var _bi2 = 0; _bi2 < 2; _bi2++) {
-                var _bx = book_x + ui_low[0] + _bi2 * (_box_w + 16);
-                draw_set_color(_cell_fill);
-                draw_roundrect_ext(_bx, book_y + ui_low[1], _bx + _box_w, book_y + ui_low[3], 6, 6, false);
-                draw_set_color(_cell_line);
-                draw_roundrect_ext(_bx, book_y + ui_low[1], _bx + _box_w, book_y + ui_low[3], 6, 6, true);
-            }
-            var _icon_sz = 10;
-            for (var _gi = 0; _gi < array_length(_sel_r.ingredients) && _gi < 6; _gi++) {
-                var _ing = _sel_r.ingredients[_gi];
-                var _bx  = book_x + ui_low[0] + (_gi div 3) * (_box_w + 16);
-                var _gcy = book_y + ui_low[1] + 4 + (_gi mod 3) * _row_h + _row_h / 2;
-                var _gix = _bx + 16;
-
+            for (var _ii = 0; _ii < array_length(_sel_r.ingredients) && _ii < 6; _ii++) {
+                var _ing = _sel_r.ingredients[_ii];
+                var _amt = variable_struct_exists(_ing, "amount") ? _ing.amount : 1;
+                var _have = variable_struct_exists(_ing, "item") ? (inventory_get_amount(_ing.item) >= _amt) : false;
+                var _rx = _lo_x0 + (_ii div 3) * 162, _ry = _lo_y0 + 2 + (_ii mod 3) * 30;
+                draw_sprite(_have ? spr_ui_recipe_ingredient_available : spr_ui_recipe_ingredient_missing, 0, _rx, _ry);
                 if (sprite_exists(_ing.icon)) {
-                    var _iiw = sprite_get_width(_ing.icon);
-                    var _iih = sprite_get_height(_ing.icon);
-                    var _isc = min((_icon_sz * 2) / _iiw, (_icon_sz * 2) / _iih);
-                    var _idw = _iiw * _isc;
-                    var _idh = _iih * _isc;
-                    draw_sprite_stretched_ext(_ing.icon, 0, _gix - _idw / 2, _gcy - _idh / 2, _idw, _idh, c_white, 1);
+                    var _gsc = min(1, 18 / max(sprite_get_width(_ing.icon), sprite_get_height(_ing.icon)));
+                    draw_sprite_ext(_ing.icon, 0, _rx + 4 + sprite_get_xoffset(_ing.icon) * _gsc, _ry + 3 + sprite_get_yoffset(_ing.icon) * _gsc, _gsc, _gsc, 0, c_white, 1);
                 } else {
                     draw_set_color(_ing.color);
-                    draw_circle(_gix, _gcy, _icon_sz * 0.8, false);
+                    draw_circle(_rx + 13, _ry + 12, 7, false);
                 }
-
                 draw_set_font(fnt_ui);
-                draw_set_halign(fa_left);
                 draw_set_valign(fa_middle);
                 draw_set_color(make_color_rgb(55, 35, 15));
-                draw_text(_gix + 14, _gcy, _ing.name);
-                var _amt = variable_struct_exists(_ing, "amount") ? _ing.amount : 1;
+                draw_text(_rx + 26, _ry + 12, _ing.name);
                 draw_set_halign(fa_right);
-                draw_text(_bx + _box_w - 8, _gcy, string(_amt) + " шт");
+                draw_text(_rx + 126, _ry + 12, string(_amt));
                 draw_set_halign(fa_left);
                 draw_set_valign(fa_top);
             }
@@ -538,12 +422,13 @@ switch (current_tab) {
             draw_set_font(fnt_ui);
             draw_set_halign(fa_center);
             draw_set_valign(fa_middle);
-            draw_set_color(make_color_rgb(160, 130, 100));
-            draw_text(_sh_cx, _sh_cy + 12, "Выбери рецепт\nиз списка");
+            draw_set_color(_txt_hint);
+            draw_text(_sh_cx, _sh_cy + 10, "Выбери рецепт\nиз списка");
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
         }
         break;
+
     case 5: // Дружба
         var _fr_list = diary_get_friend_list();
 

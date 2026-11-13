@@ -1,0 +1,57 @@
+id,category,file,width,height,description,game_field
+ui_journal_book_base_1672x941,book,sprites/book/ui_journal_book_base_1672x941.png,1672,941,"Книга без вкладок, карточек и текста; вся структура в 1672x941 px",
+ui_tab_quests_inactive,tabs,sprites/tabs/ui_tab_quests_inactive.png,50,48,"Вкладка Задания, неактивная",inactive
+ui_tab_quests_active,tabs,sprites/tabs/ui_tab_quests_active.png,50,48,"Вкладка Задания, активная",active
+ui_tab_inventory_inactive,tabs,sprites/tabs/ui_tab_inventory_inactive.png,50,48,"Вкладка Инвентарь, неактивная",inactive
+ui_tab_inventory_active,tabs,sprites/tabs/ui_tab_inventory_active.png,50,48,"Вкладка Инвентарь, активная",active
+ui_tab_recipes_inactive,tabs,sprites/tabs/ui_tab_recipes_inactive.png,50,48,"Вкладка Рецепты, неактивная",inactive
+ui_tab_recipes_active,tabs,sprites/tabs/ui_tab_recipes_active.png,50,48,"Вкладка Рецепты, активная",active
+ui_tab_plants_inactive,tabs,sprites/tabs/ui_tab_plants_inactive.png,50,48,"Вкладка Растения, неактивная",inactive
+ui_tab_plants_active,tabs,sprites/tabs/ui_tab_plants_active.png,50,48,"Вкладка Растения, активная",active
+ui_tab_adventures_inactive,tabs,sprites/tabs/ui_tab_adventures_inactive.png,50,48,"Вкладка Приключения, неактивная",inactive
+ui_tab_adventures_active,tabs,sprites/tabs/ui_tab_adventures_active.png,50,48,"Вкладка Приключения, активная",active
+ui_tab_friendship_inactive,tabs,sprites/tabs/ui_tab_friendship_inactive.png,50,48,"Вкладка Дружба, неактивная",inactive
+ui_tab_friendship_active,tabs,sprites/tabs/ui_tab_friendship_active.png,50,48,"Вкладка Дружба, активная",active
+ui_tab_money_inactive,tabs,sprites/tabs/ui_tab_money_inactive.png,50,48,"Вкладка Деньги, неактивная",inactive
+ui_tab_money_active,tabs,sprites/tabs/ui_tab_money_active.png,50,48,"Вкладка Деньги, активная",active
+ui_close_normal,controls,sprites/controls/ui_close_normal.png,30,30,Закрыть normal,
+ui_close_hover,controls,sprites/controls/ui_close_hover.png,30,30,Закрыть hover,
+ui_arrow_left_normal,controls,sprites/controls/ui_arrow_left_normal.png,20,20,Листание left normal,
+ui_arrow_left_disabled,controls,sprites/controls/ui_arrow_left_disabled.png,20,20,Листание left disabled,
+ui_arrow_right_normal,controls,sprites/controls/ui_arrow_right_normal.png,20,20,Листание right normal,
+ui_arrow_right_disabled,controls,sprites/controls/ui_arrow_right_disabled.png,20,20,Листание right disabled,
+ui_quest_card_normal,quests,sprites/quests/ui_quest_card_normal.png,320,56,Карточка задания normal,quest_text_x=58 quest_text_y=11
+ui_quest_card_hover,quests,sprites/quests/ui_quest_card_hover.png,320,56,Карточка задания hover,quest_text_x=58 quest_text_y=11
+ui_quest_card_selected,quests,sprites/quests/ui_quest_card_selected.png,320,56,Карточка задания selected,quest_text_x=58 quest_text_y=11
+ui_quest_status_new,quests,sprites/quests/ui_quest_status_new.png,16,16,Статус задания new,
+ui_quest_status_read,quests,sprites/quests/ui_quest_status_read.png,16,16,Статус задания read,
+ui_quest_status_done,quests,sprites/quests/ui_quest_status_done.png,16,16,Статус задания done,
+ui_quest_group_heading,quests,sprites/quests/ui_quest_group_heading.png,320,20,Плашка раздела без текста 320x20,
+ui_quest_type_star,quests,sprites/quests/ui_quest_type_star.png,32,32,Тип задания star,
+ui_quest_type_leaf,quests,sprites/quests/ui_quest_type_leaf.png,32,32,Тип задания leaf,
+ui_quest_type_check,quests,sprites/quests/ui_quest_type_check.png,32,32,Тип задания check,
+ui_inventory_slot_empty,inventory,sprites/inventory/ui_inventory_slot_empty.png,48,48,Слот инвентаря empty,
+ui_inventory_slot_item,inventory,sprites/inventory/ui_inventory_slot_item.png,48,48,Слот инвентаря item,
+ui_inventory_slot_hover,inventory,sprites/inventory/ui_inventory_slot_hover.png,48,48,Слот инвентаря hover,
+ui_inventory_slot_selected,inventory,sprites/inventory/ui_inventory_slot_selected.png,48,48,Слот инвентаря selected,
+ui_count_badge,inventory,sprites/inventory/ui_count_badge.png,16,16,"Бейдж количества, без цифр",
+ui_inventory_item_preview_96x96,inventory,sprites/inventory/ui_inventory_item_preview_96x96.png,96,96,Рамка под увеличенную иконку 96x96,
+ui_quantity_label_200x28,inventory,sprites/inventory/ui_quantity_label_200x28.png,200,28,"Плашка количества, без текста",
+ui_recipe_category_inactive,recipes,sprites/recipes/ui_recipe_category_inactive.png,96,26,Кнопка категории inactive,
+ui_recipe_category_active,recipes,sprites/recipes/ui_recipe_category_active.png,96,26,Кнопка категории active,
+ui_recipe_icon_bread,recipes,sprites/recipes/ui_recipe_icon_bread.png,16,16,Иконка категории bread,
+ui_recipe_icon_plate,recipes,sprites/recipes/ui_recipe_icon_plate.png,16,16,Иконка категории plate,
+ui_recipe_icon_cup,recipes,sprites/recipes/ui_recipe_icon_cup.png,16,16,Иконка категории cup,
+ui_recipe_slot_empty,recipes,sprites/recipes/ui_recipe_slot_empty.png,46,46,Ячейка рецепта empty,
+ui_recipe_slot_normal,recipes,sprites/recipes/ui_recipe_slot_normal.png,46,46,Ячейка рецепта normal,
+ui_recipe_slot_selected,recipes,sprites/recipes/ui_recipe_slot_selected.png,46,46,Ячейка рецепта selected,
+ui_recipe_slot_locked,recipes,sprites/recipes/ui_recipe_slot_locked.png,46,46,Ячейка рецепта locked,
+ui_recipe_large_dish_200x120,recipes,sprites/recipes/ui_recipe_large_dish_200x120.png,200,120,Рамка большой иллюстрации блюда,
+ui_recipe_ingredient_available,recipes,sprites/recipes/ui_recipe_ingredient_available.png,150,24,Ингредиент: available,
+ui_recipe_ingredient_missing,recipes,sprites/recipes/ui_recipe_ingredient_missing.png,150,24,Ингредиент: missing,
+ui_plant_card_normal,plants,sprites/plants/ui_plant_card_normal.png,320,56,Карточка растения normal,plant_text_x=58 plant_text_y=11
+ui_plant_card_selected,plants,sprites/plants/ui_plant_card_selected.png,320,56,Карточка растения selected,plant_text_x=58 plant_text_y=11
+ui_growth_stages_empty_260x64,plants,sprites/plants/ui_growth_stages_empty_260x64.png,260,64,4 пустые клетки стадий роста со стрелками,
+ui_plant_icon_clock,plants,sprites/plants/ui_plant_icon_clock.png,16,16,Иконка растений clock,
+ui_plant_icon_drop,plants,sprites/plants/ui_plant_icon_drop.png,16,16,Иконка растений drop,
+ui_plant_icon_sun,plants,sprites/plants/ui_plant_icon_sun.png,16,16,Иконка растений sun,

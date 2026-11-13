@@ -234,3 +234,41 @@ function diary_quest_build_rows(_content_x, _content_y, _bs) {
 
     return _rows;
 }
+
+/// @func diary_quest_build_pages(_x, _y, _max_h)
+/// @desc Задания для дневника v2, по страницам: плашка группы (20 px) и карточки (56 px), промежуток 2 px.
+/// Страница заполняется сверху вниз от _y, пока ряды помещаются в _max_h. Плашка группы не остаётся одна внизу страницы.
+/// Возвращает массив страниц, страница — массив рядов { type: "header"/"quest", text, q, x, y, h }.
+function diary_quest_build_pages(_x, _y, _max_h) {
+    var _list = diary_get_quest_list();
+    var _main = [], _side = [], _done = [];
+    for (var i = 0; i < array_length(_list); i++) {
+        var _q = _list[i];
+        if (_q.done)                     array_push(_done, _q);
+        else if (_q.category == "main")  array_push(_main, _q);
+        else                             array_push(_side, _q);
+    }
+    var _groups = [["Основные", _main], ["Дополнительные", _side], ["Выполненные", _done]];
+
+    var _hh = 20, _ch = 56, _gap = 2;
+    var _pages = [], _page = [], _cy = _y;
+    for (var g = 0; g < 3; g++) {
+        var _items = _groups[g][1];
+        if (array_length(_items) == 0) continue;
+        // плашка группы: переносим на новую страницу, если под ней не влезет хотя бы одна карточка
+        if (_cy + _hh + _gap + _ch > _y + _max_h && array_length(_page) > 0) {
+            array_push(_pages, _page); _page = []; _cy = _y;
+        }
+        array_push(_page, {type: "header", text: _groups[g][0], q: undefined, x: _x, y: _cy, h: _hh});
+        _cy += _hh + _gap;
+        for (var j = 0; j < array_length(_items); j++) {
+            if (_cy + _ch > _y + _max_h) {
+                array_push(_pages, _page); _page = []; _cy = _y;
+            }
+            array_push(_page, {type: "quest", text: _items[j].text, q: _items[j], x: _x, y: _cy, h: _ch});
+            _cy += _ch + _gap;
+        }
+    }
+    if (array_length(_page) > 0 || array_length(_pages) == 0) array_push(_pages, _page);
+    return _pages;
+}

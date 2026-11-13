@@ -1,0 +1,16 @@
+GIMP Palette
+Name: PixelGame Journal UI
+Columns: 4
+#
+252 222 170  Paper
+234 198 152  Cards
+203 159 108  Card Border
+172 104  55  Dark Frame
+250 241 226  White Sheet
+121  57  41  Cover
+241 196 136  Inactive Tab
+ 94  54  38  Ink
+ 81  40  31  Dark Outline
+241 212 170  Hover
+199  71  64  Alert
+ 96 156  99  Done

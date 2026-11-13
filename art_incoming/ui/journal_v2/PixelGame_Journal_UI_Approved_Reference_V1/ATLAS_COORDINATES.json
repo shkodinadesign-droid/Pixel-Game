@@ -1,0 +1,394 @@
+[
+  {
+    "id": "ui_journal_book_base_1672x941",
+    "x": 16,
+    "y": 16,
+    "w": 1672,
+    "h": 941
+  },
+  {
+    "id": "ui_tab_quests_inactive",
+    "x": 16,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_quests_active",
+    "x": 82,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_inventory_inactive",
+    "x": 148,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_inventory_active",
+    "x": 214,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_recipes_inactive",
+    "x": 280,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_recipes_active",
+    "x": 346,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_plants_inactive",
+    "x": 412,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_plants_active",
+    "x": 478,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_adventures_inactive",
+    "x": 544,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_adventures_active",
+    "x": 610,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_friendship_inactive",
+    "x": 676,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_friendship_active",
+    "x": 742,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_money_inactive",
+    "x": 808,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_tab_money_active",
+    "x": 874,
+    "y": 976,
+    "w": 50,
+    "h": 48
+  },
+  {
+    "id": "ui_close_normal",
+    "x": 940,
+    "y": 976,
+    "w": 30,
+    "h": 30
+  },
+  {
+    "id": "ui_close_hover",
+    "x": 986,
+    "y": 976,
+    "w": 30,
+    "h": 30
+  },
+  {
+    "id": "ui_arrow_left_normal",
+    "x": 1032,
+    "y": 976,
+    "w": 20,
+    "h": 20
+  },
+  {
+    "id": "ui_arrow_left_disabled",
+    "x": 1068,
+    "y": 976,
+    "w": 20,
+    "h": 20
+  },
+  {
+    "id": "ui_arrow_right_normal",
+    "x": 1104,
+    "y": 976,
+    "w": 20,
+    "h": 20
+  },
+  {
+    "id": "ui_arrow_right_disabled",
+    "x": 1140,
+    "y": 976,
+    "w": 20,
+    "h": 20
+  },
+  {
+    "id": "ui_quest_card_normal",
+    "x": 1176,
+    "y": 976,
+    "w": 320,
+    "h": 56
+  },
+  {
+    "id": "ui_quest_card_hover",
+    "x": 1512,
+    "y": 976,
+    "w": 320,
+    "h": 56
+  },
+  {
+    "id": "ui_quest_card_selected",
+    "x": 16,
+    "y": 1048,
+    "w": 320,
+    "h": 56
+  },
+  {
+    "id": "ui_quest_status_new",
+    "x": 352,
+    "y": 1048,
+    "w": 16,
+    "h": 16
+  },
+  {
+    "id": "ui_quest_status_read",
+    "x": 384,
+    "y": 1048,
+    "w": 16,
+    "h": 16
+  },
+  {
+    "id": "ui_quest_status_done",
+    "x": 416,
+    "y": 1048,
+    "w": 16,
+    "h": 16
+  },
+  {
+    "id": "ui_quest_group_heading",
+    "x": 448,
+    "y": 1048,
+    "w": 320,
+    "h": 20
+  },
+  {
+    "id": "ui_quest_type_star",
+    "x": 784,
+    "y": 1048,
+    "w": 32,
+    "h": 32
+  },
+  {
+    "id": "ui_quest_type_leaf",
+    "x": 832,
+    "y": 1048,
+    "w": 32,
+    "h": 32
+  },
+  {
+    "id": "ui_quest_type_check",
+    "x": 880,
+    "y": 1048,
+    "w": 32,
+    "h": 32
+  },
+  {
+    "id": "ui_inventory_slot_empty",
+    "x": 928,
+    "y": 1048,
+    "w": 48,
+    "h": 48
+  },
+  {
+    "id": "ui_inventory_slot_item",
+    "x": 992,
+    "y": 1048,
+    "w": 48,
+    "h": 48
+  },
+  {
+    "id": "ui_inventory_slot_hover",
+    "x": 1056,
+    "y": 1048,
+    "w": 48,
+    "h": 48
+  },
+  {
+    "id": "ui_inventory_slot_selected",
+    "x": 1120,
+    "y": 1048,
+    "w": 48,
+    "h": 48
+  },
+  {
+    "id": "ui_count_badge",
+    "x": 1184,
+    "y": 1048,
+    "w": 16,
+    "h": 16
+  },
+  {
+    "id": "ui_inventory_item_preview_96x96",
+    "x": 1216,
+    "y": 1048,
+    "w": 96,
+    "h": 96
+  },
+  {
+    "id": "ui_quantity_label_200x28",
+    "x": 1328,
+    "y": 1048,
+    "w": 200,
+    "h": 28
+  },
+  {
+    "id": "ui_recipe_category_inactive",
+    "x": 1544,
+    "y": 1048,
+    "w": 96,
+    "h": 26
+  },
+  {
+    "id": "ui_recipe_category_active",
+    "x": 1656,
+    "y": 1048,
+    "w": 96,
+    "h": 26
+  },
+  {
+    "id": "ui_recipe_icon_bread",
+    "x": 1768,
+    "y": 1048,
+    "w": 16,
+    "h": 16
+  },
+  {
+    "id": "ui_recipe_icon_plate",
+    "x": 1800,
+    "y": 1048,
+    "w": 16,
+    "h": 16
+  },
+  {
+    "id": "ui_recipe_icon_cup",
+    "x": 1832,
+    "y": 1048,
+    "w": 16,
+    "h": 16
+  },
+  {
+    "id": "ui_recipe_slot_empty",
+    "x": 1864,
+    "y": 1048,
+    "w": 46,
+    "h": 46
+  },
+  {
+    "id": "ui_recipe_slot_normal",
+    "x": 1926,
+    "y": 1048,
+    "w": 46,
+    "h": 46
+  },
+  {
+    "id": "ui_recipe_slot_selected",
+    "x": 16,
+    "y": 1160,
+    "w": 46,
+    "h": 46
+  },
+  {
+    "id": "ui_recipe_slot_locked",
+    "x": 78,
+    "y": 1160,
+    "w": 46,
+    "h": 46
+  },
+  {
+    "id": "ui_recipe_large_dish_200x120",
+    "x": 140,
+    "y": 1160,
+    "w": 200,
+    "h": 120
+  },
+  {
+    "id": "ui_recipe_ingredient_available",
+    "x": 356,
+    "y": 1160,
+    "w": 150,
+    "h": 24
+  },
+  {
+    "id": "ui_recipe_ingredient_missing",
+    "x": 522,
+    "y": 1160,
+    "w": 150,
+    "h": 24
+  },
+  {
+    "id": "ui_plant_card_normal",
+    "x": 688,
+    "y": 1160,
+    "w": 320,
+    "h": 56
+  },
+  {
+    "id": "ui_plant_card_selected",
+    "x": 1024,
+    "y": 1160,
+    "w": 320,
+    "h": 56
+  },
+  {
+    "id": "ui_growth_stages_empty_260x64",
+    "x": 1360,
+    "y": 1160,
+    "w": 260,
+    "h": 64
+  },
+  {
+    "id": "ui_plant_icon_clock",
+    "x": 1636,
+    "y": 1160,
+    "w": 16,
+    "h": 16
+  },
+  {
+    "id": "ui_plant_icon_drop",
+    "x": 1668,
+    "y": 1160,
+    "w": 16,
+    "h": 16
+  },
+  {
+    "id": "ui_plant_icon_sun",
+    "x": 1700,
+    "y": 1160,
+    "w": 16,
+    "h": 16
+  }
+]
