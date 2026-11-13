@@ -11,22 +11,28 @@ item_defs = [
 ];
 item_def_count = array_length(item_defs);
 
-// Размеры панели
+// Книга-подложка spr_storage_bg (836x470, как дневник): слева ящик, справа инвентарь; рисуется 1:1
 var gui_w = display_get_gui_width();
 var gui_h = display_get_gui_height();
-panel_w = 620;
-panel_h = 340;
-panel_x = (gui_w - panel_w) / 2;
-panel_y = (gui_h - panel_h) / 2;
+panel_w = sprite_get_width(spr_storage_bg);
+panel_h = sprite_get_height(spr_storage_bg);
+panel_x = round((gui_w - panel_w) / 2);
+panel_y = round((gui_h - panel_h) / 2);
 
-// Сетка слотов
-slot_size = 44;
-slot_gap  = 5;
+// Разметка (пиксели подложки): центры табличек заголовков, сетки 4x3 из ячеек 48x48 с шагом 54
+title_y       = panel_y + 108;
+chest_cx      = panel_x + 236;
+player_cx     = panel_x + 606;
+slot_size = 48;
+slot_gap  = 6;
 grid_cols = 4;
 grid_rows = 3;
-chest_grid_x  = panel_x + 20;
-player_grid_x = panel_x + panel_w / 2 + 20;
-grid_y        = panel_y + 58;
+chest_grid_x  = chest_cx  - 105;
+player_grid_x = player_cx - 105;
+grid_y        = panel_y + 160;
+hint_y        = panel_y + 372;
+close_x       = panel_x + 790;   // кнопка-крестик 30x30
+close_y       = panel_y + 14;
 
 // Отслеживание кликов (true = пропустить клик открытия)
 _click_prev = true;

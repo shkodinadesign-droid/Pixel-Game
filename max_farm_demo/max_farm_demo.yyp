@@ -866,6 +866,7 @@
     {"id":{"name":"spr_ui_tab_quests_inactive","path":"sprites/spr_ui_tab_quests_inactive/spr_ui_tab_quests_inactive.yy",},},
     {"id":{"name":"spr_ui_tab_recipes_active","path":"sprites/spr_ui_tab_recipes_active/spr_ui_tab_recipes_active.yy",},},
     {"id":{"name":"spr_ui_tab_recipes_inactive","path":"sprites/spr_ui_tab_recipes_inactive/spr_ui_tab_recipes_inactive.yy",},},
+    {"id":{"name":"spr_storage_bg","path":"sprites/spr_storage_bg/spr_storage_bg.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
