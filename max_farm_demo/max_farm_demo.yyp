@@ -957,6 +957,8 @@
     {"id":{"name":"spr_cook_stage3","path":"sprites/spr_cook_stage3/spr_cook_stage3.yy",},},
     {"id":{"name":"spr_cook_stage4","path":"sprites/spr_cook_stage4/spr_cook_stage4.yy",},},
     {"id":{"name":"spr_ingr_yeast","path":"sprites/spr_ingr_yeast/spr_ingr_yeast.yy",},},
+    {"id":{"name":"spr_farmer_joe_smoke","path":"sprites/spr_farmer_joe_smoke/spr_farmer_joe_smoke.yy",},},
+    {"id":{"name":"obj_farmer_joe","path":"objects/obj_farmer_joe/obj_farmer_joe.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
