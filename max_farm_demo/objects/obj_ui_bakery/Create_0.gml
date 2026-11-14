@@ -44,7 +44,7 @@ check_tx  = panel_x + 308;
 
 // Миска — рисуется в рамке, если у блюда нет картинки
 bowl_cx     = frame_cx;
-bowl_cy     = frame_cy;
+bowl_cy     = frame_cy + 20;                 // ингредиенты летят в миску (нижняя часть картинки стадии)
 bowl_rx     = 72;   // полуширина миски
 bowl_ry     = 52;   // полувысота миски
 
@@ -82,7 +82,7 @@ drink_timer = 0;
 btn_w = sprite_get_width(spr_cook_btn);
 btn_h = sprite_get_height(spr_cook_btn);
 btn_x = round(frame_cx - btn_w / 2);
-btn_y = frame_y1 - btn_h - 8;
+btn_y = frame_y1 - btn_h - 28;                // над точками-индикатором стадий
 
 // Анимации всплеска при попадании в миску
 splash_anims = [];

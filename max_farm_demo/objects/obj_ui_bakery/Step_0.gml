@@ -30,7 +30,7 @@ if (cook_anim > 0) {
     cook_anim--;
     if (cook_anim == 0 && !cook_done) {
         cook_done       = true;
-        cook_done_timer = 80; // ~1.3 сек показываем "Готово!", потом авто-закрытие
+        cook_done_timer = 110; // ~1.3 сек показываем "Готово!", потом авто-закрытие
     }
 }
 
@@ -185,7 +185,7 @@ if (cook_anim == 0 && !cook_done) {
     if (_all_added && click_press) {
         if (mx >= btn_x && mx <= btn_x + btn_w &&
             my >= btn_y && my <= btn_y + btn_h) {
-            cook_anim = 90;
+            cook_anim = 150;   // стадия «духовка»
         }
     }
 }

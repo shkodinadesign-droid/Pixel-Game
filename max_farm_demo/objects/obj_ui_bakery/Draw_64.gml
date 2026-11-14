@@ -66,45 +66,42 @@ var _ing_count = array_length(_r.ingredients);
 // ЛЕВАЯ РАМКА — БЛЮДО (или миска, если картинки нет)
 // =======================================================
 
-var _dish = recipe_dish_image(_r.id);
-
-// Свечение при готовке
-if (cook_anim > 0) {
-    var _pulse = sin(cook_anim * 0.25) * 6;
-    draw_set_alpha(0.3);
-    draw_set_color(make_color_rgb(255, 200, 80));
-    draw_ellipse(frame_cx - 80 + _pulse, frame_cy - 62 + _pulse, frame_cx + 80 - _pulse, frame_cy + 62 - _pulse, false);
-    draw_set_alpha(1);
+// Стадия: 1 — добавляем ингредиенты, 2 — всё в миске (замес), 3 — в духовке (идёт готовка), 4 — готово
+var _all_in = (_ing_count > 0);
+for (var i = 0; i < _ing_count; i++) {
+    var _f = false;
+    for (var j = 0; j < array_length(bowl_items); j++) if (bowl_items[j] == _r.ingredients[i].item) { _f = true; break; }
+    if (!_f) { _all_in = false; break; }
 }
-
-if (sprite_exists(_dish)) {
-    var _dw = sprite_get_width(_dish), _dh = sprite_get_height(_dish);
-    var _dsc = min(1, min(170 / _dw, 150 / _dh));
-    draw_sprite_ext(_dish, 0, frame_cx - _dw * _dsc / 2 + sprite_get_xoffset(_dish) * _dsc,
-                    frame_cy - _dh * _dsc / 2 + sprite_get_yoffset(_dish) * _dsc, _dsc, _dsc, 0, c_white, 1);
-} else {
-    // Миска
-    draw_set_alpha(0.15);
-    draw_set_color(c_black);
-    draw_ellipse(bowl_cx - bowl_rx + 8, bowl_cy + bowl_ry - 10, bowl_cx + bowl_rx + 8, bowl_cy + bowl_ry + 6, false);
-    draw_set_alpha(1);
-    draw_set_color(make_color_rgb(225, 210, 180));
-    draw_ellipse(bowl_cx - bowl_rx, bowl_cy - bowl_ry * 0.4, bowl_cx + bowl_rx, bowl_cy + bowl_ry, false);
-    draw_set_color(make_color_rgb(210, 195, 160));
-    draw_ellipse(bowl_cx - bowl_rx + 8, bowl_cy - bowl_ry * 0.4 + 8, bowl_cx + bowl_rx - 8, bowl_cy + bowl_ry - 6, false);
-    draw_set_color(make_color_rgb(140, 100, 55));
-    draw_ellipse(bowl_cx - bowl_rx, bowl_cy - bowl_ry * 0.4, bowl_cx + bowl_rx, bowl_cy + bowl_ry, true);
-    draw_set_color(make_color_rgb(200, 180, 145));
-    draw_ellipse(bowl_cx - bowl_rx, bowl_cy - bowl_ry * 0.4 - 8, bowl_cx + bowl_rx, bowl_cy - bowl_ry * 0.4 + 8, false);
-    draw_set_color(make_color_rgb(140, 100, 55));
-    draw_ellipse(bowl_cx - bowl_rx, bowl_cy - bowl_ry * 0.4 - 8, bowl_cx + bowl_rx, bowl_cy - bowl_ry * 0.4 + 8, true);
+var _stage = cook_done ? 4 : ((cook_anim > 0) ? 3 : (_all_in ? 2 : 1));
+var _spr   = [spr_cook_stage1, spr_cook_stage2, spr_cook_stage3, spr_cook_stage4][_stage - 1];
+if (_stage == 4 && string_pos("pie", _r.id) == 0) {            // готовое блюдо: пирог с блёстками — только для пирогов
+    var _dish = recipe_dish_image(_r.id);
+    _spr = sprite_exists(_dish) ? _dish : spr_cook_stage4;
 }
+// Лёгкая анимация стадий (целые пиксели)
+var _tick = current_time div 16;
+var _ax = 0, _ay = 0;
+switch (_stage) {
+    case 1: _ay = ((_tick div 20) mod 2 == 0) ? 0 : -1; break;            // покачивание
+    case 2: _ax = [0, 1, 0, -1][(_tick div 6) mod 4]; break;             // замешивание
+    case 3: _ay = ((_tick div 10) mod 2 == 0) ? 0 : -1;                  // духовка «дышит», тёплое свечение
+            draw_set_alpha(0.18 + 0.1 * sin(current_time / 150));
+            draw_set_color(make_color_rgb(255, 190, 80));
+            draw_ellipse(frame_cx - 82, frame_cy - 86, frame_cx + 82, frame_cy + 86, false);
+            draw_set_alpha(1); break;
+    case 4: _ay = ((_tick div 24) mod 2 == 0) ? 0 : -1; break;
+}
+var _sw = sprite_get_width(_spr), _sh = sprite_get_height(_spr);
+draw_sprite(_spr, 0, round(frame_cx - _sw / 2) + sprite_get_xoffset(_spr) + _ax, round(frame_cy - _sh / 2) + sprite_get_yoffset(_spr) + _ay);
 
-// Уже добавленные ингредиенты — рядок иконок под блюдом
-var _bi_count = array_length(bowl_items);
-for (var i = 0; i < _bi_count; i++) {
-    var _bx = frame_cx + (i - (_bi_count - 1) / 2) * 36;
-    _draw_item(bowl_items[i], _bx, frame_cy + 88, 1, _ing_color_map);
+// Точки-индикатор стадий внизу рамки
+for (var i = 1; i <= 4; i++) {
+    var _dx = frame_cx + (i - 2.5) * 16, _dy = frame_y1 - 14;
+    draw_set_color(make_color_rgb(150, 100, 55));
+    draw_circle(_dx, _dy, 5, false);
+    draw_set_color((i == _stage) ? make_color_rgb(235, 160, 60) : make_color_rgb(250, 238, 215));
+    draw_circle(_dx, _dy, 4, false);
 }
 
 // Полёт ингредиентов в рамку
