@@ -56,17 +56,17 @@ function plant_crop(seed_type = "carrot") {
         with (crop_id) {
             if (crop_type == "potato") {
                 // 3 дня: семя → росток → росток → готов
-                spr_stages     = [spr_seed, spr_potato_stage1, spr_potato_stage1, spr_potato_ready];
+                spr_stages     = [spr_potato_sprout, spr_potato_stage1, spr_potato_stage1, spr_potato_ready];
                 days_per_stage = 1;
                 set_stage_sprite();
             } else if (crop_type == "strawberry") {
                 // 1 день: семя → готова
-                spr_stages     = [spr_seed, spr_strawberry_ready];
+                spr_stages     = [spr_strawberry_sprout, spr_strawberry_ready];
                 days_per_stage = 1;
                 set_stage_sprite();
             } else if (crop_type == "carrot") {
                 // 2 дня: семя → росток → готова
-                spr_stages     = [spr_seed, spr_carrot_stage1, spr_carrot_ready];
+                spr_stages     = [spr_carrot_sprout, spr_carrot_stage1, spr_carrot_ready];
                 days_per_stage = 1;
                 set_stage_sprite();
             }

@@ -33,15 +33,15 @@ function storage_init() {
         name: "Морковь",
         category: "vegetables",
         grow_days: 3,
-        sell_price: 5
+        sell_price: 5,
+        icon: spr_carrot_icon
     });
     ds_map_add(global.item_database, "potato", {
         name: "Картофель",
         category: "vegetables",
         grow_days: 4,
         sell_price: 5,
-        icon: spr_potato_icon,
-        icon_scale: 0.75
+        icon: spr_potato_icon
     });
     ds_map_add(global.item_database, "potato_seed", {
         name: "Семена картофеля",
@@ -63,7 +63,7 @@ function storage_init() {
         name: "Помидор",
         category: "vegetables",
         grow_days: 5,
-        icon: -1,
+        icon: spr_tomato_icon,
         sell_price: 3
     });
     ds_map_add(global.item_database, "cabbage", {
@@ -74,7 +74,8 @@ function storage_init() {
     ds_map_add(global.item_database, "onion", {
         name: "Лук",
         category: "vegetables",
-        grow_days: 3
+        grow_days: 3,
+        icon: spr_onion_icon
     });
 
     // --- МОЛОЧНЫЕ ---
@@ -142,7 +143,8 @@ function storage_init() {
         name: "Клубника",
         category: "fruits",
         grow_days: 4,
-        sell_price: 5
+        sell_price: 5,
+        icon: spr_straberry_icon
     });
     ds_map_add(global.item_database, "strawberry_seed", {
         name: "Семена клубники",

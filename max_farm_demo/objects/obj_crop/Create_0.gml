@@ -17,13 +17,13 @@ if (!variable_instance_exists(id, "crop_type")) crop_type = "carrot";
 // Можно переопределить снаружи через plant_crop() — здесь дефолт для моркови
 if (crop_type == "potato") {
     // 3 дня
-    spr_stages = [spr_seed, spr_potato_stage1, spr_potato_stage1, spr_potato_ready];
+    spr_stages = [spr_potato_sprout, spr_potato_stage1, spr_potato_stage1, spr_potato_ready];
 } else if (crop_type == "strawberry") {
     // 1 день
-    spr_stages = [spr_seed, spr_strawberry_ready];
+    spr_stages = [spr_strawberry_sprout, spr_strawberry_ready];
 } else {
     // carrot — 2 дня
-    spr_stages = [spr_seed, spr_carrot_stage1, spr_carrot_ready];
+    spr_stages = [spr_carrot_sprout, spr_carrot_stage1, spr_carrot_ready];
 }
 
 // хелперы
