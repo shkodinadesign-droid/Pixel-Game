@@ -24,13 +24,11 @@ if (drink_phase) {
 
 /// иконка предмета 1:1 (32x32), по центру точки; бледная при _a < 1
 var _draw_item = function(_item_id, _cx, _cy, _a, _cmap) {
-    var _inf = storage_get_item_info(_item_id);
-    if (_inf != undefined && variable_struct_exists(_inf, "icon") && sprite_exists(_inf.icon)) {
-        var _s  = _inf.icon;
+    var _s = ingredient_icon(_item_id);                       // spr_ingr_* (до 40 px) или обычная иконка
+    if (_s != -1) {
         var _sw = sprite_get_width(_s), _sh = sprite_get_height(_s);
         var _sc = (max(_sw, _sh) <= 40) ? 1 : 36 / max(_sw, _sh);
-        if (variable_struct_exists(_inf, "icon_scale")) _sc *= _inf.icon_scale;
-        draw_sprite_ext(_s, 0, _cx - _sw * _sc / 2 + sprite_get_xoffset(_s) * _sc, _cy - _sh * _sc / 2 + sprite_get_yoffset(_s) * _sc,
+        draw_sprite_ext(_s, 0, round(_cx - _sw * _sc / 2) + sprite_get_xoffset(_s) * _sc, round(_cy - _sh * _sc / 2) + sprite_get_yoffset(_s) * _sc,
                         _sc, _sc, 0, c_white, _a);
     } else {
         var _col = ds_map_find_value(_cmap, _item_id);
@@ -105,7 +103,7 @@ if (sprite_exists(_dish)) {
 // Уже добавленные ингредиенты — рядок иконок под блюдом
 var _bi_count = array_length(bowl_items);
 for (var i = 0; i < _bi_count; i++) {
-    var _bx = frame_cx + (i - (_bi_count - 1) / 2) * 30;
+    var _bx = frame_cx + (i - (_bi_count - 1) / 2) * 36;
     _draw_item(bowl_items[i], _bx, frame_cy + 88, 1, _ing_color_map);
 }
 

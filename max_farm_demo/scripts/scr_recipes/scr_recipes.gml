@@ -147,3 +147,13 @@ function recipe_dish_image(_id) {
     var _s = asset_get_index("spr_dish_" + _id);
     return (_s != -1 && sprite_exists(_s)) ? _s : -1;
 }
+
+/// @func ingredient_icon(_item_id)
+/// @desc Иконка ингредиента для окна готовки: spr_ingr_<id> (лист ingredients_v1), иначе обычная иконка предмета, иначе -1.
+function ingredient_icon(_item_id) {
+    var _s = asset_get_index("spr_ingr_" + _item_id);
+    if (_s != -1 && sprite_exists(_s)) return _s;
+    var _inf = storage_get_item_info(_item_id);
+    if (_inf != undefined && variable_struct_exists(_inf, "icon") && sprite_exists(_inf.icon)) return _inf.icon;
+    return -1;
+}
