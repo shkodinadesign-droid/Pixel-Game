@@ -41,7 +41,7 @@ function scr_dialog_draw_speaker(_win_x, _win_y, _win_w, _win_h, _name)
 /// @desc Рисует деревянную плашку с портретом справа (между биркой и кнопкой).
 ///       Возвращает макс. ширину текста слева от портрета — использовать в draw_text_ext.
 
-function scr_dialog_draw_portrait(_win_x, _win_y, _win_w, _win_h, _btn_y1, _sprite, _size)
+function scr_dialog_draw_portrait(_win_x, _win_y, _win_w, _win_h, _btn_y1, _sprite, _size, _frame = 0)
 {
     var _scale_x = _win_w / 580;
     var _scale_y = _win_h / 234;
@@ -59,7 +59,7 @@ function scr_dialog_draw_portrait(_win_x, _win_y, _win_w, _win_h, _btn_y1, _spri
 
     var _ppad = 8;
     var _pscale = (_size - _ppad * 2) / sprite_get_width(_sprite);
-    draw_sprite_ext(_sprite, 0, _px1 + _ppad, _py1 + _ppad, _pscale, _pscale, 0, c_white, 1);
+    draw_sprite_ext(_sprite, _frame, _px1 + _ppad, _py1 + _ppad, _pscale, _pscale, 0, c_white, 1);   // _frame — кадр анимированного портрета
 
     var _text_x = _win_x + 15 * _scale_x + 8;
     return _px1 - _text_x - 16;

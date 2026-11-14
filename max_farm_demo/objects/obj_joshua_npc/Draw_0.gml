@@ -1,7 +1,11 @@
-// spr_Miley: 32×48, origin top-left → рисуем с центром по x, низ на y
-var _sw = sprite_get_width(spr_Miley);
-var _sh = sprite_get_height(spr_Miley);
-draw_sprite(spr_Miley, 0, x - _sw / 2, y - _sh);
+// Майли: спрайты spr_miley_* 48x48, начало — низ по центру (x, y).
+// Во время разговора (shop_state != 0) — позы разговора по кругу, иначе стоит лицом и иногда улыбается-моргает.
+var _sh = 48;
+if (shop_state != 0) {
+    draw_sprite(spr_miley_talk, [0, 1, 2, 1][(current_time div 300) mod 4], x, y);
+} else {
+    draw_sprite(spr_miley_idle_down, ((current_time div 150) mod 24 == 0) ? 1 : 0, x, y);
+}
 
 // Имя
 draw_set_font(fnt_dialog);

@@ -322,9 +322,23 @@ if (room == rm_bakery && variable_global_exists("show_potato_hint") && global.sh
 if (miley_active && room == rm_bakery) {
     var _cam_x = camera_get_view_x(view_camera[0]);
     var _cam_y = camera_get_view_y(view_camera[0]);
-    draw_sprite_ext(spr_Miley, 0,
-        miley_x - _cam_x, miley_y - _cam_y,
-        miley_xscale, 1, 0, c_white, 1);
+    // Спрайты spr_miley_* (48x48, начало — низ по центру). miley_x/y — левый верх прежнего спрайта 32x48
+    // (при miley_xscale = -1 он рисовался отражённым влево), отсюда низ по центру: x + 16 * xscale, y + 48.
+    var _mspr = spr_miley_idle_left, _mfr = 0;
+    switch (miley_state) {
+        case "entering": case "leaving":
+            _mspr = (miley_xscale < 0) ? spr_miley_walk_left : spr_miley_walk_right;
+            _mfr  = (current_time div 150) mod 4;
+            break;
+        case "talking": case "thanks":
+            _mspr = miley_dlg_show ? spr_miley_talk : spr_miley_idle_down;
+            _mfr  = miley_dlg_show ? [0, 1, 2, 1][(current_time div 300) mod 4] : 0;
+            break;
+        default:   // ждёт кофе / получает кружку — стоит лицом к Макс, иногда моргает
+            _mspr = (miley_xscale < 0) ? spr_miley_idle_left : spr_miley_idle_right;
+            _mfr  = ((current_time div 150) mod 24 == 0) ? 1 : 0;
+    }
+    draw_sprite(_mspr, _mfr, miley_x + 16 * miley_xscale - _cam_x, miley_y + 48 - _cam_y);
 
     // --- Подсказка: Майли ждёт кофе ---
     if (miley_state == "waiting_for_coffee") {
@@ -403,9 +417,14 @@ if (miley_active && room == rm_bakery) {
         draw_set_alpha(1);
         scr_dialog_draw_bg(_mwx, _mwy, _mww, _mwh);
 
-        // Иконка кружки кофе (слева)
+        // Слева: портрет Майли в её репликах (говорит — улыбка <-> смех), в репликах Макс — иконка кружки кофе
         var _mcx = _mwx + 52;
         var _mcy = _mwy + _mwh / 2 + 4;
+        if (_mspeaker == "Майли:") {
+            draw_set_color(make_color_rgb(60, 38, 20));
+            draw_roundrect_ext(_mcx - 34, _mcy - 34, _mcx + 34, _mcy + 34, 10, 10, false);
+            draw_sprite(spr_miley_portrait_anim, ((current_time div 250) mod 2 == 0) ? 0 : 1, _mcx - 28, _mcy - 28);
+        } else {
         draw_set_color(make_color_rgb(220, 200, 165));
         draw_ellipse(_mcx-24, _mcy+16, _mcx+24, _mcy+22, false);
         draw_set_color(make_color_rgb(240, 228, 208));
@@ -423,6 +442,7 @@ if (miley_active && room == rm_bakery) {
         draw_circle(_mcx-5, _mcy-22, 3, false);
         draw_circle(_mcx+5, _mcy-26, 2, false);
         draw_set_alpha(1);
+        }
 
         // Имя — жирным, в бирке
         scr_dialog_draw_speaker(_mwx, _mwy, _mww, _mwh, _mspeaker);

@@ -83,7 +83,7 @@ if (shop_state >= 1 && shop_state <= 3) {
     if (_speaker == "Майли:") {
         var _portrait_size = 72;
         var _portrait_x1   = dx + 565 * (dw / 580) - 8 - _portrait_size;
-        scr_dialog_draw_portrait(dx, dy, dw, dh, _by1, spr_miley_portrait, _portrait_size);
+        scr_dialog_draw_portrait(dx, dy, dw, dh, _by1, spr_miley_portrait_anim, _portrait_size, ((current_time div 250) mod 2 == 0) ? 0 : 1);   // говорит: улыбка <-> смех
         _text_max_w = _portrait_x1 - tx - 16;
     }
 
@@ -118,7 +118,7 @@ if (shop_state == 5) {
 
     var _portrait_size5 = 72;
     var _portrait_x1_5  = dx + 565 * (dw / 580) - 8 - _portrait_size5;
-    scr_dialog_draw_portrait(dx, dy, dw, dh, _by1, spr_miley_portrait, _portrait_size5);
+    scr_dialog_draw_portrait(dx, dy, dw, dh, _by1, spr_miley_portrait_anim, _portrait_size5, ((current_time div 250) mod 2 == 0) ? 0 : 1);
     var _text_max_w5 = _portrait_x1_5 - tx5 - 16;
 
     draw_set_font(fnt_ui);
