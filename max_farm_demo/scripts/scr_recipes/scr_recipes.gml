@@ -142,17 +142,44 @@ function recipe_craft(idx) {
 }
 
 /// @func recipe_dish_image(_id)
-/// @desc Картинка готового блюда для окна готовки и дневника: спрайт spr_dish_<id>, иначе -1.
+/// @desc Картинка готового блюда для окна готовки и дневника, иначе -1.
+/// Спрайты перечислены явно: в проекте включено «удалять неиспользуемые ресурсы», и найденные только по имени
+/// (asset_get_index) спрайты в сборку не попадают.
 function recipe_dish_image(_id) {
-    var _s = asset_get_index("spr_dish_" + _id);
-    return (_s != -1 && sprite_exists(_s)) ? _s : -1;
+    switch (_id) {
+        case "potato_pie":    return spr_dish_potato_pie;
+        case "carrot_pie":    return spr_dish_carrot_pie;
+        case "carrot_muffin": return spr_dish_carrot_muffin;
+        case "pizza":         return spr_dish_pizza;
+        case "apple_bun":     return spr_dish_apple_bun;
+        case "pudding":       return spr_dish_pudding;
+        case "latte":         return spr_dish_latte;
+        case "cappuccino":    return spr_dish_cappuccino;
+        case "cocoa":         return spr_dish_cocoa;
+        case "tea_aromatic":  return spr_dish_tea_aromatic;
+        case "tea_sunny":     return spr_dish_tea_sunny;
+        case "tea_grandma":   return spr_dish_tea_grandma;
+    }
+    return -1;
 }
 
 /// @func ingredient_icon(_item_id)
-/// @desc Иконка ингредиента для окна готовки: spr_ingr_<id> (лист ingredients_v1), иначе обычная иконка предмета, иначе -1.
+/// @desc Крупная иконка ингредиента (до 40 px) для окна готовки, иначе обычная иконка предмета, иначе -1.
+/// Спрайты перечислены явно (см. recipe_dish_image).
 function ingredient_icon(_item_id) {
-    var _s = asset_get_index("spr_ingr_" + _item_id);
-    if (_s != -1 && sprite_exists(_s)) return _s;
+    switch (_item_id) {
+        case "egg":          return spr_ingr_egg;
+        case "milk":         return spr_ingr_milk;
+        case "potato":       return spr_ingr_potato;
+        case "sugar":        return spr_ingr_sugar;
+        case "flour":        return spr_ingr_flour;
+        case "water":        return spr_ingr_water;
+        case "carrot":       return spr_ingr_carrot;
+        case "strawberry":   return spr_ingr_strawberry;
+        case "coffee_beans": return spr_ingr_coffee_beans;
+        case "pepperoni":    return spr_ingr_pepperoni;
+        case "yeast":        return spr_ingr_yeast;
+    }
     var _inf = storage_get_item_info(_item_id);
     if (_inf != undefined && variable_struct_exists(_inf, "icon") && sprite_exists(_inf.icon)) return _inf.icon;
     return -1;

@@ -101,8 +101,7 @@ function storage_init() {
         name: "Яйцо",
         category: "eggs",
         source: "chicken",
-        icon: spr_egg_icon,
-        icon_scale: 0.75
+        icon: spr_egg_icon
     });
     ds_map_add(global.item_database, "golden_egg", {
         name: "Золотое яйцо",
