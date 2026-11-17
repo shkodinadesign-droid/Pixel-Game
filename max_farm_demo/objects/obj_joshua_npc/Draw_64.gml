@@ -1,6 +1,6 @@
 // ===== ХИНТ "[E] Говорить" при повторном визите =====
 if (shop_state == 0) {
-    if (variable_global_exists("miley_first_visit_done") && global.miley_first_visit_done
+    if (variable_global_exists(first_visit_key) && variable_global_get(first_visit_key)
     && instance_exists(obj_max)
     && point_distance(x, y, obj_max.x, obj_max.y) < 160) {
         var _gui_w = display_get_gui_width();
@@ -40,28 +40,8 @@ var _my = device_mouse_y_to_gui(0);
 if (shop_state >= 1 && shop_state <= 3) {
     dx = (_gui_w - dw) / 2;
 
-    var _speaker, _col, _l1, _l2;
-    switch (shop_state) {
-        case 1:
-            _speaker = "Майли:";
-            _col = make_color_rgb(80, 180, 120);
-            _l1  = "Добро пожаловать в магазин!";
-            _l2  = "Для новых посетителей у нас будут скидки!";
-            break;
-        case 2:
-            _speaker = "Макс:";
-            _col = make_color_rgb(255, 210, 100);
-            _l1  = "Добрый день! Рада новому знакомству!";
-            _l2  = "Хочу тут прикупить у вас новые товары!";
-            break;
-        case 3:
-            _speaker = "Майли:";
-            _col = make_color_rgb(80, 180, 120);
-            _l1  = "Посмотрите что у нас есть!";
-            _l2  = "У нас большой выбор =)";
-            break;
-        default: exit;
-    }
+    var _ln = intro_lines[clamp(shop_state - 1, 0, array_length(intro_lines) - 1)];
+    var _speaker = _ln[0], _l1 = _ln[1], _l2 = _ln[2];
 
     gpu_set_blendmode(bm_normal);
     draw_set_alpha(1);
@@ -80,10 +60,10 @@ if (shop_state >= 1 && shop_state <= 3) {
     var _by2 = _by1 + btn_h;
 
     // Портрет Майли — только в её репликах
-    if (_speaker == "Майли:") {
+    if (_speaker == npc_speaker) {
         var _portrait_size = 72;
         var _portrait_x1   = dx + 565 * (dw / 580) - 8 - _portrait_size;
-        scr_dialog_draw_portrait(dx, dy, dw, dh, _by1, spr_miley_portrait_anim, _portrait_size, ((current_time div 250) mod 2 == 0) ? 0 : 1);   // говорит: улыбка <-> смех
+        scr_dialog_draw_portrait(dx, dy, dw, dh, _by1, npc_portrait, _portrait_size, ((current_time div 250) mod 2 == 0) ? 0 : 1);   // говорит: улыбка <-> смех
         _text_max_w = _portrait_x1 - tx - 16;
     }
 
@@ -106,7 +86,7 @@ if (shop_state == 5) {
     draw_set_alpha(1);
 
     scr_dialog_draw_bg(dx, dy, dw, dh);
-    scr_dialog_draw_speaker(dx, dy, dw, dh, "Майли:");
+    scr_dialog_draw_speaker(dx, dy, dw, dh, npc_speaker);
 
     var tx5 = dx + 15 * (dw / 580) + 8;
     var ty5 = scr_dialog_body_top(dx, dy, dw, dh);
@@ -118,14 +98,14 @@ if (shop_state == 5) {
 
     var _portrait_size5 = 72;
     var _portrait_x1_5  = dx + 565 * (dw / 580) - 8 - _portrait_size5;
-    scr_dialog_draw_portrait(dx, dy, dw, dh, _by1, spr_miley_portrait_anim, _portrait_size5, ((current_time div 250) mod 2 == 0) ? 0 : 1);
+    scr_dialog_draw_portrait(dx, dy, dw, dh, _by1, npc_portrait, _portrait_size5, ((current_time div 250) mod 2 == 0) ? 0 : 1);
     var _text_max_w5 = _portrait_x1_5 - tx5 - 16;
 
     draw_set_font(fnt_ui);
     draw_set_halign(fa_left);
     draw_set_valign(fa_top);
     draw_set_color(c_black);
-    draw_text_ext(tx5, ty5, "Добрый день! Что желаете купить?", -1, _text_max_w5);
+    draw_text_ext(tx5, ty5, repeat_line, -1, _text_max_w5);
 
     var _hover5 = (device_mouse_x_to_gui(0) >= _bx1 && device_mouse_x_to_gui(0) <= _bx2
                && device_mouse_y_to_gui(0) >= _by1 && device_mouse_y_to_gui(0) <= _by2);
@@ -158,7 +138,7 @@ if (shop_state == 4) {
     draw_set_halign(fa_center);
     draw_set_valign(fa_top);
     draw_set_color(make_color_rgb(80, 50, 20));
-    draw_text(shop_panel_x + shop_panel_w / 4,     shop_panel_y + 16, "МАГАЗИН МАЙЛИ");
+    draw_text(shop_panel_x + shop_panel_w / 4,     shop_panel_y + 16, shop_title);
     draw_text(shop_panel_x + shop_panel_w * 3 / 4, shop_panel_y + 16, "ИНВЕНТАРЬ");
 
     // Монеты
@@ -248,14 +228,15 @@ if (shop_state == 4) {
     }
 
     // ── Товары Майли (под левой сеткой магазина, слоты с кружками) ──
-    if (variable_global_exists("miley_inventory") && ds_map_size(global.miley_inventory) > 0) {
+    var _stock = variable_global_exists(stock_key) ? variable_global_get(stock_key) : -1;
+    if (_stock != -1 && ds_map_size(_stock) > 0) {
         var _ml_top = shop_grid_y + shop_grid_rows * (shop_slot_size + shop_slot_gap) + 6;
         var _ml_sy  = _ml_top;
         var _ml_col = 0;
-        var _mkey   = ds_map_find_first(global.miley_inventory);
-        repeat(ds_map_size(global.miley_inventory)) {
+        var _mkey   = ds_map_find_first(_stock);
+        repeat(ds_map_size(_stock)) {
             if (_ml_sy + shop_slot_size > shop_panel_y + shop_panel_h - 66) break;
-            var _mamt = ds_map_find_value(global.miley_inventory, _mkey);
+            var _mamt = ds_map_find_value(_stock, _mkey);
             var _mdef = ds_map_find_value(global.item_database, _mkey);
             var _mspr = (_mdef != undefined && variable_struct_exists(_mdef, "icon")) ? _mdef.icon : -1;
             var _mcol = (_mdef != undefined && variable_struct_exists(_mdef, "col"))  ? _mdef.col  : make_color_rgb(180,160,120);
@@ -264,7 +245,7 @@ if (shop_state == 4) {
             _draw_slot(_msx, _ml_sy, _mslot, _mamt, false, "", mx, my);
             _ml_col++;
             if (_ml_col >= shop_grid_cols) { _ml_col = 0; _ml_sy += shop_slot_size + shop_slot_gap; }
-            _mkey = ds_map_find_next(global.miley_inventory, _mkey);
+            _mkey = ds_map_find_next(_stock, _mkey);
         }
     }
 

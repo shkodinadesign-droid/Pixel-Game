@@ -1,10 +1,10 @@
-// Майли: спрайты spr_miley_* 48x48, начало — низ по центру (x, y).
+// Продавец: спрайты npc_spr_idle / npc_spr_talk 48x48, начало — низ по центру (x, y).
 // Во время разговора (shop_state != 0) — позы разговора по кругу, иначе стоит лицом и иногда улыбается-моргает.
 var _sh = 48;
 if (shop_state != 0) {
-    draw_sprite(spr_miley_talk, [0, 1, 2, 1][(current_time div 300) mod 4], x, y);
+    draw_sprite(npc_spr_talk, [0, 1, 2, 1][(current_time div 300) mod 4], x, y);
 } else {
-    draw_sprite(spr_miley_idle_down, ((current_time div 150) mod 24 == 0) ? 1 : 0, x, y);
+    draw_sprite(npc_spr_idle, ((current_time div 150) mod 24 == 0) ? 1 : 0, x, y);
 }
 
 // Имя

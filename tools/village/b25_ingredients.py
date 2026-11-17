@@ -21,7 +21,7 @@ for k,(x0,y0,x1,y1) in BOX.items():
     print(sn,len(s[0]),'x',len(s))
 gm_res.add_to_yyp(P,new)
 # Общие иконки предметов 32x32 (инвентарь, ящик, холодильник, магазин, дневник) — замена на месте, рисунок до 30 px по центру
-GLOBAL={'egg':'spr_egg_icon','milk':'spr_milk_icon','sugar':'spr_shugar_icon','flour':'spr_flour_icon','water':'spr_water_bucket'}
+GLOBAL={'egg':'spr_egg_icon','milk':'spr_milk_icon','sugar':'spr_shugar_icon','flour':'spr_flour_icon','water':'spr_water_bucket','pepperoni':'spr_pepperoni_icon'}
 for k,sn in GLOBAL.items():
     x0,y0,x1,y1=BOX[k]; im=crop([r[x0:x1+1] for r in img[y0:y1+1]])
     s=down(im,len(im[0]),len(im),30/max(len(im[0]),len(im))); s=crop([[c[:3]+(255,) if c[3]>=128 else (0,0,0,0) for c in r] for r in s])
@@ -30,6 +30,8 @@ for k,sn in GLOBAL.items():
     for y,r in enumerate(s):
         for x,c in enumerate(r):
             if c[3]: out[oy+y][ox+x]=near(c)+(255,)
+    if not os.path.exists(f'{P}/sprites/{sn}'):                  # новая иконка (колбаса пепперони)
+        gm_res.sprite(P,sn,out,(0,0),(0,0,31,31),folder=('Ui','folders/Sprites/Ui.yy')); gm_res.add_to_yyp(P,[sn])
     for root,_,fs in os.walk(f'{P}/sprites/{sn}'):
         for f in fs:
             if f.endswith('.png'): png.write(f'{root}/{f}',32,32,out)

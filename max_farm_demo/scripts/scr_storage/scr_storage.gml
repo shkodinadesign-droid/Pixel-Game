@@ -95,6 +95,12 @@ function storage_init() {
         category: "dairy",
         crafted: true
     });
+    ds_map_add(global.item_database, "pepperoni", {
+        name: "Колбаса пепперони",
+        category: "meat",
+        sell_price: 6,
+        icon: spr_pepperoni_icon
+    });
 
     // --- ЯЙЦА ---
     ds_map_add(global.item_database, "egg", {
@@ -438,6 +444,10 @@ function hotbar_add_item(item_id) {
         case "flour":              _spr = spr_flour_icon;  break;
         case "yeast":              _spr = spr_yeast_icon;  break;
         case "water":              _spr = spr_water_bucket;  break;
+        case "egg":                _spr = spr_egg_icon;      break;
+        case "pepperoni":          _spr = spr_pepperoni_icon; break;
+        case "cheese":             _spr = -1; break;   // иконок пока нет
+        case "butter":             _spr = -1; break;
         case "pudding":            _spr = -1; break;
         default: return; // неизвестный предмет — не добавляем
     }

@@ -10,7 +10,7 @@ if (intro_timer > 0 && !global.control_locked) {
     if (intro_timer == 0 && shop_state == 0) {
         shop_state = 1;
         global.control_locked = true;
-        global.miley_first_visit_done = true;
+        variable_global_set(first_visit_key, true);
     }
 }
 
@@ -18,7 +18,8 @@ if (intro_timer > 0 && !global.control_locked) {
 if (shop_state == 0 && !global.control_locked && instance_exists(obj_max)) {
     if (point_distance(x, y, obj_max.x, obj_max.y) < 160
     &&  keyboard_check_pressed(ord("E"))) {
-        if (global.miley_first_visit_done) {
+        if (variable_global_get(first_visit_key)) {
+            on_talk();      // продавец может поменять реплику (задания и т.п.)
             shop_state = 5; // короткий диалог при повторном визите
         } else {
             shop_state = 1; // полный интро-диалог при первом визите
@@ -180,9 +181,10 @@ if (shop_state == 4) {
                 if (inventory_get_amount(_sitem.id) >= sell_qty) {
                     inventory_remove(_sitem.id, sell_qty);
                     global.coins += _sitem.price * sell_qty;
-                    var _cur = ds_map_find_value(global.miley_inventory, _sitem.id);
+                    var _stock = variable_global_get(stock_key);
+                    var _cur = ds_map_find_value(_stock, _sitem.id);
                     if (is_undefined(_cur)) _cur = 0;
-                    ds_map_set(global.miley_inventory, _sitem.id, _cur + sell_qty);
+                    ds_map_set(_stock, _sitem.id, _cur + sell_qty);
                     sell_selected = -1;
                     sell_qty      = 1;
                 }

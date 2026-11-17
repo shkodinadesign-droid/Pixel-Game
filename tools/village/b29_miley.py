@@ -1,10 +1,10 @@
-# Майли (art_incoming/miley_v1/miley_sheet_v1.png): ряд 1 — стоя (лицом x2, вправо x2, спиной x2, влево x2),
+# Лист персонажа (Майли: art_incoming/miley_v1, Иван: art_incoming/ivan_v1 — одинаковая раскладка): ряд 1 — стоя (лицом x2, вправо x2, спиной x2, влево x2),
 # ряд 2 — ходьба (вправо x4, влево x4), ряд 3 — 4 позы разговора, ряд 4 — 5 портретов.
 # Фигуры: холст 48x48, рост 47 px (масштаб по ряду), низ по центру, начало (24,47); портреты 56x56. 32 цвета на спрайт.
 import sys,os
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__))); import png,gm_anim
 from b06_nature_convert import down,kmeans,crop
-SRC,P=sys.argv[1],sys.argv[2]
+SRC,P=sys.argv[1],sys.argv[2]; N=sys.argv[3] if len(sys.argv)>3 else 'miley'   # имя персонажа в спрайтах spr_<N>_*
 w,h,p=png.read(SRC)
 A=lambda c:c[3]>=200 and not (c[0]>190 and c[1]<70 and c[2]<70)
 img=[[c[:3]+(255,) if A(c) else (0,0,0,0) for c in r] for r in p]
@@ -37,12 +37,12 @@ def build(idx,H,CW,CH,align):
         out.append(fr)
     return out
 rows=[list(range(0,8)),list(range(8,16))]
-for name,idx,row in [('spr_miley_idle_down',[0,1],0),('spr_miley_idle_right',[2,3],0),('spr_miley_idle_up',[4,5],0),('spr_miley_idle_left',[6,7],0),
-                     ('spr_miley_walk_right',[8,9,10,11],1),('spr_miley_walk_left',[12,13,14,15],1)]:
+for name,idx,row in [(f'spr_{N}_idle_down',[0,1],0),(f'spr_{N}_idle_right',[2,3],0),(f'spr_{N}_idle_up',[4,5],0),(f'spr_{N}_idle_left',[6,7],0),
+                     (f'spr_{N}_walk_right',[8,9,10,11],1),(f'spr_{N}_walk_left',[12,13,14,15],1)]:
     # масштаб по всему ряду (рост одинаковый во всех кадрах ряда)
     allr=[cut(comps[i]) for i in rows[row]]; H=47*max(len(cut(comps[i])) for i in idx)/max(len(a) for a in allr)
     fr=build(idx,round(H),48,48,'bottom'); gm_anim.sprite(P,name,fr,(24,47),(14,40,33,47),0); print(name,len(fr))
-fr=build([16,17,18,19],47,48,48,'bottom'); gm_anim.sprite(P,'spr_miley_talk',fr,(24,47),(14,40,33,47),0); print('spr_miley_talk',4)
-fr=build([20,21,22,23,24],54,56,56,'bottom'); gm_anim.sprite(P,'spr_miley_portrait_anim',fr,(0,0),(0,0,55,55),0,folder=('Ui','folders/Sprites/Ui.yy')); print('spr_miley_portrait_anim',5)
+fr=build([16,17,18,19],47,48,48,'bottom'); gm_anim.sprite(P,f'spr_{N}_talk',fr,(24,47),(14,40,33,47),0); print(f'spr_{N}_talk',4)
+fr=build([20,21,22,23,24],54,56,56,'bottom'); gm_anim.sprite(P,f'spr_{N}_portrait_anim',fr,(0,0),(0,0,55,55),0,folder=('Ui','folders/Sprites/Ui.yy')); print(f'spr_{N}_portrait_anim',5)
 # превью
 import itertools

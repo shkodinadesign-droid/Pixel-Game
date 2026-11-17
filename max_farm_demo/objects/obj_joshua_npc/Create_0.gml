@@ -1,14 +1,32 @@
 say_timer = 0;
-npc_name  = "Miley";
+
+// ===== Продавец с диалогом и магазином — параметры (по умолчанию Майли, магазин Джошуа) =====
+// Наследник (например obj_ivan_npc) задаёт свои значения ДО event_inherited() — здесь ставятся только отсутствующие.
+if (!variable_instance_exists(id, "npc_name"))        npc_name        = "Miley";
+if (!variable_instance_exists(id, "npc_speaker"))     npc_speaker     = "Майли:";
+if (!variable_instance_exists(id, "npc_spr_idle"))    npc_spr_idle    = spr_miley_idle_down;      // стоит лицом, кадр 1 — моргает
+if (!variable_instance_exists(id, "npc_spr_talk"))    npc_spr_talk    = spr_miley_talk;           // 4 позы разговора
+if (!variable_instance_exists(id, "npc_portrait"))    npc_portrait    = spr_miley_portrait_anim;  // кадры 0/1 — говорит
+if (!variable_instance_exists(id, "first_visit_key")) first_visit_key = "miley_first_visit_done";
+if (!variable_instance_exists(id, "stock_key"))       stock_key       = "miley_inventory";        // что игрок продал продавцу
+if (!variable_instance_exists(id, "shop_title"))      shop_title      = "МАГАЗИН МАЙЛИ";
+if (!variable_instance_exists(id, "repeat_line"))     repeat_line     = "Добрый день! Что желаете купить?";
+if (!variable_instance_exists(id, "intro_lines")) intro_lines = [
+    ["Майли:", "Добро пожаловать в магазин!",          "Для новых посетителей у нас будут скидки!"],
+    ["Макс:",  "Добрый день! Рада новому знакомству!", "Хочу тут прикупить у вас новые товары!"],
+    ["Майли:", "Посмотрите что у нас есть!",           "У нас большой выбор =)"],
+];
+// Вызывается, когда Макс снова заговаривает с продавцом (E), перед коротким диалогом — может поменять repeat_line
+if (!variable_instance_exists(id, "on_talk")) on_talk = function() {};
 
 // Сбросить блокировку при входе в магазин (spawn_controller здесь не стоит)
 global.control_locked = false;
 
-if (!variable_global_exists("miley_inventory")) global.miley_inventory = ds_map_create();
+if (!variable_global_exists(stock_key)) variable_global_set(stock_key, ds_map_create());
 
 // Автодиалог при первом входе
-if (!variable_global_exists("miley_first_visit_done")) global.miley_first_visit_done = false;
-intro_timer = global.miley_first_visit_done ? -1 : 90; // 1.5 сек задержка после входа
+if (!variable_global_exists(first_visit_key)) variable_global_set(first_visit_key, false);
+intro_timer = variable_global_get(first_visit_key) ? -1 : 90; // 1.5 сек задержка после входа
 
 // Состояние диалога/магазина
 // 0 = нет диалога
@@ -29,8 +47,8 @@ btn_w = 120;
 btn_h = 30;
 _click_prev = false;
 
-// Товары магазина (идентично chest item_defs)
-shop_items = [
+// Товары магазина (идентично chest item_defs); наследник может задать свои
+if (!variable_instance_exists(id, "shop_items")) shop_items = [
     { id: "coffee_beans",       spr: spr_cofee_icon,           col: make_color_rgb(100,60,20),   name: "К.зерна",      price: 8  },
     { id: "tomato",             spr: -1,                       col: make_color_rgb(220,60,60),   name: "Томаты",       price: 4  },
     { id: ITEM_POTATO_SEED,     spr: spr_potato_seed_icon,     col: make_color_rgb(220,170,50),  name: "Сем.картоф.",  price: 6  },
