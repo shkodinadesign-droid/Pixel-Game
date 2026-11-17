@@ -59,13 +59,23 @@ if (cook_done && cook_done_timer > 0) {
                 _dialog_obj = obj_ui_dialog_max_muffin;
             } else if (_r_done.id == "pudding") {
                 _dialog_obj = obj_ui_dialog_max_pudding;
-            } else {
+            } else if (_r_done.id == "potato_pie") {
                 _dialog_obj = obj_ui_dialog_max_pie;
+            } else {
+                _dialog_obj = obj_ui_dialog_max_dish;   // пицца, варенье — без флагов картофельного пирога
             }
             var _dlg = instance_create_layer(0, 0, "GUI", _dialog_obj);
             // Диалог маффина общий для выпечки — подставляем правильное название
             if (_r_done.id == "apple_bun") _dlg.line1 = "Булочки с яблоками готовы!";
             if (_r_done.id == "pear_bun")  _dlg.line1 = "Булочки с грушей готовы!";
+            if (_r_done.id == "pizza") {
+                _dlg.line1 = "Пицца с колбасой готова!";
+                _dlg.line2 = (variable_global_exists("toby_order_taken") && global.toby_order_taken
+                           && !(variable_global_exists("toby_pizza_done") && global.toby_pizza_done))
+                           ? "Вечером Тоби за ней зайдёт." : "Пахнет просто чудесно!";
+            }
+            if (_r_done.id == "apple_jam") _dlg.line1 = "Яблочное варенье готово!";
+            if (_r_done.id == "pear_jam")  _dlg.line1 = "Грушевое варенье готово!";
             instance_destroy();
             exit;
         }

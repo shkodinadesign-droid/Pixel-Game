@@ -370,6 +370,26 @@ if (day_index == 2 && !global.miley_visited && !miley_active && room == rm_baker
     }
 }
 
+// --- Тоби (почтальон): заказ пиццы — после Джастина и Майли (с дня 2); вечером с 17:00 забирает готовую пиццу ---
+if (room == rm_bakery && !instance_exists(obj_toby) && !miley_active
+&&  !(variable_global_exists("control_locked") && global.control_locked)) {
+    var _justin_ok = variable_global_exists("justin_day2_done") && global.justin_day2_done;
+    var _miley_ok  = variable_global_exists("miley_visited")    && global.miley_visited;
+    var _visit = "";
+    if (!global.toby_order_taken && day_index >= 2 && _justin_ok && _miley_ok && !instance_exists(obj_justin_day2)) {
+        _visit = "order";
+    } else if (global.toby_order_taken && !global.toby_pizza_done && hour >= 17 && inventory_get_amount(ITEM_PIZZA) > 0) {
+        _visit = "pickup";
+    }
+    if (_visit != "") {
+        toby_timer++;
+        if (toby_timer >= 180) {                                   // ~3 с после того, как всё готово
+            toby_timer = 0;
+            instance_create_depth(236, 788, -400, obj_toby, { visit: _visit });
+        }
+    } else toby_timer = 0;
+}
+
 // --- Напоминание посадить семена (День 1, полдень) ---
 if (day_index == 1 && hour >= 12 && !seed_reminder_shown) {
     seed_reminder_shown = true;

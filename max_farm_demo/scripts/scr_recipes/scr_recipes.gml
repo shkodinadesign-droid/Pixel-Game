@@ -72,10 +72,12 @@ function recipes_init() {
     };
     array_push(global.recipes, _r5);
 
-    // pepperoni и tomato появятся позже (мясная лавка)
+    // Пицца с колбасой: открывается заказом Тоби (день 2). Колбаса (id "pepperoni") — в мясной лавке Ивана,
+    // помидоры — в стартовом ящике сарая, вода — из колодца
     var _r6 = {
         id:          "pizza",
         name:        "Пицца",
+        unlock:      "toby_order_taken",
         ingredients: [
             { item: "flour",     amount: 1 },
             { item: "water",     amount: 1 },

@@ -158,6 +158,11 @@ if (!variable_global_exists("fruit_quest_started"))  global.fruit_quest_started 
 if (!variable_global_exists("fruit_quest_done"))     global.fruit_quest_done     = false;
 if (!variable_global_exists("show_fruit_done_popup"))global.show_fruit_done_popup= false;
 if (!variable_global_exists("fruit_quest_pending"))  global.fruit_quest_pending  = false;
+// --- День 2: заказ пиццы почтальона Тоби (obj_toby) ---
+if (!variable_global_exists("toby_order_taken")) global.toby_order_taken = false;   // заказ принят, аванс получен
+if (!variable_global_exists("toby_pizza_done"))  global.toby_pizza_done  = false;   // пицца отдана Тоби
+toby_timer = 0;                                                                        // пауза перед его приходом
+
 // --- Квест: проверить пекарню (после первого полива) ---
 if (!variable_global_exists("bakery_check_started")) global.bakery_check_started = false;
 if (!variable_global_exists("bakery_check_done"))    global.bakery_check_done    = false;

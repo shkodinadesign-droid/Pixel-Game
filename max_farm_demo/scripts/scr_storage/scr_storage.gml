@@ -96,7 +96,7 @@ function storage_init() {
         crafted: true
     });
     ds_map_add(global.item_database, "pepperoni", {
-        name: "Колбаса пепперони",
+        name: "Колбаса",
         category: "meat",
         sell_price: 6,
         icon: spr_pepperoni_icon
@@ -308,6 +308,7 @@ function storage_init() {
     global.chest_inventory = ds_map_create();
     ds_map_set(global.chest_inventory, ITEM_SEED,            4);
     ds_map_set(global.chest_inventory, "potato",             3);
+    ds_map_set(global.chest_inventory, "tomato",             2);   // для первой пиццы (заказ Тоби, день 2)
     ds_map_set(global.chest_inventory, "coffee_beans",       3);
     ds_map_set(global.chest_inventory, ITEM_POTATO_SEED,     5);
     ds_map_set(global.chest_inventory, ITEM_STRAWBERRY_SEED, 5);
@@ -446,6 +447,7 @@ function hotbar_add_item(item_id) {
         case "water":              _spr = spr_water_bucket;  break;
         case "egg":                _spr = spr_egg_icon;      break;
         case "pepperoni":          _spr = spr_pepperoni_icon; break;
+        case "tomato":             _spr = spr_tomato_icon;    break;
         case "cheese":             _spr = -1; break;   // иконок пока нет
         case "butter":             _spr = -1; break;
         case "pudding":            _spr = -1; break;

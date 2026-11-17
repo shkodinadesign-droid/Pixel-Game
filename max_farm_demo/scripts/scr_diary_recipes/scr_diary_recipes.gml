@@ -18,6 +18,7 @@ function diary_get_recipe_categories() {
 function diary_get_recipe_list() {
     var _justin_done = variable_global_exists("justin_bakery_intro_done") && global.justin_bakery_intro_done;
     var _coffee_unlocked = variable_global_exists("coffee_letter_read") && global.coffee_letter_read;
+    var _pizza_unlocked  = variable_global_exists("toby_order_taken") && global.toby_order_taken;
 
     return [
         {
@@ -61,6 +62,21 @@ function diary_get_recipe_list() {
                 {item: "coffee_beans", icon: -1,            name: "Зёрна кофе", color: make_color_rgb(90,60,40)},
                 {item: "milk", icon: spr_milk_icon, name: "Молоко",      color: make_color_rgb(220,235,255)},
                 {item: "sugar", icon: -1,            name: "Сахар",       color: make_color_rgb(250,250,240)},
+            ]
+        },
+        {
+            id: "pizza",
+            name: "Пицца с колбасой",
+            category: "main",
+            icon: -1,
+            image: -1,
+            unlocked: _pizza_unlocked,          // открывается заказом Тоби (день 2)
+            ingredients: [
+                {item: "flour",     icon: spr_flour_icon,     name: "Мука",    color: make_color_rgb(235,225,205)},
+                {item: "water",     icon: spr_water_bucket,   name: "Вода",    color: make_color_rgb(120,170,230)},
+                {item: "egg",       icon: spr_egg_icon,       name: "Яйцо",    color: make_color_rgb(255,220,80)},
+                {item: "tomato",    icon: spr_tomato_icon,    name: "Помидор", color: make_color_rgb(220,60,60)},
+                {item: "pepperoni", icon: spr_pepperoni_icon, name: "Колбаса", color: make_color_rgb(190,80,50)},
             ]
         },
     ];

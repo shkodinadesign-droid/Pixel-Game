@@ -7,6 +7,7 @@ item_defs = [
     { id: ITEM_POTATO_SEED,     spr: spr_potato_seed_icon, col: make_color_rgb(220,170,50),  name: "Сем.картофеля" },
     { id: ITEM_STRAWBERRY_SEED, spr: spr_strawberry_seed_icon,     col: make_color_rgb(255,100,120), name: "Сем.клубники"  },
     { id: "potato",             spr: spr_potato_icon, col: make_color_rgb(220,170,50),  name: "Картофель"     },
+    { id: "tomato",             spr: spr_tomato_icon, col: make_color_rgb(220,60,60),   name: "Помидоры"      },
     { id: "coffee_beans",       spr: spr_cofee_icon,  col: make_color_rgb(100,60,20),   name: "К.зерна"       },
 ];
 item_def_count = array_length(item_defs);

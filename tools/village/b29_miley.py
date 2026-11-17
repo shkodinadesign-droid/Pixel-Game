@@ -41,7 +41,12 @@ for name,idx,row in [(f'spr_{N}_idle_down',[0,1],0),(f'spr_{N}_idle_right',[2,3]
                      (f'spr_{N}_walk_right',[8,9,10,11],1),(f'spr_{N}_walk_left',[12,13,14,15],1)]:
     # масштаб по всему ряду (рост одинаковый во всех кадрах ряда)
     allr=[cut(comps[i]) for i in rows[row]]; H=47*max(len(cut(comps[i])) for i in idx)/max(len(a) for a in allr)
-    fr=build(idx,round(H),48,48,'bottom'); gm_anim.sprite(P,name,fr,(24,47),(14,40,33,47),0); print(name,len(fr))
+    if N=='toby' and 'walk' in name:                               # у Тоби оба ряда ходьбы — один цикл вправо из 8 кадров
+        fr=build(list(range(8,16)),round(H),48,48,'bottom')
+        if name.endswith('left'): fr=[[list(reversed(r)) for r in f] for f in fr]   # влево — зеркало
+    else:
+        fr=build(idx,round(H),48,48,'bottom')
+    gm_anim.sprite(P,name,fr,(24,47),(14,40,33,47),0); print(name,len(fr))
 fr=build([16,17,18,19],47,48,48,'bottom'); gm_anim.sprite(P,f'spr_{N}_talk',fr,(24,47),(14,40,33,47),0); print(f'spr_{N}_talk',4)
 fr=build([20,21,22,23,24],54,56,56,'bottom'); gm_anim.sprite(P,f'spr_{N}_portrait_anim',fr,(0,0),(0,0,55,55),0,folder=('Ui','folders/Sprites/Ui.yy')); print(f'spr_{N}_portrait_anim',5)
 # превью

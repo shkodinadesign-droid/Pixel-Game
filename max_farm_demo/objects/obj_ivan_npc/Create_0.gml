@@ -17,7 +17,7 @@ intro_lines = [
     ["Иван:", "Смотри, что есть на прилавке!",             "Для своих - лучшие цены =)"],
 ];
 shop_items = [
-    { id: "pepperoni", spr: spr_pepperoni_icon, col: make_color_rgb(190,80,50),   name: "Пепперони", price: 8 },
+    { id: "pepperoni", spr: spr_pepperoni_icon, col: make_color_rgb(190,80,50),   name: "Колбаса",   price: 8 },
     { id: "milk",      spr: spr_milk_icon,      col: make_color_rgb(240,240,240), name: "Молоко",    price: 4 },
     { id: "egg",       spr: spr_egg_icon,       col: make_color_rgb(255,220,80),  name: "Яйца",      price: 3 },
     { id: "cheese",    spr: -1,                 col: make_color_rgb(250,200,70),  name: "Сыр",       price: 7 },

@@ -73,6 +73,17 @@ function diary_get_quest_list() {
         });
     }
 
+    // --- День 2: первый необычный заказ — пицца для почтальона Тоби ---
+    if (variable_global_exists("toby_order_taken") && global.toby_order_taken) {
+        array_push(_list, {
+            id: "toby_pizza",
+            text: "Приготовить пиццу для Тоби",
+            desc: "Тоби, деревенский почтальон, заказал пиццу с колбасой и оставил аванс.\n\nНужны мука, вода, яйцо, помидор и колбаса. Колбасы на ферме нет - её продаёт Иван в мясной лавке, рядом с магазином Майли.\n\nТоби вернётся в пекарню вечером, после 17:00.",
+            done: variable_global_exists("toby_pizza_done") && global.toby_pizza_done,
+            category: "main"
+        });
+    }
+
     // --- Эпизод "Пуддинг -> лягушонок -> карта" ---
     var _pud_ready  = variable_global_exists("pudding_ready")   && global.pudding_ready;
     var _frog_done  = variable_global_exists("frog_night_done") && global.frog_night_done;
