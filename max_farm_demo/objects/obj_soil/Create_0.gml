@@ -64,6 +64,15 @@ function plant_crop(seed_type = "carrot") {
                 spr_stages     = [spr_strawberry_sprout, spr_strawberry_ready];
                 days_per_stage = 1;
                 set_stage_sprite();
+            } else if (crop_type == "tomato" || crop_type == "pumpkin" || crop_type == "onion") {
+                // 2 дня: росток -> подрос -> урожай (спрайты spr_<культура>_sprout/_stage1/_ready)
+                switch (crop_type) {
+                    case "tomato":  spr_stages = [spr_tomato_sprout,  spr_tomato_stage1,  spr_tomato_ready];  break;
+                    case "pumpkin": spr_stages = [spr_pumpkin_sprout, spr_pumpkin_stage1, spr_pumpkin_ready]; break;
+                    case "onion":   spr_stages = [spr_onion_sprout,   spr_onion_stage1,   spr_onion_ready];   break;
+                }
+                days_per_stage = 1;
+                set_stage_sprite();
             } else if (crop_type == "carrot") {
                 // 2 дня: семя → росток → готова
                 spr_stages     = [spr_carrot_sprout, spr_carrot_stage1, spr_carrot_ready];

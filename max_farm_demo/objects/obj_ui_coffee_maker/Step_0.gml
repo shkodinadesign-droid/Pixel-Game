@@ -93,30 +93,16 @@ for (var i = array_length(splash_anims) - 1; i >= 0; i--) {
 }
 
 // --- Переключение рецепта (стрелки) ---
-if (cook_anim == 0 && !cook_done && click_press) {
-    var _arr_w  = 26;
-    var _nav_y  = tab_y;
-    var _nav_h  = tab_h + 4;
-    var _count  = array_length(coffee_recipes);
-    if (my >= _nav_y && my <= _nav_y + _nav_h) {
-        if (mx >= right_x && mx <= right_x + _arr_w) {
-            var _prev = (selected_recipe - 1 + _count) mod _count;
-            if (_prev != selected_recipe) {
-                selected_recipe = _prev;
-                bowl_items   = [];
-                fly_anims    = [];
-                splash_anims = [];
-            }
-        }
-        if (mx >= right_x + right_w - _arr_w && mx <= right_x + right_w) {
-            var _next = (selected_recipe + 1) mod _count;
-            if (_next != selected_recipe) {
-                selected_recipe = _next;
-                bowl_items   = [];
-                fly_anims    = [];
-                splash_anims = [];
-            }
-        }
+if (cook_anim == 0 && !cook_done && click_press && my >= nav_y && my < nav_y + nav_h) {
+    var _count = array_length(coffee_recipes);
+    var _new   = selected_recipe;
+    if (mx >= nav_l_x && mx < nav_l_x + nav_w) _new = (selected_recipe - 1 + _count) mod _count;
+    if (mx >= nav_r_x && mx < nav_r_x + nav_w) _new = (selected_recipe + 1) mod _count;
+    if (_new != selected_recipe) {
+        selected_recipe = _new;
+        bowl_items   = [];
+        fly_anims    = [];
+        splash_anims = [];
     }
 }
 
@@ -147,11 +133,11 @@ if (cook_anim == 0 && !cook_done) {
     for (var i = 0; i < _ing_count; i++) {
         var _col = i mod cells_cols;
         var _row = i div cells_cols;
-        var _cx  = right_x + _col * (cell_size + cell_gap);
-        var _cy  = cell_area_y + _row * (cell_size + cell_gap);
+        var _cx  = cells_x + _col * cell_step_x;
+        var _cy  = cell_area_y + _row * cell_step_y;
 
-        if (mx >= _cx && mx <= _cx + cell_size &&
-            my >= _cy && my <= _cy + cell_size) {
+        if (mx >= _cx && mx < _cx + cell_w &&
+            my >= _cy && my < _cy + cell_h) {
             hover_cell = i;
             if (click_press) {
                 var _item_id = _r.ingredients[i].item;
@@ -166,8 +152,8 @@ if (cook_anim == 0 && !cook_done) {
                 }
                 if (!_in_bowl && !_in_fly && inventory_get_amount(_item_id) >= _needed) {
                     array_push(fly_anims, {
-                        sx:      _cx + cell_size / 2,
-                        sy:      _cy + cell_size / 2,
+                        sx:      _cx + cell_w / 2,
+                        sy:      _cy + cell_h / 2,
                         t:       0,
                         item_id: _item_id
                     });

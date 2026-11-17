@@ -1,6 +1,6 @@
 // Продавец: спрайты npc_spr_idle / npc_spr_talk 48x48, начало — низ по центру (x, y).
 // Во время разговора (shop_state != 0) — позы разговора по кругу, иначе стоит лицом и иногда улыбается-моргает.
-var _sh = 48;
+var _sh = sprite_get_height(npc_spr_idle);   // для подписи имени над головой
 if (shop_state != 0) {
     draw_sprite(npc_spr_talk, [0, 1, 2, 1][(current_time div 300) mod 4], x, y);
 } else {

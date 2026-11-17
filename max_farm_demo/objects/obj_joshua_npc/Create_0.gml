@@ -18,6 +18,7 @@ if (!variable_instance_exists(id, "intro_lines")) intro_lines = [
 ];
 // Вызывается, когда Макс снова заговаривает с продавцом (E), перед коротким диалогом — может поменять repeat_line
 if (!variable_instance_exists(id, "on_talk")) on_talk = function() {};
+if (!variable_instance_exists(id, "talk_radius")) talk_radius = 160;   // с какого расстояния E начинает разговор
 
 // Сбросить блокировку при входе в магазин (spawn_controller здесь не стоит)
 global.control_locked = false;
@@ -63,22 +64,30 @@ if (!variable_instance_exists(id, "shop_items")) shop_items = [
     { id: "yeast",              spr: spr_yeast_icon,           col: make_color_rgb(200,160,80),  name: "Дрожжи",       price: 4  },
 ];
 
-// Размеры панели (как у chest)
+// Окно магазина — книга как у ящика хранения (spr_storage_bg 836x470, 1:1): слева товары продавца, справа инвентарь
 var _gw = display_get_gui_width();
 var _gh = display_get_gui_height();
-shop_panel_w = 620;
-shop_panel_h = 380;
-shop_panel_x = (_gw - shop_panel_w) / 2;
-shop_panel_y = (_gh - shop_panel_h) / 2;
+shop_panel_w = sprite_get_width(spr_storage_bg);
+shop_panel_h = sprite_get_height(spr_storage_bg);
+shop_panel_x = round((_gw - shop_panel_w) / 2);
+shop_panel_y = round((_gh - shop_panel_h) / 2);
+shop_left_cx  = shop_panel_x + 236;            // центры страниц (таблички заголовков)
+shop_right_cx = shop_panel_x + 606;
+shop_title_y  = shop_panel_y + 108;
+shop_close_x  = shop_panel_x + 790;            // крестик 30x30
+shop_close_y  = shop_panel_y + 14;
 
-// Сетка (как у chest)
-shop_slot_size = 44;
-shop_slot_gap  = 5;
+// Сетки 4x3 из ячеек 48x48 с шагом 54 (как у ящика)
+shop_slot_size = 48;
+shop_slot_gap  = 6;
 shop_grid_cols = 4;
 shop_grid_rows = 3;
-shop_grid_x    = shop_panel_x + 20;
-shop_inv_x     = shop_panel_x + shop_panel_w / 2 + 20;
-shop_grid_y    = shop_panel_y + 72;
+shop_grid_x    = shop_left_cx  - 105;
+shop_inv_x     = shop_right_cx - 105;
+shop_grid_y    = shop_panel_y + 156;
+
+// Нижняя панель каждой страницы: название, ‹ количество ›, кнопка (96x26), сумма
+shop_bar_y     = shop_panel_y + 330;
 
 // Выбор количества (покупка)
 shop_selected  = -1;

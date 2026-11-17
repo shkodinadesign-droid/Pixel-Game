@@ -81,3 +81,16 @@ function scr_dialog_draw_button(_x1, _y1, _x2, _y2, _label, _hover)
     draw_set_color(c_white);
     draw_text((_x1 + _x2) / 2, (_y1 + _y2) / 2, _label);
 }
+
+
+/// @func ui_font_fit(_text, _max_w)
+/// @desc Ставит самый крупный шрифт, в котором _text помещается в _max_w (жирный 16 -> Calibri 14 -> fnt_ui 12),
+/// без масштабирования — масштабированный шрифт рисуется кривыми буквами. Возвращает выбранный шрифт.
+function ui_font_fit(_text, _max_w) {
+    var _fonts = [fnt_dialog_ru_bold, fnt_dialog, fnt_ui];
+    for (var i = 0; i < array_length(_fonts); i++) {
+        draw_set_font(_fonts[i]);
+        if (string_width(_text) <= _max_w) return _fonts[i];
+    }
+    return fnt_ui;
+}

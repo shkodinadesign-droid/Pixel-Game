@@ -48,12 +48,25 @@ function storage_init() {
         category: "vegetables"
     });
     ds_map_add(global.item_database, "tomato_seed", {
-        name: "Семена томатов",
-        category: "vegetables"
+        name: "Семена помидоров",
+        category: "vegetables",
+        icon: spr_tomato_seed_icon
     });
     ds_map_add(global.item_database, "pumpkin_seed", {
         name: "Семена тыквы",
-        category: "vegetables"
+        category: "vegetables",
+        icon: spr_pumpkin_seed_icon
+    });
+    ds_map_add(global.item_database, "onion_seed", {
+        name: "Семена лука",
+        category: "vegetables",
+        icon: spr_onion_seed_icon
+    });
+    ds_map_add(global.item_database, "pumpkin", {
+        name: "Тыква",
+        category: "vegetables",
+        sell_price: 8,
+        icon: spr_pumpkin_icon
     });
     ds_map_add(global.item_database, "sunflower_seed", {
         name: "Семена подсолнуха",
@@ -448,6 +461,11 @@ function hotbar_add_item(item_id) {
         case "egg":                _spr = spr_egg_icon;      break;
         case "pepperoni":          _spr = spr_pepperoni_icon; break;
         case "tomato":             _spr = spr_tomato_icon;    break;
+        case "pumpkin":            _spr = spr_pumpkin_icon;   break;
+        case "onion":              _spr = spr_onion_icon;     break;
+        case "tomato_seed":        _spr = spr_tomato_seed_icon;  _is_seed = true; break;
+        case "pumpkin_seed":       _spr = spr_pumpkin_seed_icon; _is_seed = true; break;
+        case "onion_seed":         _spr = spr_onion_seed_icon;   _is_seed = true; break;
         case "cheese":             _spr = -1; break;   // иконок пока нет
         case "butter":             _spr = -1; break;
         case "pudding":            _spr = -1; break;

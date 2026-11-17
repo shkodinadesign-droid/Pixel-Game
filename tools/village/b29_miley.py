@@ -5,6 +5,8 @@ import sys,os
 sys.path.insert(0,os.path.dirname(os.path.abspath(__file__))); import png,gm_anim
 from b06_nature_convert import down,kmeans,crop
 SRC,P=sys.argv[1],sys.argv[2]; N=sys.argv[3] if len(sys.argv)>3 else 'miley'   # имя персонажа в спрайтах spr_<N>_*
+FH=int(sys.argv[4]) if len(sys.argv)>4 else 47   # рост фигуры (Майли и Иван — 53, как бабуля Мэгги)
+C=FH+3                                             # квадратный холст, низ по центру
 w,h,p=png.read(SRC)
 A=lambda c:c[3]>=200 and not (c[0]>190 and c[1]<70 and c[2]<70)
 img=[[c[:3]+(255,) if A(c) else (0,0,0,0) for c in r] for r in p]
@@ -40,14 +42,14 @@ rows=[list(range(0,8)),list(range(8,16))]
 for name,idx,row in [(f'spr_{N}_idle_down',[0,1],0),(f'spr_{N}_idle_right',[2,3],0),(f'spr_{N}_idle_up',[4,5],0),(f'spr_{N}_idle_left',[6,7],0),
                      (f'spr_{N}_walk_right',[8,9,10,11],1),(f'spr_{N}_walk_left',[12,13,14,15],1)]:
     # масштаб по всему ряду (рост одинаковый во всех кадрах ряда)
-    allr=[cut(comps[i]) for i in rows[row]]; H=47*max(len(cut(comps[i])) for i in idx)/max(len(a) for a in allr)
+    allr=[cut(comps[i]) for i in rows[row]]; H=FH*max(len(cut(comps[i])) for i in idx)/max(len(a) for a in allr)
     if N=='toby' and 'walk' in name:                               # у Тоби оба ряда ходьбы — один цикл вправо из 8 кадров
-        fr=build(list(range(8,16)),round(H),48,48,'bottom')
+        fr=build(list(range(8,16)),round(H),C,C,'bottom')
         if name.endswith('left'): fr=[[list(reversed(r)) for r in f] for f in fr]   # влево — зеркало
     else:
-        fr=build(idx,round(H),48,48,'bottom')
-    gm_anim.sprite(P,name,fr,(24,47),(14,40,33,47),0); print(name,len(fr))
-fr=build([16,17,18,19],47,48,48,'bottom'); gm_anim.sprite(P,f'spr_{N}_talk',fr,(24,47),(14,40,33,47),0); print(f'spr_{N}_talk',4)
+        fr=build(idx,round(H),C,C,'bottom')
+    gm_anim.sprite(P,name,fr,(C//2,C-1),(C//2-10,C-8,C//2+9,C-1),0); print(name,len(fr))
+fr=build([16,17,18,19],FH,C,C,'bottom'); gm_anim.sprite(P,f'spr_{N}_talk',fr,(C//2,C-1),(C//2-10,C-8,C//2+9,C-1),0); print(f'spr_{N}_talk',4)
 fr=build([20,21,22,23,24],54,56,56,'bottom'); gm_anim.sprite(P,f'spr_{N}_portrait_anim',fr,(0,0),(0,0,55,55),0,folder=('Ui','folders/Sprites/Ui.yy')); print(f'spr_{N}_portrait_anim',5)
 # превью
 import itertools

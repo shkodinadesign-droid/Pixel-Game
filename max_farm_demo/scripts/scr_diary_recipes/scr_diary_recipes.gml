@@ -102,5 +102,8 @@ function diary_get_plant_list() {
         { name: "Морковь",   icon: spr_seed_carrot_icon,     stages: [spr_carrot_sprout, spr_carrot_stage1, spr_carrot_ready], grow_text: "Созревает за 2 дня полива" },
         { name: "Картофель", icon: spr_potato_seed_icon,     stages: [spr_potato_sprout, spr_potato_stage1, spr_potato_ready], grow_text: "Созревает за 3 дня полива" },
         { name: "Клубника",  icon: spr_strawberry_seed_icon, stages: [spr_strawberry_sprout, spr_strawberry_ready],                grow_text: "Созревает за 1 день полива" },
+        { name: "Помидоры",  icon: spr_tomato_seed_icon,     stages: [spr_tomato_sprout, spr_tomato_stage1, spr_tomato_ready],    grow_text: "Созревает за 2 дня полива" },
+        { name: "Тыква",     icon: spr_pumpkin_seed_icon,    stages: [spr_pumpkin_sprout, spr_pumpkin_stage1, spr_pumpkin_ready], grow_text: "Созревает за 2 дня полива" },
+        { name: "Лук",       icon: spr_onion_seed_icon,      stages: [spr_onion_sprout, spr_onion_stage1, spr_onion_ready],       grow_text: "Созревает за 2 дня полива" },
     ];
 }

@@ -2,7 +2,7 @@
 if (shop_state == 0) {
     if (variable_global_exists(first_visit_key) && variable_global_get(first_visit_key)
     && instance_exists(obj_max)
-    && point_distance(x, y, obj_max.x, obj_max.y) < 160) {
+    && point_distance(x, y, obj_max.x, obj_max.y) < talk_radius) {
         var _gui_w = display_get_gui_width();
         var _gui_h = display_get_gui_height();
         var _vx = camera_get_view_x(view_camera[0]);
@@ -112,271 +112,103 @@ if (shop_state == 5) {
     scr_dialog_draw_button(_bx1, _by1, _bx2, _by2, "Далее", _hover5);
 }
 
-// ===== МАГАЗИН (фаза 4) — идентично chest =====
+// ===== МАГАЗИН (фаза 4) — книга как у ящика хранения: слева товары продавца, справа инвентарь Макс =====
 if (shop_state == 4) {
-    // Затемнение фона
+    var _txt_dark = make_color_rgb(70, 40, 15);
+    var _txt_mid  = make_color_rgb(130, 100, 70);
     draw_set_alpha(0.5);
     draw_set_color(c_black);
     draw_rectangle(0, 0, _gui_w, _gui_h, false);
     draw_set_alpha(1);
 
-    // Панель
-    draw_set_color(make_color_rgb(240, 225, 190));
-    draw_roundrect_ext(shop_panel_x, shop_panel_y,
-                       shop_panel_x + shop_panel_w, shop_panel_y + shop_panel_h, 8, 8, false);
-    draw_set_color(make_color_rgb(160, 120, 70));
-    draw_roundrect_ext(shop_panel_x, shop_panel_y,
-                       shop_panel_x + shop_panel_w, shop_panel_y + shop_panel_h, 8, 8, true);
+    draw_sprite(spr_storage_bg, 0, shop_panel_x, shop_panel_y);
+    var _cl_h = (_mx >= shop_close_x && _mx < shop_close_x + 30 && _my >= shop_close_y && _my < shop_close_y + 30);
+    draw_sprite(_cl_h ? spr_ui_close_hover : spr_ui_close_normal, 0, shop_close_x, shop_close_y);
 
-    // Разделитель по центру
-    draw_set_color(make_color_rgb(160, 120, 70));
-    draw_line(shop_panel_x + shop_panel_w / 2, shop_panel_y + 10,
-              shop_panel_x + shop_panel_w / 2, shop_panel_y + shop_panel_h - 10);
-
-    // Заголовки
-    draw_set_font(fnt_ui);
+    // Заголовки в табличках и монеты
     draw_set_halign(fa_center);
-    draw_set_valign(fa_top);
-    draw_set_color(make_color_rgb(80, 50, 20));
-    draw_text(shop_panel_x + shop_panel_w / 4,     shop_panel_y + 16, shop_title);
-    draw_text(shop_panel_x + shop_panel_w * 3 / 4, shop_panel_y + 16, "ИНВЕНТАРЬ");
-
-    // Монеты
-    draw_set_halign(fa_right);
+    draw_set_valign(fa_middle);
+    draw_set_color(_txt_dark);
+    ui_font_fit(shop_title, 200);
+    draw_text(shop_left_cx, shop_title_y, shop_title);
+    ui_font_fit("Инвентарь", 200);
+    draw_text(shop_right_cx, shop_title_y, "Инвентарь");
+    draw_set_font(fnt_ui);
     draw_set_color(make_color_rgb(140, 100, 20));
-    draw_text(shop_panel_x + shop_panel_w / 2 - 6, shop_panel_y + 36,
-              "Монеты: " + string(global.coins));
+    draw_text(shop_left_cx,  shop_title_y + 32, "Монеты: " + string(global.coins));
+    draw_set_color(_txt_mid);
+    draw_text(shop_right_cx, shop_title_y + 32, "[E] закрыть");
 
-    var mx = device_mouse_x_to_gui(0);
-    var my = device_mouse_y_to_gui(0);
-
-    // Вспомогательная функция отрисовки слота
-    var _draw_slot = function(_sx, _sy, _def, _qty, _selected, _price_label, _mx, _my) {
-        var _hover = (_mx >= _sx && _mx <= _sx + shop_slot_size &&
-                      _my >= _sy && _my <= _sy + shop_slot_size);
-        var _sel   = _selected;
-
-        draw_set_color(_sel ? make_color_rgb(255,230,150) : (_hover ? make_color_rgb(230,210,170) : make_color_rgb(210,190,150)));
-        draw_roundrect_ext(_sx, _sy, _sx+shop_slot_size, _sy+shop_slot_size, 4,4, false);
-        draw_set_color(_sel ? make_color_rgb(200,140,30) : make_color_rgb(160,120,80));
-        draw_roundrect_ext(_sx, _sy, _sx+shop_slot_size, _sy+shop_slot_size, 4,4, true);
-
-        if (_qty > 0 || _price_label != "") {
-            if (sprite_exists(_def.spr)) {
-                var _iw = sprite_get_width(_def.spr);
-                var _ih = sprite_get_height(_def.spr);
-                var _ox = sprite_get_xoffset(_def.spr);
-                var _oy = sprite_get_yoffset(_def.spr);
-                var _sc = min((shop_slot_size-8)/_iw, (shop_slot_size-8)/_ih);
-                draw_sprite_ext(_def.spr, 0,
-                    _sx+shop_slot_size/2-(_iw/2-_ox)*_sc,
-                    _sy+shop_slot_size/2-(_ih/2-_oy)*_sc,
-                    _sc, _sc, 0, c_white, 1);
-            } else {
-                draw_set_color(_def.col);
-                draw_circle(_sx+shop_slot_size/2, _sy+shop_slot_size/2, 14, false);
-            }
-
-            // Цена или количество
-            draw_set_font(fnt_ui);
-            draw_set_halign(fa_center);
-            draw_set_valign(fa_bottom);
-            if (_price_label != "") {
-                draw_set_color(make_color_rgb(100,60,10));
-                draw_text(_sx+shop_slot_size/2, _sy+shop_slot_size-1, _price_label);
-            }
-            if (_qty > 0 && _price_label == "") {
-                var _bx = _sx+shop_slot_size; var _by = _sy+shop_slot_size;
-                draw_set_color(make_color_rgb(70,40,10));
-                draw_circle(_bx, _by, 7, false);
-                draw_set_halign(fa_center); draw_set_valign(fa_middle);
-                draw_set_color(c_white);
-                draw_text(_bx, _by, string(_qty));
-            }
+    // Ячейка: спрайт ячейки дневника, иконка 1:1 (32x32), цена или количество
+    var _slot = function(_sx, _sy, _def, _qty, _sel, _price, _mx, _my) {
+        var _hov = (_mx >= _sx && _mx < _sx + shop_slot_size && _my >= _sy && _my < _sy + shop_slot_size);
+        draw_sprite(_sel ? spr_ui_inventory_slot_selected : (_hov ? spr_ui_inventory_slot_hover : spr_ui_inventory_slot_item), 0, _sx, _sy);
+        if (sprite_exists(_def.spr)) {
+            var _iw = sprite_get_width(_def.spr), _ih = sprite_get_height(_def.spr);
+            var _sc = (max(_iw, _ih) <= 40) ? 1 : 36 / max(_iw, _ih);
+            draw_sprite_ext(_def.spr, 0, _sx + (shop_slot_size - _iw * _sc) / 2 + sprite_get_xoffset(_def.spr) * _sc,
+                            _sy + (shop_slot_size - _ih * _sc) / 2 + sprite_get_yoffset(_def.spr) * _sc, _sc, _sc, 0, c_white, 1);
+        } else {
+            draw_set_color(_def.col);
+            draw_circle(_sx + shop_slot_size / 2, _sy + shop_slot_size / 2, 14, false);
+        }
+        draw_set_font(fnt_ui);
+        if (_price >= 0) {                         // товар продавца — цена в правом верхнем углу
+            draw_set_halign(fa_right); draw_set_valign(fa_top);
+            draw_set_color(make_color_rgb(140, 100, 20));
+            draw_text(_sx + shop_slot_size - 3, _sy + 1, string(_price));
+        } else if (_qty > 0) {                     // вещь Макс — бейдж количества
+            draw_sprite(spr_ui_count_badge, 0, _sx + shop_slot_size - 12, _sy + shop_slot_size - 12);
+            draw_set_halign(fa_center); draw_set_valign(fa_middle);
+            draw_set_color(c_white);
+            draw_text(_sx + shop_slot_size - 4, _sy + shop_slot_size - 4, string(_qty));
         }
         draw_set_halign(fa_left); draw_set_valign(fa_top);
     };
 
-    // Левая сторона — товары магазина (покупка)
-    for (var _r = 0; _r < shop_grid_rows; _r++) {
-        for (var _c = 0; _c < shop_grid_cols; _c++) {
-            var _idx = _r * shop_grid_cols + _c;
-            var _sx  = shop_grid_x + _c * (shop_slot_size + shop_slot_gap);
-            var _sy  = shop_grid_y + _r * (shop_slot_size + shop_slot_gap);
-            if (_idx < array_length(shop_items)) {
-                var _def  = shop_items[_idx];
-                _draw_slot(_sx, _sy, _def, 0,
-                           (shop_selected == _idx),
-                           " ", mx, my);
-            }
-        }
+    for (var _i = 0; _i < shop_grid_rows * shop_grid_cols; _i++) {
+        var _sx = shop_grid_x + (_i mod shop_grid_cols) * (shop_slot_size + shop_slot_gap);
+        var _sy = shop_grid_y + (_i div shop_grid_cols) * (shop_slot_size + shop_slot_gap);
+        if (_i < array_length(shop_items)) _slot(_sx, _sy, shop_items[_i], 0, shop_selected == _i, shop_items[_i].price, _mx, _my);
+        else draw_sprite(spr_ui_inventory_slot_empty, 0, _sx, _sy);
+        var _px = shop_inv_x + (_i mod shop_grid_cols) * (shop_slot_size + shop_slot_gap);
+        if (_i < array_length(sell_items)) _slot(_px, _sy, sell_items[_i], inventory_get_amount(sell_items[_i].id), sell_selected == _i, -1, _mx, _my);
+        else draw_sprite(spr_ui_inventory_slot_empty, 0, _px, _sy);
     }
 
-    // Правая сторона — товары игрока (продажа)
-    for (var _r = 0; _r < shop_grid_rows; _r++) {
-        for (var _c = 0; _c < shop_grid_cols; _c++) {
-            var _idx = _r * shop_grid_cols + _c;
-            var _sx  = shop_inv_x + _c * (shop_slot_size + shop_slot_gap);
-            var _sy  = shop_grid_y + _r * (shop_slot_size + shop_slot_gap);
-            if (_idx < array_length(sell_items)) {
-                var _def = sell_items[_idx];
-                var _qty = inventory_get_amount(_def.id);
-                _draw_slot(_sx, _sy, _def, _qty,
-                           (sell_selected == _idx), "", mx, my);
-            }
-        }
-    }
-
-    // ── Товары Майли (под левой сеткой магазина, слоты с кружками) ──
-    var _stock = variable_global_exists(stock_key) ? variable_global_get(stock_key) : -1;
-    if (_stock != -1 && ds_map_size(_stock) > 0) {
-        var _ml_top = shop_grid_y + shop_grid_rows * (shop_slot_size + shop_slot_gap) + 6;
-        var _ml_sy  = _ml_top;
-        var _ml_col = 0;
-        var _mkey   = ds_map_find_first(_stock);
-        repeat(ds_map_size(_stock)) {
-            if (_ml_sy + shop_slot_size > shop_panel_y + shop_panel_h - 66) break;
-            var _mamt = ds_map_find_value(_stock, _mkey);
-            var _mdef = ds_map_find_value(global.item_database, _mkey);
-            var _mspr = (_mdef != undefined && variable_struct_exists(_mdef, "icon")) ? _mdef.icon : -1;
-            var _mcol = (_mdef != undefined && variable_struct_exists(_mdef, "col"))  ? _mdef.col  : make_color_rgb(180,160,120);
-            var _mslot = { spr: _mspr, col: _mcol };
-            var _msx = shop_grid_x + _ml_col * (shop_slot_size + shop_slot_gap);
-            _draw_slot(_msx, _ml_sy, _mslot, _mamt, false, "", mx, my);
-            _ml_col++;
-            if (_ml_col >= shop_grid_cols) { _ml_col = 0; _ml_sy += shop_slot_size + shop_slot_gap; }
-            _mkey = ds_map_find_next(_stock, _mkey);
-        }
-    }
-
-    // ── Панель покупки снизу ──
-    var _bar_y = shop_panel_y + shop_panel_h - 62;
-    draw_set_color(make_color_rgb(200, 175, 130));
-    draw_line(shop_panel_x + 10, _bar_y - 4, shop_panel_x + shop_panel_w - 10, _bar_y - 4);
-
+    // Нижняя панель страницы: название, ‹ количество ›, кнопка, сумма (координаты — как в Step)
+    var _bar = function(_cx, _name, _qty, _total, _ok, _label, _mx, _my, _txt) {
+        var _by = shop_bar_y;
+        draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_top);
+        draw_set_color(_txt);
+        draw_text(_cx, _by, _name);
+        draw_sprite((_qty > 1) ? spr_ui_arrow_left_normal : spr_ui_arrow_left_disabled, 0, _cx - 104, _by + 20);
+        draw_sprite(spr_ui_arrow_right_normal, 0, _cx - 60, _by + 20);
+        draw_set_valign(fa_middle);
+        draw_text(_cx - 72, _by + 30, string(_qty));
+        var _bx = _cx + 8, _bh = (_mx >= _bx && _mx < _bx + 96 && _my >= _by + 17 && _my < _by + 43);
+        draw_sprite_ext(_ok ? spr_ui_recipe_category_active : spr_ui_recipe_category_inactive, 0, _bx, _by + 17, 1, 1, 0, c_white, (_ok && _bh) ? 0.85 : 1);
+        draw_set_color(_ok ? make_color_rgb(60, 35, 10) : make_color_rgb(150, 120, 90));
+        draw_text(_bx + 48, _by + 30, _label);
+        draw_set_valign(fa_top);
+        draw_set_color(_ok ? make_color_rgb(140, 100, 20) : make_color_rgb(180, 60, 60));
+        draw_text(_cx, _by + 46, string(_qty) + " шт = " + string(_total) + " монет");
+        draw_set_halign(fa_left);
+    };
     if (shop_selected >= 0) {
-        var _item   = shop_items[shop_selected];
-        var _total  = _item.price * shop_buy_qty;
-        var _can    = (global.coins >= _total);
-        var _bar_cx = shop_panel_x + shop_panel_w / 4;
-
-        // Название выбранного товара
-        draw_set_font(fnt_ui);
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_top);
-        draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(_bar_cx, _bar_y, _item.name);
-
-        // ◄  количество  ►
-        var _arr_w = 24; var _arr_h = 24;
-        var _left_x  = _bar_cx - 50;
-        var _right_x = _bar_cx + 26;
-        var _qty_y   = _bar_y + 16;
-
-        draw_set_color(make_color_rgb(160, 120, 70));
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_middle);
-        draw_text(_left_x  + _arr_w / 2, _qty_y + _arr_h / 2, "<");
-        draw_text(_right_x + _arr_w / 2, _qty_y + _arr_h / 2, ">");
-
-        draw_set_color(make_color_rgb(50, 30, 10));
-        draw_text(_bar_cx, _qty_y + _arr_h / 2, string(shop_buy_qty));
-
-        // Цена: N = X монет
-        draw_set_color(_can ? make_color_rgb(120, 80, 20) : make_color_rgb(180, 60, 60));
-        draw_set_valign(fa_top);
-        draw_text(_bar_cx, _qty_y + _arr_h + 2,
-                  string(shop_buy_qty) + " = " + string(_total) + " монет");
-
-        // Кнопка КУПИТЬ
-        var _btn_x = shop_panel_x + shop_panel_w / 2 - 60;
-        var _btn_w = 120; var _btn_h = 32;
-        var _btn_y = _bar_y + 4;
-        draw_set_color(_can ? make_color_rgb(80, 140, 60) : make_color_rgb(160, 130, 110));
-        draw_roundrect_ext(_btn_x, _btn_y, _btn_x + _btn_w, _btn_y + _btn_h, 5, 5, false);
-        draw_set_color(_can ? make_color_rgb(50, 100, 30) : make_color_rgb(130, 100, 80));
-        draw_roundrect_ext(_btn_x, _btn_y, _btn_x + _btn_w, _btn_y + _btn_h, 5, 5, true);
-        draw_set_font(fnt_ui);
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_middle);
-        draw_set_color(c_white);
-        draw_text(_btn_x + _btn_w / 2, _btn_y + _btn_h / 2, "КУПИТЬ");
+        var _it = shop_items[shop_selected];
+        _bar(shop_left_cx, _it.name, shop_buy_qty, _it.price * shop_buy_qty, global.coins >= _it.price * shop_buy_qty, "Купить", _mx, _my, _txt_dark);
     } else {
-        draw_set_font(fnt_ui);
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_middle);
-        draw_set_color(make_color_rgb(160, 130, 90));
-        draw_text(shop_panel_x + shop_panel_w / 4, _bar_y + 28, "Выбери товар слева");
+        draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle); draw_set_color(_txt_mid);
+        draw_text(shop_left_cx, shop_bar_y + 30, "Выбери товар");
     }
-
-    // ── Панель продажи (правая сторона) ──
-    var _bar_cx_r = shop_panel_x + shop_panel_w * 3 / 4;
     if (sell_selected >= 0) {
-        var _sitem   = sell_items[sell_selected];
-        var _s_price = _sitem.price;
-        var _have    = inventory_get_amount(_sitem.id);
-        var _s_total = _s_price * sell_qty;
-
-        // Название
-        draw_set_font(fnt_ui);
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_top);
-        draw_set_color(make_color_rgb(80, 50, 20));
-        draw_text(_bar_cx_r, _bar_y, _sitem.name);
-
-        // ◄ количество ►
-        var _arr_w = 24; var _arr_h = 24;
-        var _left_x  = _bar_cx_r - 50;
-        var _right_x = _bar_cx_r + 26;
-        var _qty_y   = _bar_y + 16;
-
-        draw_set_color(make_color_rgb(160, 120, 70));
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_middle);
-        draw_text(_left_x  + _arr_w / 2, _qty_y + _arr_h / 2, "<");
-        draw_text(_right_x + _arr_w / 2, _qty_y + _arr_h / 2, ">");
-        draw_set_color(make_color_rgb(50, 30, 10));
-        draw_text(_bar_cx_r, _qty_y + _arr_h / 2, string(sell_qty));
-
-        // Цена: N = X монет
-        draw_set_color(make_color_rgb(80, 130, 50));
-        draw_set_valign(fa_top);
-        draw_text(_bar_cx_r, _qty_y + _arr_h + 2,
-                  string(sell_qty) + " = " + string(_s_total) + " монет");
-
-        // Кнопка ПРОДАТЬ
-        var _btn_x = shop_panel_x + shop_panel_w - 140;
-        var _btn_w = 120; var _btn_h = 32;
-        var _btn_y = _bar_y + 4;
-        var _can_sell = (_have >= sell_qty);
-        draw_set_color(_can_sell ? make_color_rgb(60, 120, 180) : make_color_rgb(160, 130, 110));
-        draw_roundrect_ext(_btn_x, _btn_y, _btn_x + _btn_w, _btn_y + _btn_h, 5, 5, false);
-        draw_set_color(_can_sell ? make_color_rgb(30, 80, 140) : make_color_rgb(130, 100, 80));
-        draw_roundrect_ext(_btn_x, _btn_y, _btn_x + _btn_w, _btn_y + _btn_h, 5, 5, true);
-        draw_set_font(fnt_ui);
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_middle);
-        draw_set_color(c_white);
-        draw_text(_btn_x + _btn_w / 2, _btn_y + _btn_h / 2, "ПРОДАТЬ");
+        var _si = sell_items[sell_selected];
+        _bar(shop_right_cx, _si.name, sell_qty, _si.price * sell_qty, inventory_get_amount(_si.id) >= sell_qty, "Продать", _mx, _my, _txt_dark);
     } else {
-        draw_set_font(fnt_ui);
-        draw_set_halign(fa_center);
-        draw_set_valign(fa_middle);
-        draw_set_color(make_color_rgb(160, 130, 90));
-        draw_text(_bar_cx_r, _bar_y + 28, "Выбери товар справа");
+        draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle); draw_set_color(_txt_mid);
+        draw_text(shop_right_cx, shop_bar_y + 30, "Выбери, что продать");
     }
-
-    // Монеты (всегда видны)
-    draw_set_font(fnt_ui);
-    draw_set_halign(fa_right);
-    draw_set_valign(fa_top);
-    draw_set_color(make_color_rgb(140, 100, 20));
-    draw_text(shop_panel_x + shop_panel_w / 2 - 6, shop_panel_y + 36,
-              "Монеты: " + string(global.coins));
-
-    draw_set_halign(fa_right);
-    draw_set_color(make_color_rgb(160, 120, 70));
-    draw_text(shop_panel_x + shop_panel_w - 12, shop_panel_y + 10, "[E] закрыть");
 }
 
 draw_set_font(-1);

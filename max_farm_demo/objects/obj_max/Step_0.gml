@@ -230,6 +230,11 @@ if ((keyboard_check_pressed(ord("E")) || keyboard_check_pressed(vk_space)) && so
         } else if (selected_seed == ITEM_STRAWBERRY_SEED && inventory_get_amount(ITEM_STRAWBERRY_SEED) > 0) {
             _seed_type = "strawberry";
             _seed_item = ITEM_STRAWBERRY_SEED;
+        } else if ((selected_seed == "tomato_seed" || selected_seed == "pumpkin_seed" || selected_seed == "onion_seed")
+               &&  inventory_get_amount(selected_seed) > 0) {
+            // новые культуры из магазина Джо: помидоры, тыква, лук
+            _seed_type = string_replace(selected_seed, "_seed", "");
+            _seed_item = selected_seed;
         }
         if (_seed_type != "") {
             with (soil_here) plant_crop(_seed_type);

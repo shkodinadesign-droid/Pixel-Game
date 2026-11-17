@@ -2,6 +2,7 @@
 
 coffee_recipes = [
     {
+        id:   "latte",
         name: "Латте",
         ingredients: [
             { item: "coffee_beans", amount: 1 },
@@ -11,6 +12,7 @@ coffee_recipes = [
         result: { item: "latte", amount: 1 }
     },
     {
+        id:   "americano",
         name: "Американо",
         ingredients: [
             { item: "coffee_beans", amount: 1 },
@@ -22,42 +24,35 @@ coffee_recipes = [
 ];
 selected_recipe = 0; // 0 = Латте (по умолчанию)
 
+// Разметка — как у окна готовки obj_ui_bakery (подложка spr_cook_bg 629x477, рисуется 1:1)
 var gui_w = display_get_gui_width();
 var gui_h = display_get_gui_height();
+panel_w = sprite_get_width(spr_cook_bg);
+panel_h = sprite_get_height(spr_cook_bg);
+panel_x = round((gui_w - panel_w) / 2);
+panel_y = round((gui_h - panel_h) / 2);
 
-panel_w = 560;
-panel_h = 400;
-panel_x = floor((gui_w - panel_w) / 2);
-panel_y = floor((gui_h - panel_h) / 2);
+title_x  = panel_x + 164;  title_y  = panel_y + 57;    // табличка "Кофемашина"
+close_rx = panel_x + 575;  close_cy = panel_y + 46;    // "[E] закрыть"
+frame_x0 = panel_x + 49;   frame_y0 = panel_y + 107;   // левая рамка — чашка
+frame_x1 = panel_x + 235;  frame_y1 = panel_y + 394;
+frame_cx = (frame_x0 + frame_x1) / 2;
+frame_cy = panel_y + 232;
 
-// Левая область — миска
-bowl_area_w = 200;
-bowl_cx     = panel_x + bowl_area_w / 2;
-bowl_cy     = panel_y + 50 + (panel_h - 90) / 2;
-bowl_rx     = 72;
-bowl_ry     = 52;
+nav_y   = panel_y + 76;  nav_l_x = panel_x + 276;  nav_r_x = panel_x + 560;  name_x = panel_x + 324;
+nav_w   = 33;            nav_h   = 31;
+check_x = panel_x + 277; check_y = panel_y + 118;  check_dy = 23;  check_tx = panel_x + 308;
 
-// Ингредиенты в миске
-bowl_items = [];
-
-// Анимации полёта и всплеска
+// Ингредиенты летят в чашку (центр рамки)
+bowl_cx = frame_cx;
+bowl_cy = frame_cy + 20;
+bowl_items   = [];
 fly_anims    = [];
 splash_anims = [];
 
-// Правая область
-right_x = panel_x + bowl_area_w + 20;
-right_w = panel_w - bowl_area_w - 28;
-
-// Вкладки
-tab_w = floor((right_w - 6) / 2);
-tab_h = 22;
-tab_y = panel_y + 42;
-
-// Ячейки ингредиентов
-cell_size   = 60;
-cell_gap    = 16;
-cells_cols  = 3;
-cell_area_y = panel_y + 195;
+// Ячейки ингредиентов 82x62: 3 в ряд, под ячейкой — название
+cell_w = 82; cell_h = 62; cell_step_x = 104; cell_step_y = 89; cells_cols = 3;
+cells_x = panel_x + 282; cell_area_y = panel_y + 244;
 
 hover_cell  = -1;
 _click_prev = true;
@@ -71,10 +66,10 @@ cook_done_timer = 0;
 drink_phase = false;
 drink_timer = 0;
 
-// Кнопка Готовить
-btn_w = right_w;
-btn_h = 48;
-btn_x = right_x;
-btn_y = cell_area_y + cell_size + cell_gap + 6;
+// Кнопка "Сварить" (плашка spr_cook_btn) — внизу рамки
+btn_w = sprite_get_width(spr_cook_btn);
+btn_h = sprite_get_height(spr_cook_btn);
+btn_x = round(frame_cx - btn_w / 2);
+btn_y = frame_y1 - btn_h - 16;
 
 global.control_locked = true;

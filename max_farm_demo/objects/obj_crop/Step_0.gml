@@ -22,6 +22,12 @@ if (stage >= ready_index() && _player != noone
     } else if (crop_type == "strawberry") {
         _harvest_item = ITEM_STRAWBERRY;
         _harvest_spr  = spr_straberry_icon;
+    } else if (crop_type == "tomato") {
+        _harvest_item = "tomato";  _harvest_spr = spr_tomato_icon;
+    } else if (crop_type == "pumpkin") {
+        _harvest_item = "pumpkin"; _harvest_spr = spr_pumpkin_icon;
+    } else if (crop_type == "onion") {
+        _harvest_item = "onion";   _harvest_spr = spr_onion_icon;
     }
     inventory_add(_harvest_item, 1);
     audio_play_sound(snd_harvest, 1, false, 0.7);

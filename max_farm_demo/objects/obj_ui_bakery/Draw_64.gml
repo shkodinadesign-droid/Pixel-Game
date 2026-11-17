@@ -50,7 +50,7 @@ draw_set_alpha(1);
 draw_sprite(spr_cook_bg, 0, panel_x, panel_y);
 
 // Табличка и подсказка закрытия
-draw_set_font(fnt_dialog_ru_bold);
+ui_font_fit("Пекарня", 150);   // шрифт по ширине таблички
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
 draw_set_color(_txt_dark);
@@ -146,7 +146,7 @@ var _can_nav = (array_length(visible_recipes) > 1) && cook_anim == 0 && !cook_do
 draw_sprite_ext(spr_cook_btn_left,  0, nav_l_x, nav_y, 1, 1, 0, c_white, _can_nav ? 1 : 0.5);
 draw_sprite_ext(spr_cook_btn_right, 0, nav_r_x, nav_y, 1, 1, 0, c_white, _can_nav ? 1 : 0.5);
 draw_sprite(spr_cook_name_plaque, 0, name_x, nav_y);
-draw_set_font(fnt_dialog_ru_bold);
+ui_font_fit(_r.name, 200);   // шрифт по ширине таблички
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
 draw_set_color(_txt_dark);
@@ -163,6 +163,7 @@ for (var i = 0; i < _ing_count; i++) {
     var _nm   = (_info != undefined) ? _info.name : _ing.item;
     draw_set_halign(fa_left);
     draw_set_color(_in_bowl ? make_color_rgb(60, 130, 60) : _txt_dark);
+    ui_font_fit(_nm + " x" + string(_ing.amount), 250);
     draw_text(check_tx, _cy2 + 9, _nm + " x" + string(_ing.amount));
 }
 
@@ -195,7 +196,9 @@ for (var i = 0; i < _ing_count; i++) {
     var _info2 = storage_get_item_info(_item_id);
     draw_set_halign(fa_center);
     draw_set_color(_txt_dark);
-    draw_text(_cx + cell_w / 2, _cy + cell_h + 2, (_info2 != undefined) ? _info2.name : _item_id);
+    var _cname = (_info2 != undefined) ? _info2.name : _item_id;
+    ui_font_fit(_cname, cell_step_x - 8);                     // название под ячейкой — в ширину ячейки
+    draw_text(_cx + cell_w / 2, _cy + cell_h + 2, _cname);
 }
 
 // --- Кнопка "Готовить" — когда всё в миске ---

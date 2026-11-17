@@ -30,7 +30,7 @@ var _cl_hover = (_mx >= _cl_x && _mx < _cl_x + 30 && _my >= _cl_y && _my < _cl_y
 draw_sprite(_cl_hover ? spr_ui_close_hover : spr_ui_close_normal, 0, _cl_x, _cl_y);
 
 // Название раздела — по центру таблички
-draw_set_font(fnt_dialog_ru_bold);
+ui_font_fit(tab_names[current_tab], 200);   // шрифт по ширине места
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
 draw_set_color(_txt_dark);
@@ -275,14 +275,20 @@ switch (current_tab) {
 
     case 3: // Растения
         var _plants = diary_get_plant_list();
-        for (var _pi = 0; _pi < array_length(_plants); _pi++) {
+        var _pp_n   = ceil(array_length(_plants) / 4);             // по 4 карточки на страницу
+        plant_page  = clamp(plant_page, 0, _pp_n - 1);
+        if (_pp_n > 1) {
+            draw_sprite((plant_page > 0) ? spr_ui_arrow_left_normal : spr_ui_arrow_left_disabled, 0, book_x + ui_arrows[0], book_y + ui_arrows[2]);
+            draw_sprite((plant_page < _pp_n - 1) ? spr_ui_arrow_right_normal : spr_ui_arrow_right_disabled, 0, book_x + ui_arrows[1], book_y + ui_arrows[2]);
+        }
+        for (var _pi = plant_page * 4; _pi < min(array_length(_plants), plant_page * 4 + 4); _pi++) {
             var _pl = _plants[_pi];
-            var _px = content_x, _py = content_y + _pi * 62;
+            var _px = content_x, _py = content_y + (_pi - plant_page * 4) * 62;
             draw_sprite((_pi == selected_plant) ? spr_ui_plant_card_selected : spr_ui_plant_card_normal, 0, _px, _py);
             if (sprite_exists(_pl.icon)) {
                 draw_sprite_ext(_pl.icon, 0, _px + 12 + sprite_get_xoffset(_pl.icon), _py + 12 + sprite_get_yoffset(_pl.icon), 1, 1, 0, c_white, 1);
             }
-            draw_set_font(fnt_dialog_ru_bold);
+            ui_font_fit(_pl.name, 230);   // шрифт по ширине места
             draw_set_color(_txt_dark);
             draw_text(_px + 58, _py + 8, _pl.name);
             draw_sprite(spr_ui_plant_icon_clock, 0, _px + 58, _py + 32);
@@ -292,7 +298,7 @@ switch (current_tab) {
         }
         if (selected_plant >= 0 && selected_plant < array_length(_plants)) {
             var _sp = _plants[selected_plant];
-            draw_set_font(fnt_dialog_ru_bold);
+            ui_font_fit(_sp.name + ": стадии роста", 270);   // шрифт по ширине места
             draw_set_halign(fa_center);
             draw_set_color(_txt_dark);
             draw_text(_sh_cx, _sh_ty, _sp.name + ": стадии роста");
@@ -391,7 +397,7 @@ switch (current_tab) {
                 draw_set_color(make_color_rgb(200, 170, 120));
                 draw_circle(_df_x + 100, _df_y + 60, 34, false);
             }
-            draw_set_font(fnt_dialog_ru_bold);
+            ui_font_fit(_sel_r.name, 270);   // шрифт по ширине места
             draw_set_halign(fa_center);
             draw_set_valign(fa_middle);
             draw_set_color(_txt_dark);
@@ -465,7 +471,7 @@ switch (current_tab) {
             }
 
             // Имя (заголовок строки)
-            draw_set_font(fnt_dialog_ru_bold);
+            ui_font_fit(_f.name, 240);   // шрифт по ширине места
             draw_set_halign(fa_left);
             draw_set_valign(fa_top);
             draw_set_color(make_color_rgb(80, 50, 20));
@@ -500,7 +506,7 @@ switch (current_tab) {
             }
 
             // Имя — заголовок справа от портрета, по центру его высоты
-            draw_set_font(fnt_dialog_ru_bold);
+            ui_font_fit(_sel_f.name, 200);   // шрифт по ширине места
             draw_set_halign(fa_left);
             draw_set_valign(fa_middle);
             draw_set_color(make_color_rgb(70, 35, 5));
@@ -517,23 +523,14 @@ switch (current_tab) {
             draw_set_color(c_black);
             var _desc_y     = _fd_y + _fd_portrait_sz + 20;
             var _desc_max_h = (_sh_y1 - 8) - _desc_y; // нижний край белого листа
-            var _line_sep   = 20;
-            var _para_gap   = 8;
+            // Шрифт не масштабируется (масштабированный пиксельный текст — кривые буквы); строки поплотнее
+            var _line_sep   = 16;
+            var _para_gap   = 4;
             var _paras      = string_split(_sel_f.desc, "\n\n");
-            var _desc_s     = 1;
-            repeat (10) {
-                var _tot_h = 0;
-                for (var _pi = 0; _pi < array_length(_paras); _pi++) {
-                    _tot_h += string_height_ext(_paras[_pi], _line_sep, _fd_w / _desc_s) * _desc_s;
-                    if (_pi > 0) _tot_h += _para_gap * _desc_s;
-                }
-                if (_tot_h <= _desc_max_h) break;
-                _desc_s -= 0.05;
-            }
             var _py = _desc_y;
             for (var _pi = 0; _pi < array_length(_paras); _pi++) {
-                draw_text_ext_transformed(_fd_x, _py, _paras[_pi], _line_sep, _fd_w / _desc_s, _desc_s, _desc_s, 0);
-                _py += (string_height_ext(_paras[_pi], _line_sep, _fd_w / _desc_s) + _para_gap) * _desc_s;
+                draw_text_ext(_fd_x, _py, _paras[_pi], _line_sep, _fd_w);
+                _py += string_height_ext(_paras[_pi], _line_sep, _fd_w) + _para_gap;
             }
         } else {
             var _fd_cx = _sh_cx;

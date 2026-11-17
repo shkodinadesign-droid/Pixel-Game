@@ -16,13 +16,14 @@ if (intro_timer > 0 && !global.control_locked) {
 
 // Открыть диалог по E
 if (shop_state == 0 && !global.control_locked && instance_exists(obj_max)) {
-    if (point_distance(x, y, obj_max.x, obj_max.y) < 160
+    if (point_distance(x, y, obj_max.x, obj_max.y) < talk_radius
     &&  keyboard_check_pressed(ord("E"))) {
         if (variable_global_get(first_visit_key)) {
             on_talk();      // продавец может поменять реплику (задания и т.п.)
             shop_state = 5; // короткий диалог при повторном визите
         } else {
             shop_state = 1; // полный интро-диалог при первом визите
+            variable_global_set(first_visit_key, true);
         }
         global.control_locked = true;
     }
@@ -79,8 +80,9 @@ if (shop_state == 4) {
         global.control_locked = false;
         exit;
     }
-    if (_click_press && (_mx < shop_panel_x || _mx > shop_panel_x + shop_panel_w ||
-                         _my < shop_panel_y || _my > shop_panel_y + shop_panel_h)) {
+    if (_click_press && ((_mx < shop_panel_x || _mx > shop_panel_x + shop_panel_w ||
+                          _my < shop_panel_y || _my > shop_panel_y + shop_panel_h)
+                      || (_mx >= shop_close_x && _mx < shop_close_x + 30 && _my >= shop_close_y && _my < shop_close_y + 30))) {
         shop_state = 0;
         global.control_locked = false;
         exit;
@@ -88,7 +90,8 @@ if (shop_state == 4) {
 
     if (_click_press) {
         var _clicked = false;
-        var _bar_y   = shop_panel_y + shop_panel_h - 62;
+        // нижняя панель страницы: ‹ (cx-104) количество › (cx-60), кнопка 96x26 (cx+8), см. Draw_64
+        var _bar_y   = shop_bar_y;
         var _arr_w   = 24; var _arr_h = 24;
 
         // === Левая сторона: клик по слоту магазина → выбрать для покупки ===
@@ -130,21 +133,21 @@ if (shop_state == 4) {
         // === Кнопки покупки (снизу слева) ===
         if (!_clicked && shop_selected >= 0) {
             var _item   = shop_items[shop_selected];
-            var _bar_cx = shop_panel_x + shop_panel_w / 4;
-            var _qty_y  = _bar_y + 16;
+            var _bar_cx = shop_left_cx;
+            var _qty_y  = _bar_y + 20;
 
-            if (_mx >= _bar_cx - 50 && _mx <= _bar_cx - 26 &&
-                _my >= _qty_y && _my <= _qty_y + _arr_h) {
+            if (_mx >= _bar_cx - 104 && _mx < _bar_cx - 84 &&
+                _my >= _qty_y && _my < _qty_y + 20) {
                 shop_buy_qty = max(1, shop_buy_qty - 1);
             }
-            if (_mx >= _bar_cx + 26 && _mx <= _bar_cx + 50 &&
-                _my >= _qty_y && _my <= _qty_y + _arr_h) {
+            if (_mx >= _bar_cx - 60 && _mx < _bar_cx - 40 &&
+                _my >= _qty_y && _my < _qty_y + 20) {
                 shop_buy_qty++;
             }
 
-            var _btn_x = shop_panel_x + shop_panel_w / 2 - 60;
-            var _btn_w = 120; var _btn_h = 32;
-            var _btn_y = _bar_y + 4;
+            var _btn_x = _bar_cx + 8;
+            var _btn_w = 96; var _btn_h = 26;
+            var _btn_y = _bar_y + 17;
             if (_mx >= _btn_x && _mx <= _btn_x + _btn_w &&
                 _my >= _btn_y && _my <= _btn_y + _btn_h) {
                 var _total = _item.price * shop_buy_qty;
@@ -161,21 +164,21 @@ if (shop_state == 4) {
         // === Кнопки продажи (снизу справа) ===
         if (!_clicked && sell_selected >= 0) {
             var _sitem  = sell_items[sell_selected];
-            var _bar_cx = shop_panel_x + shop_panel_w * 3 / 4;
-            var _qty_y  = _bar_y + 16;
+            var _bar_cx = shop_right_cx;
+            var _qty_y  = _bar_y + 20;
 
-            if (_mx >= _bar_cx - 50 && _mx <= _bar_cx - 26 &&
-                _my >= _qty_y && _my <= _qty_y + _arr_h) {
+            if (_mx >= _bar_cx - 104 && _mx < _bar_cx - 84 &&
+                _my >= _qty_y && _my < _qty_y + 20) {
                 sell_qty = max(1, sell_qty - 1);
             }
-            if (_mx >= _bar_cx + 26 && _mx <= _bar_cx + 50 &&
-                _my >= _qty_y && _my <= _qty_y + _arr_h) {
+            if (_mx >= _bar_cx - 60 && _mx < _bar_cx - 40 &&
+                _my >= _qty_y && _my < _qty_y + 20) {
                 sell_qty = min(inventory_get_amount(_sitem.id), sell_qty + 1);
             }
 
-            var _btn_x = shop_panel_x + shop_panel_w - 140;
-            var _btn_w = 120; var _btn_h = 32;
-            var _btn_y = _bar_y + 4;
+            var _btn_x = _bar_cx + 8;
+            var _btn_w = 96; var _btn_h = 26;
+            var _btn_y = _bar_y + 17;
             if (_mx >= _btn_x && _mx <= _btn_x + _btn_w &&
                 _my >= _btn_y && _my <= _btn_y + _btn_h) {
                 if (inventory_get_amount(_sitem.id) >= sell_qty) {

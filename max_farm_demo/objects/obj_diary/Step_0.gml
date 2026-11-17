@@ -87,8 +87,14 @@ if (current_tab == 2 && click_press) {
 // Растения (вкладка 3): карточки 320x56 с шагом 62
 if (current_tab == 3 && click_press) {
     var _plants = diary_get_plant_list();
-    for (var _pi = 0; _pi < array_length(_plants); _pi++) {
-        var _px = book_x + ui_list[0], _py = book_y + ui_list[1] + _pi * 62;
+    var _pp_n   = ceil(array_length(_plants) / 4);
+    var _ay = book_y + ui_arrows[2];
+    if (my >= _ay && my < _ay + 20) {
+        if (mx >= book_x + ui_arrows[0] && mx < book_x + ui_arrows[0] + 20 && plant_page > 0) plant_page--;
+        if (mx >= book_x + ui_arrows[1] && mx < book_x + ui_arrows[1] + 20 && plant_page < _pp_n - 1) plant_page++;
+    }
+    for (var _pi = plant_page * 4; _pi < min(array_length(_plants), plant_page * 4 + 4); _pi++) {
+        var _px = book_x + ui_list[0], _py = book_y + ui_list[1] + (_pi - plant_page * 4) * 62;
         if (mx >= _px && mx < _px + 320 && my >= _py && my < _py + 56) selected_plant = _pi;
     }
 }
