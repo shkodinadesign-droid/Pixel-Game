@@ -1,4 +1,3 @@
-// ===== ЛЕС: ВЫХОД ОБРАТНО В ДЕРЕВНЮ (CREATE) =====
-// Левый край rm_forest_entrance. Возвращает к выходу в лес в деревне; оттуда прежний путь на ферму.
-forest_episode_init();
-near_player = false;
+// ===== ДОРОГА ИЗ ЛЕСА В ДЕРЕВНЮ — переход шагом вперёд (left) =====
+// Зона ног Макс и точка появления — см. scr_doors / tools/village/b33_doors.py
+door_init(0, 788, 30, 874, "left", rm_village, VILLAGE_FOREST_SPAWN_X, VILLAGE_FOREST_SPAWN_Y);

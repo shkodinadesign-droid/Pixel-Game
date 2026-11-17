@@ -56,6 +56,21 @@ if (p != noone) {
     if (variable_instance_exists(p, "is_input_locked")) p.is_input_locked = false;
 }
 
+// Направление взгляда после перехода через дверь (scr_doors)
+if (p != noone && variable_global_exists("spawn_facing") && global.spawn_facing != "") {
+    with (p) {
+        direction_facing = global.spawn_facing;
+        switch (global.spawn_facing) {
+            case "up":    sprite_index = spr_max_idle_up;    break;
+            case "down":  sprite_index = spr_max_idle_down;  break;
+            case "left":  sprite_index = spr_max_idle_left;  break;
+            case "right": sprite_index = spr_max_idle_right; break;
+        }
+        image_speed = 0; image_index = 0;
+    }
+    global.spawn_facing = "";
+}
+
 // После использования спавн-параметры очищаем (чтобы не «тащились» дальше)
 global.next_spawn_tag = undefined;
 global.next_spawn_x   = undefined;

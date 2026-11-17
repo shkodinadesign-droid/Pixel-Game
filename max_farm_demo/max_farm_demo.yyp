@@ -431,6 +431,7 @@
     {"id":{"name":"scr_letter_data","path":"scripts/scr_letter_data/scr_letter_data.yy",},},
     {"id":{"name":"scr_orders","path":"scripts/scr_orders/scr_orders.yy",},},
     {"id":{"name":"scr_recipes","path":"scripts/scr_recipes/scr_recipes.yy",},},
+    {"id":{"name":"scr_doors","path":"scripts/scr_doors/scr_doors.yy",},},
     {"id":{"name":"scr_sit","path":"scripts/scr_sit/scr_sit.yy",},},
     {"id":{"name":"scr_storage","path":"scripts/scr_storage/scr_storage.yy",},},
     {"id":{"name":"snd_book_close","path":"sounds/snd_book_close/snd_book_close.yy",},},

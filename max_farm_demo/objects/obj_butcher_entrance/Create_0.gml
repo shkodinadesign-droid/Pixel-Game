@@ -1,1 +1,3 @@
-near_player = false;
+// ===== ДВЕРЬ МЯСНОЙ ЛАВКИ — переход шагом вперёд (up) =====
+// Зона ног Макс и точка появления — см. scr_doors / tools/village/b33_doors.py
+door_init(1360, 270, 1402, 306, "up", rm_butcher_shop, 128, 643);

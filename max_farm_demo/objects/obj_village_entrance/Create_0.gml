@@ -1,1 +1,3 @@
-near_player = false;
+// ===== ДОРОГА В ДЕРЕВНЮ — ПРАВЫЙ КРАЙ ФЕРМЫ — переход шагом вперёд (right) =====
+// Зона ног Макс и точка появления — см. scr_doors / tools/village/b33_doors.py
+door_init(1250, 280, 1280, 354, "right", rm_village, 40, 366);

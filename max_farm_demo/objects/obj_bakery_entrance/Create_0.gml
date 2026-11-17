@@ -1,2 +1,3 @@
-// obj_bakery_entrance — здание пекарни на ферме
-// Спрайт: добавить spr_bakery_building в GMS IDE
+// ===== ДВЕРЬ ПЕКАРНИ (ФЕРМА) — переход шагом вперёд (up) =====
+// Зона ног Макс и точка появления — см. scr_doors / tools/village/b33_doors.py
+door_init(930, 252, 978, 282, "up", rm_bakery, 290, 653);

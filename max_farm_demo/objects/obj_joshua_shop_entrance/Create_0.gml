@@ -1,1 +1,3 @@
-near_player = false;
+// ===== ДВЕРЬ МАГАЗИНА ДЖОШУА — переход шагом вперёд (up) =====
+// Зона ног Макс и точка появления — см. scr_doors / tools/village/b33_doors.py
+door_init(930, 330, 978, 366, "up", rm_joshua_shop, 128, 643);

@@ -1,3 +1,3 @@
-visible = false; // чтобы в игре не видно было
-
-hold_timer = 0;
+// ===== ВЫХОД ИЗ ДОМА — переход шагом вперёд (down) =====
+// Зона ног Макс и точка появления — см. scr_doors / tools/village/b33_doors.py
+door_init(150, 482, 300, 540, "down", rm_farm, 454, 227);

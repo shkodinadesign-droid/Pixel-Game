@@ -1,10 +1,3 @@
-// При заходе в пекарню снимаем блокировку и ставим игрока у входа
-global.control_locked = false;
-
-if (instance_exists(obj_max)) {
-    obj_max.x = 480;
-    obj_max.y = 420;
-    if (variable_instance_exists(obj_max, "hsp")) obj_max.hsp = 0;
-    if (variable_instance_exists(obj_max, "vsp")) obj_max.vsp = 0;
-    obj_max.speed = 0;
-}
+// ===== ВЫХОД ИЗ ПЕКАРНИ — переход шагом вперёд (down) =====
+// Зона ног Макс и точка появления — см. scr_doors / tools/village/b33_doors.py
+door_init(236, 712, 384, 768, "down", rm_farm, 938, 243);

@@ -1,1 +1,3 @@
-near_player = false;
+// ===== ВЫХОД ИЗ МАГАЗИНА ДЖОШУА — переход шагом вперёд (down) =====
+// Зона ног Макс и точка появления — см. scr_doors / tools/village/b33_doors.py
+door_init(32, 702, 224, 768, "down", rm_village, 938, 331);
