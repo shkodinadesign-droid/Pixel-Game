@@ -18,6 +18,7 @@ function door_init(_x1, _y1, _x2, _y2, _dir, _room, _spawn_x, _spawn_y, _check =
 /// @func door_step()
 /// @desc Проверка перехода; true — переход начат
 function door_step() {
+    if (!variable_instance_exists(id, "door_x1")) return false;   // door_init не вызван (нет события Create) — дверь молчит
     if (!instance_exists(obj_max)) return false;
     if (variable_global_exists("control_locked") && global.control_locked) return false;
     var _p  = instance_find(obj_max, 0);
