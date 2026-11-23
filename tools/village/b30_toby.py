@@ -14,6 +14,8 @@ path_out = [[236, 618], [236, 788]];
 wp    = 0;
 spd   = 2;
 face  = 1;                                          // 1 — вправо, -1 — влево
+vdir  = -1;                                         // по вертикали: -1 — вверх, 1 — вниз
+move_v = false;                                     // идёт в основном по вертикали (кадры вверх/вниз)
 state = "enter";                                    // enter -> talk -> leave -> (note) -> конец
 dlg_i = 0;
 _click_prev = true;
@@ -53,6 +55,8 @@ var _walk = function(_pts) {                       // шаг к текущей �
         var _d = point_direction(x, y, _t[0], _t[1]);
         x = round(x + lengthdir_x(spd, _d)); y = round(y + lengthdir_y(spd, _d));
         if (abs(lengthdir_x(1, _d)) > 0.2) face = (lengthdir_x(1, _d) < 0) ? -1 : 1;
+        move_v = abs(lengthdir_x(1, _d)) < 0.5;
+        vdir   = (lengthdir_y(1, _d) < 0) ? -1 : 1;
         return false;
     }
     x = _t[0]; y = _t[1]; wp++;
@@ -100,12 +104,17 @@ switch (state) {
         break;
 }
 '''
-DRAW=r'''// ===== ТОБИ (DRAW) — спрайты spr_toby_* 48x48, начало — низ по центру =====
+DRAW=r'''// ===== ТОБИ (DRAW) — спрайты spr_toby_* 48x48 (v2, tools/characters/toby_v2.py), начало — низ по центру =====
 if (state == "note") exit;                                   // уже ушёл — только мысль Макс в GUI
 var _spr = spr_toby_idle_down, _fr = ((current_time div 150) mod 24 == 0) ? 1 : 0;
 if (state == "enter" || state == "leave") {
-    _spr = (face < 0) ? spr_toby_walk_left : spr_toby_walk_right;
-    _fr  = (current_time div 110) mod 8;
+    if (move_v) {
+        _spr = (vdir < 0) ? spr_toby_walk_up : spr_toby_walk_down;
+        _fr  = (current_time div 150) mod 4;
+    } else {
+        _spr = (face < 0) ? spr_toby_walk_left : spr_toby_walk_right;
+        _fr  = (current_time div 110) mod 8;
+    }
 } else if (state == "talk" && lines[dlg_i][0] == "Тоби:") {
     _spr = spr_toby_talk; _fr = [0, 1, 2, 1][(current_time div 300) mod 4];
 }

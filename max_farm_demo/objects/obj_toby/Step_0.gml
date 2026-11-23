@@ -15,6 +15,8 @@ var _walk = function(_pts) {                       // шаг к текущей �
         var _d = point_direction(x, y, _t[0], _t[1]);
         x = round(x + lengthdir_x(spd, _d)); y = round(y + lengthdir_y(spd, _d));
         if (abs(lengthdir_x(1, _d)) > 0.2) face = (lengthdir_x(1, _d) < 0) ? -1 : 1;
+        move_v = abs(lengthdir_x(1, _d)) < 0.5;
+        vdir   = (lengthdir_y(1, _d) < 0) ? -1 : 1;
         return false;
     }
     x = _t[0]; y = _t[1]; wp++;

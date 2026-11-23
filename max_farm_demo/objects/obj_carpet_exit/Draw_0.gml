@@ -13,12 +13,4 @@ if (sprite_exists(spr_carpet)) {
     draw_ellipse(x - 20, y - 8, x + 20, y + 8, true);
 }
 
-// Подсказка [E] Выйти
-if (!variable_global_exists("control_locked") || !global.control_locked) {
-    if (instance_exists(obj_max)) {
-        var _dist = point_distance(x, y, obj_max.x, obj_max.y);
-        if (_dist < 96) {
-            draw_hint("[E] Выйти", x, y - 16, true);
-        }
-    }
-}
+// Подсказки «[E] Выйти» больше нет — входы и выходы шагом (scr_doors)

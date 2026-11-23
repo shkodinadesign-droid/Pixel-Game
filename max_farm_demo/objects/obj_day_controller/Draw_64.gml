@@ -138,17 +138,7 @@ if (show_fruit_quest_dlg) {
     draw_set_color(c_white); draw_set_alpha(1);
 }
 
-// --- Подсказка: войти в сарай ---
-if (room == rm_farm && instance_exists(obj_max)
-&&  (!variable_global_exists("control_locked") || !global.control_locked)) {
-    var _barn_wx = 96; var _barn_wy = 256;
-    if (point_distance(_barn_wx, _barn_wy, obj_max.x, obj_max.y) < 96) {
-        var _cam = view_camera[0];
-        var _hint_gx = (_barn_wx - camera_get_view_x(_cam)) / camera_get_view_width(_cam)  * display_get_gui_width();
-        var _hint_gy = (_barn_wy - camera_get_view_y(_cam)) / camera_get_view_height(_cam) * display_get_gui_height() - 20;
-        draw_hint("[E] Войти", _hint_gx, _hint_gy, true);
-    }
-}
+// Подсказки «[E] Войти» у сарая больше нет — вход шагом в сторону двери (scr_doors)
 
 // --- Уведомление: Мэгги принесла дневник ---
 if (variable_instance_exists(id, "meggie_diary_msg_timer") && meggie_diary_msg_timer > 0) {
