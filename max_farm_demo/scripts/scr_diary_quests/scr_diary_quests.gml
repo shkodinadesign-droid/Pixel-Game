@@ -100,8 +100,8 @@ function diary_get_quest_list() {
     if (_pud_ready) {
         array_push(_list, {
             id: "pudding_leave",
-            text: "Оставить пуддинг в огороде",
-            desc: "Бабуля просила оставить немного пуддинга в огороде, а самой лечь спать.\n\nУтром меня ждёт сюрприз!",
+            text: "Поставить пуддинг на камень у огорода",
+            desc: "Бабуля просила поставить миску с пуддингом на плоский камень у забора огорода, а самой лечь спать.\n\nУтром меня ждёт сюрприз!",
             done: (variable_global_exists("pudding_on_porch") && global.pudding_on_porch) || _frog_done,
             category: "main"
         });
@@ -110,7 +110,7 @@ function diary_get_quest_list() {
         array_push(_list, {
             id: "find_map",
             text: "Проверить огород",
-            desc: "Пуддинга на месте нет... Вместо него в огороде что-то лежит.",
+            desc: "Миска на камне пустая... А рядом с ней что-то лежит.",
             done: _map_taken,
             category: "main"
         });
@@ -143,12 +143,46 @@ function diary_get_quest_list() {
         }
         if (global.frog_talk_done) {
             array_push(_list, {
-                id: "forest_tell_justin",
-                text: "Рассказать Джастину о лягушонке",
-                desc: "Лягушонок оставил карту в благодарность за пуддинг и показал мне место у большого камня.\n\nНа камне появился странный светящийся знак.\n\nЛягушонок сказал, что дальше лучше идти не одной. Надо рассказать обо всём Джастину.",
+                id: "forest_hero_sword",
+                text: "Найти Меч героя",
+                desc: "Лягушонок разговаривает! Карту оставил он - за пуддинг. И он знает бабушку Соню.\n\nТропа идёт только по краю леса. Глубже растут необычные ингредиенты - например, лунная ягода, - но там живут разные существа, и не все дружелюбные.\n\nДальше края леса без Меча героя мне пока рано. Где он - лягушонок не знает, но помнит знак его прежнего хозяина." + (global.secret_room_opened ? "\n\nВ зелёной тетради бабушки нашёлся рисунок меча - с тем самым знаком на гарде. Но запись о том, где он лежит, обрывается кляксой." : ""),
                 done: false,
                 category: "main"
             });
+            array_push(_list, {
+                id: "find_sign",
+                text: "Найти такой же знак",
+                desc: "На большом камне в лесу загорелся знак - спираль с лучами. Лягушонок сказал: \"Ищи такую отметку. Соня знала, что она означает\".\n\nБабушка никогда ничего такого не рассказывала...",
+                done: global.door_sign_found,
+                category: "main"
+            });
+            if (global.door_sign_found) {
+                array_push(_list, {
+                    id: "ask_maggie_sign",
+                    text: "Спросить Мэгги о знаке",
+                    desc: "Такой же знак - на запертой двери в пекарне!\n\nБабушка далеко, письмом про такое не спросишь. Может, Мэгги знает, что это за дверь. Её дом - в деревне.",
+                    done: global.maggie_sign_talk_done,
+                    category: "main"
+                });
+            }
+            if (global.maggie_sign_talk_done) {
+                array_push(_list, {
+                    id: "find_old_cache",
+                    text: "Найти старый тайник в саду",
+                    desc: "За дверью Соня хранила свои особенные рецепты и записи, где находила ингредиенты. Ключ она спрятала в их с Мэгги старом тайнике.\n\nНа старой фотографии бабушка и Мэгги совсем маленькие - у молодой яблони. У корней - большой плоский камень со звёздочкой.\n\nЯблоня теперь большая. Наверное, это одна из яблонь на ферме.",
+                    done: global.secret_cache_found,
+                    category: "main"
+                });
+            }
+            if (global.secret_cache_found) {
+                array_push(_list, {
+                    id: "open_secret_room",
+                    text: "Открыть тайную комнату",
+                    desc: "В жестяной коробке под камнем - ключ, пара стеклянных шариков и свежая записка от бабушки.\n\nОна просит начать с тетради в зелёной обложке и не пробовать ингредиенты, названий которых я не знаю.",
+                    done: global.secret_room_opened,
+                    category: "main"
+                });
+            }
         }
     }
 
@@ -158,23 +192,6 @@ function diary_get_quest_list() {
             text: "Морковь для Ивана",
             desc: "Иван из мясной лавки готовит рагу к открытию, и ему не хватает моркови.\n\nНужно отнести ему 5 морковок в деревню - он заплатит 25 монет.",
             done: variable_global_exists("ivan_quest_done") && global.ivan_quest_done,
-            category: "side"
-        });
-    }
-
-    if (variable_global_exists("secret_quest_started") && global.secret_quest_started) {
-        var _all_done =
-            (variable_global_exists("three_pies_done")       && global.three_pies_done) &&
-            (variable_global_exists("all_coffees_done")      && global.all_coffees_done) &&
-            (variable_global_exists("pizza_recipe_done")     && global.pizza_recipe_done) &&
-            (variable_global_exists("helped_villagers_done") && global.helped_villagers_done) &&
-            (variable_global_exists("pear_jam_done")         && global.pear_jam_done);
-
-        array_push(_list, {
-            id: "secret_main",
-            text: "Узнать где ключ от тайной двери",
-            desc: "Где-то в доме бабушки спрятан ключ от загадочной двери.\n\nЧтобы его найти, нужно:\n- испечь три вида пирогов\n- сварить все виды кофе\n- найти рецепт пиццы бабушки\n- помочь жителям деревни\n- приготовить грушевое варенье",
-            done: _all_done,
             category: "side"
         });
     }

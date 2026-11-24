@@ -40,6 +40,7 @@ switch (state) {
             if (dlg_i >= array_length(lines)) {
                 if (visit == "order") {
                     global.toby_order_taken = true;               // задание в дневнике + рецепт пиццы
+                    global.toby_order_day   = obj_day_controller.day_index;   // в следующие дни заберёт пиццу без ожидания вечера
                     global.coins += 8;                            // аванс на колбасу
                     global.diary_has_new = true; global.diary_was_read = false;
                 } else if (inventory_remove(ITEM_PIZZA, 1)) {

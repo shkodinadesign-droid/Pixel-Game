@@ -1,4 +1,4 @@
-// ===== ТОБИ (DRAW) — спрайты spr_toby_* 48x48 (v2, tools/characters/toby_v2.py), начало — низ по центру =====
+// ===== ТОБИ (DRAW) — спрайты spr_toby_* 56x56, рост 53 (v2, tools/characters/toby_v2.py), начало — низ по центру =====
 if (state == "note") exit;                                   // уже ушёл — только мысль Макс в GUI
 var _spr = spr_toby_idle_down, _fr = ((current_time div 150) mod 24 == 0) ? 1 : 0;
 if (state == "enter" || state == "leave") {

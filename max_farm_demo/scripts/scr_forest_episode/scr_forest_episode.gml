@@ -17,6 +17,12 @@ function forest_episode_init() {
     if (!variable_global_exists("forest_glade_found"))    global.forest_glade_found    = false; // дошла до поляны с камнем
     if (!variable_global_exists("frog_talk_done"))        global.frog_talk_done        = false; // поговорила с лягушонком
     if (!variable_global_exists("map_hotkey_hint_shown")) global.map_hotkey_hint_shown = false; // подсказка про клавишу M
+    if (!variable_global_exists("door_sign_found"))       global.door_sign_found       = false; // Макс узнала знак на двери пекарни
+    // Ключ от тайной комнаты: Мэгги -> фотография -> тайник под камнем у яблони -> записка Сони -> комната -> зелёная тетрадь
+    if (!variable_global_exists("maggie_sign_talk_done")) global.maggie_sign_talk_done = false; // Мэгги рассказала про тайник, фото у Макс
+    if (!variable_global_exists("secret_cache_found"))    global.secret_cache_found    = false; // жестяная коробка найдена
+    if (!variable_global_exists("has_secret_key"))        global.has_secret_key        = false; // ключ от тайной комнаты
+    if (!variable_global_exists("secret_room_opened"))    global.secret_room_opened    = false; // комната открыта, зелёная тетрадь прочитана
     if (!variable_global_exists("control_locked"))        global.control_locked        = false;
 }
 
@@ -34,8 +40,11 @@ function forest_current_goal() {
     forest_episode_init();
     var _a = forest_area();
     if (global.frog_talk_done) {
-        if (_a == "forest") return "вернуться по тропе налево, в деревню, и рассказать Джастину о лягушонке и знаке.";
-        return "рассказать Джастину о лягушонке и знаке в лесу.";
+        if (global.secret_room_opened)    return "найти Меч героя. Запись в зелёной тетради бабушки обрывается...";
+        if (global.has_secret_key)        return "открыть тайную комнату в пекарне ключом из тайника.";
+        if (global.maggie_sign_talk_done) return "найти старый тайник у яблони на ферме: камень со звёздочкой у корней, как на фотографии.";
+        if (global.door_sign_found) return "спросить Мэгги, что значит знак на двери пекарни. Её дом - в деревне.";
+        return "найти такой же знак, как на большом камне. Бабушка Соня знала, что он означает.";
     }
     if (global.forest_glade_found) return "поговорить с лягушонком у большого камня.";
     switch (_a) {
@@ -72,7 +81,7 @@ function map_open(_owns_lock) {
 /// @func forest_page(_who, _lines)
 /// @desc Страница диалога для dialog_seq_start: _who = "max" / "frog"
 function forest_page(_who, _lines) {
-    var _name = (_who == "frog") ? "Лягушонок:" : "Макс:";
+    var _name = (_who == "frog") ? "Лягушонок:" : ((_who == "maggie") ? "Мэгги:" : "Макс:");
     return { who: _who, speaker: _name, lines: _lines };
 }
 
@@ -90,13 +99,79 @@ function dialog_seq_start(_pages, _on_finish, _owns_lock = false) {
 function forest_on_dialog_finished(_event) {
     forest_episode_init();
     switch (_event) {
+        // --- Тайная комната: Мэгги показывает фотографию, потом рассказывает про тайник ---
+        case "maggie_show_photo":
+            var _ph = instance_create_depth(0, 0, -10000, obj_ui_photo);
+            _ph.then_event = "maggie_after_photo";
+            break;
+        case "maggie_after_photo":
+            dialog_seq_start([
+                forest_page("maggie", ["Это мы посадили её. Соня тогда уверяла,", "что яблоки вырастут уже к следующему утру."]),
+                forest_page("max",    ["Кажется, терпение у нас семейное."]),
+                forest_page("maggie", ["Дерево теперь большое.", "А наш тайник всё ещё там.", "Посмотри, что на фотографии лежит у корней."])
+            ], "maggie_sign_done");
+            break;
+        case "maggie_sign_done":
+            global.maggie_sign_talk_done = true;
+            global.diary_has_new  = true;
+            global.diary_was_read = false;
+            break;
+        // --- Тайник у яблони: коробка, ключ, записка Сони ---
+        case "cache_open":
+            global.secret_cache_found = true;
+            global.has_secret_key     = true;
+            global.diary_has_new      = true;
+            global.diary_was_read     = false;
+            var _note = instance_create_depth(0, 0, -10000, obj_ui_letter);
+            _note.letter_data = {
+                sender: "Бабушка Соня",
+                title:  "Макс,",
+                lines:  [
+                    "если ты нашла ключ, значит, у тебя уже появились вопросы.",
+                    "В комнате есть мои старые тетради. Начни с той, у которой зелёная обложка.",
+                    "Только не верь всему, что я там написала: кое-что я записывала с чужих слов, а кое в чём ошибалась сама.",
+                    "И пожалуйста, не пробуй ингредиенты, названий которых не знаешь. Даже если они очень приятно пахнут.",
+                    "Бабушка Соня."
+                ],
+                hint: "Ключ у тебя. Тайная дверь - в пекарне."
+            };
+            break;
+        // --- Тайная комната и зелёная тетрадь ---
+        case "secret_room_open":
+            var _nb = instance_create_depth(0, 0, -10000, obj_ui_green_notebook);
+            _nb.then_event = global.secret_room_opened ? "" : "notebook_first_read";
+            break;
+        case "notebook_first_read":
+            global.secret_room_opened = true;
+            global.diary_has_new      = true;
+            global.diary_was_read     = false;
+            dialog_seq_start([
+                forest_page("max", ["Запись обрывается...", "Значит, где меч - придётся выяснять самой."])
+            ], "");
+            break;
         case "frog_talk":
             global.forest_glade_found = true;
-            global.frog_talk_done     = true;  // знак на камне теперь виден, следующая цель — Джастин
+            global.frog_talk_done     = true;  // на камне светится знак; цель — найти такой же (он на тайной двери в пекарне)
             global.diary_has_new      = true;
             global.diary_was_read     = false;
             break;
     }
+}
+
+/// @func forest_draw_sign(_cx, _cy, _alpha)
+/// @desc Знак прежнего владельца Меча героя (временная графика: спираль). Один и тот же — на большом камне
+///       в лесу и на тайной двери в пекарне.
+function forest_draw_sign(_cx, _cy, _alpha) {
+    draw_set_alpha(_alpha);
+    draw_set_color(make_color_rgb(150, 235, 220));
+    draw_circle(_cx, _cy, 7, true);
+    draw_circle(_cx, _cy, 3, true);
+    draw_line(_cx - 10, _cy, _cx - 7, _cy);
+    draw_line(_cx + 7, _cy, _cx + 10, _cy);
+    draw_line(_cx, _cy - 10, _cx, _cy - 7);
+    draw_point(_cx, _cy);
+    draw_set_alpha(1);
+    draw_set_color(c_white);
 }
 
 /// @func forest_mark_progress(_flag)

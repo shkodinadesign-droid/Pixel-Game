@@ -3,7 +3,8 @@
 speaker     = "Макс:";
 speaker_col = make_color_rgb(255, 210, 100);
 
-var _quest = variable_global_exists("secret_quest_started") && global.secret_quest_started;
+forest_episode_init();
+if (!variable_instance_exists(id, "recognized_now")) recognized_now = false;
 
 if (room == rm_joshua_shop) {
     // Дверь в магазине Майли — просто закрыто
@@ -12,20 +13,27 @@ if (room == rm_joshua_shop) {
     line3 = "";
     line4 = "";
     line_count = 1;
-} else if (_quest) {
-    // Пекарня — квест активен, загадочный намёк
-    line1 = "Странная дверь... Она явно ведёт куда-то.";
-    line2 = "Интересно, что за ней скрывается?";
-    line3 = "Может, бабуля знает ключ...";
-    line4 = "";
-    line_count = 3;
+} else if (global.door_sign_found) {
+    // Пекарня — Макс узнала знак с камня
+    line1 = "Это же тот самый знак! Как на камне в лесу.";
+    line2 = "Бабушка правда знала, что он означает...";
+    line3 = "Она далеко, письмом такое не спросишь.";
+    line4 = "Может, Мэгги знает, что это за дверь?";
+    line_count = 4;
+    if (!recognized_now) {
+        line1 = "Заперто. Знак как на камне в лесу.";
+        line2 = "Надо спросить Мэгги, что это за дверь.";
+        line3 = "";
+        line4 = "";
+        line_count = 2;
+    }
 } else {
-    // Пекарня — квест ещё не начат
+    // Пекарня — до разговора с лягушонком: просто странная запертая дверь
     line1 = "Заперто. Эта дверь выглядит необычно.";
-    line2 = "";
+    line2 = "На ней вырезан какой-то узор.";
     line3 = "";
     line4 = "";
-    line_count = 1;
+    line_count = 2;
 }
 
 win_w  = 560;

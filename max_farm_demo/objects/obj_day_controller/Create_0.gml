@@ -3,14 +3,19 @@
 // === ТЕСТОВЫЙ РЕЖИМ ===
 // Поставь TEST_DAY = 1 для обычного старта
 // Поставь TEST_DAY = 2 для тестирования кофейного квеста
-// Поставь TEST_DAY = 3 для тестирования дня 3 / секретной двери
+// Поставь TEST_DAY = 3 для тестирования дня 3: письмо с пуддингом ->
+//   пуддинг на камень у забора огорода -> сон -> ночная сцена с лягушонком -> карта утром
+//   (TEST_FROM_PUDDING_LETTER ниже работает и для дня 3)
 // Поставь TEST_DAY = 5 для тестирования лесного эпизода (карта уже получена, старт в доме)
 // Поставь TEST_DAY = 4 для тестирования письма с пуддингом
 //   TEST_FROM_PUDDING_LETTER = true  — старт ДО письма: письмо ждёт в ящике, ингредиенты в инвентаре,
 //                                      пуддинг надо приготовить самой (полная проверка эпизода)
 //   TEST_FROM_PUDDING_LETTER = false — старт ПОСЛЕ готовки: готовый пуддинг сразу в инвентаре
-var TEST_DAY = 2;   // Тест дня 2 (Тоби, пицца, Иван). Обычная игра — 1.
+var TEST_DAY = 3;   // Тест дня 3 (пуддинг -> ночь с лягушонком -> карта). Обычная игра — 1.
 var TEST_FROM_PUDDING_LETTER = true;
+// Только при TEST_DAY = 5: true — лягушонок уже поговорил с Макс (знак на камне), дальше — знак на двери
+// пекарни -> Мэгги у её дома -> тайник у яблони -> тайная комната. Обычно false.
+var TEST_FROM_FROG_TALK = false;
 
 // Запоминаем как переменную инстанса — нужно в Draw для баннера-предупреждения
 // "TEST_DAY активен", чтобы билд с TEST_DAY != 1 нельзя было случайно не заметить.
@@ -70,15 +75,32 @@ if (_apply_test && TEST_DAY >= 2) {
     }
 }
 if (_apply_test && TEST_DAY >= 3) {
-    // День 3 — письмо про секретную комнату ещё не прочитано (появится "!" на ящике)
+    // День 3 — утром в ящике письмо с рецептом пуддинга (письма про секретную комнату и «5 дел» больше нет)
     global.maggie_day2_started  = true;
     global.kitten_arrived       = true;
     global.coffee_made          = true;
     global.secret_quest_started = true;
-    // Письма 0,1,2,5 прочитаны; письмо 6 (секретная дверь) — НЕТ, ждёт в ящике
+    // Письма 0,1,2,5 прочитаны (письмо 6 удалено: тайная дверь теперь открывается через знак лягушонка)
     global.letters_read = [0, 1, 2, 5];
     // Флаг: на первом кадре перейти в дом
     _need_house_start = true;
+    if (TEST_DAY == 3) {
+        // Пирог Джастину отдан вчера (день 2) — днём (10:00–17:00) он придёт на ферму поговорить
+        global.justin_day2_done = true;
+        global.justin_pie_day   = 2;
+        // Письмо 7 (пуддинг) тоже приходит в день 3 — сразу после письма 6
+        if (!variable_global_exists("pudding_on_porch")) global.pudding_on_porch = false;
+        if (TEST_FROM_PUDDING_LETTER) {
+            global.pudding_quest = false;
+            global.pudding_ready = false;
+            _need_pudding_ingredients = true; // молоко, яйцо, сахар, яблоко — чтобы сразу приготовить
+        } else {
+            global.letters_read  = [0, 1, 2, 5, 6, 7];
+            global.pudding_quest = true;
+            global.pudding_ready = true;
+            _need_pudding_in_inv = true;
+        }
+    }
 }
 if (_apply_test && TEST_DAY >= 4) {
     // День 4. При TEST_FROM_PUDDING_LETTER = true письмо 7 (рецепт пуддинга) ещё НЕ прочитано и ждёт в ящике
@@ -97,6 +119,12 @@ if (_apply_test && TEST_DAY >= 4) {
         global.frog_night_done  = true;
         global.magic_map_placed = true;
         global.magic_map_taken  = true;
+        if (TEST_FROM_FROG_TALK) {
+            forest_episode_init();
+            global.forest_found       = true;
+            global.forest_glade_found = true;
+            global.frog_talk_done     = true;
+        }
     } else if (TEST_FROM_PUDDING_LETTER) {
         // Письмо 7 (рецепт пуддинга) ещё не прочитано — "!" на почтовом ящике
         global.pudding_quest = false;
@@ -140,11 +168,13 @@ forest_episode_init();
 // --- Эпизод "Пуддинг -> лягушонок -> карта" ---
 // Точка в огороде, куда кладётся пуддинг (и где утром лежит карта)
 if (!variable_global_exists("control_locked")) global.control_locked = false;
-global.PUDDING_SPOT_X = 240;
-global.PUDDING_SPOT_Y = 430;
+// Плоский камень у правого забора огорода (obj_pudding_stone в rm_farm на 348,424, масштаб 2) — миска стоит на нём
+global.PUDDING_SPOT_X = 362;
+global.PUDDING_SPOT_Y = 434;
 if (!variable_global_exists("pudding_quest"))       global.pudding_quest       = false;
 if (!variable_global_exists("pudding_ready"))       global.pudding_ready       = false;
 if (!variable_global_exists("pudding_on_porch"))    global.pudding_on_porch    = false; // пуддинг лежит в огороде
+if (!variable_global_exists("pudding_bowl_empty"))  global.pudding_bowl_empty  = false; // после ночи на камне пустая миска (до того, как Макс возьмёт карту)
 if (!variable_global_exists("frog_night_pending"))  global.frog_night_pending  = false; // ночная сцена ждёт запуска на ферме
 if (!variable_global_exists("frog_night_done"))     global.frog_night_done     = false;
 if (!variable_global_exists("frog_morning_dialog")) global.frog_morning_dialog = false; // реплика Макс утром после сцены
@@ -161,6 +191,12 @@ if (!variable_global_exists("fruit_quest_pending"))  global.fruit_quest_pending 
 // --- День 2: заказ пиццы почтальона Тоби (obj_toby) ---
 if (!variable_global_exists("toby_order_taken")) global.toby_order_taken = false;   // заказ принят, аванс получен
 if (!variable_global_exists("toby_pizza_done"))  global.toby_pizza_done  = false;   // пицца отдана Тоби
+if (!variable_global_exists("justin_farm_talk_done")) global.justin_farm_talk_done = false;   // разговор с Джастином на ферме (день 3+) состоялся
+if (!variable_global_exists("justin_pie_day"))        global.justin_pie_day        = 2;       // день, когда Джастин забрал пирог
+if (!variable_global_exists("justin_day2_done"))      global.justin_day2_done      = false;
+if (!variable_global_exists("clock_paused"))          global.clock_paused          = false;   // часы стоят (долгий разговор)
+justin_visit_timer = 0;
+if (!variable_global_exists("toby_order_day"))   global.toby_order_day   = 2;       // день, когда Тоби сделал заказ
 toby_timer = 0;                                                                        // пауза перед его приходом
 
 // --- Квест: проверить пекарню (после первого полива) ---
@@ -213,6 +249,7 @@ miley_active         = false;
 miley_state          = "";
 miley_x              = 0;
 miley_y              = 0;
+miley_dir            = 0;      // направление шага (градусы): вверх/вниз — spr_miley_walk_up/down
 miley_xscale         = -1;
 miley_target_x       = 0;
 miley_target_y       = 0;

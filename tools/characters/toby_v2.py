@@ -2,7 +2,7 @@
 # Ряды: 0 — стояние 8 (вперёд, вперёд-улыбка, 2 сбоку, 2 спиной, 2 сбоку), 1 — ходьба сбоку 8,
 #       2 — разговор 4 (у 4-го «!»), 3 — портреты 6 (у 5-го «!», у 6-го сердечко), 4 — идёт вниз 4, 5 — идёт вверх 4.
 # Значки «!» и сердечко убираются (при 48 px не читаются). Ряды на листе нарисованы в разном масштабе —
-# каждый ряд уменьшается так, чтобы фигура стоя была ~46 px (портрет — 54 px); общая палитра на все кадры.
+# каждый ряд уменьшается так, чтобы фигура стоя была ~53 px (портрет — 54 px); общая палитра на все кадры.
 # Запуск: python3 toby_v2.py <лист> <папка проекта max_farm_demo> [--preview out.png]
 import sys, os
 import numpy as np
@@ -58,7 +58,7 @@ def shrink(a, s):
 
 MARKED = {(2, 3): (88, 58), (3, 4): (92, 42, 44, 110), (3, 5): (116, 100)}   # кадры со значками: зона (x от, y до)
 cuts = [[cut(b, MARKED.get((ri, ci))) for ci, b in enumerate(r)] for ri, r in enumerate(ROWS)]
-H_BODY, H_PORT = 46, 54
+H_BODY, H_PORT = 53, 54   # рост 53 — как Майли и Иван (было 46, Тоби выглядел мелким)
 small = []
 for ri, r in enumerate(cuts):
     hmax = max(c.shape[0] for c in r)
@@ -86,7 +86,7 @@ def place(f, W, H, bottom, by_head):
     can[y0:y0 + h, x0:x0 + w] = f
     return can
 
-body = lambda f: place(f, 48, 48, 47, True)
+body = lambda f: place(f, 56, 56, 55, True)
 port = lambda f: place(f, 56, 56, 55, False)
 R0, R1, R2, R3, R4, R5 = small
 mirror = lambda f: f[:, ::-1].copy()
@@ -121,6 +121,6 @@ else:
         fl = [[[tuple(int(v) for v in f[y, x]) for x in range(f.shape[1])] for y in range(f.shape[0])] for f in frames]
         allm = np.any(np.stack([f[:, :, 3] > 0 for f in frames]), axis=0)
         ys, xs = np.where(allm)
-        origin = (0, 0) if is_port else (24, 47)
+        origin = (0, 0) if is_port else (28, 55)
         gm_anim.sprite(P, name, fl, origin, (int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())), 0)
         print(name, len(frames))

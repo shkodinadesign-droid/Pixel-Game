@@ -317,7 +317,9 @@ if (miley_active && room == rm_bakery) {
     var _mspr = spr_miley_idle_left, _mfr = 0;
     switch (miley_state) {
         case "entering": case "leaving":
-            _mspr = (miley_xscale < 0) ? spr_miley_walk_left : spr_miley_walk_right;
+            var _vy = -dsin(miley_dir), _vx = dcos(miley_dir);   // вниз по экрану — _vy > 0
+            if (abs(_vy) > abs(_vx)) _mspr = (_vy < 0) ? spr_miley_walk_up : spr_miley_walk_down;
+            else                     _mspr = (miley_xscale < 0) ? spr_miley_walk_left : spr_miley_walk_right;
             _mfr  = (current_time div 150) mod 4;
             break;
         case "talking": case "thanks":

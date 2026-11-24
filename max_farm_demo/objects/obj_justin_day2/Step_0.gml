@@ -125,6 +125,7 @@ switch (cscene_step) {
     // --- Джастин уходит ---
     case 10:
         global.justin_day2_done = true;
+        global.justin_pie_day   = obj_day_controller.day_index;   // визит на ферму (obj_justin_farm_visit) — не раньше следующего дня
         global.control_locked   = false;
 
         var _lx, _ly;

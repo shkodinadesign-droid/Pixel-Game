@@ -6,6 +6,7 @@
   "inheritCreationOrder":false,
   "inheritLayers":false,
   "instanceCreationOrder":[
+    {"name":"inst_CACHESTONE1","path":"rooms/rm_farm/rm_farm.yy",},
     {"name":"inst_6C2CAE6B","path":"rooms/rm_farm/rm_farm.yy",},
     {"name":"inst_E7EBA709","path":"rooms/rm_farm/rm_farm.yy",},
     {"name":"inst_EDF31613","path":"rooms/rm_farm/rm_farm.yy",},
@@ -96,6 +97,7 @@
     {"name":"inst_215353FE","path":"rooms/rm_farm/rm_farm.yy",},
     {"name":"inst_720D6B45","path":"rooms/rm_farm/rm_farm.yy",},
     {"name":"inst_386D7165","path":"rooms/rm_farm/rm_farm.yy",},
+    {"name":"inst_PUDSTONE1","path":"rooms/rm_farm/rm_farm.yy",},
     {"name":"inst_7FFC35C7","path":"rooms/rm_farm/rm_farm.yy",},
     {"name":"inst_58B826EE","path":"rooms/rm_farm/rm_farm.yy",},
     {"name":"inst_4245E55D","path":"rooms/rm_farm/rm_farm.yy",},
@@ -185,7 +187,9 @@
   "isDnd":false,
   "layers":[
     {"$GMRInstanceLayer":"","%Name":"pudding","depth":0,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
+        {"$GMRInstance":"v4","%Name":"inst_CACHESTONE1","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_CACHESTONE1","objectId":{"name":"obj_secret_cache_stone","path":"objects/obj_secret_cache_stone/obj_secret_cache_stone.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":662.0,"y":526.0,},
         {"$GMRInstance":"v4","%Name":"inst_386D7165","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_386D7165","objectId":{"name":"obj_pudding_icon","path":"objects/obj_pudding_icon/obj_pudding_icon.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":352.0,"y":256.0,},
+        {"$GMRInstance":"v4","%Name":"inst_PUDSTONE1","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_PUDSTONE1","objectId":{"name":"obj_pudding_stone","path":"objects/obj_pudding_stone/obj_pudding_stone.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":348.0,"y":424.0,},
       ],"layers":[],"name":"pudding","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRInstanceLayer":"","%Name":"Backery","depth":100,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[
         {"$GMRInstance":"v4","%Name":"inst_75F31BC0","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_75F31BC0","objectId":{"name":"obj_bakery_outside","path":"objects/obj_bakery_outside/obj_bakery_outside.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":870.0,"y":9.0,},

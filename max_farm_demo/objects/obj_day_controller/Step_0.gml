@@ -146,8 +146,8 @@ if (room == rm_farm
                 obj_pudding_icon.visible = true;
             }
             var _dlg = instance_create_depth(0, 0, -9999, obj_ui_dialog_max_pudding_porch);
-            _dlg.line1 = "Оставлю пуддинг здесь, в огороде.";
-            _dlg.line2 = "Вечером лягу спать - посмотрим, что будет утром!";
+            _dlg.line1 = "Ну вот. Ужин для неизвестного гостя готов.";
+            _dlg.line2 = "";
         } else {
             var _dlg_no = instance_create_depth(0, 0, -9999, obj_ui_dialog_max_pudding_porch);
             _dlg_no.line1 = "Ой, у меня нет пуддинга...";
@@ -276,8 +276,8 @@ if (sleep_fade > 0) {
     sleep_fade = max(0, sleep_fade);
 }
 
-// --- Тик времени ---
-minute_timer += 1;
+// --- Тик времени (стоит, пока идёт разговор, который не должен съедать время — global.clock_paused) ---
+if (!global.clock_paused) minute_timer += 1;
 if (minute_timer >= minute_length) {
     minute_timer = 0;
     minute += 1;
@@ -370,7 +370,25 @@ if (day_index == 2 && !global.miley_visited && !miley_active && room == rm_baker
     }
 }
 
-// --- Тоби (почтальон): заказ пиццы — после Джастина и Майли (с дня 2); вечером с 17:00 забирает готовую пиццу ---
+// --- Джастин приходит на ферму поблагодарить за пирог и познакомиться (день 3+, один раз) ---
+// Пирог отдан в прошлые дни; с 10:00 до 17:00; Макс свободна (нет диалогов, меню, письма, обучения, сна).
+// Не успела — визит переносится на следующий день. Ни на что не влияет: пуддинг и ночь от него не зависят.
+if (room == rm_farm && day_index >= 3 && !global.justin_farm_talk_done && global.justin_day2_done
+&&  day_index > global.justin_pie_day && hour >= 10 && hour < 17
+&&  !global.control_locked && !is_sleeping && sleep_fade <= 0 && instance_exists(obj_max)
+&&  global.tutorial_farm_step >= 7
+&&  !instance_exists(obj_justin_farm_visit) && !instance_exists(obj_ui_letter) && !instance_exists(obj_diary)
+&&  !instance_exists(obj_maggie_day2) && !instance_exists(obj_grandma_Maggie) && !instance_exists(obj_neighbor)
+&&  !instance_exists(obj_cutscene_frog_night)) {
+    justin_visit_timer++;
+    if (justin_visit_timer >= 240) {                              // ~4 с свободной игры на ферме
+        justin_visit_timer = 0;
+        instance_create_depth(0, 0, 0, obj_justin_farm_visit);
+    }
+} else justin_visit_timer = 0;
+
+// --- Тоби (почтальон): заказ пиццы — после Джастина и Майли (с дня 2); вечером с 17:00 забирает готовую пиццу,
+//     а если Макс опоздала — в любой из следующих дней (заказ не проваливается) ---
 if (room == rm_bakery && !instance_exists(obj_toby) && !miley_active
 &&  !(variable_global_exists("control_locked") && global.control_locked)) {
     var _justin_ok = variable_global_exists("justin_day2_done") && global.justin_day2_done;
@@ -378,7 +396,8 @@ if (room == rm_bakery && !instance_exists(obj_toby) && !miley_active
     var _visit = "";
     if (!global.toby_order_taken && day_index >= 2 && _justin_ok && _miley_ok && !instance_exists(obj_justin_day2)) {
         _visit = "order";
-    } else if (global.toby_order_taken && !global.toby_pizza_done && hour >= 17 && inventory_get_amount(ITEM_PIZZA) > 0) {
+    } else if (global.toby_order_taken && !global.toby_pizza_done
+           && (hour >= 17 || day_index > global.toby_order_day) && inventory_get_amount(ITEM_PIZZA) > 0) {
         _visit = "pickup";
     }
     if (_visit != "") {
@@ -432,6 +451,7 @@ if (miley_active && room == rm_bakery) {
                 miley_x      = round(miley_x + lengthdir_x(miley_move_speed, _mdir));
                 miley_y      = round(miley_y + lengthdir_y(miley_move_speed, _mdir));
                 miley_xscale = (cos(degtorad(_mdir)) < 0) ? -1 : 1;
+                miley_dir    = _mdir;   // для выбора спрайта ходьбы вверх/вниз в Draw_64
             } else {
                 if (miley_enter_wp == 0) {
                     miley_enter_wp = 1; // идём к прилавку
@@ -584,6 +604,7 @@ if (miley_active && room == rm_bakery) {
                 miley_x      = round(miley_x + lengthdir_x(miley_move_speed, _ldir));
                 miley_y      = round(miley_y + lengthdir_y(miley_move_speed, _ldir));
                 miley_xscale = (cos(degtorad(_ldir)) < 0) ? -1 : 1;
+                miley_dir    = _ldir;
             } else {
                 if (miley_enter_wp == 1) {
                     miley_enter_wp = 0; // дошли до wp1, теперь к выходу
