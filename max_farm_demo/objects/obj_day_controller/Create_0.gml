@@ -269,3 +269,6 @@ miley_enter_wp       = 0;   // 0=идём к wp1, 1=идём к obj_max
 // Таймер Мэгги (дневник после туториала)
 meggie_diary_timer     = -1; // -1=не активен, >0=отсчёт
 meggie_diary_msg_timer = 0;  // время показа уведомления
+
+// Атмосфера: дождь на 3-й день, звуки и светлячки в лесу (постоянный объект)
+if (!instance_exists(obj_ambience)) instance_create_depth(0, 0, -100, obj_ambience);
