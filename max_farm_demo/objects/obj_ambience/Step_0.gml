@@ -28,20 +28,38 @@ if (rain_alpha > 0) {
     }
 }
 
-// --- светлячки: создаются заново при входе в лес ---
-if (_forest && flies_room != room) {
-    flies_room = room;
-    flies = [];
-    for (var k = 0; k < 9; k++) {
-        array_push(flies, { x: random(room_width), y: random(room_height), ph: random(1000), sp: random_range(0.15, 0.35) });
+// --- пылинки: в лесу всегда, на улице — на следующий день после дождя ---
+var _after_rain = variable_global_exists("rain_day") && global.rain_day >= 0 && _day == global.rain_day + 1;
+var _motes_on = !_rain && (_forest || (_outdoor && _after_rain));
+motes_alpha = clamp(motes_alpha + (_motes_on ? 0.01 : -0.02), 0, 1);
+if (motes_alpha > 0) {
+    for (var m = 0; m < array_length(motes); m++) {
+        var d = motes[m];
+        d.ph += 1;
+        d.x += sin(d.ph / 110) * d.sp + 0.05;          // чуть сносит ветерком вправо
+        d.y += cos(d.ph / 150) * d.sp * 0.6 - 0.03;    // и медленно вверх
+        if (d.x > 970) d.x -= 980; if (d.x < -10) d.x += 980;
+        if (d.y < -10) d.y += 560; if (d.y > 550) d.y -= 560;
     }
 }
-if (!_forest) flies_room = -1;
-for (var k = 0; k < array_length(flies); k++) {
-    var f = flies[k];
-    f.ph += 1;
-    f.x += sin(f.ph / 90) * f.sp;
-    f.y += cos(f.ph / 130) * f.sp * 0.7;
+
+// --- бабочки: днём в огороде, не в дождь ---
+var _dark = instance_exists(obj_day_controller) ? obj_day_controller.darkness : 0;
+var _bfly_on = (room == rm_farm) && !_rain && _dark < 0.25 && !instance_exists(obj_cutscene_frog_night);
+bfly_alpha = clamp(bfly_alpha + (_bfly_on ? 0.02 : -0.03), 0, 1);
+if (room == rm_farm) {
+    for (var b = 0; b < array_length(butterflies); b++) {
+        var f = butterflies[b];
+        f.ph += 1;
+        if (point_distance(f.x, f.y, f.tx, f.ty) < 8 || random(1) < 0.004) {   // новая цветочная точка
+            f.tx = random_range(GARDEN_X1, GARDEN_X2);
+            f.ty = random_range(GARDEN_Y1, GARDEN_Y2);
+        }
+        var _dir = point_direction(f.x, f.y, f.tx, f.ty) + sin(f.ph / 9) * 50;  // зигзагом
+        f.vx = lerp(f.vx, lengthdir_x(0.7, _dir), 0.08);
+        f.vy = lerp(f.vy, lengthdir_y(0.7, _dir), 0.08);
+        f.x += f.vx; f.y += f.vy;
+    }
 }
 
 // --- звуки: целевая громкость каждой петли ---

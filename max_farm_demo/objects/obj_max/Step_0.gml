@@ -192,6 +192,10 @@ if (mouse_check_button_pressed(mb_left)) {
                         selected_seed         = "";
                         selected_shovel       = false;
                         selected_watering_can = false;
+                        // Старая фотография — посмотреть ещё раз
+                        if (_e.item == "old_photo" && !instance_exists(obj_ui_photo) && !global.control_locked) {
+                            instance_create_depth(0, 0, -10000, obj_ui_photo);
+                        }
                     }
                     _clicked = true;
                     break;

@@ -3,13 +3,44 @@ var _cam = view_camera[0];
 var _cx = camera_get_view_x(_cam), _cy = camera_get_view_y(_cam);
 var _cw = camera_get_view_width(_cam), _ch = camera_get_view_height(_cam);
 
-// --- светлячки в лесу: бледно-зелёные, мерцают ---
-for (var k = 0; k < array_length(flies); k++) {
-    var f = flies[k];
-    var _a = 0.25 + 0.35 * max(0, sin(f.ph / 45));
-    draw_set_color(make_color_rgb(200, 255, 190));
-    draw_set_alpha(_a * 0.35); draw_circle(f.x, f.y, 3, false);
-    draw_set_alpha(_a);        draw_rectangle(f.x - 1, f.y - 1, f.x, f.y, false);
+// --- пылинки: тёплые светлые точки, мерцают ---
+if (motes_alpha > 0) {
+    draw_set_color((room == rm_forest_entrance) ? make_color_rgb(230, 245, 210) : make_color_rgb(255, 240, 200));
+    for (var m = 0; m < array_length(motes); m++) {
+        var d = motes[m];
+        var _tw = 0.55 + 0.45 * sin(d.ph / 37);
+        draw_set_alpha(d.a * _tw * motes_alpha);
+        var _x = floor(_cx + d.x), _y = floor(_cy + d.y);
+        if (d.big) draw_rectangle(_x, _y, _x + 1, _y + 1, false);
+        else       draw_point(_x, _y);
+    }
+}
+
+// --- бабочки: тельце 1x3, крылья раскрываются и складываются ---
+if (bfly_alpha > 0 && room == rm_farm) {
+    for (var b = 0; b < array_length(butterflies); b++) {
+        var f = butterflies[b];
+        var _bx = floor(f.x), _by = floor(f.y + sin(f.ph / 14) * 3);
+        var _open = (f.ph div 5) mod 2 == 0;
+        draw_set_alpha(bfly_alpha);
+        draw_set_color(f.c1);
+        if (_open) {
+            draw_rectangle(_bx - 3, _by - 2, _bx - 1, _by, false);   // верхние крылья
+            draw_rectangle(_bx + 1, _by - 2, _bx + 3, _by, false);
+            draw_set_color(f.c2);
+            draw_rectangle(_bx - 2, _by + 1, _bx - 1, _by + 2, false); // нижние крылья
+            draw_rectangle(_bx + 1, _by + 1, _bx + 2, _by + 2, false);
+        } else {
+            draw_rectangle(_bx - 1, _by - 3, _bx - 1, _by, false);   // крылья сложены вверх
+            draw_rectangle(_bx + 1, _by - 3, _bx + 1, _by, false);
+        }
+        draw_set_color(make_color_rgb(50, 35, 25));
+        draw_rectangle(_bx, _by - 1, _bx, _by + 1, false);           // тельце
+        // лёгкая тень на земле
+        draw_set_color(c_black); draw_set_alpha(0.12 * bfly_alpha);
+        draw_rectangle(_bx - 1, f.y + 14, _bx + 1, f.y + 14, false);
+    }
+    draw_set_alpha(1);
 }
 
 if (rain_alpha > 0) {

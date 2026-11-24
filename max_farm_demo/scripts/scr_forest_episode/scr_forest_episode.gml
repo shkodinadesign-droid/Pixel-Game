@@ -113,10 +113,21 @@ function forest_on_dialog_finished(_event) {
             break;
         case "maggie_sign_done":
             global.maggie_sign_talk_done = true;
+            quest_item_add("old_photo");                 // фотография теперь у Макс (хотбар, клик — посмотреть)
             global.diary_has_new  = true;
             global.diary_was_read = false;
             break;
         // --- Тайник у яблони: коробка, ключ, записка Сони ---
+        case "cache_key_anim":                           // Макс достаёт ключ и радуется (obj_cutscene_key_found)
+            instance_create_depth(0, 0, -9000, obj_cutscene_key_found);
+            break;
+        case "cache_after_key":
+            dialog_seq_start([
+                forest_page("max", ["Ура! Нашла!", "Ключ от тайной комнаты!"]),
+                forest_page("max", ["А ещё тут пара стеклянных шариков...", "и записка."]),
+                forest_page("max", ["Бумага совсем свежая.", "Значит, бабушка открывала эту коробку", "совсем недавно..."])
+            ], "cache_open");
+            break;
         case "cache_open":
             global.secret_cache_found = true;
             global.has_secret_key     = true;
@@ -183,4 +194,37 @@ function forest_mark_progress(_flag) {
     variable_global_set(_flag, true);
     global.diary_has_new  = true;
     global.diary_was_read = false;
+}
+
+// ===== СЮЖЕТНЫЕ ПРЕДМЕТЫ В ХОТБАРЕ (ключ, фотография) =====
+// Не лежат в global.player_inventory — их нельзя продать, выставить на витрину или убрать в сарай.
+// Список — global.quest_items, в хотбар Макс добавляются без счётчика.
+
+/// @func quest_item_sprite(_id)
+function quest_item_sprite(_id) {
+    switch (_id) {
+        case "secret_key": return spr_item_secret_key;
+        case "old_photo":  return spr_item_old_photo;
+    }
+    return -1;
+}
+
+/// @func quest_item_add(_id)
+function quest_item_add(_id) {
+    if (!variable_global_exists("quest_items")) global.quest_items = [];
+    if (!array_contains(global.quest_items, _id)) array_push(global.quest_items, _id);
+    quest_items_sync();
+}
+
+/// @func quest_items_sync()
+/// @desc Положить все сюжетные предметы в хотбар Макс (если их там ещё нет)
+function quest_items_sync() {
+    if (!variable_global_exists("quest_items") || !instance_exists(obj_max)) return;
+    with (obj_max) {
+        for (var _q = 0; _q < array_length(global.quest_items); _q++) {
+            var _qid = global.quest_items[_q], _has = false;
+            for (var _i = 0; _i < array_length(hotbar_items); _i++) if (hotbar_items[_i].item == _qid) { _has = true; break; }
+            if (!_has) array_push(hotbar_items, { item: _qid, spr: quest_item_sprite(_qid), is_seed: false, has_count: false });
+        }
+    }
 }
