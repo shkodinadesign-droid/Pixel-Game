@@ -1,6 +1,6 @@
 // ===== АТМОСФЕРА: ДОЖДЬ, ЗВУКИ ЛЕСА (CREATE) =====
 // Один постоянный объект, создаётся obj_day_controller (Create).
-// Дождь: весь 3-й день и до утра 4-го (пока идёт ночная сцена с лягушонком) — см. ambience_rain_on() в Step.
+// Дождь: весь день после ночи с лягушонком (обычно день 4), global.rain_day — см. Step.
 // Лес (rm_forest_entrance): всегда тихие сверчки и еле слышный шум леса + несколько светлячков.
 // Звуки — процедурные, tools/audio/ambience_gen.py (snd_rain, snd_night_crickets, snd_forest_ambience).
 

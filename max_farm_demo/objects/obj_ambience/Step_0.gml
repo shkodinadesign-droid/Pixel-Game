@@ -1,12 +1,13 @@
 // ===== АТМОСФЕРА (STEP) =====
 var _outdoor = (room == rm_farm || room == rm_village || room == rm_forest_entrance);
 var _indoor  = (room == rm_house_inside || room == rm_bakery || room == rm_joshua_shop
-             || room == rm_butcher_shop || room == room_barn);
+             || room == rm_butcher_shop || room == room_barn || room == rm_maggie_house);
 var _forest  = (room == rm_forest_entrance);
 
-// Дождь: третий день, и дальше до утра — пока идёт ночная сцена с лягушонком
+// Дождь: весь день после ночи с лягушонком (обычно день 4) — Макс находит карту и идёт в лес под дождём.
+// global.rain_day ставит сцена лягушонка на рассвете; на саму ночь дождя нет.
 var _day  = instance_exists(obj_day_controller) ? obj_day_controller.day_index : 0;
-var _rain = (_day == 3) || (_day == 4 && instance_exists(obj_cutscene_frog_night));
+var _rain = variable_global_exists("rain_day") && (_day == global.rain_day) && !instance_exists(obj_cutscene_frog_night);
 
 rain_alpha = clamp(rain_alpha + ((_rain && _outdoor) ? 0.01 : -0.02), 0, 1);
 

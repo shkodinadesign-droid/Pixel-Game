@@ -150,21 +150,12 @@ function diary_get_quest_list() {
                 category: "main"
             });
             array_push(_list, {
-                id: "find_sign",
-                text: "Найти такой же знак",
-                desc: "На большом камне в лесу загорелся знак - спираль с лучами. Лягушонок сказал: \"Ищи такую отметку. Соня знала, что она означает\".\n\nБабушка никогда ничего такого не рассказывала...",
-                done: global.door_sign_found,
+                id: "ask_maggie_sign",
+                text: "Поговорить с бабушкой Мэгги о тайном знаке",
+                desc: "На большом камне в лесу загорелся знак - спираль с лучами. Лягушонок сказал: \"Ищи такую отметку. Соня знала, что она означает\".\n\nА подсказать может кто-то из старых друзей бабушки. Мэгги дружит с ней с детства. Её дом - в деревне." + (global.door_sign_found ? "\n\nИ ещё: такой же знак вырезан на запертой двери в пекарне!" : ""),
+                done: global.maggie_sign_talk_done,
                 category: "main"
             });
-            if (global.door_sign_found) {
-                array_push(_list, {
-                    id: "ask_maggie_sign",
-                    text: "Спросить Мэгги о знаке",
-                    desc: "Такой же знак - на запертой двери в пекарне!\n\nБабушка далеко, письмом про такое не спросишь. Может, Мэгги знает, что это за дверь. Её дом - в деревне.",
-                    done: global.maggie_sign_talk_done,
-                    category: "main"
-                });
-            }
             if (global.maggie_sign_talk_done) {
                 array_push(_list, {
                     id: "find_old_cache",

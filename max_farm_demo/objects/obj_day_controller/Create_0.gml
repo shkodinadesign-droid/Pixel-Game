@@ -7,11 +7,12 @@
 //   пуддинг на камень у забора огорода -> сон -> ночная сцена с лягушонком -> карта утром
 //   (TEST_FROM_PUDDING_LETTER ниже работает и для дня 3)
 // Поставь TEST_DAY = 5 для тестирования лесного эпизода (карта уже получена, старт в доме)
-// Поставь TEST_DAY = 4 для тестирования письма с пуддингом
-//   TEST_FROM_PUDDING_LETTER = true  — старт ДО письма: письмо ждёт в ящике, ингредиенты в инвентаре,
-//                                      пуддинг надо приготовить самой (полная проверка эпизода)
-//   TEST_FROM_PUDDING_LETTER = false — старт ПОСЛЕ готовки: готовый пуддинг сразу в инвентаре
-var TEST_DAY = 3;   // Тест дня 3 (пуддинг -> ночь с лягушонком -> карта). Обычная игра — 1.
+// Поставь TEST_DAY = 4 для тестирования утра после ночи с лягушонком: Макс просыпается дома,
+//   за окном дождь; на камне у огорода пустая миска и карта (дальше — деревня и лес под дождём)
+//   TEST_FROM_PUDDING_LETTER (для дня 3):
+//   true  — старт ДО письма: письмо ждёт в ящике, ингредиенты в инвентаре, пуддинг готовить самой
+//   false — старт ПОСЛЕ готовки: готовый пуддинг сразу в инвентаре
+var TEST_DAY = 4;   // Тест дня 4 (утро -> пустая миска -> карта -> лес под дождём). Обычная игра — 1.
 var TEST_FROM_PUDDING_LETTER = true;
 // Только при TEST_DAY = 5: true — лягушонок уже поговорил с Макс (знак на камне), дальше — знак на двери
 // пекарни -> Мэгги у её дома -> тайник у яблони -> тайная комната. Обычно false.
@@ -111,7 +112,22 @@ if (_apply_test && TEST_DAY >= 4) {
     // Письма до пуддинга прочитаны; письмо 7 (рецепт бабули) доставит почтовый ящик
     global.letters_read  = [0, 1, 2, 3, 5, 6];
     if (!variable_global_exists("pudding_on_porch")) global.pudding_on_porch = false;
-    if (TEST_DAY >= 5) {
+    if (TEST_DAY == 4) {
+        // Ночь с лягушонком прошла: утро дня 4, дождь, на камне пустая миска и карта (ещё не взята)
+        global.letters_read        = [0, 1, 2, 3, 5, 6, 7];
+        global.pudding_quest       = true;
+        global.pudding_ready       = true;
+        global.pudding_on_porch    = false;
+        global.pudding_bowl_empty  = true;
+        global.frog_night_done     = true;
+        global.frog_morning_dialog = true;
+        global.magic_map_placed    = true;
+        global.magic_map_taken     = false;
+        global.rain_day            = 4;
+        global.justin_day2_done      = true;   // Джастин уже заходил на ферму в день 3
+        global.justin_pie_day        = 2;
+        global.justin_farm_talk_done = true;
+    } else if (TEST_DAY >= 5) {
         // Эпизод с пуддингом пройден: лягушонок приходил, карта у Макс
         global.letters_read     = [0, 1, 2, 3, 5, 6, 7];
         global.pudding_quest    = true;
@@ -178,6 +194,8 @@ if (!variable_global_exists("pudding_bowl_empty"))  global.pudding_bowl_empty  =
 if (!variable_global_exists("frog_night_pending"))  global.frog_night_pending  = false; // ночная сцена ждёт запуска на ферме
 if (!variable_global_exists("frog_night_done"))     global.frog_night_done     = false;
 if (!variable_global_exists("frog_morning_dialog")) global.frog_morning_dialog = false; // реплика Макс утром после сцены
+if (!variable_global_exists("frog_bowl_seen"))      global.frog_bowl_seen      = false; // Макс увидела пустую миску (утро после сцены)
+if (!variable_global_exists("rain_day"))            global.rain_day            = -1;    // день дождя — утро после ночи с лягушонком
 if (!variable_global_exists("magic_map_placed"))    global.magic_map_placed    = false;
 if (!variable_global_exists("magic_map_taken"))     global.magic_map_taken     = false;
 
@@ -270,5 +288,5 @@ miley_enter_wp       = 0;   // 0=идём к wp1, 1=идём к obj_max
 meggie_diary_timer     = -1; // -1=не активен, >0=отсчёт
 meggie_diary_msg_timer = 0;  // время показа уведомления
 
-// Атмосфера: дождь на 3-й день, звуки и светлячки в лесу (постоянный объект)
+// Атмосфера: дождь в день после ночи с лягушонком (обычно 4-й), звуки и светлячки в лесу (постоянный объект)
 if (!instance_exists(obj_ambience)) instance_create_depth(0, 0, -100, obj_ambience);

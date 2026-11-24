@@ -2,7 +2,7 @@ global.control_locked = true;
 
 speaker     = "Макс:";
 speaker_col = make_color_rgb(255, 210, 100);
-line1 = "Ух ты! Это же карта!";
+line1 = "Сложенный листок... Ух ты, это же карта!";
 line2 = "Надо взглянуть на неё...";
 line3 = "";
 line4 = "";

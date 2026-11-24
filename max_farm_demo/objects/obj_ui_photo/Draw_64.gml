@@ -2,13 +2,15 @@
 var _gw = display_get_gui_width(), _gh = display_get_gui_height();
 draw_set_alpha(0.55); draw_set_color(c_black); draw_rectangle(0, 0, _gw, _gh, false); draw_set_alpha(1);
 
-// белая рамка старого снимка
-draw_set_color(make_color_rgb(236, 228, 210));
-draw_rectangle(px - 12, py - 12, px + pw + 12, py + ph + 34, false);
-
 if (sprite_exists(photo_spr)) {
-    draw_sprite_stretched(photo_spr, 0, px, py, pw, ph);
+    // у рисунка своя потёртая рамка — только мягкая тень под ним
+    draw_set_alpha(0.35); draw_set_color(c_black);
+    draw_roundrect(px + 6, py + 8, px + pw + 6, py + ph + 8, false);
+    draw_set_alpha(1);
+    draw_sprite(photo_spr, 0, px, py);
 } else {
+    draw_set_color(make_color_rgb(236, 228, 210));
+    draw_rectangle(px - 12, py - 12, px + pw + 12, py + ph + 12, false);
     // --- временная картинка в сепии ---
     var _sky = make_color_rgb(214, 190, 150), _grass = make_color_rgb(160, 132, 92);
     var _dark = make_color_rgb(92, 70, 48), _mid = make_color_rgb(128, 100, 70);
@@ -40,13 +42,13 @@ if (sprite_exists(photo_spr)) {
     draw_set_alpha(1);
 }
 
-// подпись от руки
+// подпись под фото
 draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_middle);
-draw_set_color(make_color_rgb(90, 70, 50));
-draw_text(px + pw / 2, py + ph + 16, "Соня и Мэгги. Наша яблонька.");
+draw_set_color(make_color_rgb(250, 238, 210));
+draw_text(px + pw / 2, py + ph + 18, caption);
 
 // кнопка
 var _mx = device_mouse_x_to_gui(0), _my = device_mouse_y_to_gui(0);
-scr_dialog_draw_button(btn_x1, btn_y1, btn_x1 + btn_w, btn_y1 + btn_h, "Далее",
+scr_dialog_draw_button(btn_x1, btn_y1, btn_x1 + btn_w, btn_y1 + btn_h, "Закрыть",
                        _mx >= btn_x1 && _mx <= btn_x1 + btn_w && _my >= btn_y1 && _my <= btn_y1 + btn_h);
 draw_set_halign(fa_left); draw_set_valign(fa_top); draw_set_color(c_white); draw_set_alpha(1);

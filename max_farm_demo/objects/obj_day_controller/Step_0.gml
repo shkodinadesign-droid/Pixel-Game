@@ -182,9 +182,26 @@ if (room == rm_farm && global.frog_night_pending && !instance_exists(obj_cutscen
 // --- Утро после ночной сцены: Макс просыпается и вспоминает про пуддинг ---
 if (room == rm_house_inside && global.frog_morning_dialog && !global.control_locked) {
     global.frog_morning_dialog = false;
-    var _mdlg = instance_create_depth(0, 0, -9999, obj_ui_dialog_max_pudding_porch);
-    _mdlg.line1 = "Доброе утро! Интересно, что стало с пуддингом?";
-    _mdlg.line2 = "Надо проверить огород.";
+    dialog_seq_start([
+        forest_page("max", ["Ох... Уже утро?", "Ничего себе, как льёт."]),
+        forest_page("max", ["Всю ночь снилось что-то странное.", "Будто кто-то шуршал в огороде", "и чавкал. Очень довольно чавкал."]),
+        forest_page("max", ["Пуддинг! Я же оставила его на камне."]),
+        forest_page("max", ["Если его съели ежи, я обижусь.", "Бабушка обещала сюрприз, а не ежей."]),
+        forest_page("max", ["Ладно. Надо сходить к огороду,", "пока дождь не размыл всё до крошки."])
+    ], "");
+}
+
+// --- Утро после сцены: Макс подходит к камню и видит пустую миску (один раз) ---
+if (room == rm_farm && global.frog_night_done && global.pudding_bowl_empty && !global.magic_map_taken
+&&  !global.frog_bowl_seen && !global.control_locked && instance_exists(obj_max)
+&&  point_distance(global.PUDDING_SPOT_X, global.PUDDING_SPOT_Y, obj_max.x, obj_max.y) < 100) {
+    global.frog_bowl_seen = true;
+    dialog_seq_start([
+        forest_page("max", ["Миска пустая. Вылизана до блеска."]),
+        forest_page("max", ["Ни крошки... Даже дождь не помог", "ничего тут спрятать."]),
+        forest_page("max", ["Кто бы это ни был, вкус у него", "хороший."]),
+        forest_page("max", ["А это что? Под миской что-то лежит.", "И оно совсем сухое."])
+    ], "");
 }
 
 // Тест-старт день 3: перенести Макса в дом на первом кадре

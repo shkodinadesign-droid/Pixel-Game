@@ -19,7 +19,8 @@ function forest_episode_init() {
     if (!variable_global_exists("map_hotkey_hint_shown")) global.map_hotkey_hint_shown = false; // подсказка про клавишу M
     if (!variable_global_exists("door_sign_found"))       global.door_sign_found       = false; // Макс узнала знак на двери пекарни
     // Ключ от тайной комнаты: Мэгги -> фотография -> тайник под камнем у яблони -> записка Сони -> комната -> зелёная тетрадь
-    if (!variable_global_exists("maggie_sign_talk_done")) global.maggie_sign_talk_done = false; // Мэгги рассказала про тайник, фото у Макс
+    if (!variable_global_exists("maggie_home_greeted"))   global.maggie_home_greeted   = false; // Макс пришла к Мэгги домой спросить про знак
+    if (!variable_global_exists("maggie_sign_talk_done")) global.maggie_sign_talk_done = false; // Мэгги рассказала про знак (ставит конец её разговора)
     if (!variable_global_exists("secret_cache_found"))    global.secret_cache_found    = false; // жестяная коробка найдена
     if (!variable_global_exists("has_secret_key"))        global.has_secret_key        = false; // ключ от тайной комнаты
     if (!variable_global_exists("secret_room_opened"))    global.secret_room_opened    = false; // комната открыта, зелёная тетрадь прочитана
@@ -30,7 +31,7 @@ function forest_episode_init() {
 /// @desc Текущая область для отметки "Вы здесь" на карте: "farm" / "village" / "forest"
 function forest_area() {
     if (room == rm_forest_entrance) return "forest";
-    if (room == rm_village || room == rm_joshua_shop || room == rm_butcher_shop) return "village";
+    if (room == rm_village || room == rm_joshua_shop || room == rm_butcher_shop || room == rm_maggie_house) return "village";
     return "farm";
 }
 
@@ -43,8 +44,7 @@ function forest_current_goal() {
         if (global.secret_room_opened)    return "найти Меч героя. Запись в зелёной тетради бабушки обрывается...";
         if (global.has_secret_key)        return "открыть тайную комнату в пекарне ключом из тайника.";
         if (global.maggie_sign_talk_done) return "найти старый тайник у яблони на ферме: камень со звёздочкой у корней, как на фотографии.";
-        if (global.door_sign_found) return "спросить Мэгги, что значит знак на двери пекарни. Её дом - в деревне.";
-        return "найти такой же знак, как на большом камне. Бабушка Соня знала, что он означает.";
+        return "поговорить с бабушкой Мэгги о тайном знаке. Её дом - в деревне.";
     }
     if (global.forest_glade_found) return "поговорить с лягушонком у большого камня.";
     switch (_a) {

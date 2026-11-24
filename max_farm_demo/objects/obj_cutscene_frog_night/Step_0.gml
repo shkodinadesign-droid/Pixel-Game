@@ -156,7 +156,8 @@ switch (phase) {
         if (phase_timer > 90) {
             if (crickets_id >= 0) audio_stop_sound(crickets_id);
             global.frog_night_done     = true;
-            global.frog_morning_dialog = true;  // «Интересно, что стало с пуддингом?» (obj_day_controller)
+            global.frog_morning_dialog = true;  // утренний монолог Макс в доме (obj_day_controller)
+            global.rain_day = instance_exists(obj_day_controller) ? obj_day_controller.day_index : -1;  // утром идёт дождь
             global.control_locked      = false;
             if (instance_exists(obj_max)) obj_max.visible = true;
             global.next_spawn_x = 96;

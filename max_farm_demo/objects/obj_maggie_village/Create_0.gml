@@ -4,7 +4,8 @@
 // Мэгги знает больше, чем говорила -> за дверью особенные рецепты Сони -> ключ в их старом тайнике ->
 // фотография (obj_ui_photo) -> «Посмотри, что лежит у корней». Дальше — тайник у яблони на ферме.
 forest_episode_init();
-if (!global.door_sign_found) { instance_destroy(); exit; }
+// Теперь Мэгги ждёт Макс дома за чаем (obj_maggie_home в rm_maggie_house) — на улице её нет.
+instance_destroy(); exit;
 sprite_index = spr_maggie_idle_left;   // лицом к цветочным горшкам у двери
 image_speed  = 0;
 depth        = -(y + 56);
