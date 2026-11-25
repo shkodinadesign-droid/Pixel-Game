@@ -11,15 +11,11 @@ if (_d < 120 && !global.control_locked
     forest_episode_init();
     // Ключ из тайника у яблони: дверь открывается — маленькая рабочая комната Сони и зелёная тетрадь
     if (room == rm_bakery && global.has_secret_key) {
-        if (!global.secret_room_opened) {
-            dialog_seq_start([
-                forest_page("max", ["Ключ подошёл!"]),
-                forest_page("max", ["Маленькая рабочая комната...", "Тетради, засушенные растения,", "баночки с выцветшими этикетками."]),
-                forest_page("max", ["И рисунки... Это лесные существа?"]),
-                forest_page("max", ["Бабушка писала начать с зелёной тетради.", "Вот она."])
-            ], "secret_room_open");
+        // Вход в тайную комнату (rm_secret_room). Первый раз — «Ключ подошёл!»
+        if (!variable_global_exists("secret_room_entered") || !global.secret_room_entered) {
+            dialog_seq_start([forest_page("max", ["Ключ подошёл!"])], "secret_room_enter");
         } else {
-            forest_on_dialog_finished("secret_room_open");   // перечитать зелёную тетрадь
+            forest_on_dialog_finished("secret_room_enter");
         }
         exit;
     }

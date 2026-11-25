@@ -1,3 +1,6 @@
+// В пещере (вид сбоку) Макс — obj_max_side, обычный Макс стоит невидимым
+if (variable_global_exists("side_view") && global.side_view) exit;
+
 // Сидит на стуле — всем управляет obj_chair
 if (sit_chair != noone) {
     if (instance_exists(sit_chair)) exit;

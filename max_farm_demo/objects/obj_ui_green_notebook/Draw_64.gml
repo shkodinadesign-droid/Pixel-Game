@@ -13,34 +13,83 @@ draw_set_alpha(0.25); draw_set_color(make_color_rgb(120, 140, 170));
 for (var _ly = by + 40; _ly < by + bh - 10; _ly += 24) { draw_line(bx + 14, _ly, _mid - 14, _ly); draw_line(_mid + 14, _ly, bx + bw - 14, _ly); }
 draw_set_alpha(1);
 
-var _ink = make_color_rgb(60, 50, 80);
-draw_set_font(fnt_ui); draw_set_halign(fa_left); draw_set_valign(fa_bottom); draw_set_color(_ink);
+var _ink  = make_color_rgb(60, 50, 80);
+var _lx   = bx + 18, _rx = _mid + 18, _top = by + 22;
+draw_set_font(fnt_ui); draw_set_halign(fa_left); draw_set_valign(fa_top); draw_set_color(_ink);
 
-// левая страница: обрывок рецепта и рисунок меча
-var _ty = by + 40;
-for (var i = 0; i < array_length(left_lines); i++) { draw_text(bx + 18, _ty, left_lines[i]); _ty += 24; }
-var _cx = bx + bw / 4, _cy = by + bh - 70;
-draw_set_color(_ink);
-draw_line_width(_cx - 70, _cy + 30, _cx + 50, _cy - 50, 3);                          // клинок
-draw_line_width(_cx - 52, _cy + 2,  _cx - 34, _cy + 30, 3);                          // гарда
-draw_line_width(_cx - 70, _cy + 30, _cx - 84, _cy + 40, 4);                          // рукоять
-draw_circle(_cx - 87, _cy + 42, 3, false);
-forest_draw_sign(_cx - 43, _cy + 16, 0.9);                                           // знак прежнего хозяина на гарде
-draw_set_color(_ink); draw_set_halign(fa_center);
-draw_text(_cx, by + bh - 12, "(рисунок по памяти)");
-draw_set_halign(fa_left);
+// номера страниц внизу
+draw_set_alpha(0.5); draw_set_halign(fa_center);
+draw_text(bx + bw / 4, by + bh - 22, string(spread * 2 + 1));
+draw_text(_mid + bw / 4, by + bh - 22, string(spread * 2 + 2));
+draw_set_alpha(1); draw_set_halign(fa_left);
 
-// правая страница: незаконченная запись
-_ty = by + 40;
-for (var j = 0; j < array_length(right_lines); j++) { draw_text(_mid + 18, _ty, right_lines[j]); _ty += 24; }
-// клякса — дальше не прочитать
-var _kx = _mid + 18 + string_width("Он лежит там, где") + 30, _ky = _ty - 24 - 8;
-draw_set_color(make_color_rgb(40, 36, 70));
-draw_circle(_kx, _ky, 13, false); draw_circle(_kx + 14, _ky + 4, 9, false); draw_circle(_kx - 8, _ky + 9, 6, false);
-draw_circle(_kx + 24, _ky - 6, 3, false);
+var _ty = _top;
+switch (spread) {
+    case 0:
+        // левая: рисунок Меча героя
+        draw_set_halign(fa_center);
+        draw_text(bx + bw / 4, _top, "Меч героя");
+        var _cx = bx + bw / 4 + 10, _cy = by + bh / 2 + 20;
+        draw_set_color(_ink);
+        draw_line_width(_cx - 80, _cy + 40, _cx + 60, _cy - 70, 3);                      // клинок
+        draw_line_width(_cx - 60, _cy + 8,  _cx - 38, _cy + 40, 3);                      // гарда
+        draw_line_width(_cx - 80, _cy + 40, _cx - 96, _cy + 52, 4);                      // рукоять
+        draw_circle(_cx - 99, _cy + 55, 3, false);
+        forest_draw_sign(_cx - 49, _cy + 24, 0.9);                                       // знак прежнего хозяина на гарде
+        draw_set_color(_ink);
+        draw_text(bx + bw / 4, by + bh - 52, "(рисунок по памяти)");
+        draw_set_halign(fa_left);
+        // правая: начало записи
+        _ty = _top;
+        draw_text_ext(_rx, _ty, txt_jack_1, line_h, page_w); _ty += string_height_ext(txt_jack_1, line_h, page_w) + 12;
+        draw_text_ext(_rx, _ty, txt_jack_2, line_h, page_w);
+        break;
 
-// кнопка
+    case 1:
+        // левая: продолжение
+        _ty = _top;
+        draw_text_ext(_lx, _ty, txt_jack_3, line_h, page_w); _ty += string_height_ext(txt_jack_3, line_h, page_w) + 12;
+        draw_text_ext(_lx, _ty, txt_jack_4, line_h, page_w);
+        // правая: конец записи
+        _ty = _top;
+        draw_text_ext(_rx, _ty, txt_jack_5, line_h, page_w); _ty += string_height_ext(txt_jack_5, line_h, page_w) + 10;
+        // неразборчивый набросок скал
+        var _sx = _rx + 40, _sy = _ty + 70;
+        draw_set_color(_ink);
+        draw_line_width(_sx, _sy, _sx + 22, _sy - 52, 2);       draw_line_width(_sx + 22, _sy - 52, _sx + 40, _sy - 30, 2);
+        draw_line_width(_sx + 40, _sy - 30, _sx + 52, _sy - 60, 2); draw_line_width(_sx + 52, _sy - 60, _sx + 74, _sy, 2);
+        draw_line_width(_sx + 96, _sy, _sx + 118, _sy - 44, 2);   draw_line_width(_sx + 118, _sy - 44, _sx + 150, _sy, 2);
+        // расколотый камень: два полукруга с трещиной
+        draw_circle(_sx + 172, _sy - 8, 10, true); draw_line(_sx + 172, _sy - 20, _sx + 168, _sy + 2);
+        // тропинка-закорючка и крестик
+        for (var k = 0; k < 6; k++) draw_line(_sx + 60 + k * 14, _sy + 16 + ((k mod 2) ? 4 : 0), _sx + 67 + k * 14, _sy + 16 + ((k mod 2) ? 0 : 4));
+        draw_line(_sx + 80, _sy - 10, _sx + 88, _sy - 2); draw_line(_sx + 88, _sy - 10, _sx + 80, _sy - 2);
+        draw_set_alpha(0.6); draw_text(_sx + 150, _sy + 6, "?"); draw_text(_sx - 14, _sy - 40, "?"); draw_set_alpha(1);
+        // приписка другим цветом
+        draw_set_color(make_color_rgb(140, 60, 40));
+        draw_text_ext(_rx, _sy + 34, txt_note, line_h, page_w);
+        draw_set_color(_ink);
+        break;
+
+    case 2:
+        // левая: рецепт пирога с лунной ягодой
+        draw_text_ext(_lx, _top, txt_recipe, line_h, page_w);
+        // правая: пустая, только засушенный листик
+        var _px = _mid + bw / 4, _py = by + bh / 2;
+        draw_set_color(make_color_rgb(150, 160, 110));
+        draw_ellipse(_px - 10, _py - 24, _px + 10, _py + 20, false);
+        draw_set_color(make_color_rgb(110, 120, 80));
+        draw_line(_px, _py - 24, _px, _py + 32);
+        draw_set_color(_ink);
+        break;
+}
+
+// кнопки
 var _mx = device_mouse_x_to_gui(0), _my = device_mouse_y_to_gui(0);
-scr_dialog_draw_button(btn_x1, btn_y1, btn_x1 + btn_w, btn_y1 + btn_h, "Закрыть",
+var _last = (spread >= SPREADS - 1);
+scr_dialog_draw_button(btn_x1, btn_y1, btn_x1 + btn_w, btn_y1 + btn_h, _last ? "Закрыть" : "Дальше",
                        _mx >= btn_x1 && _mx <= btn_x1 + btn_w && _my >= btn_y1 && _my <= btn_y1 + btn_h);
+if (spread > 0)
+    scr_dialog_draw_button(back_x1, btn_y1, back_x1 + btn_w, btn_y1 + btn_h, "Назад",
+                           _mx >= back_x1 && _mx <= back_x1 + btn_w && _my >= btn_y1 && _my <= btn_y1 + btn_h);
 draw_set_halign(fa_left); draw_set_valign(fa_top); draw_set_color(c_white); draw_set_alpha(1);

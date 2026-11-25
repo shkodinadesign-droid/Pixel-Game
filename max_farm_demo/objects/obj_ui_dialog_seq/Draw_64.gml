@@ -11,8 +11,16 @@ scr_dialog_draw_bg(win_x, win_y, win_w, win_h);
 scr_dialog_draw_speaker(win_x, win_y, win_w, win_h, _p.speaker);
 
 // Портрет справа: Макс — её портрет, лягушонок — спрайт лягушонка (масштаб 2:1, целый)
-var _spr = (_p.who == "frog") ? spr_frog_idle_down : ((_p.who == "maggie") ? spr_grandma_maggie_portrait : spr_max_portrait);
-var _text_w = scr_dialog_draw_portrait(win_x, win_y, win_w, win_h, btn_y1, _spr, portrait_size);
+var _spr = spr_max_portrait;
+switch (_p.who) {
+    case "frog":   _spr = spr_frog_idle_down;          break;
+    case "maggie": _spr = spr_grandma_maggie_portrait; break;
+    case "jack":   _spr = spr_joe_portrait_anim;       break;   // Джо
+    case "keeper": _spr = spr_keeper_portrait;         break;   // временный портрет
+    case "clay":   _spr = spr_clay_guardian_portrait;  break;   // временный портрет
+}
+var _pframe = (_p.who == "jack") ? (current_time div 250) mod sprite_get_number(_spr) : 0;   // Джо — анимированный портрет продавца семян
+var _text_w = scr_dialog_draw_portrait(win_x, win_y, win_w, win_h, btn_y1, _spr, portrait_size, _pframe);
 
 var tx = win_x + 15 * (win_w / 580) + 8;
 var ty = scr_dialog_body_top(win_x, win_y, win_w, win_h);

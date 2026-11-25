@@ -1,4 +1,5 @@
 // === КОНТРОЛЛЕР ДНЯ/НОЧИ (STEP) ===
+if (!quest_sync_done && instance_exists(obj_max)) { quest_sync_done = true; quest_items_sync(); }
 
 // --- F1: экран отладки квестовых флагов (см. Draw_64) ---
 if (keyboard_check_pressed(vk_f1)) show_debug_flags = !show_debug_flags;
@@ -202,6 +203,14 @@ if (room == rm_farm && global.frog_night_done && global.pudding_bowl_empty && !g
         forest_page("max", ["Кто бы это ни был, вкус у него", "хороший."]),
         forest_page("max", ["А это что? Под миской что-то лежит.", "И оно совсем сухое."])
     ], "");
+}
+
+// Тест-старт: сразу в пещеру (TEST_FROM_CAVE)
+if (variable_instance_exists(id, "_need_cave_start") && _need_cave_start) {
+    _need_cave_start = false;
+    global.side_spawn = "left";
+    room_goto(rm_cave);
+    exit;
 }
 
 // Тест-старт день 3: перенести Макса в дом на первом кадре

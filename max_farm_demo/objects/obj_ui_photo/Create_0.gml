@@ -8,7 +8,7 @@ open_delay  = 10;
 owns_lock   = !global.control_locked;
 global.control_locked = true;
 _click_prev = true;
-photo_spr   = asset_get_index("spr_photo_sonya_maggie");
+photo_spr   = spr_photo_sonya_maggie;   // прямая ссылка: иначе GameMaker выкидывает спрайт при сборке
 
 pw = 480; ph = 360;                                   // сама фотография (1:1 со спрайтом)
 px = (display_get_gui_width() - pw) / 2;

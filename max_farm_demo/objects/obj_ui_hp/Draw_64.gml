@@ -6,7 +6,8 @@ if (!instance_exists(obj_max)) exit;
 
 // Скрываем в помещениях
 if (room == rm_bakery || room == rm_joshua_shop || room == rm_butcher_shop ||
-    room == rm_house_inside || room == room_barn || room == rm_maggie_house) exit;
+    room == rm_house_inside || room == room_barn || room == rm_maggie_house || room == rm_secret_room
+    || room == rm_cave || room == rm_cave_arena) exit;
 
 // Плавное появление
 hp_alpha = min(hp_alpha + 0.03, 1);

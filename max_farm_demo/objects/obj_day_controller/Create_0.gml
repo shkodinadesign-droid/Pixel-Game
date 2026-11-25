@@ -17,6 +17,12 @@ var TEST_FROM_PUDDING_LETTER = true;
 // Только при TEST_DAY = 5: true — лягушонок уже поговорил с Макс (знак на камне), дальше — знак на двери
 // пекарни -> Мэгги у её дома -> тайник у яблони -> тайная комната. Обычно false.
 var TEST_FROM_FROG_TALK = false;
+// Только при TEST_DAY = 5: true — ключ от тайной комнаты уже найден (Мэгги, фото, тайник пройдены).
+// Старт в доме: пекарня -> тайная комната -> зелёная тетрадь -> Джо в деревне -> пещера в лесу. Обычно false.
+var TEST_FROM_SECRET_KEY = false;
+// Только при TEST_DAY = 5: true — тетрадь прочитана, Джо рассказал про пещеру; старт сразу у входа в пещеру
+// (вид сбоку): фонарь -> хранитель -> первое испытание (глиняный страж). Обычно false.
+var TEST_FROM_CAVE = false;
 
 // Запоминаем как переменную инстанса — нужно в Draw для баннера-предупреждения
 // "TEST_DAY активен", чтобы билд с TEST_DAY != 1 нельзя было случайно не заметить.
@@ -135,11 +141,25 @@ if (_apply_test && TEST_DAY >= 4) {
         global.frog_night_done  = true;
         global.magic_map_placed = true;
         global.magic_map_taken  = true;
-        if (TEST_FROM_FROG_TALK) {
+        if (TEST_FROM_FROG_TALK || TEST_FROM_SECRET_KEY || TEST_FROM_CAVE) {
             forest_episode_init();
             global.forest_found       = true;
             global.forest_glade_found = true;
             global.frog_talk_done     = true;
+        }
+        if (TEST_FROM_SECRET_KEY || TEST_FROM_CAVE) {
+            global.door_sign_found       = true;
+            global.maggie_home_greeted   = true;
+            global.maggie_sign_talk_done = true;
+            global.secret_cache_found    = true;
+            global.has_secret_key        = true;
+            global.quest_items           = ["old_photo", "secret_key"];   // в хотбар — первым кадром (Step)
+        }
+        if (TEST_FROM_CAVE) {
+            global.secret_room_entered = true;
+            global.secret_room_opened  = true;
+            global.jack_cave_talk_done = true;
+            _need_cave_start = true;          // Step: первым кадром — в пещеру
         }
     } else if (TEST_FROM_PUDDING_LETTER) {
         // Письмо 7 (рецепт пуддинга) ещё не прочитано — "!" на почтовом ящике
@@ -290,3 +310,6 @@ meggie_diary_msg_timer = 0;  // время показа уведомления
 
 // Атмосфера: дождь в день после ночи с лягушонком (обычно 4-й), звуки и светлячки в лесу (постоянный объект)
 if (!instance_exists(obj_ambience)) instance_create_depth(0, 0, -100, obj_ambience);
+
+// Сюжетные предметы (ключ, фото) — в хотбар, когда Макс появится (нужно для тестового старта)
+quest_sync_done = false;

@@ -1,3 +1,4 @@
+if (variable_global_exists("side_view") && global.side_view) exit;   // в пещере хотбара нет — руки заняты прыжками
 // ========== ИНВЕНТАРЬ - ПАНЕЛЬ ВНИЗУ ЭКРАНА ==========
 
 var gui_w = display_get_gui_width();

@@ -1,7 +1,7 @@
 // ===== АТМОСФЕРА (STEP) =====
 var _outdoor = (room == rm_farm || room == rm_village || room == rm_forest_entrance);
 var _indoor  = (room == rm_house_inside || room == rm_bakery || room == rm_joshua_shop
-             || room == rm_butcher_shop || room == room_barn || room == rm_maggie_house);
+             || room == rm_butcher_shop || room == room_barn || room == rm_maggie_house || room == rm_secret_room);
 var _forest  = (room == rm_forest_entrance);
 
 // Дождь: весь день после ночи с лягушонком (обычно день 4) — Макс находит карту и идёт в лес под дождём.
@@ -30,7 +30,7 @@ if (rain_alpha > 0) {
 
 // --- пылинки: в лесу всегда, на улице — на следующий день после дождя ---
 var _after_rain = variable_global_exists("rain_day") && global.rain_day >= 0 && _day == global.rain_day + 1;
-var _motes_on = !_rain && (_forest || (_outdoor && _after_rain));
+var _motes_on = (room == rm_secret_room) || (!_rain && (_forest || (_outdoor && _after_rain)));
 motes_alpha = clamp(motes_alpha + (_motes_on ? 0.01 : -0.02), 0, 1);
 if (motes_alpha > 0) {
     for (var m = 0; m < array_length(motes); m++) {

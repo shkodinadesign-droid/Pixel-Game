@@ -84,9 +84,29 @@ draw_set_font(fnt_ui);
 draw_set_halign(fa_center);
 draw_set_valign(fa_bottom);
 draw_set_color(_col_ink);
-draw_set_alpha(0.6);
-draw_text(_dead_x, _dead_y - 6, "тупик");
-draw_set_alpha(1);
+if (global.jack_cave_talk_done) {
+    // Джо отметил пещеру: скалы с тёмным входом, расколотый камень и подпись
+    var _cvx = _dead_x, _cvy = _dead_y - 8;
+    draw_set_color(make_color_rgb(110, 95, 80));
+    draw_triangle(_cvx - 26, _cvy, _cvx - 8, _cvy - 26, _cvx + 2, _cvy, false);
+    draw_triangle(_cvx - 4, _cvy, _cvx + 12, _cvy - 30, _cvx + 28, _cvy, false);
+    draw_set_color(make_color_rgb(40, 28, 20));
+    draw_ellipse(_cvx - 7, _cvy - 12, _cvx + 7, _cvy + 2, false);                  // низкий вход
+    draw_set_color(_col_ink);
+    draw_circle(_cvx - 34, _cvy - 2, 5, true); draw_line(_cvx - 34, _cvy - 7, _cvx - 36, _cvy + 3);   // расколотый камень
+    draw_set_color(_col_red);
+    draw_circle(_cvx, _cvy - 10, 22, true);
+    draw_set_color(_col_ink);
+    draw_set_font(fnt_dialog_ru_bold);
+    draw_set_halign(fa_left);
+    draw_text(_cvx + 30, _cvy - 2, "Старая пещера");   // справа от значка — не налезает на заголовок
+    draw_set_halign(fa_center);
+    draw_set_font(fnt_ui);
+} else {
+    draw_set_alpha(0.6);
+    draw_text(_dead_x, _dead_y - 6, "тупик");
+    draw_set_alpha(1);
+}
 
 // Точки и подписи
 for (var i = 0; i < 5; i++) {
