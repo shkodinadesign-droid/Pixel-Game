@@ -1,14 +1,36 @@
 // ===== ПЕРВОЕ ИСПЫТАНИЕ (DRAW END): свет, предупреждения поверх темноты, частицы =====
 var _m = max_side;
-light_surf = cave_light_begin(light_surf, make_color_rgb(104, 90, 118));     // арена светлее прохода — края видны
+light_surf = cave_light_begin(light_surf, make_color_rgb(196, 190, 204));    // арена светлая, тёмно-серая — края и опасности видны
 if (instance_exists(_m) && global.has_lantern) {
     var _lx = cave_lantern_x(_m), _ly = cave_lantern_y(_m);
-    cave_light_circle(_lx, _ly, 200 + sin(flick / 9) * 3, make_color_rgb(200, 164, 118));
-    cave_light_circle(_lx, _ly, 80, make_color_rgb(70, 54, 32));
+    cave_light_circle(_lx, _ly, 220 + sin(flick / 9) * 3, make_color_rgb(70, 52, 26));
+    cave_light_circle(_lx, _ly, 80, make_color_rgb(40, 30, 14));
 }
 if (state == "done") cave_light_circle(944, 120, 90, make_color_rgb(70, 80, 110));   // из открытого выхода тянет прохладой
 cave_light_end(light_surf);
 side_draw_edges(0.45);
+
+// --- страж, камни, глина: поверх света ---
+var _sh = (g_shake > 0) ? g_shake : 0;
+cave_draw_clay(gx + random_range(-_sh, _sh), F - gr + random_range(-_sh, _sh), gr, g_ang, g_eye, g_arm, g_arm_up, g_mood);
+for (var i = 0; i < array_length(rocks); i++) {
+    var r = rocks[i];
+    if (r.st != "fall" && r.st != "crumble") continue;
+    var _x1 = r.x - ROCK_W / 2, _a = (r.st == "crumble") ? 1 - r.t / 18 : 1;
+    draw_set_alpha(_a);
+    draw_set_color(make_color_rgb(104, 100, 112)); draw_roundrect_ext(_x1, r.y, _x1 + ROCK_W, r.y + ROCK_H, 12, 12, false);
+    draw_set_color(make_color_rgb(140, 136, 150)); draw_roundrect_ext(_x1 + 4, r.y + 3, _x1 + ROCK_W - 12, r.y + 12, 8, 8, false);
+    draw_set_color(make_color_rgb(60, 56, 66));    draw_roundrect_ext(_x1, r.y, _x1 + ROCK_W, r.y + ROCK_H, 12, 12, true);
+    if (r.st == "crumble") { draw_line(_x1 + 10, r.y + 6, _x1 + 26, r.y + ROCK_H); draw_line(_x1 + 36, r.y + 4, _x1 + 30, r.y + ROCK_H); }
+    draw_set_alpha(1);
+}
+if (clay_y < F) {
+    draw_set_color(make_color_rgb(132, 88, 62));
+    for (var _x = 0; _x < room_width; _x += 8) draw_rectangle(_x, clay_y + sin(_x / 23 + flick / 18) * 2, _x + 7, F, false);
+    draw_set_color(make_color_rgb(110, 72, 52));
+    for (var k = 0; k < 6; k++) { var _bx = (k * 157 + flick * 0.7) mod room_width; draw_circle(_bx, clay_y + 10 + (k mod 3) * 14, 2 + (flick div 10 + k) mod 2, false); }
+}
+draw_set_color(c_white);
 
 // предупреждения камней: тень на земле + струйка крошки с потолка
 for (var i = 0; i < array_length(rocks); i++) {

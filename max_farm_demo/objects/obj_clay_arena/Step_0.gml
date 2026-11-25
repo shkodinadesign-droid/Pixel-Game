@@ -5,6 +5,7 @@ cave_fx_step();
 if (exit_warn_cd > 0) exit_warn_cd -= 1;
 if (retry_t > 0) retry_t -= 1;
 if (banner_t > 0) banner_t -= 1;
+if (inv_t > 0) inv_t -= 1;
 // частицы
 for (var i = array_length(parts) - 1; i >= 0; i--) {
     var p = parts[i]; p.vy += 0.3; p.x += p.vx; p.y += p.vy; p.life -= 1;
@@ -27,6 +28,8 @@ if (hit_t > 0) {
             case "p3": place_max(233); clay_y = F; clay_delay = 60; break;
         }
         parts = [];
+        global.hearts = global.hearts_max;                // сердечки снова полные
+        inv_t = 0;
     }
     if (hit_t >= 60) { hit_t = 0; _m.frozen = false; retry_t = 80; }
     exit;
@@ -215,7 +218,7 @@ switch (state) {
         } else {
             clay_y = max(CLAY_TOP, clay_y - CLAY_SPD);
         }
-        if (_m.y + SIDE_BH > clay_y + 6) hurt();
+        if (_m.y + SIDE_BH > clay_y + 6) hurt(true);       // глина накрыла — подъём заново
         // наверху у выхода — победа
         if (_m.on_ground && _m.y + SIDE_BH <= 145 && _m.x >= 806) {
             state = "win_still"; t = 0; _m.frozen = true;

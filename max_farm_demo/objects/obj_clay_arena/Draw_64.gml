@@ -1,5 +1,6 @@
 // ===== ПЕРВОЕ ИСПЫТАНИЕ (DRAW GUI): затемнение при попадании, «Ещё раз!», плашка победы =====
 var _gw = display_get_gui_width(), _gh = display_get_gui_height();
+hearts_draw();
 if (hit_t > 0) {
     var _a = (hit_t < 30) ? hit_t / 30 : (60 - hit_t) / 30;
     draw_set_alpha(_a * 0.75); draw_set_color(c_black); draw_rectangle(0, 0, _gw, _gh, false);

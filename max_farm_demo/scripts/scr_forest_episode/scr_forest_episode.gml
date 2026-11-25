@@ -33,13 +33,19 @@ function forest_episode_init() {
     if (!variable_global_exists("trial1_done"))           global.trial1_done           = false; // первое испытание пройдено
     if (!variable_global_exists("side_view"))             global.side_view             = false; // сейчас комната с видом сбоку
     if (!variable_global_exists("side_spawn"))            global.side_spawn            = "";    // "left"/"right" — откуда входит в комнату пещеры
+    // Тайный лес: на середине пути лягушонок даёт волшебный сироп — у Макс 3 сердечка (для испытаний)
+    if (!variable_global_exists("frog_syrup_done"))       global.frog_syrup_done       = false;
+    if (!variable_global_exists("hearts_max"))            global.hearts_max            = 0;
+    if (!variable_global_exists("hearts"))                global.hearts                = 0;
     if (!variable_global_exists("control_locked"))        global.control_locked        = false;
 }
 
 /// @func forest_area()
 /// @desc Текущая область для отметки "Вы здесь" на карте: "farm" / "village" / "forest"
 function forest_area() {
-    if (room == rm_forest_entrance || room == rm_cave || room == rm_cave_arena) return "forest";
+    if (room == rm_mystic_forest) return "mystic";
+    if (room == rm_cave || room == rm_cave_arena) return "cave";
+    if (room == rm_forest_entrance) return "forest";
     if (room == rm_village || room == rm_joshua_shop || room == rm_butcher_shop || room == rm_maggie_house) return "village";
     return "farm";
 }
@@ -53,7 +59,11 @@ function forest_current_goal() {
         if (global.trial1_done)           return "первое испытание пройдено. Дальше по проходу - второе испытание хранителя.";
         if (global.keeper_talk_done)      return "пройти испытания хранителя. Проход открыт - вперёд, вглубь пещеры.";
         if (global.cave_entered)          return global.has_lantern ? "идти вглубь пещеры." : "взять старый фонарь на каменном выступе у входа в пещеру.";
-        if (global.jack_cave_talk_done)   return (room == rm_forest_entrance) ? "найти вход в пещеру: от развилки вверх, до тупика. За расколотым камнем - проход между скалами." : "найти вход в старую пещеру в лесу: от развилки вверх, к расколотому камню.";
+        if (global.jack_cave_talk_done) {
+            if (room == rm_mystic_forest)   return "пройти тайный лес до конца. За расколотым камнем - проход между скалами, вход в пещеру.";
+            if (room == rm_forest_entrance) return "с поляны лягушонка (у большого камня) - направо, в тайный лес. Пещера - в его конце.";
+            return "найти вход в старую пещеру: через лес к поляне лягушонка, оттуда - в тайный лес.";
+        }
         if (global.secret_room_opened)    return "расспросить Джо о пещере и Мече героя. Он продаёт семена у вагончика в деревне.";
         if (global.has_secret_key)        return (room == rm_secret_room) ? "прочитать зелёную тетрадь на столе." : "открыть тайную комнату в пекарне ключом из тайника.";
         if (global.maggie_sign_talk_done) return "найти старый тайник у яблони на ферме: камень со звёздочкой у корней, как на фотографии.";
@@ -213,7 +223,8 @@ function forest_on_dialog_finished(_event) {
                 forest_page("max",  ["Такое чувство, что здесь все всё знают,", "кроме меня."]),
                 forest_page("jack", ["Мы знаем старые истории. А что там", "сейчас - тебе ещё предстоит выяснить."]),
                 forest_page("jack", ["Давай-ка свою карту.", "(отмечает что-то на карте)"]),
-                forest_page("jack", ["Вот здесь свернёшь с лесной тропы.", "Увидишь расколотый камень - за ним", "проход между скалами."]),
+                forest_page("jack", ["От поляны с большим камнем тропа", "уходит дальше, в старый тайный лес."]),
+                forest_page("jack", ["Пройдёшь его до конца - увидишь", "расколотый камень. За ним -", "проход между скалами."]),
                 forest_page("jack", ["Вход низкий, с дороги его почти не видно."]),
                 forest_page("max",  ["И там лежит меч?"]),
                 forest_page("jack", ["Возможно. Когда мы были молодыми,", "говорили, что в этой пещере его хранитель", "испытывает тех, кто приходит за мечом."]),
@@ -228,9 +239,20 @@ function forest_on_dialog_finished(_event) {
             ], "jack_cave_done");
             break;
         case "jack_cave_done":
-            global.jack_cave_talk_done = true;   // на карте — «Старая пещера», в лесу открывается проход
+            global.jack_cave_talk_done = true;   // на карте — тайный лес и «Старая пещера», заросли у поляны расступаются
             global.diary_has_new       = true;
             global.diary_was_read      = false;
+            map_open(false);                     // Джо отметил путь — карта сразу открывается
+            break;
+        // ----- тайный лес: лягушонок и волшебный сироп (obj_mystic_frog) -----
+        case "frog_syrup":
+            global.hearts_max = 3;
+            global.hearts     = 3;
+            with (obj_mystic_frog) { state = "syrup"; t = 0; }
+            break;
+        case "frog_syrup_bye":
+            global.frog_syrup_done = true;
+            with (obj_mystic_frog) { state = "leave"; t = 0; }
             break;
         // ----- пещера (scr_cave_side, obj_cave_controller, obj_clay_arena) -----
         case "keeper_strike":           // хранитель ударяет посохом — проход открывается

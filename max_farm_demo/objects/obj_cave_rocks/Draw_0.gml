@@ -1,10 +1,10 @@
-// ===== СКАЛЫ С НИЗКИМ ВХОДОМ В ПЕЩЕРУ (DRAW) =====
-// Две скалы (spr_village2_rocks, правая зеркально), между ними — тёмный проход. Временная графика.
-draw_set_color(make_color_rgb(18, 14, 14));
-draw_ellipse(877, 146, 907, 178, false);
-draw_rectangle(877, 162, 907, 196, false);
-draw_set_color(make_color_rgb(36, 30, 28));
-draw_rectangle(880, 188, 904, 196, false);              // пол прохода чуть светлее
-draw_sprite_ext(spr_village2_rocks, 0, 846, 198,  1.25, 1.25, 0, c_white, 1);
-draw_sprite_ext(spr_village2_rocks, 0, 938, 198, -1.25, 1.25, 0, c_white, 1);
+// ===== СКАЛЫ С НИЗКИМ ВХОДОМ (DRAW): две скалы, между ними тёмный проход, фиолетовое свечение из глубины =====
+draw_set_color(make_color_rgb(14, 10, 18));
+draw_ellipse(x - 15, y - 50, x + 15, y - 18, false);
+draw_rectangle(x - 15, y - 34, x + 15, y, false);
+draw_set_color(make_color_rgb(70, 40, 110)); draw_set_alpha(0.35 + 0.15 * sin(current_time / 600));
+draw_ellipse(x - 9, y - 40, x + 9, y - 10, false);
+draw_set_alpha(1);
+draw_sprite_ext(spr_village2_rocks, 0, x - 46, y + 2,  1.25, 1.25, 0, c_white, 1);
+draw_sprite_ext(spr_village2_rocks, 0, x + 46, y + 2, -1.25, 1.25, 0, c_white, 1);
 draw_set_color(c_white);

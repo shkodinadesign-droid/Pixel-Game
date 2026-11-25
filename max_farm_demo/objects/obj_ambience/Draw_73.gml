@@ -44,7 +44,7 @@ if (_secret) {
 
 // --- пылинки: тёплые светлые точки, мерцают (в тайной комнате — сиреневые искорки) ---
 if (motes_alpha > 0) {
-    draw_set_color(_secret ? make_color_rgb(215, 190, 255) : ((room == rm_forest_entrance) ? make_color_rgb(230, 245, 210) : make_color_rgb(255, 240, 200)));
+    draw_set_color((_secret || room == rm_mystic_forest) ? make_color_rgb(215, 190, 255) : ((room == rm_forest_entrance) ? make_color_rgb(230, 245, 210) : make_color_rgb(255, 240, 200)));
     for (var m = 0; m < array_length(motes); m++) {
         var d = motes[m];
         var _tw = 0.55 + 0.45 * sin(d.ph / 37);

@@ -205,6 +205,17 @@ if (room == rm_farm && global.frog_night_done && global.pudding_bowl_empty && !g
     ], "");
 }
 
+// Тест-старт: день 4 сразу в тайной комнате (TEST_DAY4_SECRET_ROOM)
+if (variable_instance_exists(id, "_need_secret_room_start") && _need_secret_room_start) {
+    _need_secret_room_start = false;
+    global.next_spawn_tag = undefined;
+    global.next_spawn_x   = 288;
+    global.next_spawn_y   = 430;
+    global.spawn_facing   = "up";
+    room_goto(rm_secret_room);
+    exit;
+}
+
 // Тест-старт: сразу в пещеру (TEST_FROM_CAVE)
 if (variable_instance_exists(id, "_need_cave_start") && _need_cave_start) {
     _need_cave_start = false;

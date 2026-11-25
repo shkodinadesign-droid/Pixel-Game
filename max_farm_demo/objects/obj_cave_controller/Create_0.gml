@@ -10,9 +10,9 @@ KEEPER_X  = 1480;           // хранитель
 BARRIER_X = 1660;
 
 // --- поверхности ---
-side_solid(0, 0, 1100, 150);                  // низкий потолок у входа
-side_solid(1100, 0, 1920, 70);                // дальше проход расширяется
-side_solid(0, FLOOR_Y, 1920, 540);            // пол
+side_solid(0, 0, 1100, 150, "stone");         // низкий потолок у входа
+side_solid(1100, 0, 1920, 70, "stone");       // дальше проход расширяется
+side_solid(0, FLOOR_Y, 1920, 540, "floor");   // пол — коричневая земля
 side_solid(232, 420, 300, 432, "ledge", true);   // выступ с фонарём
 side_solid(520, 430, 580, FLOOR_Y, "rock");      // ступенька — первый прыжок
 side_solid(620, 394, 740, 406, "ledge", true);   // уступ — попробовать запрыгнуть
@@ -20,10 +20,10 @@ side_solid(800, 440, 850, FLOOR_Y, "rock");
 barrier = global.keeper_talk_done ? noone : side_solid(BARRIER_X, 70, BARRIER_X + 60, FLOOR_Y, "barrier");
 barrier_sink = 0;
 
-// --- Макс: вошла из леса (слева) или вернулась с арены (справа) ---
+// --- Макс: вошла из тайного леса (слева) или вернулась с арены (справа) ---
 var _from_arena = (variable_global_exists("side_spawn") && global.side_spawn == "right");
 global.side_spawn = "";
-max_side = instance_create_depth(_from_arena ? 1880 : 12, FLOOR_Y - SIDE_BH, -100, obj_max_side);
+max_side = instance_create_depth(_from_arena ? 1880 : 70, FLOOR_Y - SIDE_BH, -100, obj_max_side);
 if (_from_arena) max_side.facing = -1;
 
 lantern_glow = global.has_lantern ? 1 : 0;   // 0..1 — фонарь разгорается после подбора

@@ -23,6 +23,9 @@ var TEST_FROM_SECRET_KEY = false;
 // Только при TEST_DAY = 5: true — тетрадь прочитана, Джо рассказал про пещеру; старт сразу у входа в пещеру
 // (вид сбоку): фонарь -> хранитель -> первое испытание (глиняный страж). Обычно false.
 var TEST_FROM_CAVE = false;
+// Только при TEST_DAY = 4: true — день 4, но лягушонок, Мэгги и тайник уже пройдены, ключ и фото в хотбаре;
+// старт прямо в тайной комнате бабушки Сони (первый осмотр комнаты -> зелёная тетрадь -> Джо -> пещера).
+var TEST_DAY4_SECRET_ROOM = true;
 
 // Запоминаем как переменную инстанса — нужно в Draw для баннера-предупреждения
 // "TEST_DAY активен", чтобы билд с TEST_DAY != 1 нельзя было случайно не заметить.
@@ -133,6 +136,23 @@ if (_apply_test && TEST_DAY >= 4) {
         global.justin_day2_done      = true;   // Джастин уже заходил на ферму в день 3
         global.justin_pie_day        = 2;
         global.justin_farm_talk_done = true;
+        if (TEST_DAY4_SECRET_ROOM) {
+            forest_episode_init();
+            global.frog_morning_dialog   = false;   // утро с миской и картой уже было
+            global.frog_bowl_seen        = true;
+            global.magic_map_taken       = true;
+            global.forest_found          = true;
+            global.forest_glade_found    = true;
+            global.frog_talk_done        = true;
+            global.door_sign_found       = true;
+            global.maggie_home_greeted   = true;
+            global.maggie_sign_talk_done = true;
+            global.secret_cache_found    = true;
+            global.has_secret_key        = true;
+            global.quest_items           = ["old_photo", "secret_key"];   // в хотбар — первым кадром (Step)
+            _need_secret_room_start      = true;    // Step: первым кадром — в тайную комнату
+            _need_house_start            = false;   // общий старт дней 3+ «в дом» тут не нужен (иначе вторым кадром уводил домой)
+        }
     } else if (TEST_DAY >= 5) {
         // Эпизод с пуддингом пройден: лягушонок приходил, карта у Макс
         global.letters_read     = [0, 1, 2, 3, 5, 6, 7];
@@ -160,6 +180,7 @@ if (_apply_test && TEST_DAY >= 4) {
             global.secret_room_opened  = true;
             global.jack_cave_talk_done = true;
             _need_cave_start = true;          // Step: первым кадром — в пещеру
+            _need_house_start = false;        // иначе вторым кадром уводил домой
         }
     } else if (TEST_FROM_PUDDING_LETTER) {
         // Письмо 7 (рецепт пуддинга) ещё не прочитано — "!" на почтовом ящике
@@ -171,7 +192,7 @@ if (_apply_test && TEST_DAY >= 4) {
         global.pudding_ready = true;
         _need_pudding_in_inv = true;
     }
-    if (TEST_DAY == 4) _need_house_start = true;
+    if (TEST_DAY == 4 && !TEST_DAY4_SECRET_ROOM) _need_house_start = true;
 }
 if (TEST_DAY == 1) {
     // День 1 — чистый старт

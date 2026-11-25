@@ -1,4 +1,5 @@
-// ===== СТАРАЯ ПЕЩЕРА — ПРОХОД (DRAW GUI): подсказка управления, пока Макс осваивается =====
+// ===== СТАРАЯ ПЕЩЕРА — ПРОХОД (DRAW GUI): сердечки, подсказка управления, пока Макс осваивается =====
+hearts_draw();
 var _m = max_side;
 if (instance_exists(_m) && global.has_lantern && _m.jumps < 3 && !global.control_locked) {
     draw_set_font(fnt_ui); draw_set_halign(fa_center); draw_set_valign(fa_bottom);

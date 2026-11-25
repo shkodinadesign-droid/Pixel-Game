@@ -10,11 +10,11 @@ F = 480;                        // пол
 WALL_L = 32; WALL_R = 928;
 
 // --- поверхности ---
-side_solid(0, 0, 960, 24);                          // потолок
-side_solid(0, F, 960, 540);                         // пол
-side_solid(0, 24, WALL_L, 400);                     // левая стена (проём 400..480 — вход)
-side_solid(WALL_R, 24, 960, 96);                    // правая стена над выходом
-side_solid(WALL_R, 160, 960, F);                    // правая стена под площадкой
+side_solid(0, 0, 960, 24, "stone");                 // потолок
+side_solid(0, F, 960, 540, "floor");                // пол — коричневая земля
+side_solid(0, 24, WALL_L, 400, "stone");            // левая стена (проём 400..480 — вход)
+side_solid(WALL_R, 24, 960, 96, "stone");           // правая стена над выходом
+side_solid(WALL_R, 160, 960, F, "stone");           // правая стена под площадкой
 side_solid(130, 400, 250, 414, "ledge", true);      // L1 — укрыться от шара
 side_solid(700, 400, 820, 414, "ledge", true);      // L2
 side_solid(400, 360, 500, 374, "ledge", true);      // M1 — дальше путь наверх
@@ -52,7 +52,9 @@ wave_i = 0; rocks = []; wave_sched = []; wave_t = 0; wave_wait = 0;
 clay_y = F; clay_delay = 0;
 CLAY_TOP = 156; CLAY_SPD = 0.3;
 // общие
-hit_t = 0; retry_t = 0; banner_t = 0; shake = 0; parts = [];
+hit_t = 0; inv_t = 0; retry_t = 0; banner_t = 0; shake = 0; parts = [];
+if (!variable_global_exists("hearts_max") || global.hearts_max <= 0) { global.hearts_max = 3; }   // сироп лягушонка — 3 сердечка
+global.hearts = global.hearts_max;
 exit_warn_cd = 0;
 unlock_wait = 3;
 leaving = false;
@@ -69,12 +71,22 @@ add_parts = function(_x, _y, _n, _col, _spd) {
     repeat (_n) array_push(parts, { x: _x, y: _y, vx: random_range(-_spd, _spd), vy: random_range(-_spd * 1.4, -0.5), life: irandom_range(20, 40), c: _col });
 };
 max_cx = function() { return max_side.x + SIDE_BW * 0.5; };
-/// попадание по Макс — короткий сброс текущей фазы
-hurt = function() {
-    if (hit_t > 0) return;
-    hit_t = 1; shake = 6;
-    max_side.frozen = true;
-    max_side.hurt_t = 60;
+/// попадание по Макс: минус сердечко и короткая неуязвимость; сердечки кончились — сброс текущей фазы.
+/// _reset = true — сразу сброс (глина накрыла)
+hurt = function(_reset = false) {
+    if (hit_t > 0 || (inv_t > 0 && !_reset)) return;
+    shake = 6;
+    if (!_reset) {
+        global.hearts = max(0, global.hearts - 1);
+        inv_t = 80; max_side.hurt_t = 80;
+        max_side.vsp = -4;                                   // лёгкий отскок
+        audio_play_sound(snd_rock_land, 0, false);
+    }
+    if (_reset || global.hearts <= 0) {
+        hit_t = 1;
+        max_side.frozen = true;
+        max_side.hurt_t = 60;
+    }
 };
 place_max = function(_x) {
     max_side.x = _x; max_side.y = F - SIDE_BH; max_side.vsp = 0; max_side.hsp = 0;

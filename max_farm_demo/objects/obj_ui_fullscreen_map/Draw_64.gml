@@ -31,28 +31,48 @@ draw_set_color(_col_ink);
 draw_text(_gw / 2, _p + 16, "~ Карта Таинственного Леса ~");
 
 // --- Точки маршрута (доли экрана) ---
-var _nx = [0.15, 0.36, 0.56, 0.70, 0.85];
-var _ny = [0.60, 0.60, 0.56, 0.42, 0.27];
-var _nm = ["Ферма бабушки", "Деревня", "Лесная тропа", "Развилка", "Большой камень"];
-for (var i = 0; i < 5; i++) { _nx[i] *= _gw; _ny[i] *= _gh; }
-var _dead_x = 0.69 * _gw, _dead_y = 0.20 * _gh;   // тупик — вверх от развилки
+// После разговора с Джо карта продолжается: Большой камень -> Тайный лес -> Старая пещера (всё сдвигается левее).
+var _ext = global.jack_cave_talk_done;
+var _nx, _ny, _nm;
+if (_ext) {
+    _nx = [0.10, 0.25, 0.40, 0.52, 0.63, 0.77, 0.90];
+    _ny = [0.62, 0.62, 0.58, 0.46, 0.34, 0.27, 0.44];
+    _nm = ["Ферма бабушки", "Деревня", "Лесная тропа", "Развилка", "Большой камень", "Тайный лес", "Старая пещера"];
+} else {
+    _nx = [0.15, 0.36, 0.56, 0.70, 0.85];
+    _ny = [0.60, 0.60, 0.56, 0.42, 0.27];
+    _nm = ["Ферма бабушки", "Деревня", "Лесная тропа", "Развилка", "Большой камень"];
+}
+var _n = array_length(_nx);
+for (var i = 0; i < _n; i++) { _nx[i] *= _gw; _ny[i] *= _gh; }
+var _dead_x = _nx[3] - 0.01 * _gw, _dead_y = 0.20 * _gh;   // тупик — вверх от развилки
 
 // Лес — зелёное пятно вокруг тропы, развилки и камня
 draw_set_alpha(0.45);
 draw_set_color(_col_forest);
-draw_ellipse(_nx[2] - 50, _dead_y - 40, _gw - _p - 30, _ny[2] + 66, false);
+draw_ellipse(_nx[2] - 50, _dead_y - 40, _nx[4] + 70, _ny[2] + 66, false);
 draw_set_alpha(1);
 draw_set_color(_col_tree);
 for (var i = 0; i < 9; i++) {
-    var _tx = lerp(_nx[2] - 10, _gw - _p - 70, i / 8);
+    var _tx = lerp(_nx[2] - 10, _nx[4] + 30, i / 8);
     var _ty = (i mod 2 == 0) ? _ny[2] + 48 : _dead_y - 18;
     draw_circle(_tx, _ty, 10, false);
+}
+// Тайный лес — фиолетовое пятно с соснами (треугольники)
+if (_ext) {
+    draw_set_alpha(0.4); draw_set_color(make_color_rgb(110, 70, 150));
+    draw_ellipse(_nx[5] - 70, _ny[5] - 60, _nx[6] + 40, _ny[6] + 50, false);
+    draw_set_alpha(1); draw_set_color(make_color_rgb(70, 50, 100));
+    for (var i = 0; i < 7; i++) {
+        var _px = lerp(_nx[5] - 50, _nx[6] + 20, i / 6), _py = (i mod 2 == 0) ? _ny[5] - 38 : _ny[6] + 34;
+        draw_triangle(_px - 7, _py + 8, _px + 7, _py + 8, _px, _py - 10, false);
+    }
 }
 draw_set_font(fnt_ui);
 draw_set_halign(fa_center);
 draw_set_valign(fa_top);
 draw_set_color(_col_tree);
-draw_text((_nx[3] + _nx[4]) / 2 + 30, _ny[2] + 30, "Лес");
+draw_text((_nx[3] + _nx[4]) / 2 + 20, _ny[2] + 30, "Лес");
 
 // Ферма — домик, деревня — три домика
 draw_set_color(_col_ink);
@@ -65,15 +85,16 @@ for (var k = -1; k <= 1; k++) {
     draw_triangle(_vx - 10, _vy, _vx + 10, _vy, _vx, _vy - 8, true);
 }
 
-// Маршрут — пунктир по точкам, тупик — бледнее
-draw_set_color(_col_route);
-for (var i = 0; i < 4; i++) {
+// Маршрут — пунктир по точкам (дальше камня — фиолетовый), тупик — бледнее
+for (var i = 0; i < _n - 1; i++) {
+    draw_set_color(i >= 4 ? make_color_rgb(120, 70, 160) : _col_route);
     var _len = point_distance(_nx[i], _ny[i], _nx[i + 1], _ny[i + 1]);
     var _steps = max(2, floor(_len / 12));
     for (var s = 1; s < _steps; s++) {
         draw_circle(lerp(_nx[i], _nx[i + 1], s / _steps), lerp(_ny[i], _ny[i + 1], s / _steps), 2.5, false);
     }
 }
+draw_set_color(_col_route);
 draw_set_alpha(0.45);
 var _dl = point_distance(_nx[3], _ny[3], _dead_x, _dead_y);
 for (var s = 1; s < floor(_dl / 12); s++) {
@@ -84,32 +105,12 @@ draw_set_font(fnt_ui);
 draw_set_halign(fa_center);
 draw_set_valign(fa_bottom);
 draw_set_color(_col_ink);
-if (global.jack_cave_talk_done) {
-    // Джо отметил пещеру: скалы с тёмным входом, расколотый камень и подпись
-    var _cvx = _dead_x, _cvy = _dead_y - 8;
-    draw_set_color(make_color_rgb(110, 95, 80));
-    draw_triangle(_cvx - 26, _cvy, _cvx - 8, _cvy - 26, _cvx + 2, _cvy, false);
-    draw_triangle(_cvx - 4, _cvy, _cvx + 12, _cvy - 30, _cvx + 28, _cvy, false);
-    draw_set_color(make_color_rgb(40, 28, 20));
-    draw_ellipse(_cvx - 7, _cvy - 12, _cvx + 7, _cvy + 2, false);                  // низкий вход
-    draw_set_color(_col_ink);
-    draw_circle(_cvx - 34, _cvy - 2, 5, true); draw_line(_cvx - 34, _cvy - 7, _cvx - 36, _cvy + 3);   // расколотый камень
-    draw_set_color(_col_red);
-    draw_circle(_cvx, _cvy - 10, 22, true);
-    draw_set_color(_col_ink);
-    draw_set_font(fnt_dialog_ru_bold);
-    draw_set_halign(fa_left);
-    draw_text(_cvx + 30, _cvy - 2, "Старая пещера");   // справа от значка — не налезает на заголовок
-    draw_set_halign(fa_center);
-    draw_set_font(fnt_ui);
-} else {
-    draw_set_alpha(0.6);
-    draw_text(_dead_x, _dead_y - 6, "тупик");
-    draw_set_alpha(1);
-}
+draw_set_alpha(0.6);
+draw_text(_dead_x, _dead_y - 6, "тупик");
+draw_set_alpha(1);
 
 // Точки и подписи
-for (var i = 0; i < 5; i++) {
+for (var i = 0; i < _n; i++) {
     draw_set_color(_col_ink);
     draw_circle(_nx[i], _ny[i], 5, false);
     draw_set_font(fnt_ui);
@@ -118,17 +119,35 @@ for (var i = 0; i < 5; i++) {
     draw_text(_nx[i], _ny[i] + 8, _nm[i]);
 }
 
-// Крестик у большого камня
+// Пещера — скалы с тёмным входом и расколотый камень (отметка Джо)
+if (_ext) {
+    var _cvx = _nx[6], _cvy = _ny[6] - 12;
+    draw_set_color(make_color_rgb(110, 95, 80));
+    draw_triangle(_cvx - 26, _cvy, _cvx - 8, _cvy - 26, _cvx + 2, _cvy, false);
+    draw_triangle(_cvx - 4, _cvy, _cvx + 12, _cvy - 30, _cvx + 28, _cvy, false);
+    draw_set_color(make_color_rgb(40, 28, 20));
+    draw_ellipse(_cvx - 7, _cvy - 12, _cvx + 7, _cvy + 2, false);
+    draw_set_color(_col_ink);
+    draw_circle(_cvx - 34, _cvy - 2, 5, true); draw_line(_cvx - 34, _cvy - 7, _cvx - 36, _cvy + 3);
+}
+
+// Крестик у большого камня (а после разговора с Джо — у пещеры)
 draw_set_color(_col_red);
-var _xx = _nx[4], _xy = _ny[4] - 22;
+var _xi = _ext ? 6 : 4;
+var _xx = _nx[_xi] + (_ext ? 34 : 0), _xy = _ny[_xi] - 22;
 draw_line_width(_xx - 9, _xy - 9, _xx + 9, _xy + 9, 3);
 draw_line_width(_xx + 9, _xy - 9, _xx - 9, _xy + 9, 3);
 draw_circle(_xx, _xy, 13, true);
 
 // "Вы здесь" — текущая область
 var _area = forest_area();
-var _hi = (_area == "farm") ? 0 : ((_area == "village") ? 1 : 2);
-var _area_name = (_area == "farm") ? "ферма" : ((_area == "village") ? "деревня" : "лес");
+var _hi = 0, _area_name = "ферма";
+switch (_area) {
+    case "village": _hi = 1; _area_name = "деревня";    break;
+    case "forest":  _hi = 2; _area_name = "лес";        break;
+    case "mystic":  _hi = min(5, _n - 1); _area_name = "тайный лес"; break;
+    case "cave":    _hi = min(6, _n - 1); _area_name = "пещера";     break;
+}
 var _pulse = 0.55 + 0.45 * sin(anim_t / 10);
 draw_set_color(_col_red);
 draw_set_alpha(_pulse);

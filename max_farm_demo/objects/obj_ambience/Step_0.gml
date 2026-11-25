@@ -1,8 +1,8 @@
 // ===== АТМОСФЕРА (STEP) =====
-var _outdoor = (room == rm_farm || room == rm_village || room == rm_forest_entrance);
+var _outdoor = (room == rm_farm || room == rm_village || room == rm_forest_entrance || room == rm_mystic_forest);
 var _indoor  = (room == rm_house_inside || room == rm_bakery || room == rm_joshua_shop
              || room == rm_butcher_shop || room == room_barn || room == rm_maggie_house || room == rm_secret_room);
-var _forest  = (room == rm_forest_entrance);
+var _forest  = (room == rm_forest_entrance || room == rm_mystic_forest);   // тайный лес — тоже сверчки и шум леса (+ сова — obj_mystic_forest)
 
 // Дождь: весь день после ночи с лягушонком (обычно день 4) — Макс находит карту и идёт в лес под дождём.
 // global.rain_day ставит сцена лягушонка на рассвете; на саму ночь дождя нет.

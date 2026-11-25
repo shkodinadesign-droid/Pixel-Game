@@ -41,7 +41,7 @@ if (!global.has_lantern && _m.x > 430) {
 // хранитель: проявляется в свете фонаря
 if (keeper_state == "wait") {
     var _d = abs(_mx - KEEPER_X);
-    keeper_alpha = global.has_lantern ? clamp(1 - (_d - 140) / 120, 0, 1) : 0;
+    keeper_alpha = global.has_lantern ? clamp(1 - (_d - 380) / 160, 0, 1) : clamp(1 - (_d - 200) / 120, 0, 0.5);
     if (global.has_lantern && _mx > KEEPER_X - 150 && !global.control_locked) {
         keeper_state = "talk";
         keeper_alpha = 1;
@@ -76,15 +76,15 @@ if (keeper_state == "strike") {
     if (keeper_t > 130) { keeper_state = "gone"; _m.frozen = false; }
 }
 
-// переходы: налево — в лес, направо — на арену
+// переходы: налево — в тайный лес (к скалам со входом), направо — на арену
 if (_m.x <= 0 && !global.control_locked && (keyboard_check(vk_left) || keyboard_check(ord("A")))) {
     leaving = true;
     global.next_spawn_tag = undefined;
-    global.next_spawn_x   = 876;
+    global.next_spawn_x   = 1504;
     global.next_spawn_y   = 196;
     global.spawn_facing   = "down";
     global.control_locked = true;
-    room_goto(rm_forest_entrance);
+    room_goto(rm_mystic_forest);
 } else if (_m.x >= room_width - SIDE_BW - 1 && keeper_state == "gone") {
     leaving = true;
     global.side_spawn     = "left";

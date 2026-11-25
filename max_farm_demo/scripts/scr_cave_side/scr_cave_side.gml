@@ -75,28 +75,35 @@ function side_hash(_a, _b) {
     return _v - floor(_v);
 }
 
-/// Рисует все поверхности (вызывать в Draw контроллера)
+/// Заполнить прямоугольник спрайтом-тайлом (сетка привязана к миру — узор не «плывёт»)
+function side_tile_rect(_spr, _x1, _y1, _x2, _y2, _col = c_white) {
+    var _w = sprite_get_width(_spr), _h = sprite_get_height(_spr);
+    for (var _ty = floor(_y1 / _h) * _h; _ty < _y2; _ty += _h) {
+        for (var _tx = floor(_x1 / _w) * _w; _tx < _x2; _tx += _w) {
+            var _l = max(0, _x1 - _tx), _t = max(0, _y1 - _ty);
+            var _r = min(_w, _x2 - _tx), _b = min(_h, _y2 - _ty);
+            if (_r > _l && _b > _t) draw_sprite_part_ext(_spr, 0, _l, _t, _r - _l, _b - _t, _tx + _l, _ty + _t, 1, 1, _col, 1);
+        }
+    }
+}
+
+/// Рисует все поверхности (вызывать в Draw контроллера).
+/// kind: "floor" — коричневая земля (тропа), "stone" — каменная стена/потолок с трещинами,
+/// "ledge" — каменная плита-уступ, "rock" — глыба, "barrier" — перегородка, "hidden" — не рисуется
 function side_draw_solids() {
     with (obj_side_solid) {
         switch (kind) {
+            case "floor":
+                side_tile_rect(spr_cave_earth_top, x1, y1, x2, min(y2, y1 + 32));
+                if (y2 > y1 + 32) side_tile_rect(spr_cave_earth, x1, y1 + 32, x2, y2);
+                break;
+            case "stone":
             case "earth":
-                // влажная земля с фиолетовым оттенком
-                draw_set_color(make_color_rgb(50, 38, 52)); draw_rectangle(x1, y1, x2 - 1, y2 - 1, false);
-                for (var _gx = x1; _gx < x2; _gx += 12) {
-                    for (var _gy = y1 + 6; _gy < y2; _gy += 12) {
-                        var _h = side_hash(_gx, _gy);
-                        if (_h < 0.35) { draw_set_color(make_color_rgb(64, 50, 64)); draw_rectangle(_gx + _h * 8, _gy, _gx + _h * 8 + 3, _gy + 2, false); }
-                        else if (_h > 0.85) { draw_set_color(make_color_rgb(86, 78, 90)); draw_rectangle(_gx + 2, _gy + 3, _gx + 6, _gy + 5, false); }   // камешек
-                    }
-                }
-                if (y1 > 0) {      // верхний край пола/уступа: светлая кромка и мох
-                    draw_set_color(make_color_rgb(92, 74, 86)); draw_rectangle(x1, y1, x2 - 1, y1 + 2, false);
-                    for (var _mx = x1; _mx < x2; _mx += 6) {
-                        if (side_hash(_mx, y1) < 0.4) { draw_set_color(make_color_rgb(72, 104, 70)); draw_rectangle(_mx, y1 - 1, _mx + 4, y1 + 1, false); }
-                    }
-                }
-                if (y1 <= 0) {     // потолок: корни свисают вниз
-                    draw_set_color(make_color_rgb(70, 52, 44));
+                side_tile_rect(spr_cave_wall, x1, y1, x2, y2);
+                draw_set_color(make_color_rgb(40, 38, 46));
+                draw_rectangle(x1, y1, x2 - 1, y2 - 1, true);
+                if (y1 <= 0) {     // потолок: корни и мох свисают вниз
+                    draw_set_color(make_color_rgb(92, 66, 48));
                     for (var _rx = x1 + 10; _rx < x2; _rx += 37) {
                         var _len = 8 + side_hash(_rx, 3) * 30;
                         if (side_hash(_rx, 7) < 0.6) {
@@ -104,33 +111,23 @@ function side_draw_solids() {
                             draw_line(_rx + 3, y2 + _len * 0.5, _rx + 1, y2 + _len);
                         }
                     }
-                    draw_set_color(make_color_rgb(72, 104, 70));      // мох по нижней кромке потолка
+                    draw_set_color(make_color_rgb(78, 110, 72));
                     for (var _mx = x1; _mx < x2; _mx += 8) if (side_hash(_mx, y2) < 0.3) draw_rectangle(_mx, y2 - 2, _mx + 5, y2, false);
                 }
                 break;
             case "ledge":
-                // каменный уступ: серо-фиолетовый, светлая верхняя кромка, тень снизу
-                draw_set_color(make_color_rgb(96, 86, 106));   draw_rectangle(x1, y1, x2 - 1, y2 - 1, false);
-                draw_set_color(make_color_rgb(150, 138, 160)); draw_rectangle(x1, y1, x2 - 1, y1 + 2, false);
-                draw_set_color(make_color_rgb(60, 52, 70));    draw_rectangle(x1, y2 - 3, x2 - 1, y2 - 1, false);
-                for (var _mx = x1 + 3; _mx < x2 - 3; _mx += 7) if (side_hash(_mx, y1) < 0.35) { draw_set_color(make_color_rgb(78, 112, 74)); draw_rectangle(_mx, y1 - 1, _mx + 3, y1, false); }
+                side_tile_rect(spr_cave_ledge, x1, y1, x2, y2);
+                draw_set_color(make_color_rgb(60, 56, 68)); draw_rectangle(x1, y1, x2 - 1, y2 - 1, true);
                 break;
             case "rock":
-                // упавшая глыба
-                draw_set_color(make_color_rgb(90, 80, 96));    draw_roundrect_ext(x1, y1, x2 - 1, y2 - 1, 12, 12, false);
-                draw_set_color(make_color_rgb(126, 114, 132)); draw_roundrect_ext(x1 + 4, y1 + 3, x2 - 12, y1 + 12, 8, 8, false);
-                draw_set_color(make_color_rgb(54, 46, 60));    draw_line(x1 + (x2 - x1) * 0.6, y1 + 8, x1 + (x2 - x1) * 0.5, y2 - 6);
+                draw_set_color(make_color_rgb(104, 100, 112)); draw_roundrect_ext(x1, y1, x2 - 1, y2 - 1, 12, 12, false);
+                draw_set_color(make_color_rgb(140, 136, 150)); draw_roundrect_ext(x1 + 4, y1 + 3, x2 - 12, y1 + 12, 8, 8, false);
+                draw_set_color(make_color_rgb(60, 56, 66));    draw_line(x1 + (x2 - x1) * 0.6, y1 + 8, x1 + (x2 - x1) * 0.5, y2 - 6);
+                draw_roundrect_ext(x1, y1, x2 - 1, y2 - 1, 12, 12, true);
                 break;
             case "barrier":
-                // каменная перегородка: сложенные плиты
-                draw_set_color(make_color_rgb(74, 66, 84)); draw_rectangle(x1, y1, x2 - 1, y2 - 1, false);
-                draw_set_color(make_color_rgb(104, 94, 114));
-                for (var _by = y1; _by < y2; _by += 24) {
-                    var _off = ((_by - y1) div 24) mod 2 ? 0 : (x2 - x1) * 0.5;
-                    draw_rectangle(x1, _by, x2 - 1, _by + 1, false);
-                    draw_line(x1 + _off, _by, x1 + _off, min(y2 - 1, _by + 24));
-                }
-                draw_set_color(make_color_rgb(54, 46, 62)); draw_rectangle(x1, y1, x2 - 1, y2 - 1, true);
+                side_tile_rect(spr_cave_wall, x1, y1, x2, y2, make_color_rgb(200, 190, 215));
+                draw_set_color(make_color_rgb(44, 40, 52)); draw_rectangle(x1, y1, x2 - 1, y2 - 1, true);
                 break;
         }
     }
@@ -165,14 +162,16 @@ function cave_light_end(_surf) {
 }
 
 /// Положение фонаря на поясе Макс (для света)
-function cave_lantern_x(_m) { return _m.x + SIDE_BW * 0.5 + _m.facing * 7; }
-function cave_lantern_y(_m) { return _m.y + 24; }
+function cave_lantern_x(_m) { return _m.x + SIDE_BW * 0.5 - _m.facing * 6; }   // на поясе сзади
+function cave_lantern_y(_m) { return _m.y + 25; }
 
 // ---------- капли со стен и пылинки (вызывать из контроллера комнаты) ----------
 function cave_fx_init() {
     fx_drip_x = []; fx_drips = []; fx_motes = [];
     for (var i = 0; i < max(6, room_width div 120); i++) array_push(fx_drip_x, irandom_range(40, room_width - 40));
     for (var i = 0; i < 18; i++) array_push(fx_motes, { x: random(room_width), y: random_range(60, room_height - 80), ph: random(1000), sp: random_range(0.08, 0.25) });
+    fx_flies = [];       // светлячки
+    for (var i = 0; i < max(10, room_width div 70); i++) array_push(fx_flies, { x: random(room_width), y: random_range(80, room_height - 90), ph: random(1000), dir: random(360) });
 }
 function cave_fx_step() {
     if (random(1) < 0.035) {
@@ -198,6 +197,12 @@ function cave_fx_step() {
         m.y += cos(m.ph / 160) * m.sp * 0.5 - 0.04;
         if (m.y < 40) m.y = room_height - 80;
     }
+    for (var i = 0; i < array_length(fx_flies); i++) {
+        var f = fx_flies[i];
+        f.ph += 1; f.dir += sin(f.ph / 37) * 4;
+        f.x = clamp(f.x + lengthdir_x(0.35, f.dir), 10, room_width - 10);
+        f.y = clamp(f.y + lengthdir_y(0.35, f.dir), 60, room_height - 90);
+    }
 }
 function cave_fx_draw() {
     draw_set_color(make_color_rgb(170, 190, 230));
@@ -212,24 +217,34 @@ function cave_fx_draw() {
         draw_set_alpha(0.25 + 0.3 * (0.5 + 0.5 * sin(m.ph / 30 + i)));
         draw_point(floor(m.x), floor(m.y));
     }
+    gpu_set_blendmode(bm_add);
+    for (var i = 0; i < array_length(fx_flies); i++) {
+        var f = fx_flies[i];
+        var _tw = 0.5 + 0.5 * sin(f.ph / 20 + i);
+        draw_set_color(make_color_rgb(200, 255, 130));
+        draw_set_alpha(0.2 * _tw); draw_circle(f.x, f.y, 6, false);
+        draw_set_alpha(0.9 * _tw); draw_rectangle(floor(f.x), floor(f.y), floor(f.x) + 1, floor(f.y) + 1, false);
+    }
+    gpu_set_blendmode(bm_normal);
     draw_set_alpha(1); draw_set_color(c_white);
 }
 
-/// Фон пещеры: градиент земли и дальняя стена (заранее посчитанные пятна bg_spots)
+/// Фон пещеры: дальняя каменная стена (тёмно-серая) + пятна мха и тени (bg_spots)
 function cave_draw_backdrop() {
-    var _top = make_color_rgb(34, 26, 44), _bot = make_color_rgb(46, 34, 40);
-    draw_rectangle_colour(0, 0, room_width, room_height, _top, _top, _bot, _bot, false);
+    var _cam = view_camera[0];
+    var _vx = camera_get_view_x(_cam), _vy = camera_get_view_y(_cam);
+    side_tile_rect(spr_cave_backwall, max(0, _vx - 64), max(0, _vy - 64), min(room_width, _vx + 1024), min(room_height, _vy + 604), make_color_rgb(150, 145, 162));   // дальше — темнее
     for (var i = 0; i < array_length(bg_spots); i++) {
         var s = bg_spots[i];
-        draw_set_color(s.c); draw_ellipse(s.x - s.w, s.y - s.h, s.x + s.w, s.y + s.h, false);
+        draw_set_color(s.c); draw_set_alpha(0.35); draw_ellipse(s.x - s.w, s.y - s.h, s.x + s.w, s.y + s.h, false);
     }
-    draw_set_color(c_white);
+    draw_set_alpha(1); draw_set_color(c_white);
 }
 function cave_backdrop_init() {
     bg_spots = [];
     random_set_seed(room_width * 7 + 36);
-    for (var i = 0; i < room_width div 18; i++) {
-        var _c = choose(make_color_rgb(40, 30, 48), make_color_rgb(52, 40, 54), make_color_rgb(44, 36, 56), make_color_rgb(38, 46, 40));
+    for (var i = 0; i < room_width div 40; i++) {
+        var _c = choose(make_color_rgb(30, 28, 36), make_color_rgb(60, 84, 60), make_color_rgb(36, 34, 44));
         array_push(bg_spots, { x: random(room_width), y: random_range(40, room_height - 60), w: random_range(10, 40), h: random_range(6, 22), c: _c });
     }
     randomize();
@@ -309,4 +324,23 @@ function cave_draw_clay(_x, _cy, _r, _ang, _eye, _arm, _arm_up, _mood) {
         }
     }
     draw_set_color(c_white);
+}
+
+// ---------- сердечки (волшебный сироп лягушонка: 3 сердечка) ----------
+/// Одно сердечко. _full — полное/пустое, _s — масштаб
+function heart_draw(_x, _y, _s, _full, _a) {
+    draw_set_alpha(_a);
+    draw_set_color(make_color_rgb(60, 20, 30));
+    draw_circle(_x - 4 * _s, _y - 2 * _s, 5 * _s, false); draw_circle(_x + 4 * _s, _y - 2 * _s, 5 * _s, false);
+    draw_triangle(_x - 9 * _s, _y - 1 * _s, _x + 9 * _s, _y - 1 * _s, _x, _y + 9 * _s, false);
+    draw_set_color(_full ? make_color_rgb(235, 70, 100) : make_color_rgb(90, 70, 80));
+    draw_circle(_x - 4 * _s, _y - 2 * _s, 4 * _s, false); draw_circle(_x + 4 * _s, _y - 2 * _s, 4 * _s, false);
+    draw_triangle(_x - 8 * _s, _y - 1 * _s, _x + 8 * _s, _y - 1 * _s, _x, _y + 7.5 * _s, false);
+    if (_full) { draw_set_color(make_color_rgb(255, 180, 200)); draw_rectangle(_x - 6 * _s, _y - 4 * _s, _x - 5 * _s, _y - 3 * _s, false); }
+    draw_set_alpha(1); draw_set_color(c_white);
+}
+/// Ряд сердечек в левом верхнем углу (под монетами) — вызывать в Draw GUI
+function hearts_draw() {
+    if (!variable_global_exists("hearts_max") || global.hearts_max <= 0) return;
+    for (var i = 0; i < global.hearts_max; i++) heart_draw(30 + i * 24, 62, 1, i < global.hearts, 1);
 }
