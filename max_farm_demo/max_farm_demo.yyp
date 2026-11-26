@@ -1107,6 +1107,7 @@
     {"id":{"name":"spr_frog_wave","path":"sprites/spr_frog_wave/spr_frog_wave.yy",},},
     {"id":{"name":"spr_frog_love","path":"sprites/spr_frog_love/spr_frog_love.yy",},},
     {"id":{"name":"spr_frog_sleep","path":"sprites/spr_frog_sleep/spr_frog_sleep.yy",},},
+    {"id":{"name":"spr_map_forest","path":"sprites/spr_map_forest/spr_map_forest.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
