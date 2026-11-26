@@ -42,7 +42,35 @@ leaving      = false;
 light_surf   = -1;
 flick        = 0;
 cave_backdrop_init();
+// --- убранство (рисунок автора): сталактиты, корни, мох — с потолка; кристаллы, грибы, кости — на полу ---
+deco = [];
+var _bg = make_color_rgb(150, 140, 160);                       // дальние предметы темнее
+cave_deco_add(spr_cave_deco_root_a, 150, 150);
+cave_deco_add(spr_cave_deco_stal_b, 390, 150);
+cave_deco_add(spr_cave_deco_moss, 690, 150);
+cave_deco_add(spr_cave_deco_stal_a, 930, 150);
+cave_deco_add(spr_cave_deco_root_b, 1050, 150, -1);
+cave_deco_add(spr_cave_deco_stal_c, 1180, 70);
+cave_deco_add(spr_cave_deco_root_a, 1290, 70, -1);
+cave_deco_add(spr_cave_deco_stal_b, 1400, 70);
+cave_deco_add(spr_cave_deco_moss, 1560, 70);
+cave_deco_add(spr_cave_deco_stal_a, 1760, 70);
+cave_deco_add(spr_cave_deco_mush_b, 120, FLOOR_Y);
+cave_deco_add(spr_cave_deco_flower, 330, FLOOR_Y);
+cave_deco_add(spr_cave_deco_shell, 460, FLOOR_Y);
+cave_deco_add(spr_cave_deco_mush_c, 680, FLOOR_Y);
+cave_deco_add(spr_cave_deco_stalag_big, 950, FLOOR_Y, 1, _bg);
+cave_deco_add(spr_cave_deco_crystal_big, 1040, FLOOR_Y, 1, c_white, make_color_rgb(70, 30, 90));
+cave_deco_add(spr_cave_deco_crystal_small, 1086, FLOOR_Y, 1, c_white, make_color_rgb(50, 20, 70));
+cave_deco_add(spr_cave_deco_mush_a, 1150, FLOOR_Y);
+cave_deco_add(spr_cave_deco_pillar, 1250, FLOOR_Y, 1, _bg);
+cave_deco_add(spr_cave_deco_skull, 1335, FLOOR_Y);
+cave_deco_add(spr_cave_deco_bone, 1365, FLOOR_Y);
+cave_deco_add(spr_cave_deco_rune, 1575, FLOOR_Y, 1, _bg);        // камень со знаком за хранителем
+cave_deco_add(spr_cave_deco_crystal_mid, 1625, FLOOR_Y, 1, c_white, make_color_rgb(60, 25, 80));
+cave_deco_add(spr_cave_deco_arch, 1850, FLOOR_Y, 1, _bg);        // арка — проход к испытанию
+cave_deco_add(spr_cave_deco_stalag_small, 1740, FLOOR_Y, 1, _bg);
 cave_fx_init();
 snd_amb = audio_play_sound(snd_cave_ambience, 0, true, 0);
 audio_sound_gain(snd_amb, 0.5, 1500);
-depth = 1000;              // фон и поверхности — под всеми; свет и эффекты — Draw End
+depth = 290;               // фон и поверхности — над чёрным фоновым слоем комнаты (300), под Макс; свет и эффекты — Draw End

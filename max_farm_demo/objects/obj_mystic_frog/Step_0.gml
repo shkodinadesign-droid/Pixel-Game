@@ -15,10 +15,11 @@ switch (state) {
         alpha = min(1, alpha + 0.08);
         var _tx = _fx + ((x + 16 < _fx) ? -44 : 28), _ty = _fy - 30;
         var _d = point_distance(x, y, _tx, _ty);
-        sprite_index = (_tx < x) ? spr_frog_walk_side_left : spr_frog_walk_side_right;
+        if (abs(_ty - y) > abs(_tx - x)) sprite_index = (_ty > y) ? spr_frog_walk_down : spr_frog_walk_up;
+        else sprite_index = (_tx < x) ? spr_frog_walk_side_left : spr_frog_walk_side_right;
         if (_d > 3) { var _dir = point_direction(x, y, _tx, _ty); x += lengthdir_x(min(3.2, _d), _dir); y += lengthdir_y(min(3.2, _d), _dir); }
         else {
-            sprite_index = spr_frog_idle_down; state = "talk";
+            sprite_index = spr_frog_happy; state = "talk";      // радостно: «Макс! Подожди!»
             global.control_locked = false;
             dialog_seq_start([
                 forest_page("frog", ["Макс! Подожди! Уф...", "Ну как? Есть успехи с мечом?"]),
@@ -32,8 +33,9 @@ switch (state) {
         break;
     case "syrup":                                     // сердечка появляются над Макс
         t += 1;
+        sprite_index = spr_frog_love;
         if (t == 90) {
-            state = "talk2";
+            state = "talk2"; sprite_index = spr_frog_wave;      // машет: «Удачи, Макс!»
             dialog_seq_start([
                 forest_page("frog", ["Вот. Теперь ты крепче.", "Удачи, Макс! Я буду держать лапки."]),
                 forest_page("max",  ["Спасибо тебе!", "Я вернусь и всё-всё расскажу."])

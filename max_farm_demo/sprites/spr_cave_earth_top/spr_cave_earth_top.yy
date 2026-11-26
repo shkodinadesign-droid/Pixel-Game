@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_cave_earth_top",
   "bboxMode":0,
-  "bbox_bottom":31,
+  "bbox_bottom":27,
   "bbox_left":0,
-  "bbox_right":31,
+  "bbox_right":63,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"e9f97d68-d24d-4301-a49a-fe572f4bbe28","name":"e9f97d68-d24d-4301-a49a-fe572f4bbe28","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"dfcfa1e2-a849-4467-9e3c-b13bbf62c041","name":"dfcfa1e2-a849-4467-9e3c-b13bbf62c041","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":32,
+  "height":28,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"5c69fc9c-02b1-4870-84dd-680db07feaa0","blendMode":0,"displayName":"default","isLocked":false,"name":"5c69fc9c-02b1-4870-84dd-680db07feaa0","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"609b4fc5-9953-4116-9db2-1761cf95bbd6","blendMode":0,"displayName":"default","isLocked":false,"name":"609b4fc5-9953-4116-9db2-1761cf95bbd6","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_cave_earth_top",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"e9f97d68-d24d-4301-a49a-fe572f4bbe28","path":"sprites/spr_cave_earth_top/spr_cave_earth_top.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"4bee42ce-25ef-4d18-bb51-944c859f9000","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"dfcfa1e2-a849-4467-9e3c-b13bbf62c041","path":"sprites/spr_cave_earth_top/spr_cave_earth_top.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"5105bc89-2dc9-44a3-ab6f-d9b2bd1bf709","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":32,
+  "width":64,
 }

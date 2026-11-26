@@ -6,9 +6,11 @@ if (instance_exists(_m) && global.has_lantern) {
     cave_light_circle(_lx, _ly, 220 + sin(flick / 9) * 3, make_color_rgb(70, 52, 26));
     cave_light_circle(_lx, _ly, 80, make_color_rgb(40, 30, 14));
 }
+cave_deco_lights(flick);
 if (state == "done") cave_light_circle(944, 120, 90, make_color_rgb(70, 80, 110));   // из открытого выхода тянет прохладой
 cave_light_end(light_surf);
 side_draw_edges(0.45);
+cave_deco_glow(flick);
 
 // --- страж, камни, глина: поверх света ---
 var _sh = (g_shake > 0) ? g_shake : 0;
@@ -18,10 +20,8 @@ for (var i = 0; i < array_length(rocks); i++) {
     if (r.st != "fall" && r.st != "crumble") continue;
     var _x1 = r.x - ROCK_W / 2, _a = (r.st == "crumble") ? 1 - r.t / 18 : 1;
     draw_set_alpha(_a);
-    draw_set_color(make_color_rgb(104, 100, 112)); draw_roundrect_ext(_x1, r.y, _x1 + ROCK_W, r.y + ROCK_H, 12, 12, false);
-    draw_set_color(make_color_rgb(140, 136, 150)); draw_roundrect_ext(_x1 + 4, r.y + 3, _x1 + ROCK_W - 12, r.y + 12, 8, 8, false);
-    draw_set_color(make_color_rgb(60, 56, 66));    draw_roundrect_ext(_x1, r.y, _x1 + ROCK_W, r.y + ROCK_H, 12, 12, true);
-    if (r.st == "crumble") { draw_line(_x1 + 10, r.y + 6, _x1 + 26, r.y + ROCK_H); draw_line(_x1 + 36, r.y + 4, _x1 + 30, r.y + ROCK_H); }
+    draw_sprite_stretched_ext(spr_cave_rock, 0, _x1 - 4, r.y - 4, ROCK_W + 8, ROCK_H + 6, c_white, _a);
+    if (r.st == "crumble") { draw_set_color(make_color_rgb(60, 40, 56)); draw_line(_x1 + 10, r.y + 6, _x1 + 26, r.y + ROCK_H); draw_line(_x1 + 36, r.y + 4, _x1 + 30, r.y + ROCK_H); }
     draw_set_alpha(1);
 }
 if (clay_y < F) {

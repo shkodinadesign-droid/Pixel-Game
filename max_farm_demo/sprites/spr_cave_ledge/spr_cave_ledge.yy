@@ -2,9 +2,9 @@
   "$GMSprite":"v2",
   "%Name":"spr_cave_ledge",
   "bboxMode":0,
-  "bbox_bottom":13,
+  "bbox_bottom":27,
   "bbox_left":0,
-  "bbox_right":31,
+  "bbox_right":60,
   "bbox_top":0,
   "collisionKind":1,
   "collisionTolerance":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"16a4a384-04a6-4f2e-a6ef-dd6f2c95e38d","name":"16a4a384-04a6-4f2e-a6ef-dd6f2c95e38d","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"be378e6c-eb66-42f2-b90c-9cc39364b9f7","name":"be378e6c-eb66-42f2-b90c-9cc39364b9f7","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":14,
+  "height":28,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"f6da749d-0460-46a0-b4aa-cac36a8314c9","blendMode":0,"displayName":"default","isLocked":false,"name":"f6da749d-0460-46a0-b4aa-cac36a8314c9","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"08c67f6d-86d9-40a5-b260-47657a35946b","blendMode":0,"displayName":"default","isLocked":false,"name":"08c67f6d-86d9-40a5-b260-47657a35946b","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_cave_ledge",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"16a4a384-04a6-4f2e-a6ef-dd6f2c95e38d","path":"sprites/spr_cave_ledge/spr_cave_ledge.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"91141144-993c-4535-a7ed-84606a56be0d","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"be378e6c-eb66-42f2-b90c-9cc39364b9f7","path":"sprites/spr_cave_ledge/spr_cave_ledge.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"2db61865-6c25-429d-b0f7-3dcc3586a843","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
@@ -86,5 +86,5 @@
   },
   "type":0,
   "VTile":false,
-  "width":32,
+  "width":61,
 }

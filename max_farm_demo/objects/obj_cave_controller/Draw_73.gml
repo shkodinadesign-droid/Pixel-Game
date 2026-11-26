@@ -14,14 +14,18 @@ if (instance_exists(_m)) {
         cave_light_circle(_lx, _ly, _r * 0.4, make_color_rgb(50, 36, 16));
     }
 }
-if (keeper_state == "strike" && keeper_t < 70) cave_light_circle(KEEPER_X - 22, FLOOR_Y - 85, 90, make_color_rgb(60, 90, 130));   // посох светится
+cave_deco_lights(flick);                                                     // кристаллы светятся
+if (keeper_state == "strike" && keeper_t < 70) cave_light_circle(KEEPER_X - 40, FLOOR_Y - 30, 110, make_color_rgb(110, 60, 140));   // посох и кристалл светятся
 if (flash > 0) { draw_set_alpha(flash); draw_set_color(make_color_rgb(120, 140, 180)); draw_rectangle(0, 0, room_width, room_height, false); draw_set_alpha(1); }
 cave_light_end(light_surf);
 side_draw_edges(0.35);
+cave_deco_glow(flick);
 // хранитель — поверх света, всегда виден (проявляется, когда Макс с фонарём подходит)
 if (keeper_state != "gone") {
-    var _up = (keeper_state == "strike") ? clamp(keeper_t / 12, 0, 1) * (keeper_t < 24) : 0;
-    cave_draw_keeper(KEEPER_X + keeper_dx, FLOOR_Y, keeper_alpha, 8 + sin(flick / 40) * 6, _up);
+    var _kf = cave_keeper_idle_frame();
+    if (keeper_state == "talk") _kf = 5;                                  // склонил голову: «?»
+    else if (keeper_state == "strike") _kf = (keeper_t < 12) ? 6 : ((keeper_t < 30) ? 7 : ((keeper_t < 70) ? 8 : _kf));
+    cave_draw_keeper(KEEPER_X + keeper_dx, FLOOR_Y, keeper_alpha, _kf);
 }
 // старинный фонарь на выступе — тоже поверх света, тёплое свечение
 if (!global.has_lantern) {

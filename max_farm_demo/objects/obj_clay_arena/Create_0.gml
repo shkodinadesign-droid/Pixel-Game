@@ -31,6 +31,18 @@ if (global.trial1_done) {                            // после победы 
     array_push(stay_rocks, side_solid(B2_X - ROCK_W / 2, F - ROCK_H, B2_X + ROCK_W / 2, F, "rock"));
 }
 
+// --- убранство (рисунок автора) — по краям, не мешает читать опасности ---
+deco = [];
+cave_deco_add(spr_cave_deco_stal_b, 170, 24);
+cave_deco_add(spr_cave_deco_root_a, 300, 24);
+cave_deco_add(spr_cave_deco_stal_c, 470, 24);
+cave_deco_add(spr_cave_deco_moss, 640, 24);
+cave_deco_add(spr_cave_deco_stal_a, 760, 24);
+cave_deco_add(spr_cave_deco_mush_b, 70, F);
+cave_deco_add(spr_cave_deco_skull, 250, F);
+cave_deco_add(spr_cave_deco_crystal_big, 880, F, 1, c_white, make_color_rgb(70, 30, 90));
+cave_deco_add(spr_cave_deco_mush_c, 820, F);
+
 // --- Макс: из прохода слева, в проёме ---
 global.side_spawn = "";
 max_side = instance_create_depth(8, F - SIDE_BH, -100, obj_max_side);
@@ -63,7 +75,7 @@ cave_backdrop_init();
 cave_fx_init();
 snd_amb = audio_play_sound(snd_cave_ambience, 0, true, 0);
 audio_sound_gain(snd_amb, 0.45, 1500);
-depth = 1000;
+depth = 290;               // над чёрным фоновым слоем комнаты (300), под Макс
 
 // ---------- помощники ----------
 /// частицы земли/камня

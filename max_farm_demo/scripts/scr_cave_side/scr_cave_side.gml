@@ -94,36 +94,26 @@ function side_draw_solids() {
     with (obj_side_solid) {
         switch (kind) {
             case "floor":
-                side_tile_rect(spr_cave_earth_top, x1, y1, x2, min(y2, y1 + 32));
-                if (y2 > y1 + 32) side_tile_rect(spr_cave_earth, x1, y1 + 32, x2, y2);
+                var _th = sprite_get_height(spr_cave_earth_top);
+                side_tile_rect(spr_cave_earth_top, x1, y1, x2, min(y2, y1 + _th));
+                if (y2 > y1 + _th) side_tile_rect(spr_cave_earth, x1, y1 + _th, x2, y2);
                 break;
             case "stone":
             case "earth":
                 side_tile_rect(spr_cave_wall, x1, y1, x2, y2);
-                draw_set_color(make_color_rgb(40, 38, 46));
+                draw_set_color(make_color_rgb(46, 30, 44));
                 draw_rectangle(x1, y1, x2 - 1, y2 - 1, true);
-                if (y1 <= 0) {     // потолок: корни и мох свисают вниз
-                    draw_set_color(make_color_rgb(92, 66, 48));
-                    for (var _rx = x1 + 10; _rx < x2; _rx += 37) {
-                        var _len = 8 + side_hash(_rx, 3) * 30;
-                        if (side_hash(_rx, 7) < 0.6) {
-                            draw_line_width(_rx, y2 - 1, _rx + 3, y2 + _len * 0.5, 2);
-                            draw_line(_rx + 3, y2 + _len * 0.5, _rx + 1, y2 + _len);
-                        }
-                    }
-                    draw_set_color(make_color_rgb(78, 110, 72));
-                    for (var _mx = x1; _mx < x2; _mx += 8) if (side_hash(_mx, y2) < 0.3) draw_rectangle(_mx, y2 - 2, _mx + 5, y2, false);
-                }
                 break;
-            case "ledge":
-                side_tile_rect(spr_cave_ledge, x1, y1, x2, y2);
-                draw_set_color(make_color_rgb(60, 56, 68)); draw_rectangle(x1, y1, x2 - 1, y2 - 1, true);
+            case "ledge":          // каменная плита: края + середина, верх плиты = линия ходьбы
+                var _lw = sprite_get_width(spr_cave_ledge), _lh = sprite_get_height(spr_cave_ledge), _cap = 12;
+                var _w = x2 - x1;
+                draw_sprite_part(spr_cave_ledge, 0, 0, 0, _cap, _lh, x1, y1 - 3);
+                for (var _sx = x1 + _cap; _sx < x2 - _cap; _sx += _lw - _cap * 2)
+                    draw_sprite_part(spr_cave_ledge, 0, _cap, 0, min(_lw - _cap * 2, x2 - _cap - _sx), _lh, _sx, y1 - 3);
+                draw_sprite_part(spr_cave_ledge, 0, _lw - _cap, 0, _cap, _lh, x2 - _cap, y1 - 3);
                 break;
-            case "rock":
-                draw_set_color(make_color_rgb(104, 100, 112)); draw_roundrect_ext(x1, y1, x2 - 1, y2 - 1, 12, 12, false);
-                draw_set_color(make_color_rgb(140, 136, 150)); draw_roundrect_ext(x1 + 4, y1 + 3, x2 - 12, y1 + 12, 8, 8, false);
-                draw_set_color(make_color_rgb(60, 56, 66));    draw_line(x1 + (x2 - x1) * 0.6, y1 + 8, x1 + (x2 - x1) * 0.5, y2 - 6);
-                draw_roundrect_ext(x1, y1, x2 - 1, y2 - 1, 12, 12, true);
+            case "rock":           // глыба — спрайт автора, растянутый на прямоугольник
+                draw_sprite_stretched(spr_cave_rock, 0, x1 - 4, y1 - 4, x2 - x1 + 8, y2 - y1 + 6);
                 break;
             case "barrier":
                 side_tile_rect(spr_cave_wall, x1, y1, x2, y2, make_color_rgb(200, 190, 215));
@@ -250,80 +240,67 @@ function cave_backdrop_init() {
     randomize();
 }
 
-/// Хранитель меча: длинное синее одеяние, высокая конусная шляпа, широко раскрытые глаза, посох.
-/// _x — центр, _fy — пол под ним, _tilt — наклон головы (градусы), _staff_up 0..1 — посох поднят для удара
-function cave_draw_keeper(_x, _fy, _alpha, _tilt, _staff_up) {
+/// Хранитель (рисунок автора, spr_cave_keeper). Смотрит влево, на Макс.
+/// _frame: 0..4 — стоит (дыхание), 5 — «?», 6 — поднимает посох, 7 — удар (дуга), 8 — посох в кристалле
+function cave_draw_keeper(_x, _fy, _alpha, _frame) {
     if (_alpha <= 0) return;
-    draw_set_alpha(_alpha);
-    var _robe = make_color_rgb(54, 78, 160), _robe_d = make_color_rgb(36, 52, 116), _hat = make_color_rgb(44, 52, 130);
-    // посох (в правой руке — он смотрит влево, на Макс)
-    var _sy = _fy - 6 - _staff_up * 16;
-    draw_set_color(make_color_rgb(110, 76, 44)); draw_line_width(_x - 22, _sy - 70, _x - 22, _sy, 3);
-    draw_set_color(make_color_rgb(150, 200, 230)); draw_circle(_x - 22, _sy - 73, 4, false);
-    // одеяние: трапеция до пола
-    draw_set_color(_robe);
-    draw_triangle(_x - 16, _fy, _x + 16, _fy, _x, _fy - 52, false);
-    draw_rectangle(_x - 10, _fy - 44, _x + 10, _fy, false);
-    draw_set_color(_robe_d); draw_rectangle(_x - 16, _fy - 4, _x + 16, _fy, false);
-    draw_set_color(make_color_rgb(54, 78, 160)); draw_rectangle(_x - 18, _fy - 34, _x - 10, _fy - 26, false);   // рукав к посоху
-    // голова (наклонена)
-    var _hx = _x + lengthdir_x(4, 90 + _tilt) - 1, _hy = _fy - 54;
-    draw_set_color(make_color_rgb(232, 190, 160)); draw_circle(_hx, _hy, 8, false);
-    draw_set_color(make_color_rgb(236, 236, 240));                                    // длинная борода
-    draw_triangle(_hx - 7, _hy + 2, _hx + 7, _hy + 2, _hx - 1, _hy + 24, false);
-    draw_set_color(c_white); draw_circle(_hx - 4, _hy - 2, 3, false); draw_circle(_hx + 3, _hy - 3, 3, false);   // огромные глаза
-    draw_set_color(make_color_rgb(30, 24, 40)); draw_point(_hx - 5, _hy - 2); draw_point(_hx + 2, _hy - 3);
-    // высокая конусная шляпа со звёздами
-    draw_set_color(_hat);
-    draw_triangle(_hx - 13, _hy - 6, _hx + 13, _hy - 8, _hx + 4 + _tilt * 0.3, _hy - 52, false);
-    draw_rectangle(_hx - 15, _hy - 8, _hx + 15, _hy - 5, false);
-    draw_set_color(make_color_rgb(240, 214, 110));
-    draw_point(_hx - 1, _hy - 20); draw_point(_hx + 4, _hy - 32); draw_point(_hx + 1, _hy - 42);
-    draw_set_alpha(1); draw_set_color(c_white);
+    draw_sprite_ext(spr_cave_keeper, _frame, _x, _fy, -1, 1, 0, c_white, _alpha);
+}
+/// кадр «стоит»: медленное дыхание туда-обратно по кадрам 0..4
+function cave_keeper_idle_frame() {
+    var _k = (current_time div 220) mod 8;
+    return (_k < 5) ? _k : 8 - _k;
 }
 
-/// Глиняный страж. _r — радиус, _ang — поворот трещин (катится), _eye 0..1 — глаза открыты,
-/// _arm 0..1 — руки видны, _arm_up 0..1 — руки подняты (удар), _mood: "angry" / "calm" / "shy"
+/// Глиняный страж (рисунок автора: spr_clay_guardian — 10 кадров, spr_clay_ball — 7 кадров шара).
+/// _cy — центр круга столкновений, _r — радиус; низ рисунка ставится на пол (_cy + _r).
+/// Кадры стража: 0 глыба, 1 открыл глаза, 2 проснулся (рожки), 3-4 стоит, 5 руки вверх, 6 замах, 7 удар об пол,
+/// 8 спокойный, 9 маленький, смущённый.
 function cave_draw_clay(_x, _cy, _r, _ang, _eye, _arm, _arm_up, _mood) {
-    var _cl = make_color_rgb(156, 104, 72), _cd = make_color_rgb(104, 66, 46), _cl2 = make_color_rgb(186, 134, 98);
-    // руки — короткие массивные
-    if (_arm > 0) {
-        draw_set_color(_cd);
-        var _ay = _cy + 4 - _arm_up * 30;
-        draw_roundrect_ext(_x - _r - 14 * _arm, _ay - 8, _x - _r + 8, _ay + 12, 8, 8, false);
-        draw_roundrect_ext(_x + _r - 8, _ay - 8, _x + _r + 14 * _arm, _ay + 12, 8, 8, false);
+    var _fy = _cy + _r;
+    if (_arm <= 0 && _eye <= 0 && _r < 40) {                 // шар: кадр по повороту + вращение
+        var _n = sprite_get_number(spr_clay_ball);
+        var _f = 1 + (floor(abs(_ang) / 50) mod (_n - 1));
+        var _s = _r / 28;
+        draw_sprite_ext(spr_clay_ball, _f, _x, _cy, _s, _s, _ang, c_white, 1);
+        return;
     }
-    draw_set_color(_cl); draw_circle(_x, _cy, _r, false);
-    draw_set_color(_cl2); draw_circle(_x - _r * 0.35, _cy - _r * 0.4, _r * 0.32, false);
-    draw_set_color(_cd);
-    for (var k = 0; k < 4; k++) {                                         // трещины и камешки — крутятся с шаром
-        var _a = _ang + k * 90 + 20;
-        var _px = _x + lengthdir_x(_r * 0.55, _a), _py = _cy + lengthdir_y(_r * 0.55, _a);
-        draw_line(_px, _py, _px + lengthdir_x(_r * 0.3, _a + 40), _py + lengthdir_y(_r * 0.3, _a + 40));
-        draw_set_color(make_color_rgb(120, 116, 112));
-        draw_rectangle(_x + lengthdir_x(_r * 0.75, _a + 45), _cy + lengthdir_y(_r * 0.75, _a + 45), _x + lengthdir_x(_r * 0.75, _a + 45) + 2, _cy + lengthdir_y(_r * 0.75, _a + 45) + 2, false);
-        draw_set_color(_cd);
+    var _fr;
+    if (_mood == "shy") _fr = 9;
+    else if (_mood == "calm") _fr = 8;
+    else if (_arm <= 0) _fr = (_eye <= 0) ? 0 : ((_eye < 1) ? 1 : 2);
+    else if (_arm < 0.6) _fr = 2;
+    else if (_arm_up > 0.6) _fr = 5;
+    else if (_arm_up > 0.15) _fr = 6;
+    else if (_arm_up > 0.02) _fr = 7;
+    else _fr = 3 + ((current_time div 400) mod 2);
+    draw_sprite(spr_clay_guardian, _fr, _x, _fy);
+}
+
+// ---------- убранство пещеры (рисунок автора, spr_cave_deco_*) ----------
+/// Добавить предмет: висящие — _y = низ потолка, стоящие — _y = пол. _glow — цвет свечения (кристаллы) или -1.
+function cave_deco_add(_spr, _x, _y, _xs = 1, _tint = c_white, _glow = -1) {
+    array_push(deco, { spr: _spr, x: _x, y: _y, xs: _xs, c: _tint, glow: _glow });
+}
+function cave_deco_draw() {
+    for (var i = 0; i < array_length(deco); i++) { var d = deco[i]; draw_sprite_ext(d.spr, 0, d.x, d.y, d.xs, 1, 0, d.c, 1); }
+}
+/// свет кристаллов (вызывать между cave_light_begin и cave_light_end)
+function cave_deco_lights(_flick) {
+    for (var i = 0; i < array_length(deco); i++) {
+        var d = deco[i]; if (d.glow == -1) continue;
+        cave_light_circle(d.x, d.y - sprite_get_height(d.spr) * 0.5, 70 + sin(_flick / 30 + i) * 6, d.glow);
     }
-    draw_circle(_x, _cy, _r, true);
-    if (_eye > 0) {
-        var _ex = _r * 0.32, _ey = _cy - _r * 0.18, _eh = max(1, _r * 0.17 * _eye);
-        var _look = (_mood == "shy") ? -3 : 0;
-        draw_set_color(make_color_rgb(250, 240, 220));
-        draw_ellipse(_x - _ex - 6, _ey - _eh, _x - _ex + 6, _ey + _eh, false);
-        draw_ellipse(_x + _ex - 6, _ey - _eh, _x + _ex + 6, _ey + _eh, false);
-        draw_set_color(make_color_rgb(30, 22, 20));
-        draw_rectangle(_x - _ex - 1 + _look, _ey - 1, _x - _ex + 1 + _look, _ey + 1, false);
-        draw_rectangle(_x + _ex - 1 + _look, _ey - 1, _x + _ex + 1 + _look, _ey + 1, false);
-        draw_set_color(_cd);
-        if (_mood == "angry") {
-            draw_line_width(_x - _ex - 7, _ey - _eh - 5, _x - _ex + 6, _ey - _eh - 1, 2);
-            draw_line_width(_x + _ex - 6, _ey - _eh - 1, _x + _ex + 7, _ey - _eh - 5, 2);
-        } else {
-            draw_line_width(_x - _ex - 6, _ey - _eh - 3, _x - _ex + 6, _ey - _eh - 3, 2);
-            draw_line_width(_x + _ex - 6, _ey - _eh - 3, _x + _ex + 6, _ey - _eh - 3, 2);
-        }
+}
+/// мягкое фиолетовое сияние поверх темноты (после cave_light_end)
+function cave_deco_glow(_flick) {
+    gpu_set_blendmode(bm_add);
+    for (var i = 0; i < array_length(deco); i++) {
+        var d = deco[i]; if (d.glow == -1) continue;
+        draw_set_color(make_color_rgb(120, 60, 150)); draw_set_alpha(0.10 + 0.04 * sin(_flick / 25 + i));
+        draw_circle(d.x, d.y - sprite_get_height(d.spr) * 0.4, sprite_get_width(d.spr) * 0.7, false);
     }
-    draw_set_color(c_white);
+    gpu_set_blendmode(bm_normal); draw_set_alpha(1); draw_set_color(c_white);
 }
 
 // ---------- сердечки (волшебный сироп лягушонка: 3 сердечка) ----------

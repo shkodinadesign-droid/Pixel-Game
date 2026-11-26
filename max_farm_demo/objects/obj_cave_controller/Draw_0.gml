@@ -1,6 +1,7 @@
 // ===== СТАРАЯ ПЕЩЕРА — ПРОХОД (DRAW): фон, поверхности, фонарь на выступе, хранитель =====
 cave_draw_backdrop();
 side_draw_solids();
+cave_deco_draw();
 if (!global.has_lantern) {                  // старинный фонарь на каменном выступе
     var _lx = LANTERN_X, _ly = 420;
     draw_set_color(make_color_rgb(70, 52, 34)); draw_rectangle(_lx - 5, _ly - 14, _lx + 5, _ly, false);

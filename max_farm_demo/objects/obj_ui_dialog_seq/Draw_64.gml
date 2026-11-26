@@ -16,8 +16,8 @@ switch (_p.who) {
     case "frog":   _spr = spr_frog_idle_down;          break;
     case "maggie": _spr = spr_grandma_maggie_portrait; break;
     case "jack":   _spr = spr_joe_portrait_anim;       break;   // Джо
-    case "keeper": _spr = spr_keeper_portrait;         break;   // временный портрет
-    case "clay":   _spr = spr_clay_guardian_portrait;  break;   // временный портрет
+    case "keeper": _spr = spr_keeper_portrait;         break;
+    case "clay":   _spr = spr_clay_guardian_portrait;  break;
 }
 var _pframe = (_p.who == "jack") ? (current_time div 250) mod sprite_get_number(_spr) : 0;   // Джо — анимированный портрет продавца семян
 var _text_w = scr_dialog_draw_portrait(win_x, win_y, win_w, win_h, btn_y1, _spr, portrait_size, _pframe);
