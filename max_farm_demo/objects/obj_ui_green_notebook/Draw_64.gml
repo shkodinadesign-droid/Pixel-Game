@@ -2,6 +2,12 @@
 var _gw = display_get_gui_width(), _gh = display_get_gui_height();
 draw_set_alpha(0.55); draw_set_color(c_black); draw_rectangle(0, 0, _gw, _gh, false); draw_set_alpha(1);
 
+// разворот 1 — рисунок автора целиком (меч и запись уже на картинке), кнопки под ним
+var _pic = (spread == 0 && sprite_exists(sword_spr));
+btn_y1 = _pic ? 506 : by + bh + 12;
+if (_pic) {
+    draw_sprite(sword_spr, 0, (_gw - sprite_get_width(sword_spr)) div 2, 2);
+} else {
 var _mid = bx + bw / 2;
 // зелёная обложка и два листа
 draw_set_color(make_color_rgb(58, 96, 60));   draw_roundrect_ext(bx - 10, by - 10, bx + bw + 10, by + bh + 10, 12, 12, false);
@@ -46,13 +52,10 @@ switch (spread) {
         break;
 
     case 1:
-        // левая: продолжение
-        _ty = _top;
-        draw_text_ext(_lx, _ty, txt_jack_3, line_h, page_w); _ty += string_height_ext(txt_jack_3, line_h, page_w) + 12;
-        draw_text_ext(_lx, _ty, txt_jack_4, line_h, page_w);
-        // правая: конец записи
-        _ty = _top;
-        draw_text_ext(_rx, _ty, txt_jack_5, line_h, page_w); _ty += string_height_ext(txt_jack_5, line_h, page_w) + 10;
+        // левая: дорогу спросить у Джо
+        draw_text_ext(_lx, _top, txt_jack_5, line_h, page_w);
+        // правая: набросок скал и приписка
+        _ty = _top + 20;
         // неразборчивый набросок скал
         var _sx = _rx + 40, _sy = _ty + 70;
         draw_set_color(_ink);
@@ -83,6 +86,8 @@ switch (spread) {
         draw_set_color(_ink);
         break;
 }
+
+} // конец ветки "не картинка"
 
 // кнопки
 var _mx = device_mouse_x_to_gui(0), _my = device_mouse_y_to_gui(0);
