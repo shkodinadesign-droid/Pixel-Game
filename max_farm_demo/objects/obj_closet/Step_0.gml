@@ -8,7 +8,7 @@ if (!global.control_locked && instance_exists(obj_max)) {
     if (_near && keyboard_check_pressed(ord("E"))) {
         var _bcase_idx = asset_get_index("obj_ui_bookcase");
         if (_bcase_idx != -1 && !instance_exists(_bcase_idx)) {
-            instance_create_layer(0, 0, "Instances", _bcase_idx);
+            instance_create_layer(0, 0, (layer_exists("Instances") ? "Instances" : layer), _bcase_idx);
         }
     }
 }

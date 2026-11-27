@@ -21,7 +21,7 @@ if (!variable_global_exists("control_locked") || !global.control_locked) {
 
         if (_dist < 64 && _dist <= _dist_table && _dist <= _dist_coffee && keyboard_check_pressed(ord("E"))) {
             global.control_locked = true;
-            instance_create_layer(0, 0, "Instances", obj_ui_fridge);
+            instance_create_layer(0, 0, (layer_exists("Instances") ? "Instances" : layer), obj_ui_fridge);
         }
     }
 }

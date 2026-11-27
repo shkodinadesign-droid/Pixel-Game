@@ -67,7 +67,7 @@ if (variable_global_exists("has_diary") && global.has_diary) {
         if (_mx >= _panel_x && _mx <= _panel_x + _slot_w &&
             _my >= _panel_y && _my <= _panel_y + _panel_h) {
             if (!instance_exists(obj_diary)) {
-                instance_create_layer(0, 0, "Instances", obj_diary);
+                instance_create_layer(0, 0, (layer_exists("Instances") ? "Instances" : layer), obj_diary);
             }
         }
     }
