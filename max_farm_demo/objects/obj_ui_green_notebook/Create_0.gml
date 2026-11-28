@@ -12,7 +12,8 @@ global.control_locked = true;
 _click_prev = true;
 book_spr    = asset_get_index("spr_green_notebook_spread");
 // развороты целиком картинками (текст нарисован на них); нет спрайта -> рисуется кодом, как раньше
-spread_pics = [asset_get_index("spr_green_notebook_sword"), asset_get_index("spr_green_notebook_cave"), -1];
+// спрайты прямо по имени: найденные только через asset_get_index выкидываются из сборки («удалять неиспользуемые ресурсы»)
+spread_pics = [spr_green_notebook_sword, spr_green_notebook_cave, -1];
 
 spread  = 0;
 SPREADS = 3;

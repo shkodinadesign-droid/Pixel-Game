@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"spr_green_notebook_sword",
   "bboxMode":0,
-  "bbox_bottom":501,
+  "bbox_bottom":518,
   "bbox_left":0,
   "bbox_right":819,
   "bbox_top":0,
@@ -12,14 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"e37e1564-64c6-48c4-b3ac-09aaf10eb819","name":"e37e1564-64c6-48c4-b3ac-09aaf10eb819","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"d577170e-8a5d-42d3-bb5f-c5bd82cb854a","name":"d577170e-8a5d-42d3-bb5f-c5bd82cb854a","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
-  "height":502,
+  "height":519,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"811dc1db-075e-475f-a493-f355b73a5dfb","blendMode":0,"displayName":"default","isLocked":false,"name":"811dc1db-075e-475f-a493-f355b73a5dfb","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"9a1143b9-8877-4f4f-a289-58766d037fc6","blendMode":0,"displayName":"default","isLocked":false,"name":"9a1143b9-8877-4f4f-a289-58766d037fc6","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_green_notebook_sword",
   "nineSlice":null,
@@ -69,8 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"e37e1564-64c6-48c4-b3ac-09aaf10eb819","path":"sprites/spr_green_notebook_sword/spr_green_notebook_sword.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"196211b1-7eb4-48d9-bae4-f70eff7c8753","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"d577170e-8a5d-42d3-bb5f-c5bd82cb854a","path":"sprites/spr_green_notebook_sword/spr_green_notebook_sword.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"78f4c546-8dae-4d41-bf1c-59a017475143","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
