@@ -593,7 +593,7 @@
           3,-6,1,3,2,1,2,-3,1,1,2,-3,1,1,3,-3,1,6,2,1,3,1,1,2,-3,1,1,2,-8,1,1,2,-10,1,1,2,-4,1,1,2,-6,1,1,3,-9,
           1,1,2,-14,1,-2,2,-5,1,3,3,1,2,-3,1,1,3,-4,1,5,3,1,3,1,2,-4,1,-2,2,-4,1,10,2,1,1,2,1,1,2,1,1,2,-3,1,-2,
           2,-6,1,1,3,-3,1,-2,2,-5,1,1,2,-9,1,6,2,1,1,2,1,2,-3,1,6,2,1,2,1,3,3,-3,1,
-        ],"TileDataFormat":1,},"tilesetId":{"name":"tls_forest","path":"tilesets/tls_forest/tls_forest.yy",},"userdefinedDepth":false,"visible":true,"x":0,"y":0,},
+        ],"TileDataFormat":1,},"tilesetId":{"name":"tls_forest_v2","path":"tilesets/tls_forest_v2/tls_forest_v2.yy",},"userdefinedDepth":false,"visible":true,"x":0,"y":0,},
     {"$GMRBackgroundLayer":"","%Name":"Background","animationFPS":15.0,"animationSpeedType":0,"colour":4280827430,"depth":500,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"hspeed":0.0,"htiled":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[],"name":"Background","properties":[],"resourceType":"GMRBackgroundLayer","resourceVersion":"2.0","spriteId":null,"stretch":false,"userdefinedAnimFPS":false,"userdefinedDepth":false,"visible":true,"vspeed":0.0,"vtiled":false,"x":0,"y":0,},
   ],
   "name":"rm_forest_entrance",
